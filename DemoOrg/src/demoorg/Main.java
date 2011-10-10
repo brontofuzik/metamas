@@ -17,7 +17,7 @@ import metamas.semanticmodel.interactionprotocol.State;
  *
  * @author Lukáš Kúdela
  */
-public class DemoOrg {
+public class Main {
 
     /**
      * @param args the command line arguments
