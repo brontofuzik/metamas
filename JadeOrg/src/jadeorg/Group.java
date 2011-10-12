@@ -1,12 +1,14 @@
 package jadeorg;
 
 import jade.core.Agent;
+import jadeorg.behaviours.NameResponderBehaviour;
+import jadeorg.behaviours.PositionAssignmentResponder;
 
 /**
  *
  * @author Lukáš Kúdela (2011-10-10)
  */
-public class Group extends Agent {
+public abstract class Group extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -19,14 +21,42 @@ public class Group extends Agent {
     @Override
     protected void setup() {
         initialize();
-        System.out.println("Group name: " + name);
+        System.out.println("Group { name: " + name + " }");
+    }
+    
+    // ---------- PROTECTED ----------
+    
+    // Template method with empty default implementation
+    protected /* virtual */ void doInitializeState() {
+    }
+    
+    // Template method with empty default implementation
+    protected /* virtual */ void doInitializeBehaviour() {
     }
     
     // ---------- PRIVATE ----------
     
     private void initialize() {
-        name = (String)getArguments()[0];
+        initializeState();
+        initializeBehaviour();
     }
+    
+    private void initializeState() {
+        name = (String)getArguments()[0];
+        doInitializeState();
+        
+        // Postconditions
+        assert name != null && !name.isEmpty();
+    }
+    
+    private void initializeBehaviour() {
+        // Preconditions
+        assert name != null && !name.isEmpty();
+        
+        addBehaviour(new NameResponderBehaviour(name));
+        addBehaviour(new PositionAssignmentResponder());
+        doInitializeBehaviour();
+    }   
     
     // </editor-fold>
 }
