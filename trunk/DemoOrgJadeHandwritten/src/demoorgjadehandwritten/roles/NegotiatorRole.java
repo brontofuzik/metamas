@@ -16,5 +16,5 @@ public class NegotiatorRole extends Role {
     @Override
     public boolean done() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }   
+    }
 }

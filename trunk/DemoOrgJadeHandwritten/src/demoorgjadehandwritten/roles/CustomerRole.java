@@ -16,5 +16,5 @@ public class CustomerRole extends Role {
     @Override
     public boolean done() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }   
+    }
 }

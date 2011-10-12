@@ -16,5 +16,5 @@ public class SupplierRole extends Role {
     @Override
     public boolean done() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }   
+    }
 }
