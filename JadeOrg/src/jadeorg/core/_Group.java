@@ -1,14 +1,14 @@
-package jadeorg;
+package jadeorg.core;
 
 import jade.core.Agent;
 import jadeorg.behaviours.NameResponderBehaviour;
-import jadeorg.behaviours.PositionAssignmentResponder;
+import jadeorg.behaviours._HiringProtocolResponder;
 
 /**
  *
  * @author Lukáš Kúdela (2011-10-10)
  */
-public abstract class Group extends Agent {
+public abstract class _Group extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -54,7 +54,7 @@ public abstract class Group extends Agent {
         assert name != null && !name.isEmpty();
         
         addBehaviour(new NameResponderBehaviour(name));
-        addBehaviour(new PositionAssignmentResponder());
+        addBehaviour(new _HiringProtocolResponder());
         doInitializeBehaviour();
     }   
     

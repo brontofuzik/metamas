@@ -1,13 +1,13 @@
-package jadeorg;
+package jadeorg.core;
 
 import jadeorg.behaviours.NameResponderBehaviour;
-import jadeorg.behaviours.PositionAssignmentInitiator;
+import jadeorg.behaviours._HiringProtocolInitiator;
 
 /**
  *
  * @author Lukáš Kúdela (2011-10-11)
  */
-public class Agent extends jade.core.Agent {
+public class _Agent extends jade.core.Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -64,7 +64,7 @@ public class Agent extends jade.core.Agent {
         for (String groupPosition : groupPositions) {
             String groupName = getGroupName(groupPosition);
             String positionName = getPositionName(groupPosition);
-            addBehaviour(new PositionAssignmentInitiator(groupName, positionName));
+            addBehaviour(new _HiringProtocolInitiator(groupName, positionName));
         }
         doInitializeBehaviour();
     }

@@ -22,7 +22,6 @@ SET GROUP3=westernSocietyGroup:%PACKAGE%.WesternSocietyGroup("Western society [g
 
 REM ----- Agents -----
 SET PACKAGE=demoorgjadehandwritten.agents
-
 SET AGENT1=agentA:%PACKAGE%.HumanAgent("Agent A [agent]",terroristOrganizationGroup.Operative,weaponsCartelGroup.Customer,westerSocietyGroup.Student)
 SET AGENT2=agentB:%PACKAGE%.HumanAgent("Agent B [agent]",weaponsCartelGroup.Negotiator)
 SET AGENT3=agentC:%PACKAGE%.HumanAgent("Agent C [agent]",weaponsCartelGroup.Supplier)
