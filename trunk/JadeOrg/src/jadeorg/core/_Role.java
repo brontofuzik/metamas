@@ -1,4 +1,4 @@
-package jadeorg;
+package jadeorg.core;
 
 import jade.core.behaviours.Behaviour;
 
@@ -6,6 +6,6 @@ import jade.core.behaviours.Behaviour;
  *
  * @author Lukáš Kúdela (2011-10-11)
  */
-public abstract class Role extends Behaviour {
+public abstract class _Role extends Behaviour {
     
 }

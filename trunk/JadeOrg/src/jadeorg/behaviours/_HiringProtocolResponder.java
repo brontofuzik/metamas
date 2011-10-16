@@ -6,7 +6,7 @@ import jade.core.behaviours.Behaviour;
  *
  * @author Lukáš Kúdela (2011-10-12)
  */
-public class PositionAssignmentResponder extends Behaviour {
+public class _HiringProtocolResponder extends Behaviour {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

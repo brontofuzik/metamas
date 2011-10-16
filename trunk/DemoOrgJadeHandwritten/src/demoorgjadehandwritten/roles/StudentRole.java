@@ -1,12 +1,12 @@
 package demoorgjadehandwritten.roles;
 
-import jadeorg.Role;
+import jadeorg.core._Role;
 
 /**
  *
  * @author Lukáš Kúdela (2011-10-11)
  */
-public class StudentRole extends Role {
+public class StudentRole extends _Role {
 
     @Override
     public void action() {
