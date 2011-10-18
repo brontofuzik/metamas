@@ -43,7 +43,7 @@ public class Organization extends Agent {
     }
 
     private void initializeBehaviour() {
-        addBehaviour(new OrganizationMainBehaviour());
+        addBehaviour(new OrganizationManagerBehaviour());
     }
 
     private void registerWithDF() {
@@ -55,25 +55,7 @@ public class Organization extends Agent {
             ex.printStackTrace();
         }
     }
-    
-    /** Enacts a role.
-     * @param roleName the name of the role
-     * @param player the player
-     */
-    private void enactRole(String roleName, AID player) {
-        if (roles.containsKey(roleName)) {
-            addBehaviour(new EnactProtocolResponder(roleName, player));
-        }
-    }
-
-    /** Deacts a role.
-     * @param roleName the name of the role
-     * @param player the player
-     */
-    private void deactRole(String roleName, AID player) {
-        addBehaviour(new DeactProtocolResponder(roleName, player));
-    }
-    
+       
     /**
      * Sends a NOT_UNDERSTOOD message.
      * @param receiver the receiver.
@@ -89,9 +71,9 @@ public class Organization extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * An organization behaviour.
+     * An organization manager behaviour.
      */
-    private class OrganizationMainBehaviour extends CyclicBehaviour {
+    private class OrganizationManagerBehaviour extends CyclicBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -117,27 +99,55 @@ public class Organization extends Agent {
         public void action() {
             ACLMessage message = myAgent.receive(organizationMessageTemplate);
             if (message != null) {
-                OrganizationMessage orgMessage = new OrganizationMessage(message);
-                if (orgMessage.getAction().equals(ENACT_ACTION)) {
-                    // Enact action requested.
-                    enactRole(orgMessage.getRole(), orgMessage.getPlayer());
-                } else if (orgMessage.getAction().equals(DEACT_ACTION)) {
-                    // Deact action requested.
-                    deactRole(orgMessage.getRole(), orgMessage.getPlayer());
-                } else {
-                    // Unknown action requested.
-                    sendNotUnderstood(message.getSender());
+                // An 'Organization' message received.
+                OrganizationMessage organizationMessage = new OrganizationMessage(message);
+                switch (organizationMessage.getAction()) {
+                    case ENACT_ACTION:
+                        // 'Enact' action requested.
+                        enactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
+                        break;
+                        
+                    case DEACT_ACTION:
+                        // 'Deact' action requested.
+                        deactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
+                        break;
+                        
+                    default:
+                        // Unknown action requested.
+                        sendNotUnderstood(message.getSender());
+                        break;
                 }
             } else {
+                // No 'Organization' message received.
                 block();
             }
+        }
+        
+        // ---------- PRIVATE ----------
+        
+        /** Enacts a role.
+         * @param roleName the name of the role
+         * @param player the player
+         */
+        private void enactRole(String roleName, AID player) {
+            if (roles.containsKey(roleName)) {
+                addBehaviour(new EnactProtocolResponder(roleName, player));
+            }
+        }
+
+        /** Deacts a role.
+         * @param roleName the name of the role
+         * @param player the player
+         */
+        private void deactRole(String roleName, AID player) {
+            addBehaviour(new DeactProtocolResponder(roleName, player));
         }
                 
         // </editor-fold>
     }
     
     /**
-     * An enact protocol responder.
+     * An 'Enact' protocol responder.
      */
     private class EnactProtocolResponder extends FSMBehaviour {
         
@@ -165,7 +175,7 @@ public class Organization extends Agent {
     }
     
     /**
-     * A deact protocol responder.
+     * A 'Deact' protocol responder.
      */
     private class DeactProtocolResponder extends FSMBehaviour {
         
@@ -228,7 +238,7 @@ public class Organization extends Agent {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Methods">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
        public String getAction() {
             return action;
