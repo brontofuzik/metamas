@@ -2,7 +2,6 @@ package jadeorg.core;
 
 import jade.core.Agent;
 import jadeorg.behaviours.NameResponderBehaviour;
-import jadeorg.behaviours._HiringProtocolResponder;
 
 /**
  *
@@ -54,7 +53,6 @@ public abstract class _Group extends Agent {
         assert name != null && !name.isEmpty();
         
         addBehaviour(new NameResponderBehaviour(name));
-        addBehaviour(new _HiringProtocolResponder());
         doInitializeBehaviour();
     }   
     
