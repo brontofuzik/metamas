@@ -1,7 +1,6 @@
 package jadeorg.core;
 
 import jadeorg.behaviours.NameResponderBehaviour;
-import jadeorg.behaviours._HiringProtocolInitiator;
 
 /**
  *
@@ -64,7 +63,6 @@ public class _Agent extends jade.core.Agent {
         for (String groupPosition : groupPositions) {
             String groupName = getGroupName(groupPosition);
             String positionName = getPositionName(groupPosition);
-            addBehaviour(new _HiringProtocolInitiator(groupName, positionName));
         }
         doInitializeBehaviour();
     }

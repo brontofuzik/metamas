@@ -9,6 +9,9 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * A role agent.
@@ -25,8 +28,6 @@ public class Role extends Agent {
     private final String DEACTIVATE_ACTION = "deactivate";
     
     private final String INVOKE_POWER_ACTION = "invoke-power";
-    
-    private final String INVOKE_RESPONSIBILITY_ACTION = "invoke-responsibility";
     
     // </editor-fold>
     
@@ -51,13 +52,13 @@ public class Role extends Agent {
     
     private void initialize() {
         initializeState();
-        initialieBehaviour();
+        initializeBehaviour();
     }
     
     private void initializeState() {       
     }
 
-    private void initialieBehaviour() {
+    private void initializeBehaviour() {
         addBehaviour(new RoleManagerBehaviour());
     }
     
@@ -69,6 +70,25 @@ public class Role extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    private void activateRole(AID player) {
+        if (player.equals(playerInfo.getAID())) {
+            addBehaviour(new ActivateProtocolResponder());
+        } else {
+            // You are not enacting this role.
+        }
+    }
+
+    private void deactivateRole(AID player) {
+        if (player.equals(playerInfo.getAID())) {
+            addBehaviour(new DeactivateProtocolResponder());
+        } else {
+            // You are not enacting this role.
+        }
+    }
+    
+    private void invokePower(AID player, String power, List<String> args) {
     }
     
     /**
@@ -85,75 +105,47 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    /** A role manager behaviour. */
+    /**
+     * A role manager behaviour.
+     */
     private class RoleManagerBehaviour extends CyclicBehaviour {
 
         @Override
         public void action() {
             ACLMessage message = myAgent.receive(roleMessageTemplate);
             if (message != null) {
-                // A 'Role' message received.
                 RoleMessage roleMessage = new RoleMessage(message);
-                switch (roleMessage.getAction()) {
-                    case ACTIVATE_ACTION:
-                        // 'Activate' action requested.
-                        activateRole(roleMessage.getPlayer());
-                        break;
-                        
-                    case DEACTIVATE_ACTION:
-                        // 'Deactivate' action requested.
-                        deactivateRole(roleMessage.getPlayer());
-                        break;
-                    
-                    case INVOKE_POWER_ACTION:
-                        break;
-                        
-                    case INVOKE_RESPONSIBILITY_ACTION:
-                        break;
-                        
-                    default:
-                        // Unknown action requested.
-                        sendNotUnderstood(message.getSender());
-                        break;
-                }
+                roleMessage.process();
             } else {
-                // No 'Role' message received.
                 block();
             }
         }
-        
-        // ---------- PRIVATE ----------
-
-        private void activateRole(AID player) {
-            if (player.equals(playerInfo.getAID())) {
-                addBehaviour(new ActivateProtocolResponder());
-            } else {
-                // You are not enacting this role.
-            }
-        }
-
-        private void deactivateRole(AID player) {
-            if (player.equals(playerInfo.getAID())) {
-                addBehaviour(new DeactivateProtocolResponder());
-            } else {
-                // You are not enacting this role.
-            }
-        }
     }
     
-    /** An 'Activate' protocol responder behaviour. */
+    /**
+     * An 'Activate' protocol responder behaviour.
+     */
     private class ActivateProtocolResponder extends FSMBehaviour {
     }
     
-    /** A 'Deactivate' protocol responder behaviour. */
+    /**
+     * A 'Deactivate' protocol responder behaviour.
+     */
     private class DeactivateProtocolResponder extends FSMBehaviour {
     }
     
+    /**
+     * A message send to a Role agent from a Player agent.
+     */
     private class RoleMessage {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private String action;
+        
+        private String power;
+        
+        private List<String> args = new ArrayList<String>();
         
         private AID player;
 
@@ -161,7 +153,27 @@ public class Role extends Agent {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        private RoleMessage(ACLMessage message) {
+        public RoleMessage(ACLMessage message) {
+            StringTokenizer tokenizer = new StringTokenizer(message.getContent());
+            
+            // Get the action.
+            if (tokenizer.hasMoreTokens()) {
+                action = tokenizer.nextToken();
+            }
+            
+            switch (action) {
+                case ACTIVATE_ACTION:
+                    parseActivateMessage(tokenizer);
+                    break;
+                case DEACTIVATE_ACTION:
+                    parseDeactivateMessage(tokenizer);
+                    break;
+                case INVOKE_POWER_ACTION:
+                    parseInvokePowerMessage(tokenizer);
+                    break;
+                default:
+                    assert false;
+            }
             
             // Get the player.
             player = message.getSender();
@@ -175,12 +187,54 @@ public class Role extends Agent {
             return action;
         }
         
+        public String getPower() {
+            return power;
+        }
+        
         public AID getPlayer() {
             return player;
         }
         
         // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        public void process() {
+            switch (action) {
+                case ACTIVATE_ACTION:
+                    activateRole(player);
+                    break;
+                case DEACTIVATE_ACTION:
+                    deactivateRole(player);
+                    break;
+                case INVOKE_POWER_ACTION:
+                    invokePower(player, power, args);
+                default:
+                    sendNotUnderstood(player);
+                    break;
+            }
+        }
+        
+        private void parseActivateMessage(StringTokenizer tokenizer) {
+        }
+
+        private void parseDeactivateMessage(StringTokenizer tokenizer) {
+        }
+        
+        private void parseInvokePowerMessage(StringTokenizer tokenizer) {
+            // Get the power.
+            if (tokenizer.hasMoreTokens()) {
+                power = tokenizer.nextToken();
+            }
+            
+            // Get the arguments.
+            while (tokenizer.hasMoreTokens()) {
+                args.add(tokenizer.nextToken());
+            }
+        }
+        
+        // </editor-fold>
     }
-    
+  
     // </editor-fold>
 }

@@ -1,14 +1,21 @@
 package jadeorg.core;
 
+import jadeorg.proto.State;
+import jadeorg.proto.Protocol;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jadeorg.lang.OrganizationMessage;
+import jadeorg.lang.RequirementsMessage;
+import jadeorg.proto.ActiveState;
+import jadeorg.proto.PassiveState;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -16,20 +23,58 @@ import java.util.StringTokenizer;
 /**
  * An organization agent.
  * @author Lukáš Kúdela (2011-10-16)
+ * @version 0.1
  */
-public class Organization extends Agent {
+public abstract class Organization extends Agent {
+    
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+    private static final String ORGANIZATION_PROTOCOL = "organiation-protocol";
+    
+    private static final String ENACT_PROTOCOL = "enact-protocol";
+    
+    private static final String ENACT_ACTION = "enact";
+    
+    private static final String DEACT_PROTOCOL = "deact-protocol";
+        
+    private static final String DEACT_ACTION = "deact";
+        
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Map<String, Role> roles = new Hashtable<String, Role>();
+    /** The organization roles. */
+    private Map<String, Class> roles = new Hashtable<String, Class>();
+    
+    /** The enacted roles. */
+    private Map<String, Role> enactedRoles = new Hashtable<String, Role>();
+    
+    /** The requirements. */
+    private Map<String, String[]> requirements = new Hashtable<String, String[]>();
+    
+    /** The DF agent description. */
+    private DFAgentDescription agentDescription;
+    
+    /** The player manager. */
+    private PlayerManager playerManager;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    @Override
     public void setup() {
         initialize();
         registerWithDF();
+    }
+    
+    // ---------- PROTECTED ----------
+    
+    protected void addRole(Class roleClass) {
+        String roleName = roleClass.getName();       
+        roles.put(roleName, roleClass);
+        
+        registerRoleWithDF(roleName);
     }
     
     // ---------- PRIVATE ----------
@@ -46,14 +91,28 @@ public class Organization extends Agent {
         addBehaviour(new OrganizationManagerBehaviour());
     }
 
+    /** Registers this organization with the DF. */
     private void registerWithDF() {
-        DFAgentDescription agentDescription = new DFAgentDescription();
-        agentDescription.setName(getAID());
+        agentDescription = new OrganizationAgentDescription(getAID());
+        
         try {
             DFService.register(this, agentDescription);
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    /** Register a role with the DF. */
+    private void registerRoleWithDF(String roleName) {
+        RoleServiceDescription serviceDescription = new RoleServiceDescription(roleName);
+        agentDescription.addServices(serviceDescription);
+        
+        try {
+            DFService.modify(this, agentDescription);
+        } catch (FIPAException ex) {
+            ex.printStackTrace();
+        }
+        
     }
        
     /**
@@ -74,17 +133,7 @@ public class Organization extends Agent {
      * An organization manager behaviour.
      */
     private class OrganizationManagerBehaviour extends CyclicBehaviour {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private final String ORGANIZATION_PROTOCOL = "ORGANIZATION_PROTOCOL";
-        
-        private final String ENACT_ACTION = "enact";
-        
-        private final String DEACT_ACTION = "deact";
-        
-        // </editor-fold>
-        
+             
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private MessageTemplate organizationMessageTemplate = MessageTemplate.and(
@@ -97,28 +146,23 @@ public class Organization extends Agent {
         
         @Override
         public void action() {
+            // Receive the message.
             ACLMessage message = myAgent.receive(organizationMessageTemplate);
             if (message != null) {
-                // An 'Organization' message received.
-                OrganizationMessage organizationMessage = new OrganizationMessage(message);
-                switch (organizationMessage.getAction()) {
+                // Parse the message.
+                OrganizationMessage messageParser = new OrganizationMessage(message);
+                switch (messageParser.getAction()) {
                     case ENACT_ACTION:
-                        // 'Enact' action requested.
-                        enactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
-                        break;
-                        
+                        enactRole(messageParser.getRole(), messageParser.getPlayer());
+                        break;                     
                     case DEACT_ACTION:
-                        // 'Deact' action requested.
-                        deactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
-                        break;
-                        
+                        deactRole(messageParser.getRole(), messageParser.getPlayer());
+                        break;                     
                     default:
-                        // Unknown action requested.
                         sendNotUnderstood(message.getSender());
                         break;
                 }
             } else {
-                // No 'Organization' message received.
                 block();
             }
         }
@@ -149,9 +193,16 @@ public class Organization extends Agent {
     /**
      * An 'Enact' protocol responder.
      */
-    private class EnactProtocolResponder extends FSMBehaviour {
+    private class EnactProtocolResponder extends Protocol {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private State receiveEnactRequest = new ReceiveEnactRequest();
+        private State sendRequirementsInform = new SendRequirementsInform();
+        private State sendFailure = new SendFailure();
+        private State receiveRequirementsInform = new ReceiveRequirementsInform();
+        private State sendRoleAID = new SendRoleAID();
+        private State end = new End();
         
         private String roleName;
         
@@ -168,7 +219,172 @@ public class Organization extends Agent {
             // -------------------------
             
             this.roleName = roleName;
-            this.player = player;                  
+            this.player = player;
+            
+            registerStates();       
+            registerTransitions();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Registers the states.
+         */
+        private void registerStates() {
+            registerState(new ReceiveEnactRequest());
+            registerState(new SendRequirementsInform());
+            registerState(new SendFailure());
+            registerState(new ReceiveRequirementsInform());
+            registerState(new SendRoleAID());
+            registerState(new End());
+        }
+
+        /**
+         * Registers the transitions.
+         */
+        private void registerTransitions() {
+            registerTransition(receiveEnactRequest, sendRequirementsInform, 0);
+            registerTransition(receiveEnactRequest, sendFailure, 1);
+            
+            registerDefaultTransition(sendRequirementsInform, receiveRequirementsInform);
+            
+            registerTransition(receiveRequirementsInform, receiveRequirementsInform, 2);
+            registerTransition(receiveRequirementsInform, sendRoleAID, 0);
+            registerTransition(receiveRequirementsInform, end, 1);   
+            
+            registerDefaultTransition(sendRoleAID, end);
+            
+            registerDefaultTransition(sendFailure, end);
+        }
+        
+//        private void registerTransitions() {     
+//            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
+//            receiveEnactRequest.registerTransition(1, sendFailure);
+//            
+//            sendRequirementsInform.registerDefaultTransition(receiveRequirementsInform);
+//            
+//            receiveRequirementsInform.registerTransition(2, receiveRequirementsInform);
+//            receiveRequirementsInform.registerTransition(0, sendRoleAID);
+//            receiveRequirementsInform.registerTransition(1, sendFailure);   
+//            
+//            sendRoleAID.registerDefaultTransition(end);
+//            
+//            sendFailure.registerDefaultTransition(end);
+//        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        /**
+         * A state in which the 'Enact' message is received.
+         */
+        private class ReceiveEnactRequest extends PassiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+            }
+
+            @Override
+            public String getName() {
+                return "receive-enact-request";
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * A state in which the 'Requirements' message is send.
+         */
+        private class SendRequirementsInform extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {              
+                // Generate the message.
+                ACLMessage message = new RequirementsMessage()
+                    .setPlayer(player)
+                    .setRequirements(requirements.get(roleName))
+                .getMessage();
+                
+                // Send the message.
+                myAgent.send(message);
+            }
+
+            @Override
+            public String getName() {
+                return "send-requirements-inform";
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * A state in which the 'Failure' message is send.
+         */
+        private class SendFailure extends ActiveState {
+
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return "send-failure";
+            }
+        }
+        
+        /**
+         * A state in which the 'Requirements' message is received.
+         */
+        private class ReceiveRequirementsInform extends PassiveState {
+
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return "receive-requirements-inform";
+            }
+        
+        }
+        
+        /** A state in which the 'Role AID' message is send. */
+        private class SendRoleAID extends ActiveState {
+
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return "send-role-aid";
+            }
+            
+        }
+        
+        /** */
+        public class End extends ActiveState {
+
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return "end";
+            }
+            
         }
         
         // </editor-fold>
@@ -203,53 +419,37 @@ public class Organization extends Agent {
     }
     
     /**
-     * An organization message tokenizer.
+     * An organization agent description.
      */
-    private class OrganizationMessage {
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private String action = "";
-        
-        private String role = "";
-        
-        private AID player;
-        
-        // </editor-fold>
+    private class OrganizationAgentDescription extends DFAgentDescription {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public OrganizationMessage(ACLMessage message) {
-            StringTokenizer tokenizer = new StringTokenizer(message.getContent());
-            
-            // Get the action.
-            if (tokenizer.hasMoreTokens()) {
-                action = tokenizer.nextToken();
-            }
-            
-            // Get the role.
-            if (tokenizer.hasMoreTokens()) {
-                role = tokenizer.nextToken();
-            }
-            
-            // Get the player.
-            player = message.getSender();
+        public OrganizationAgentDescription(AID organization) {
+            super();
+            setName(organization);
         }
         
         // </editor-fold>
+    }
+    
+    /**
+     * A role service description.
+     */
+    private class RoleServiceDescription extends ServiceDescription {
         
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+        private static final String ROLE_SERVICE_TYPE = "role";
+    
+        // </editor-fold>
         
-       public String getAction() {
-            return action;
-        }
-        
-        public String getRole() {
-            return role;
-        }
-        
-        public AID getPlayer() {
-            return player;
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+        public RoleServiceDescription(String roleName) {
+            super();
+            setType(ROLE_SERVICE_TYPE);
+            setName(roleName);
         }
         
         // </editor-fold>
