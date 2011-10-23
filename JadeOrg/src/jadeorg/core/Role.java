@@ -41,6 +41,18 @@ public class Role extends Agent {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    void setRoleName(String roleName) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    void setOrganization(Organization organization) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public void setup() {
@@ -100,7 +112,7 @@ public class Role extends Agent {
         message.addReceiver(receiver);
         send(message);
     }
-     
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">

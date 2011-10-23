@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.behaviours.OneShotBehaviour;
+import jadeorg.proto.PassiveState.Event;
 
 /**
  * An active protocol state.
@@ -43,7 +44,7 @@ public abstract class ActiveState extends OneShotBehaviour
      * @param event the event triggering the transition
      * @param targetState the target state
      */
-    public void registerTransition(int event, State state) {
+    public void registerTransition(Event event, State state) {
         myProtocol.registerTransition(this, state, event);
     }
     

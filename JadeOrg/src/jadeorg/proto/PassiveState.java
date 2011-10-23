@@ -15,6 +15,9 @@ public abstract class PassiveState extends CyclicBehaviour
     /** The parent protocol. */
     private Protocol myProtocol;
     
+    /** The exist value. */
+    private Event exitValue;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -43,7 +46,7 @@ public abstract class PassiveState extends CyclicBehaviour
      * @param event the event triggering the transition
      * @param targetState the target state
      */
-    public void registerTransition(int event, State state) {
+    public void registerTransition(Event event, State state) {
         myProtocol.registerTransition(this, state, event);
     }
     
@@ -55,6 +58,43 @@ public abstract class PassiveState extends CyclicBehaviour
      */
     public void registerDefaultTransition(State state) {
         myProtocol.registerDefaultTransition(this, state);
+    }
+    
+    @Override
+    public int onEnd() {
+        return exitValue.getCode();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    /** Transition event. */
+    public enum Event {
+        SUCCESS(0),
+        FAILURE(1);
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int code;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        private Event(int code) {
+            this.code = code;
+        }
+                
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        public int getCode() {
+            return code;
+        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
