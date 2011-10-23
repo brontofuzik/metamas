@@ -1,5 +1,7 @@
 package jadeorg.proto;
 
+import jadeorg.proto.PassiveState.Event;
+
 /**
  * A protocol state - a one-shot behaviour.
  * @author Lukáš Kúdela (2011-10-20)
@@ -30,7 +32,7 @@ public interface State {
      * @param event the event triggering the transition
      * @param targetState the target state
      */
-    public void registerTransition(int event, State targetState);
+    public void registerTransition(Event event, State targetState);
     
     /**
      * Registers a default transition from this state.

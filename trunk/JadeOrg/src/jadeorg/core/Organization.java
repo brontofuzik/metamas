@@ -1,5 +1,6 @@
 package jadeorg.core;
 
+import jade.wrapper.StaleProxyException;
 import jadeorg.proto.State;
 import jadeorg.proto.Protocol;
 import jade.core.AID;
@@ -12,13 +13,19 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.lang.OrganizationMessage;
-import jadeorg.lang.RequirementsMessage;
+import jade.wrapper.AgentController;
+import jadeorg.proto.enactprotocol.EnactProtocol;
+import jadeorg.proto.enactprotocol.RefuseMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
+import jadeorg.proto.enactprotocol.RequirementsMessage;
+import jadeorg.proto.enactprotocol.RoleAIDMessage;
+import jadeorg.proto.organizationprotocol.OrganizationProtocol;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * An organization agent.
@@ -28,14 +35,8 @@ import java.util.StringTokenizer;
 public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-    private static final String ORGANIZATION_PROTOCOL = "organiation-protocol";
-    
-    private static final String ENACT_PROTOCOL = "enact-protocol";
     
     private static final String ENACT_ACTION = "enact";
-    
-    private static final String DEACT_PROTOCOL = "deact-protocol";
         
     private static final String DEACT_ACTION = "deact";
         
@@ -55,8 +56,8 @@ public abstract class Organization extends Agent {
     /** The DF agent description. */
     private DFAgentDescription agentDescription;
     
-    /** The player manager. */
-    private PlayerManager playerManager;
+    /** The role manager. */
+    private RoleManager roleManager;
     
     // </editor-fold>
     
@@ -133,33 +134,29 @@ public abstract class Organization extends Agent {
      * An organization manager behaviour.
      */
     private class OrganizationManagerBehaviour extends CyclicBehaviour {
-             
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private MessageTemplate organizationMessageTemplate = MessageTemplate.and(
-            MessageTemplate.MatchProtocol(ORGANIZATION_PROTOCOL),
-            MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
             // Receive the message.
+            MessageTemplate organizationMessageTemplate = OrganizationProtocol.getInstance()
+                .getTemplate(OrganizationMessage.class);
             ACLMessage message = myAgent.receive(organizationMessageTemplate);
             if (message != null) {
-                // Parse the message.
-                OrganizationMessage messageParser = new OrganizationMessage(message);
-                switch (messageParser.getAction()) {
+                // Parse the ACL message.
+                OrganizationMessage organizationMessage = (OrganizationMessage)OrganizationProtocol
+                    .getInstance().parse(OrganizationMessage.class, message);
+                   
+                switch (organizationMessage.getAction()) {
                     case ENACT_ACTION:
-                        enactRole(messageParser.getRole(), messageParser.getPlayer());
+                        enactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
                         break;                     
                     case DEACT_ACTION:
-                        deactRole(messageParser.getRole(), messageParser.getPlayer());
+                        deactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
                         break;                     
                     default:
-                        sendNotUnderstood(message.getSender());
+                        sendNotUnderstood(organizationMessage.getPlayer());
                         break;
                 }
             } else {
@@ -245,14 +242,13 @@ public abstract class Organization extends Agent {
          * Registers the transitions.
          */
         private void registerTransitions() {
-            registerTransition(receiveEnactRequest, sendRequirementsInform, 0);
-            registerTransition(receiveEnactRequest, sendFailure, 1);
+            registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
+            registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
             
             registerDefaultTransition(sendRequirementsInform, receiveRequirementsInform);
             
-            registerTransition(receiveRequirementsInform, receiveRequirementsInform, 2);
-            registerTransition(receiveRequirementsInform, sendRoleAID, 0);
-            registerTransition(receiveRequirementsInform, end, 1);   
+            registerTransition(receiveRequirementsInform, sendRoleAID, PassiveState.Event.SUCCESS);
+            registerTransition(receiveRequirementsInform, end, PassiveState.Event.FAILURE);   
             
             registerDefaultTransition(sendRoleAID, end);
             
@@ -283,6 +279,12 @@ public abstract class Organization extends Agent {
          */
         private class ReceiveEnactRequest extends PassiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-enact-request";
+            
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
@@ -291,7 +293,7 @@ public abstract class Organization extends Agent {
 
             @Override
             public String getName() {
-                return "receive-enact-request";
+                return NAME;
             }
             
             // </editor-fold>
@@ -302,23 +304,32 @@ public abstract class Organization extends Agent {
          */
         private class SendRequirementsInform extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-requirements-inform";
+            
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
-            public void action() {              
-                // Generate the message.
-                ACLMessage message = new RequirementsMessage()
+            public void action() {
+                // Create the 'Requirements' message.
+                RequirementsMessage requirementsMessage = new RequirementsMessage()
                     .setPlayer(player)
-                    .setRequirements(requirements.get(roleName))
-                .getMessage();
+                    .setRequirements(requirements.get(roleName));
+                
+                // Generate the ACL message.
+                ACLMessage aclMessage = EnactProtocol.getInstance()
+                    .generate(RequirementsMessage.class, requirementsMessage);
                 
                 // Send the message.
-                myAgent.send(message);
+                myAgent.send(aclMessage);
             }
 
             @Override
             public String getName() {
-                return "send-requirements-inform";
+                return NAME;
             }
             
             // </editor-fold>
@@ -329,15 +340,33 @@ public abstract class Organization extends Agent {
          */
         private class SendFailure extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "send-failure";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                // Create the 'Refuse' message.
+                RefuseMessage refuseMesage = new RefuseMessage()
+                    .setPlayer(player);
+      
+                // Generate the ACL message.
+                ACLMessage aclMessage = EnactProtocol.getInstance()
+                    .generate(RefuseMessage.class, refuseMesage);
+                
+                myAgent.send(aclMessage);
             }
 
             @Override
             public String getName() {
-                return "send-failure";
+                return NAME;
             }
+            
+            // </editor-fold>
         }
         
         /**
@@ -345,46 +374,145 @@ public abstract class Organization extends Agent {
          */
         private class ReceiveRequirementsInform extends PassiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-requirements-inform";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                // Receive the message.
+                MessageTemplate messageTemplate = MessageTemplate.MatchProtocol(EnactProtocol.getInstance().getName());
+                ACLMessage message = myAgent.receive(messageTemplate);
+                if (message != null) {
+                    if (message.getPerformative() == ACLMessage.AGREE) {
+                        
+                    } else if (message.getPerformative() == ACLMessage.REFUSE) {
+                    } else {
+                        sendNotUnderstood(player);
+                    }
+                } else {
+                    block();
+                }
             }
 
             @Override
             public String getName() {
-                return "receive-requirements-inform";
+                return NAME;
             }
         
+            // </editor-fold>
         }
         
         /** A state in which the 'Role AID' message is send. */
         private class SendRoleAID extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-role-aid";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public String getName() {
-                return "send-role-aid";
+                Role role = createRoleAgent(roleName, roleName);
+                startRoleAgent(role);
+                
+                enactedRoles.put(roleName + ":" + player.getName(), role);
+                roleManager.updatePlayer_Enact(roleName, player);
+                
+                // Create the 'RoleAID' message.
+                RoleAIDMessage roleAIDMessage = new RoleAIDMessage()
+                    .setPlayer(player)
+                    .setRoleAID(role.getAID());
+                
+                // Generate the ACL message.
+                ACLMessage aclMessage = EnactProtocol.getInstance()
+                    .generate(RoleAIDMessage.class, roleAIDMessage);
+                        
+                // Send the ACL message.
+                myAgent.send(aclMessage);
             }
             
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // ---------- PRIVATE ----------
+
+            /**
+             * Create a role agent.
+             * @param roleClassName the name of the role agent class.
+             * @param roleName the name of the role agent instance.
+             * @return the role agent.
+             */
+            private Role createRoleAgent(String roleClassName, String roleName) {
+                Class roleClass = roles.get(roleClassName);
+                Constructor roleConstructor = null;
+                try {
+                    roleConstructor = roleClass.getConstructor();
+                } catch (NoSuchMethodException ex) {
+                    ex.printStackTrace();
+                } catch (SecurityException ex) {
+                    ex.printStackTrace();
+                }
+                Role role = null;
+                try {
+                    role = (Role)roleConstructor.newInstance();
+                } catch (InstantiationException ex) {
+                    ex.printStackTrace();
+                } catch (IllegalAccessException ex) {
+                    ex.printStackTrace();
+                } catch (IllegalArgumentException ex) {
+                    ex.printStackTrace();
+                } catch (InvocationTargetException ex) {
+                    ex.printStackTrace();
+                }
+                role.setRoleName(roleName);
+                role.setOrganization((Organization)myAgent);
+                return role;
+            }
+            
+            private void startRoleAgent(Role role) {
+                AgentController agentController = null;
+                try {
+                    agentController = getContainerController().acceptNewAgent(roleName, role);
+                    agentController.start();
+                } catch (StaleProxyException ex) {
+                    ex.printStackTrace();
+                }             
+            }
+            
+            // </editor-fold>    
         }
         
         /** */
         public class End extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
             public String getName() {
-                return "end";
+                return NAME;
             }
             
+            // </editor-fold>
         }
         
         // </editor-fold>

@@ -27,8 +27,8 @@ public abstract class Protocol extends FSMBehaviour {
         state.setProtocol(this);
     }
     
-    public void registerTransition(State fromState, State toState, int event) {
-        registerTransition(fromState.getName(), toState.getName(), event);
+    public void registerTransition(State fromState, State toState, PassiveState.Event event) {
+        registerTransition(fromState.getName(), toState.getName(), event.getCode());
     }
     
     public void registerDefaultTransition(State fromState, State toState) {
