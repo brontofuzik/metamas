@@ -2,10 +2,10 @@ package jadeorg.proto.enactprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.lang.PlayerMessage;
 
 /**
  * A 'Role AID' message.
@@ -14,58 +14,15 @@ import jadeorg.lang.MessageParser;
  * @author Lukáš Kúdela (2011-10-23)
  * @version 0.1
  */
-public class RoleAIDMessage extends Message {
+public class RoleAIDMessage extends PlayerMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private MessageTemplate templateSingleton;
-    
-    private RoleAIDMessageParser parserSingleton;
-    
-    private RoleAIDMessageGenerator generatorSingleton;
-    
-    private AID player;
     
     private AID roleAID;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public MessageTemplate getTemplate() {
-        if (templateSingleton == null) {
-            templateSingleton = MessageTemplate.and(
-                MessageTemplate.MatchProtocol(EnactProtocol.getInstance().getName()),
-                MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-        }
-        return templateSingleton;
-    }
-
-    @Override
-    public MessageParser getParser() {
-        if (parserSingleton == null) {
-            parserSingleton = new RoleAIDMessageParser();
-        }
-        return parserSingleton;
-    }
-
-    @Override
-    public MessageGenerator getGenerator() {
-        if (generatorSingleton == null) {
-            generatorSingleton = new RoleAIDMessageGenerator();
-        }
-        return generatorSingleton;
-    }
-    
-    public AID getPlayer() {
-        return player;
-    }
-    
-    public RoleAIDMessage setPlayer(AID player) {
-        this.player = player;
-        return this;
-    }
     
     public AID getRoleAID() {
         return roleAID;
@@ -74,6 +31,27 @@ public class RoleAIDMessage extends Message {
     public RoleAIDMessage setRoleAID(AID roleAID) {
         this.roleAID = roleAID;
         return this;
+    }
+    
+    // ---------- PROTECTED ----------
+
+    @Override
+    protected int getPerformative() {
+        return ACLMessage.INFORM;
+    }
+    
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected MessageParser createParser() {
+        return new RoleAIDMessageParser();
+    }
+
+    @Override
+    protected MessageGenerator createGenerator() {
+        return new RoleAIDMessageGenerator();
     }
     
     // </editor-fold>

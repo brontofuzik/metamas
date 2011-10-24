@@ -1,25 +1,31 @@
-package jadeorg.proto.organizationprotocol;
+package jadeorg.proto.deactprotocol;
 
 import jadeorg.proto.Protocol;
 
 /**
- * The 'Organization' protocol.
+ * The 'Deact' protocol.
  * DP: Singleton - Singleton
  * DP: Abstract factory - Concrete factory
- * @author Lukáš Kúdela (2011-10-21)
+ * @author Lukáš Kúdela (2011-10-24)
  * @version 0.1
  */
-public class OrganizationProtocol extends Protocol {
-   
+public class DeactProtocol extends Protocol {
+
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    private static final String NAME = "deact-protocol";
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static OrganizationProtocol singleton;
-        
+    private static DeactProtocol singleton;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private OrganizationProtocol() {
+    private DeactProtocol() {
         registerMessages();
     }
     
@@ -27,26 +33,24 @@ public class OrganizationProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    public static DeactProtocol getInstance() {
+        if (singleton == null) {
+            singleton = new DeactProtocol();
+        }
+        return singleton;              
+    }
+    
     @Override
     public String getName() {
-        return "organization-protocol";
+        return NAME;
     }
         
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public static OrganizationProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new OrganizationProtocol();
-        }
-        return singleton;
-    }
-    
-    // ---------- PRIVATE ----------
-    
     private void registerMessages() {
-        registerMessage(new OrganizationMessage());
+        registerMessage(new FailureMessage());
     }
     
     // </editor-fold>

@@ -1,6 +1,6 @@
 package jadeorg.proto.enactprotocol;
 
-import jadeorg.lang.Protocol;
+import jadeorg.proto.Protocol;
 
 /**
  * The 'Enact' protocol.
@@ -29,7 +29,7 @@ public class EnactProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     private EnactProtocol() {
-        super();
+        registerMessages();
     }
     
     // </editor-fold>
@@ -43,8 +43,9 @@ public class EnactProtocol extends Protocol {
         return singleton;
     }
     
-    @Override
-    public void registerMessages() {
+    // ---------- PRIVATE ----------
+
+    private void registerMessages() {
         registerMessage(new RequirementsMessage());        
         registerMessage(new RefuseMessage());
     }

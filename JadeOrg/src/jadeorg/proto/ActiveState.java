@@ -1,6 +1,8 @@
 package jadeorg.proto;
 
 import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
+import jadeorg.lang.Message;
 import jadeorg.proto.PassiveState.Event;
 
 /**
@@ -13,8 +15,8 @@ public abstract class ActiveState extends OneShotBehaviour
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The parent protocol. */
-    private Protocol myProtocol;
+    /** The parent party. */
+    private Party myParty;
     
     // </editor-fold>
     
@@ -23,16 +25,24 @@ public abstract class ActiveState extends OneShotBehaviour
     /** Gets the parent protocol.
      * @returns the parent protocol
      */
-    public Protocol getProtocol() {
-        return myProtocol;
+    public Party getProtocol() {
+        return myParty;
+    }
+    
+    /**
+     * Gets the parent party.
+     * @return the parent party
+     */
+    public Party getParty() {
+        return myParty;
     }
  
     /**
-     * Sets the parent protocol.
-     * @protocol the parent protocol
+     * Sets the parent party.
+     * @protocol the parent party
      */
-    public void setProtocol(Protocol protocol) {
-        this.myProtocol = protocol;
+    public void setParty(Party party) {
+        this.myParty = party;
     }
     
     // </editor-fold>
@@ -45,7 +55,7 @@ public abstract class ActiveState extends OneShotBehaviour
      * @param targetState the target state
      */
     public void registerTransition(Event event, State state) {
-        myProtocol.registerTransition(this, state, event);
+        myParty.registerTransition(this, state, event);
     }
     
     /**
@@ -55,7 +65,24 @@ public abstract class ActiveState extends OneShotBehaviour
      * @param targetState the target state.
      */
     public void registerDefaultTransition(State state) {
-        myProtocol.registerDefaultTransition(this, state);
+        myParty.registerDefaultTransition(this, state);
+    }
+    
+    /**
+     * Sends a JadeOrg message.
+     * @param messageClass the message class
+     * @param message the message
+     */
+    public void send(Class messageClass, Message message) {
+        getParty().send(messageClass, message);
+    }
+    
+    /**
+     * Sends an ACL message.
+     * @param aclMessage the message
+     */
+    public void send(ACLMessage message) {
+        getParty().send(message);
     }
     
     // </editor-fold>

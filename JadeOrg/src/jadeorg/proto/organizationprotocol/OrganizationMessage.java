@@ -2,10 +2,10 @@ package jadeorg.proto.organizationprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.lang.PlayerMessage;
 import java.util.StringTokenizer;
 
 /**
@@ -15,21 +15,9 @@ import java.util.StringTokenizer;
  * @author Lukáš Kúdela (2011-10-20)
  * @version 0.1
  */
-public class OrganizationMessage extends Message {
+public class OrganizationMessage extends PlayerMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The message template singleton. */
-    private MessageTemplate templateSingleton;
-    
-    /** The message parser singleton. */
-    private OrganizationMessageParser parserSingleton;
-    
-    /** The message generator singleton. */
-    private OrganizationMessageGenerator generatorSingleton;
-    
-    /** The player AID. */
-    private AID player;
     
     private String action = "";
 
@@ -38,63 +26,6 @@ public class OrganizationMessage extends Message {
     // </editor-fold>
         
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    /**
-     * Gets the template to receive this message.
-     * @return the template to receive this message. 
-     */
-    @Override
-    public MessageTemplate getTemplate() {
-        if (templateSingleton == null) {
-            templateSingleton = MessageTemplate.and(
-            MessageTemplate.MatchProtocol(OrganizationProtocol.getInstance().getName()),
-            MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-        }
-        return templateSingleton;
-    }
-    
-    /**
-     * Gets the message parser singleton.
-     * @return the message parser singleton.
-     */
-    @Override
-    public MessageParser getParser() {       
-        if (parserSingleton == null) {
-            parserSingleton = new OrganizationMessageParser();
-        }
-        return parserSingleton;
-    }
-
-    /**
-     * Gets the message parser singleton.
-     * @return the message generator singleton.
-     */
-    @Override
-    public MessageGenerator getGenerator() {
-        if (generatorSingleton == null) {
-            generatorSingleton = new OrganizationMessageGenerator();
-        }
-        return generatorSingleton;
-    }
-    
-    /**
-     * Gets the player AID.
-     * @return the player AID.
-     */
-    public AID getPlayer() {
-        return player;
-    }
-    
-    /**
-     * Sets the player ADI.
-     * DP: Fluent iterface
-     * @param player the player AID.
-     * @return this 'Organization' message.
-     */
-    public OrganizationMessage setPlayer(AID player) {
-        this.player = player;
-        return this;
-    }
     
     public String getAction() {
         return action;
@@ -113,7 +44,28 @@ public class OrganizationMessage extends Message {
         this.role = role;
         return this;
     }
+    
+    // ---------- PROTECTED ----------
+    
+    @Override
+    protected int getPerformative() {
+        return ACLMessage.REQUEST;
+    }
         
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected MessageParser createParser() {
+        return new OrganizationMessageParser();
+    }
+
+    @Override
+    protected MessageGenerator createGenerator() {
+        return new OrganizationMessageGenerator();
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
