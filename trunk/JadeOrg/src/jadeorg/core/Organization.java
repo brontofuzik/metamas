@@ -1,8 +1,9 @@
 package jadeorg.core;
 
 import jade.wrapper.StaleProxyException;
-import jadeorg.proto.State;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.State;
+import jadeorg.proto.Party;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -14,6 +15,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.wrapper.AgentController;
+import jadeorg.lang.Message;
 import jadeorg.proto.enactprotocol.EnactProtocol;
 import jadeorg.proto.enactprotocol.RefuseMessage;
 import jadeorg.proto.organizationprotocol.OrganizationMessage;
@@ -22,6 +24,8 @@ import jadeorg.proto.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.OrganizationProtocol;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
+import jadeorg.proto.deactprotocol.DeactProtocol;
+import jadeorg.proto.deactprotocol.FailureMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -67,6 +71,14 @@ public abstract class Organization extends Agent {
     public void setup() {
         initialize();
         registerWithDF();
+    }
+    
+    public void send(Message message) {
+        // Generate the ACL message from the message.
+        ACLMessage aclMessage = message.getProtocol().generate(message.getClass(), message);
+        
+        // Send the ACL message.
+        send(aclMessage);
     }
     
     // ---------- PROTECTED ----------
@@ -139,7 +151,7 @@ public abstract class Organization extends Agent {
         
         @Override
         public void action() {
-            // Receive the message.
+            // Receive the 'Organization' message.
             MessageTemplate organizationMessageTemplate = OrganizationProtocol.getInstance()
                 .getTemplate(OrganizationMessage.class);
             ACLMessage message = myAgent.receive(organizationMessageTemplate);
@@ -190,16 +202,9 @@ public abstract class Organization extends Agent {
     /**
      * An 'Enact' protocol responder.
      */
-    private class EnactProtocolResponder extends Protocol {
+    private class EnactProtocolResponder extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private State receiveEnactRequest = new ReceiveEnactRequest();
-        private State sendRequirementsInform = new SendRequirementsInform();
-        private State sendFailure = new SendFailure();
-        private State receiveRequirementsInform = new ReceiveRequirementsInform();
-        private State sendRoleAID = new SendRoleAID();
-        private State end = new End();
         
         private String roleName;
         
@@ -218,8 +223,16 @@ public abstract class Organization extends Agent {
             this.roleName = roleName;
             this.player = player;
             
-            registerStates();       
-            registerTransitions();
+            registerStatesAndTransitions();       
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected Protocol getProtocol() {
+            return EnactProtocol.getInstance();
         }
         
         // </editor-fold>
@@ -227,21 +240,25 @@ public abstract class Organization extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         /**
-         * Registers the states.
+         * Registers the states and transitions.
          */
-        private void registerStates() {
+        private void registerStatesAndTransitions() {
+            State receiveEnactRequest = new ReceiveEnactRequest();
+            State sendRequirementsInform = new SendRequirementsInform();
+            State sendFailure = new SendRefuse();
+            State receiveRequirementsInform = new ReceiveRequirementsInform();
+            State sendRoleAID = new SendRoleAID();
+            State end = new End();
+        
+            // Register the states.
             registerState(new ReceiveEnactRequest());
             registerState(new SendRequirementsInform());
-            registerState(new SendFailure());
+            registerState(new SendRefuse());
             registerState(new ReceiveRequirementsInform());
             registerState(new SendRoleAID());
             registerState(new End());
-        }
-
-        /**
-         * Registers the transitions.
-         */
-        private void registerTransitions() {
+            
+            // Register the transitions (OLD).
             registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
             registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
             
@@ -253,9 +270,8 @@ public abstract class Organization extends Agent {
             registerDefaultTransition(sendRoleAID, end);
             
             registerDefaultTransition(sendFailure, end);
-        }
-        
-//        private void registerTransitions() {     
+            
+//            // Register the transitions (NEW).
 //            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
 //            receiveEnactRequest.registerTransition(1, sendFailure);
 //            
@@ -268,7 +284,7 @@ public abstract class Organization extends Agent {
 //            sendRoleAID.registerDefaultTransition(end);
 //            
 //            sendFailure.registerDefaultTransition(end);
-//        }
+        }
         
         // </editor-fold>
         
@@ -315,16 +331,12 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Create the 'Requirements' message.
-                RequirementsMessage requirementsMessage = new RequirementsMessage()
-                    .setPlayer(player)
-                    .setRequirements(requirements.get(roleName));
+                RequirementsMessage requirementsMessage = new RequirementsMessage();
+                requirementsMessage.setPlayer(player);
+                requirementsMessage.setRequirements(requirements.get(roleName));
                 
-                // Generate the ACL message.
-                ACLMessage aclMessage = EnactProtocol.getInstance()
-                    .generate(RequirementsMessage.class, requirementsMessage);
-                
-                // Send the message.
-                myAgent.send(aclMessage);
+                // Send the 'Requirements' message.
+                getOrganization().send(requirementsMessage);
             }
 
             @Override
@@ -336,9 +348,9 @@ public abstract class Organization extends Agent {
         }
         
         /**
-         * A state in which the 'Failure' message is send.
+         * A state in which the 'Refuse' message is send.
          */
-        private class SendFailure extends ActiveState {
+        private class SendRefuse extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Fields">
             
@@ -351,14 +363,11 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Create the 'Refuse' message.
-                RefuseMessage refuseMesage = new RefuseMessage()
-                    .setPlayer(player);
+                RefuseMessage refuseMessage = new RefuseMessage();
+                refuseMessage.setPlayer(player);
       
-                // Generate the ACL message.
-                ACLMessage aclMessage = EnactProtocol.getInstance()
-                    .generate(RefuseMessage.class, refuseMesage);
-                
-                myAgent.send(aclMessage);
+                // Set the 'Refuse' message.
+                getOrganization().send(refuseMessage);
             }
 
             @Override
@@ -384,13 +393,15 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                // Receive the message.
-                MessageTemplate messageTemplate = MessageTemplate.MatchProtocol(EnactProtocol.getInstance().getName());
-                ACLMessage message = myAgent.receive(messageTemplate);
-                if (message != null) {
-                    if (message.getPerformative() == ACLMessage.AGREE) {
-                        
-                    } else if (message.getPerformative() == ACLMessage.REFUSE) {
+                // Receive the ACL message.
+                ACLMessage aclMessage = getOrganization()
+                    .receive(EnactProtocol.getInstance().getTemplate());
+                
+                if (aclMessage != null) {
+                    if (aclMessage.getPerformative() == ACLMessage.AGREE) {
+                        // TODO
+                    } else if (aclMessage.getPerformative() == ACLMessage.REFUSE) {
+                        // TODO
                     } else {
                         sendNotUnderstood(player);
                     }
@@ -427,16 +438,12 @@ public abstract class Organization extends Agent {
                 roleManager.updatePlayer_Enact(roleName, player);
                 
                 // Create the 'RoleAID' message.
-                RoleAIDMessage roleAIDMessage = new RoleAIDMessage()
-                    .setPlayer(player)
-                    .setRoleAID(role.getAID());
+                RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
+                roleAIDMessage.setPlayer(player);
+                roleAIDMessage.setRoleAID(role.getAID());
                 
-                // Generate the ACL message.
-                ACLMessage aclMessage = EnactProtocol.getInstance()
-                    .generate(RoleAIDMessage.class, roleAIDMessage);
-                        
-                // Send the ACL message.
-                myAgent.send(aclMessage);
+                // Send the 'RoleAID' message.
+                getOrganization().send(roleAIDMessage);
             }
             
             @Override
@@ -521,7 +528,7 @@ public abstract class Organization extends Agent {
     /**
      * A 'Deact' protocol responder.
      */
-    private class DeactProtocolResponder extends FSMBehaviour {
+    private class DeactProtocolResponder extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
@@ -541,6 +548,171 @@ public abstract class Organization extends Agent {
             
             this.roleName = roleName;
             this.player = player;
+            
+            registerStatesAndTransitions();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+       @Override
+        protected Protocol getProtocol() {
+            return DeactProtocol.getInstance();
+        }
+        
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        /**
+         * Registers the transitions and transitions.
+         */
+        private void registerStatesAndTransitions() {
+            State receiveDeactRequest = new ReceiveDeactRequest();
+            State sendDeactInformation = new SendDeactInformation();
+            State sendDeactFailure = new SendDeactFailure();
+            State end = new End();
+        
+            // Register the states.
+            registerFirstState(receiveDeactRequest);
+            registerState(sendDeactInformation);
+            registerState(sendDeactFailure);
+            registerLastState(end);
+            
+            // Register the transisions (OLD).
+            registerTransition(receiveDeactRequest, sendDeactInformation, PassiveState.Event.SUCCESS);
+            registerTransition(receiveDeactRequest, sendDeactFailure, PassiveState.Event.FAILURE);
+            
+            registerDefaultTransition(sendDeactInformation, end);
+            
+            registerDefaultTransition(sendDeactFailure, end);
+            
+//            // Register the transisions (NEW).
+//            receiveDeactRequest.registerTransition(PassiveState.Event.SUCCESS, sendDeactInformation);
+//            receiveDeactRequest.registerTransition(PassiveState.Event.FAILURE, sendDeactFailure);
+//            
+//            sendDeactInformation.registerDefaultTransition(end);
+//            
+//            sendDeactFailure.registerDefaultTransition(end);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        /**
+         * The 'Receive deact request' active state.
+         */
+        class ReceiveDeactRequest extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-deact-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Send deact information' active state.
+         */
+        class SendDeactInformation extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-deact-information";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Send deact failure' active state.
+         */
+        class SendDeactFailure extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-deact-failure";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Create the 'Failure' message.
+                FailureMessage failureMessage = new FailureMessage();
+                failureMessage.setPlayer(player);
+                
+                getOrganization().send(failureMessage);
+                
+                // Generate the ACL message from the 'Failure' message.
+                ACLMessage aclMessage = OrganizationProtocol.getInstance()
+                    .generate(FailureMessage.class, failureMessage);
+                
+                // Send the ACL message.
+                myAgent.send(aclMessage);
+            }
+
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'End' active state.
+         */
+        class End extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+            }
+
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>

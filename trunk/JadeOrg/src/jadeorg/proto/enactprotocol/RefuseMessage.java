@@ -2,10 +2,10 @@ package jadeorg.proto.enactprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.lang.PlayerMessage;
 
 /**
  * A refuse message parser/generator.
@@ -13,79 +13,31 @@ import jadeorg.lang.MessageParser;
  * containing a refusal to enact/deact a certain role.
  * @author Lukáš Kúdela (2011-10-21)
  */
-public class RefuseMessage extends Message {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The message template sinleton. */
-    private MessageTemplate templateSingleton;
-    
-    /** The message parser singleton. */
-    private RefuseMessageParser parserSingleton;
-    
-    /** The message generator singleton. */
-    private RefuseMessageGenerator generatorSingleton;
-    
-    /** The player AID. */
-    private AID player;
-    
-    // </editor-fold>
+public class RefuseMessage extends PlayerMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    // ---------- PROTECTED ----------
+
     @Override
-    public MessageTemplate getTemplate() {
-        if (templateSingleton == null) {
-            templateSingleton = MessageTemplate.and(
-                MessageTemplate.MatchProtocol(EnactProtocol.getInstance().getName()),
-                MessageTemplate.MatchPerformative(ACLMessage.REFUSE));
-        }
-        return templateSingleton;
+    protected int getPerformative() {
+        return ACLMessage.REFUSE;
     }
     
-    /**
-     * Gets the message parser singleton.
-     * @return the message parser singleton.
-     */
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+
     @Override
-    public MessageParser getParser() {
-        if (parserSingleton == null) {
-            parserSingleton = new RefuseMessageParser();
-        }
-        return parserSingleton;
+    protected MessageParser createParser() {
+        return new RefuseMessageParser();
     }
 
-    /**
-     * Gets the message genertor singleton.
-     * @return the message generator singleton.
-     */
     @Override
-    public MessageGenerator getGenerator() {
-        if (generatorSingleton == null) {
-            generatorSingleton = new RefuseMessageGenerator();
-        }
-        return generatorSingleton;
+    protected MessageGenerator createGenerator() {
+        return new RefuseMessageGenerator();
     }
-    
-    /**
-     * Gets the player AID.
-     * @return the player AID
-     */
-    public AID getPlayer() {
-        return player;
-    }
-    
-    /**
-     * Sets the player AID.
-     * DP: Fluent interface
-     * @param player the player AID
-     * @return this 'Refuse' message.
-     */
-    public RefuseMessage setPlayer(AID player) {
-        this.player = player;
-        return this;
-    }
-    
+      
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">

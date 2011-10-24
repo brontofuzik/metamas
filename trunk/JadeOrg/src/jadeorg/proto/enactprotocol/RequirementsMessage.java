@@ -2,10 +2,10 @@ package jadeorg.proto.enactprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.lang.PlayerMessage;
 import java.util.Arrays;
 
 /**
@@ -14,80 +14,15 @@ import java.util.Arrays;
  * containing information about requirements to enact a certain role.
  * @author Lukáš Kúdela (2011-10-20)
  */
-public class RequirementsMessage extends Message {
+public class RequirementsMessage extends PlayerMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The message template singleton. */
-    private MessageTemplate templateSingleton;
-    
-    /** The message parser singleton. */
-    private RequirementsMessageParser parserSingleton;
-    
-    /** The message generator singleton. */
-    private RequirementsMessageGenerator generatorSingleton;
-
-    /** The player AID. */
-    private AID player;
     
     private String[] requirements;
 
     // </editor-fold>
         
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public MessageTemplate getTemplate() {
-        if (templateSingleton == null) {
-            templateSingleton = MessageTemplate.and(
-                MessageTemplate.MatchProtocol(EnactProtocol.getInstance().getName()),
-                MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-        }
-        return templateSingleton;
-    }
-    
-    /**
-     * Gets the message parser singleton.
-     * @return the message parser singleton.
-     */
-    @Override
-    public MessageParser getParser() {
-        if (parserSingleton == null) {
-            parserSingleton = new RequirementsMessageParser();
-        }
-        return parserSingleton;   
-    }
-
-    /**
-     * Gets the message genertor singleton.
-     * @return the message generator singleton.
-     */
-    @Override
-    public MessageGenerator getGenerator() {
-        if (generatorSingleton == null) {
-            generatorSingleton = new RequirementsMessageGenerator();
-        }
-        return generatorSingleton;  
-    }
-   
-    /**
-     * Gets the player AID.
-     * @return the player AID
-     */
-    public AID getPlayer() {
-        return player;
-    }
-
-       /**
-     * Sets the player AID.
-     * DP: Fluent interface
-     * @param player the player AID
-     * @return this 'Refuse' message.
-     */
-    public RequirementsMessage setPlayer(AID player) {
-        this.player = player;
-        return this;
-    }
     
     /**
      * Gets the requirements.
@@ -104,6 +39,27 @@ public class RequirementsMessage extends Message {
     public RequirementsMessage setRequirements(String[] requirements) {
         this.requirements = Arrays.copyOf(requirements, requirements.length);
         return this;
+    }
+    
+    // ---------- PROTECTED ----------
+    
+    @Override
+    protected int getPerformative() {
+        return ACLMessage.INFORM;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected MessageParser createParser() {
+        return new RequirementsMessageParser();
+    }
+
+    @Override
+    protected MessageGenerator createGenerator() {
+        return new RequirementsMessageGenerator();
     }
     
     // </editor-fold>

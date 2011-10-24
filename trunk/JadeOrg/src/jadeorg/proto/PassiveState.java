@@ -1,6 +1,9 @@
 package jadeorg.proto;
 
 import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jadeorg.lang.Message;
 
 /**
  * A passive protocol state.
@@ -12,8 +15,8 @@ public abstract class PassiveState extends CyclicBehaviour
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The parent protocol. */
-    private Protocol myProtocol;
+    /** The parent party. */
+    private Party myParty;
     
     /** The exist value. */
     private Event exitValue;
@@ -22,19 +25,20 @@ public abstract class PassiveState extends CyclicBehaviour
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    /** Gets the parent protocol.
-     * @returns the parent protocol
+    /**
+     * Gets the parent party.
+     * @return the parent party
      */
-    public Protocol getProtocol() {
-        return myProtocol;
+    public Party getParty() {
+        return myParty;
     }
     
     /**
      * Sets the parent protocol.
      * @protocol the parent protocol
      */
-    public void setProtocol(Protocol protocol) {
-        this.myProtocol = protocol;
+    public void setParty(Party protocol) {
+        this.myParty = protocol;
     }
     
     // </editor-fold>
@@ -47,7 +51,7 @@ public abstract class PassiveState extends CyclicBehaviour
      * @param targetState the target state
      */
     public void registerTransition(Event event, State state) {
-        myProtocol.registerTransition(this, state, event);
+        myParty.registerTransition(this, state, event);
     }
     
     /**
@@ -57,13 +61,32 @@ public abstract class PassiveState extends CyclicBehaviour
      * @param targetState the target state.
      */
     public void registerDefaultTransition(State state) {
-        myProtocol.registerDefaultTransition(this, state);
+        myParty.registerDefaultTransition(this, state);
+    }
+    
+    /**
+     * Receives a JadeOrg message.
+     * @param messageClass the message class
+     * @return the received message
+     */
+    public Message receive(Class messageClass) {
+        return getParty().receive(messageClass);
+    }
+    
+    /**
+     * Receives an ACL message.
+     * @return the received message
+     */
+    public ACLMessage receive() {
+        return getParty().receive();
     }
     
     @Override
     public int onEnd() {
         return exitValue.getCode();
     }
+    
+    // ---------- PRIVATE ----------
     
     // </editor-fold>
     

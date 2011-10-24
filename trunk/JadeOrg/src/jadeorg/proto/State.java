@@ -17,11 +17,13 @@ public interface State {
      */
     public abstract String getName();
     
+    public Party getParty();
+    
     /**
-     * Sets the parent protocol.
-     * @protocol the parent protocol
+     * Sets the parent party.
+     * @protocol the parent party
      */
-    public void setProtocol(Protocol protocol);
+    public void setParty(Party party);
     
     // </editor-fold>
     
