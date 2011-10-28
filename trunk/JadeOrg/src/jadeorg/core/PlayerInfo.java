@@ -1,22 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jadeorg.core;
 
 import jade.core.AID;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A player info.
  * @author Lukáš Kúdela (2011-10-18)
  */
-public class PlayerInfo {
+class PlayerInfo {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The AID of the player. */
     private AID playerAID;
     
+    /** The name of the player. */
     private String name;
+    
+    /** The roles the player enacts. */
+    private Set<String> enactedRoles = new HashSet<String>();
     
     // </editor-fold>
     
@@ -46,4 +49,16 @@ public class PlayerInfo {
     }
     
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    boolean doesEn
+            
+    void enactRole(String role) {
+    }
+    
+    void deactRole(String role) {
+    }
+    
+    // </editor-fold> 
 }
