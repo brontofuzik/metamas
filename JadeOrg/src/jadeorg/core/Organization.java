@@ -51,9 +51,6 @@ public abstract class Organization extends Agent {
     /** The organization roles. */
     private Map<String, Class> roles = new Hashtable<String, Class>();
     
-    /** The enacted roles. */
-    private Map<String, Role> enactedRoles = new Hashtable<String, Role>();
-    
     /** The requirements. */
     private Map<String, String[]> requirements = new Hashtable<String, String[]>();
     
@@ -61,7 +58,7 @@ public abstract class Organization extends Agent {
     private DFAgentDescription agentDescription;
     
     /** The role manager. */
-    private RoleManager roleManager;
+    private OrganizationKnowledgeBase knowledge;
     
     // </editor-fold>
     
@@ -182,9 +179,17 @@ public abstract class Organization extends Agent {
          * @param roleName the name of the role
          * @param player the player
          */
+        // TODO Move the precondition assertions to the 'Enact' protocol responder behaviour.
         private void enactRole(String roleName, AID player) {
+            // If the role is defined for this organization ...
             if (roles.containsKey(roleName)) {
-                addBehaviour(new EnactProtocolResponder(roleName, player));
+                
+                // ... and it is currently not enacted by any player ...
+                if (!knowledge.queryIfRoleIeEnacted(roleName)) {
+                    
+                    // ... respond according to the 'Enact' protocol.
+                    addBehaviour(new EnactProtocolResponder(roleName, player));
+                }          
             }
         }
 
@@ -192,8 +197,18 @@ public abstract class Organization extends Agent {
          * @param roleName the name of the role
          * @param player the player
          */
+        // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
         private void deactRole(String roleName, AID player) {
-            addBehaviour(new DeactProtocolResponder(roleName, player));
+            // If the role is defined for this organization ...
+            if (roles.containsKey(roleName)) {
+                
+                // ... and it is currently enacted by the player.
+                if (knowledge.queryIfRoleIsEnactedByPlayer(roleName, player)) {
+                
+                    // ... respond according to the the 'Deact' protocol.
+                    addBehaviour(new DeactProtocolResponder(roleName, player));
+                }
+            }      
         }
                 
         // </editor-fold>
@@ -434,8 +449,7 @@ public abstract class Organization extends Agent {
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
                 
-                enactedRoles.put(roleName + ":" + player.getName(), role);
-                roleManager.updatePlayer_Enact(roleName, player);
+                knowledge.update_roleGetsEnacted(roleName, role);
                 
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
