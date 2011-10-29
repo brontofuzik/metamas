@@ -26,7 +26,7 @@ class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // ----- QUERY METHODS -----
+    // ----- QUERY -----
     
     /**
      * Queries this organization knowledge base to determine whether
@@ -36,7 +36,7 @@ class OrganizationKnowledgeBase {
      * @return <c>true</c> if the specified role is enacted by the specified player;
      *         <c>false</c> otherwise.
      */
-    public boolean queryIfRoleIsEnactedByPlayer(String roleName, AID player) {
+    public boolean isRoleEnactedByPlayer(String roleName, AID player) {
         return true;
     }
     
@@ -47,7 +47,7 @@ class OrganizationKnowledgeBase {
      * @return <c>true</c> if the specified role is enacted by any player;
      *         <c>false</c> otherwise.
      */
-    public boolean queryIfRoleIeEnacted(String roleName) {
+    public boolean isRoleEnacted(String roleName) {
         return false;
     }
     
@@ -58,11 +58,11 @@ class OrganizationKnowledgeBase {
      * @return <c>true</c> if the specified player enacts any role;
      *         <c>false</c> otherwise.
      */
-    public boolean queryIfPlayerEnacts(AID player) {
+    public boolean doesPlayerEnact(AID player) {
         return false;
     }
     
-    // ----- UPDATE METHODS -----
+    // ----- UPDATE -----
     
     /**
      * Updates this organization knowledge base to contain information about

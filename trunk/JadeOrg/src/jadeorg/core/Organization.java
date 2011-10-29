@@ -185,7 +185,7 @@ public abstract class Organization extends Agent {
             if (roles.containsKey(roleName)) {
                 
                 // ... and it is currently not enacted by any player ...
-                if (!knowledgeBase.queryIfRoleIeEnacted(roleName)) {
+                if (!knowledgeBase.isRoleEnacted(roleName)) {
                     
                     // ... respond according to the 'Enact' protocol.
                     addBehaviour(new EnactProtocolResponder(roleName, player));
@@ -203,7 +203,7 @@ public abstract class Organization extends Agent {
             if (roles.containsKey(roleName)) {
                 
                 // ... and it is currently enacted by the player.
-                if (knowledgeBase.queryIfRoleIsEnactedByPlayer(roleName, player)) {
+                if (knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
                 
                     // ... respond according to the the 'Deact' protocol.
                     addBehaviour(new DeactProtocolResponder(roleName, player));
@@ -258,20 +258,22 @@ public abstract class Organization extends Agent {
          * Registers the states and transitions.
          */
         private void registerStatesAndTransitions() {
+            // ----- States -----
             State receiveEnactRequest = new ReceiveEnactRequest();
             State sendRequirementsInform = new SendRequirementsInform();
             State sendFailure = new SendRefuse();
             State receiveRequirementsInform = new ReceiveRequirementsInform();
             State sendRoleAID = new SendRoleAID();
             State end = new End();
+            // ------------------
         
             // Register the states.
-            registerState(new ReceiveEnactRequest());
+            registerFirstState(new ReceiveEnactRequest());
             registerState(new SendRequirementsInform());
             registerState(new SendRefuse());
             registerState(new ReceiveRequirementsInform());
             registerState(new SendRoleAID());
-            registerState(new End());
+            registerLastState(new End());
             
             // Register the transitions (OLD).
             registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
