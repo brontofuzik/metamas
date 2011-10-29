@@ -2,13 +2,19 @@ package jadeorg.player;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
+import jadeorg.proto.Party;
 
 /**
  * A player agent.
  * @author Lukáš Kúdela (2011-10-17)
  */
-public class Player extends Agent {
+public class Player extends Agent { 
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
@@ -33,7 +39,7 @@ public class Player extends Agent {
     
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class PlayerManagerBehaviour extends CyclicBehaviour {
 
@@ -43,7 +49,7 @@ public class Player extends Agent {
         }
     }
     
-    private class EnactProtocolInitiator extends FSMBehaviour {
+    private class EnactProtocolInitiator extends Party {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -53,7 +59,7 @@ public class Player extends Agent {
         // </editor-fold>
     }
     
-    private class DeactProtocolInitiator extends FSMBehaviour {
+    private class DeactProtocolInitiator extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -64,7 +70,7 @@ public class Player extends Agent {
     
     }
     
-    private class ActivateProtocolInitiator extends FSMBehaviour {
+    private class ActivateProtocolInitiator extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -74,7 +80,7 @@ public class Player extends Agent {
         // </editor-fold>
     }
     
-    private class DeactivateProtocolInitiator extends FSMBehaviour {
+    private class DeactivateProtocolInitiator extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         

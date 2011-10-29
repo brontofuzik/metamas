@@ -57,8 +57,8 @@ public abstract class Organization extends Agent {
     /** The DF agent description. */
     private DFAgentDescription agentDescription;
     
-    /** The role manager. */
-    private OrganizationKnowledgeBase knowledge;
+    /** The knowledge base. */
+    private OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
     
     // </editor-fold>
     
@@ -185,7 +185,7 @@ public abstract class Organization extends Agent {
             if (roles.containsKey(roleName)) {
                 
                 // ... and it is currently not enacted by any player ...
-                if (!knowledge.queryIfRoleIeEnacted(roleName)) {
+                if (!knowledgeBase.queryIfRoleIeEnacted(roleName)) {
                     
                     // ... respond according to the 'Enact' protocol.
                     addBehaviour(new EnactProtocolResponder(roleName, player));
@@ -203,7 +203,7 @@ public abstract class Organization extends Agent {
             if (roles.containsKey(roleName)) {
                 
                 // ... and it is currently enacted by the player.
-                if (knowledge.queryIfRoleIsEnactedByPlayer(roleName, player)) {
+                if (knowledgeBase.queryIfRoleIsEnactedByPlayer(roleName, player)) {
                 
                     // ... respond according to the the 'Deact' protocol.
                     addBehaviour(new DeactProtocolResponder(roleName, player));
@@ -306,7 +306,7 @@ public abstract class Organization extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
         /**
-         * A state in which the 'Enact' message is received.
+         * The state in which the 'Enact' message is received.
          */
         private class ReceiveEnactRequest extends PassiveState {
 
@@ -331,7 +331,7 @@ public abstract class Organization extends Agent {
         }
         
         /**
-         * A state in which the 'Requirements' message is send.
+         * The state in which the 'Requirements' message is send.
          */
         private class SendRequirementsInform extends ActiveState {
 
@@ -363,7 +363,7 @@ public abstract class Organization extends Agent {
         }
         
         /**
-         * A state in which the 'Refuse' message is send.
+         * The state in which the 'Refuse' message is send.
          */
         private class SendRefuse extends ActiveState {
 
@@ -394,7 +394,7 @@ public abstract class Organization extends Agent {
         }
         
         /**
-         * A state in which the 'Requirements' message is received.
+         * The state in which the 'Requirements' message is received.
          */
         private class ReceiveRequirementsInform extends PassiveState {
 
@@ -433,7 +433,9 @@ public abstract class Organization extends Agent {
             // </editor-fold>
         }
         
-        /** A state in which the 'Role AID' message is send. */
+        /**
+         * The state in which the 'Role AID' message is send.
+         */
         private class SendRoleAID extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -449,7 +451,7 @@ public abstract class Organization extends Agent {
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
                 
-                knowledge.updateRoleIsEnacted(role, player);
+                knowledgeBase.updateRoleIsEnacted(role, player);
                 
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
@@ -513,7 +515,9 @@ public abstract class Organization extends Agent {
             // </editor-fold>    
         }
         
-        /** */
+        /**
+         * The ending state.
+         */
         public class End extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
