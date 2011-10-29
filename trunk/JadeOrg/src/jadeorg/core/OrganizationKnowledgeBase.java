@@ -72,12 +72,13 @@ class OrganizationKnowledgeBase {
      */
     void updateRoleIsEnacted(Role role, AID player) {
         // ----- Preconditions -----
+        assert role != null;
+        assert player != null;
         assert !enactedRoles.containsKey(role);
         // -------------------------
         
         enactedRoles.put(role.getName(), role);
-        PlayerInfo playerInfo = getPlayerInfo(player);
-        
+        updatePlayerEnactsRole(player, role.getName());
     }
     
     /**
@@ -88,38 +89,60 @@ class OrganizationKnowledgeBase {
      */
     void roleIsDeactedByPlayer(Role role, AID player) {
         // ----- Preconditions -----
+        assert role != null;
+        assert player != null;
         assert enactedRoles.containsKey(role);
         // -------------------------
         
         enactedRoles.remove(role.getName());
-        removePlayer(player);
+        updatePlayerDeactsRole(player, role.getName());
     }
     
     // ---------- PRIVATE ----------
+
+    private void updatePlayerEnactsRole(AID playerAID, String roleName) {
+        // ----- Prconditions -----
+        assert playerAID != null;
+        assert roleName != null && !roleName.isEmpty();
+        // ------------------------
+        
+        // Get the player info.
+        PlayerInfo playerInfo = getPlayerInfo(playerAID);
+        
+        // Create the player info if the player is unemployed.
+        if (!playerInfo.isEmployed()) {
+            players.put(playerAID, playerInfo);
+        }
+        
+        // Enact the role.
+        playerInfo.enactRole(roleName);
+    }
+
+    private void updatePlayerDeactsRole(AID playerAID, String roleName) {
+       // ----- Prconditions -----
+        assert playerAID != null;
+        assert roleName != null && !roleName.isEmpty();
+        // ------------------------
+        
+        // Get the player info.
+        PlayerInfo playerInfo = getPlayerInfo(playerAID);
+        
+        // Deact the role.
+        playerInfo.deactRole(roleName);
+        
+        // Delete the player info if the player is unemployed.
+        if (!playerInfo.isEmployed()) {
+            players.remove(playerAID);
+        }
+    }
     
     private PlayerInfo getPlayerInfo(AID playerAID) {
         PlayerInfo playerInfo = players.get(playerAID);
         if (playerInfo == null) {
-            // A new player.
             playerInfo = new PlayerInfo(playerAID);
-            players.put(playerAID, playerInfo);
         }
         return playerInfo;
     }
     
-    private void addPlayer(AID player) {
-        // Get the player info.
-        PlayerInfo playerInfo = players.get(player);
-        if (playerInfo == null) {
-            // A new player.
-            playerInfo = new PlayerInfo(player);
-            players.put(player, playerInfo);
-        }
-        playerInfo
-        
-        
-        players.put(player, new PlayerInfo(player));
-    }
-        
     // </editor-fold>  
 }
