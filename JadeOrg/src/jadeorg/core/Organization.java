@@ -449,7 +449,7 @@ public abstract class Organization extends Agent {
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
                 
-                knowledge.update_roleGetsEnacted(roleName, role);
+                knowledge.updateRoleIsEnacted(role, player);
                 
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
