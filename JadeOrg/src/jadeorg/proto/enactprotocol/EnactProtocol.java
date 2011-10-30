@@ -6,8 +6,9 @@ import jadeorg.proto.Protocol;
  * The 'Enact' protocol.
  * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
  * DP: This cass plays the role of 'Concrete factory' in the Abstract factory design pattern.
- * @author Lukáš Kúdela (2011-10-21)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-21
+ * @version %I% %G%
  */
 public class EnactProtocol extends Protocol {
    

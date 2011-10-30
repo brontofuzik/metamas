@@ -12,7 +12,9 @@ import java.util.Arrays;
  * A requirements message parser/generator.
  * A requirements message is a message send from an Organization agent to a Player agent
  * containing information about requirements to enact a certain role.
- * @author Lukáš Kúdela (2011-10-20)
+ * @author Lukáš Kúdela
+ * @since 2011-10-20
+ * @version %I% %G%
  */
 public class RequirementsMessage extends PlayerMessage {
     
@@ -71,7 +73,7 @@ public class RequirementsMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class RequirementsMessageParser extends MessageParser {
 
@@ -110,7 +112,7 @@ public class RequirementsMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class RequirementsMessageGenerator extends MessageGenerator {
 

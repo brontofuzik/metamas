@@ -15,7 +15,9 @@ import java.util.StringTokenizer;
 
 /**
  * A role agent.
- * @author Lukáš Kúdela (2011-10-16)
+ * @author Lukáš Kúdela
+ * @since 2011-10-16
+ * @version %I% %G%
  */
 public class Role extends Agent {
     

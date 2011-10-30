@@ -11,7 +11,9 @@ import java.util.StringTokenizer;
 
 /**
  * The JadeOrg DF service wrapper.
- * @author Lukas
+ * @author Lukáš Kúdela
+ * @since 2011-10-29
+ * @version %I% %G%
  */
 public class YellowPages {
     

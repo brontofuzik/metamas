@@ -11,7 +11,8 @@ import jadeorg.lang.PlayerMessage;
  * A refuse message parser/generator.
  * A refuse message is a message send from an Organization agent to a Player agent
  * containing a refusal to enact/deact a certain role.
- * @author Lukáš Kúdela (2011-10-21)
+ * @author Lukáš Kúdela
+ * @since 2011-10-21
  */
 public class RefuseMessage extends PlayerMessage {
     
@@ -47,7 +48,7 @@ public class RefuseMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class RefuseMessageParser extends MessageParser {
 
@@ -70,7 +71,7 @@ public class RefuseMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class RefuseMessageGenerator extends MessageGenerator {
 

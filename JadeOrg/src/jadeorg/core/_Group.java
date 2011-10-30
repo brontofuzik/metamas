@@ -1,7 +1,7 @@
 package jadeorg.core;
 
 import jade.core.Agent;
-import jadeorg.behaviours.NameResponderBehaviour;
+import jadeorg.behaviours._NameResponderBehaviour;
 
 /**
  *
@@ -52,7 +52,7 @@ public abstract class _Group extends Agent {
         // Preconditions
         assert name != null && !name.isEmpty();
         
-        addBehaviour(new NameResponderBehaviour(name));
+        addBehaviour(new _NameResponderBehaviour(name));
         doInitializeBehaviour();
     }   
     

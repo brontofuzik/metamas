@@ -8,7 +8,7 @@ import jade.lang.acl.MessageTemplate;
  *
  * @author Lukáš Kúdela (2011-10-12)
  */
-public class NameResponderBehaviour extends CyclicBehaviour {
+public class _NameResponderBehaviour extends CyclicBehaviour {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -26,7 +26,7 @@ public class NameResponderBehaviour extends CyclicBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public NameResponderBehaviour(String name) {
+    public _NameResponderBehaviour(String name) {
         assert !name.isEmpty();
         
         this.name = name;

@@ -6,8 +6,9 @@ import jadeorg.proto.Protocol;
  * The 'Deact' protocol.
  * DP: Singleton - Singleton
  * DP: Abstract factory - Concrete factory
- * @author Lukáš Kúdela (2011-10-24)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-24
+ * @version %I% %G%
  */
 public class DeactProtocol extends Protocol {
 

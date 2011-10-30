@@ -33,8 +33,9 @@ import java.util.Map;
 
 /**
  * An organization agent.
- * @author Lukáš Kúdela (2011-10-16)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-16
+ * @version %I% %G%
  */
 public abstract class Organization extends Agent {
     

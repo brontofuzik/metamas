@@ -5,8 +5,9 @@ import jade.lang.acl.ACLMessage;
 /**
  * A message parser.
  * DP: Abstract factory - Abstract product
- * @author Lukáš Kúdela (2011-10-21)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-21
+ * @version %I% %G%
  */
 public abstract class MessageParser {
 

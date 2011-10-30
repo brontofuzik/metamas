@@ -1,6 +1,6 @@
 package jadeorg.core;
 
-import jadeorg.behaviours.NameResponderBehaviour;
+import jadeorg.behaviours._NameResponderBehaviour;
 
 /**
  *
@@ -59,7 +59,7 @@ public class _Agent extends jade.core.Agent {
         assert name != null && !name.isEmpty();
         assert groupPositions != null;
         
-        addBehaviour(new NameResponderBehaviour(name));
+        addBehaviour(new _NameResponderBehaviour(name));
         for (String groupPosition : groupPositions) {
             String groupName = getGroupName(groupPosition);
             String positionName = getPositionName(groupPosition);
