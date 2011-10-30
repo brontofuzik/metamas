@@ -6,7 +6,9 @@ import java.util.Set;
 
 /**
  * A player info.
- * @author Lukáš Kúdela (2011-10-18)
+ * @author Lukáš Kúdela
+ * @since 2011-10-18
+ * @version %I% %G%
  */
 class PlayerInfo {
     

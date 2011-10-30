@@ -6,8 +6,9 @@ import java.util.Map;
 
 /**
  * An organization knowledge base.
- * @author Lukáš Kúdela (2011-10-27)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-27
+ * @version %I% %G%
  */
 class OrganizationKnowledgeBase {
     

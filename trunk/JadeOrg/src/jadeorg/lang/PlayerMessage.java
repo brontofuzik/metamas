@@ -4,8 +4,9 @@ import jade.core.AID;
 
 /**
  * A 'Player' (abstract) message.
- * @author Lukáš Kúdela (2011-10-23)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-23
+ * @version %I% %G%
  */
 public abstract class PlayerMessage extends Message {
     

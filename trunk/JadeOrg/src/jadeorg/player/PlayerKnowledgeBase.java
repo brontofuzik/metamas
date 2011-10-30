@@ -4,8 +4,9 @@ import java.util.Hashtable;
 
 /**
  * A player knowledge base.
- * @author Lukáš Kúdela (2011-10-29)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-29
+ * @version %I% %G%
  */
 class PlayerKnowledgeBase {
     

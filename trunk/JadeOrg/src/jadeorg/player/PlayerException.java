@@ -2,8 +2,9 @@ package jadeorg.player;
 
 /**
  * A player exception.
- * @author Lukáš Kúdela (2011-10-29)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-29
+ * @version %I% %G%
  */
 public class PlayerException extends Exception {
     
@@ -21,7 +22,7 @@ public class PlayerException extends Exception {
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructor">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public PlayerException(Player player, String message) {
         // ----- Preconditiosn -----

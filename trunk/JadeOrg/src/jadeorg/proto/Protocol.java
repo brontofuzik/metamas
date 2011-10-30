@@ -11,8 +11,9 @@ import java.util.Map;
 /**
  * An interaction protocol.
  * DP: Abstract factory - Abstract factory
- * @author Lukáš Kúdela (2011-1-21)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-21
+ * @version %I% %G%
  */
 public abstract class Protocol {
     

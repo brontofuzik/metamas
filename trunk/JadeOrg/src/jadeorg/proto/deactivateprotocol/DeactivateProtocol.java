@@ -5,8 +5,9 @@ import jadeorg.proto.Protocol;
 /**
  * The 'Deactivate' protocol.
  * DP: Singleton - Singleton
- * @author Lukáš Kúdela (2011-10-29)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-29
+ * @version %I% %G%
  */
 public class DeactivateProtocol extends Protocol {
 

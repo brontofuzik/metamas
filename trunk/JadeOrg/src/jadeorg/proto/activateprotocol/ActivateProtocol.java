@@ -4,8 +4,9 @@ import jadeorg.proto.Protocol;
 
 /**
  * The 'Activate' protocol.
- * @author Lukáš Kúdela (2011-10-29)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-29
+ * @version %I% %G%
  */
 public class ActivateProtocol extends Protocol {
 

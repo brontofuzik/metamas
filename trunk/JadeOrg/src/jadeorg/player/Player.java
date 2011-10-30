@@ -22,7 +22,9 @@ import jadeorg.proto.enactprotocol.EnactProtocol;
 
 /**
  * A player agent.
- * @author Lukáš Kúdela (2011-10-17)
+ * @author Lukáš Kúdela
+ * @since 2011-10-17
+ * @version %I% %G%
  */
 public class Player extends Agent {
 
@@ -135,7 +137,7 @@ public class Player extends Agent {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Constructor">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public EnactProtocolInitiator(AID organization, String roleName) {
             // ----- Preconditions -----
@@ -329,7 +331,7 @@ public class Player extends Agent {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Constructor">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public DeactProtocolInitiator(AID organization, String roleName) {
             // ----- Preconditions -----
@@ -448,7 +450,7 @@ public class Player extends Agent {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Constructor">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public ActivateProtocolInitiator(RoleInfo roleInfo) {
             // ----- Preconditions -----
@@ -565,7 +567,7 @@ public class Player extends Agent {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Constructor">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public DeactivateProtocolInitiator(RoleInfo roleInfo) {
             // ----- Preconditions -----

@@ -5,7 +5,9 @@ import jade.core.behaviours.FSMBehaviour;
 
 /**
  * A power.
- * @author Lukáš Kúdela (2011-11-19)
+ * @author Lukáš Kúdela
+ * @since 2011-11-19
+ * @version %I% %G%
  */
 public class Power extends FSMBehaviour {
     

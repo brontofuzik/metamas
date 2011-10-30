@@ -12,8 +12,9 @@ import java.util.StringTokenizer;
  * An organization message.
  * An organization message is a message send from a Player agent to an Organization agent
  * containing a request to enact/deact a certain role.
- * @author Lukáš Kúdela (2011-10-20)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-20
+ * @version %I% %G%
  */
 public class OrganizationMessage extends PlayerMessage {
     
@@ -75,7 +76,7 @@ public class OrganizationMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class OrganizationMessageParser extends MessageParser {
 
@@ -118,7 +119,7 @@ public class OrganizationMessage extends PlayerMessage {
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
-     * @version 0.1
+     * @version %I% %G%
      */
     class OrganizationMessageGenerator extends MessageGenerator {
 

@@ -11,8 +11,9 @@ import jadeorg.lang.PlayerMessage;
  * A 'Role AID' message.
  * A 'Role AID' message is send by an Organization agent to a Player agent
  * as part the 'Enact' protocol and contains information about the Role agent's AID.
- * @author Lukáš Kúdela (2011-10-23)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-23
+ * @version %I% %G%
  */
 public class RoleAIDMessage extends PlayerMessage {
 

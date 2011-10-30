@@ -7,8 +7,9 @@ import jadeorg.lang.Message;
 
 /**
  * A passive protocol state.
- * @author Lukáš Kúdela (2011-10-20)
- * @version 0.1
+ * @author Lukáš Kúdela
+ * @since 2011-10-20
+ * @version %I% %G%
  */
 public abstract class PassiveState extends CyclicBehaviour
     implements State {
