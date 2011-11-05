@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.core.Organization;
 import jadeorg.lang.Message;
+import jadeorg.player.Player;
 
 /**
  * A communication protocol - a FSM behaviour.
@@ -19,6 +20,10 @@ public abstract class Party extends FSMBehaviour {
     
     protected Organization getOrganization() {
         return (Organization)myAgent;
+    }
+    
+    protected Player getPlayer() {
+        return (Player)myAgent;
     }
     
     protected abstract Protocol getProtocol();

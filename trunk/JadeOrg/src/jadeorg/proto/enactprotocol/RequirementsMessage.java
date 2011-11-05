@@ -9,8 +9,8 @@ import jadeorg.lang.PlayerMessage;
 import java.util.Arrays;
 
 /**
- * A requirements message parser/generator.
- * A requirements message is a message send from an Organization agent to a Player agent
+ * A 'Requirements' message.
+ * A 'Requirements' message is a message send from an Organization agent to a Player agent
  * containing information about requirements to enact a certain role.
  * @author Lukáš Kúdela
  * @since 2011-10-20
@@ -109,8 +109,8 @@ public class RequirementsMessage extends PlayerMessage {
     
     /**
      * The 'Requirements' message generator.
-     * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
-     * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
+     * DP: Singleton - Singleton
+     * DP: Abstract factory - Concrete product
      * @author Lukáš Kúdela (2011-10-21)
      * @version %I% %G%
      */

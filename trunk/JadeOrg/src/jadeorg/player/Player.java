@@ -9,7 +9,9 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.YellowPages;
+import jadeorg.lang.Message;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -19,6 +21,7 @@ import jadeorg.proto.activateprotocol.ActivateProtocol;
 import jadeorg.proto.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.deactprotocol.DeactProtocol;
 import jadeorg.proto.enactprotocol.EnactProtocol;
+import jadeorg.proto.enactprotocol.EnactRequestMessage;
 
 /**
  * A player agent.
@@ -37,8 +40,16 @@ public class Player extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected void setup() {
+    public void setup() {
         initialize();
+    }
+    
+    public void send(Message message) {
+        // Generate the ACL message from the message.
+        ACLMessage aclMessage = message.getProtocol().generate(message.getClass(), message);
+        
+        // Send the ACL message.
+        send(aclMessage);
     }
     
     // ----- INITIALIZE -----
@@ -70,7 +81,6 @@ public class Player extends Agent {
         }
     }
     
-
     // TODO Check if the role is enacted.
     private void deact(String organizationName, String roleName) throws PlayerException {
         DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
@@ -217,14 +227,24 @@ public class Player extends Agent {
          */
         private class SendEnactRequest extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-enact-request";
+            
+            // </editor-fold>
+            
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                EnactRequestMessage message = new EnactRequestMessage();
+                message.setOrganization(organizationAID);
+                message.setRoleName(roleName);
+                
+                getPlayer().send(message);
             }
 
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
         }
         

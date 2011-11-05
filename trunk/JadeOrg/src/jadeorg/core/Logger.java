@@ -62,11 +62,11 @@ public class Logger {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public void logSentMessage(ACLMessage message) {
-        log(new MessageLogMessage(Direction.SENT, message));
+        log(new ACLMessageLogMessage(Direction.SENT, message));
     }
     
     public void logReceivedMessage(ACLMessage message) {
-        log(new MessageLogMessage(Direction.RECEIVED, message));
+        log(new ACLMessageLogMessage(Direction.RECEIVED, message));
     }
     
     public void log(LogLevel logLevel, String logMessage) {
@@ -173,7 +173,7 @@ public class Logger {
     /**
      * A specific log message pertaining to sent/received ACL messages.
      */
-    private class MessageLogMessage extends LogMessage {
+    private class ACLMessageLogMessage extends LogMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -206,7 +206,7 @@ public class Logger {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public MessageLogMessage(Direction direction, ACLMessage message) {
+        public ACLMessageLogMessage(Direction direction, ACLMessage message) {
             super(LogLevel.INFO);
             
             // ----- Preconditions -----
