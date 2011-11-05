@@ -85,6 +85,12 @@ public abstract class Protocol {
         return getGenerator(messageClass).generate(message);
     }
     
+    public ACLMessage getACLMessage(int performative) {
+        ACLMessage aclMessage = new ACLMessage(performative);
+        aclMessage.setProtocol(getName());
+        return aclMessage;
+    }
+    
     // ---------- PRIVATE ----------
     
     /**

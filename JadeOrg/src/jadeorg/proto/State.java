@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jadeorg.proto.PassiveState.Event;
 
+// TODO Add a constructor with one parameter - the name of the state.
 /**
  * A protocol state - a one-shot behaviour.
  * @author Lukáš Kúdela

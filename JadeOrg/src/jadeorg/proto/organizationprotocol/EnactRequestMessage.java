@@ -1,10 +1,11 @@
-package jadeorg.proto.enactprotocol;
+package jadeorg.proto.organizationprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.lang.OrganizationMessage;
+import jadeorg.proto.enactprotocol.EnactProtocol;
 
 /**
  * An 'Enact request' message.
