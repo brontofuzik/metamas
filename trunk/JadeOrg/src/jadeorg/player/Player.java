@@ -21,7 +21,8 @@ import jadeorg.proto.activateprotocol.ActivateProtocol;
 import jadeorg.proto.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.deactprotocol.DeactProtocol;
 import jadeorg.proto.enactprotocol.EnactProtocol;
-import jadeorg.proto.enactprotocol.EnactRequestMessage;
+import jadeorg.proto.enactprotocol.RoleAIDMessage;
+import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 
 /**
  * A player agent.
@@ -42,14 +43,6 @@ public class Player extends Agent {
     @Override
     public void setup() {
         initialize();
-    }
-    
-    public void send(Message message) {
-        // Generate the ACL message from the message.
-        ACLMessage aclMessage = message.getProtocol().generate(message.getClass(), message);
-        
-        // Send the ACL message.
-        send(aclMessage);
     }
     
     // ----- INITIALIZE -----
@@ -233,19 +226,27 @@ public class Player extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 EnactRequestMessage message = new EnactRequestMessage();
                 message.setOrganization(organizationAID);
                 message.setRoleName(roleName);
                 
-                getPlayer().send(message);
+                send(EnactRequestMessage.class, message);
             }
 
-            @Override
-            public String getName() {
-                return NAME;
-            }
+            // </editor-fold>
         }
         
         /**
@@ -254,15 +255,29 @@ public class Player extends Agent {
          */
         private class ReceiveRequirementsInfo extends PassiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-requirements-info";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            // </editor-fold>
         }
         
         /**
@@ -271,15 +286,31 @@ public class Player extends Agent {
          */
         private class SendAgree extends ActiveState {
 
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "send-agree";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
+                        
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                ACLMessage aclMessage = EnactProtocol.getInstance().getACLMessage(ACLMessage.AGREE);
+                aclMessage.addReceiver(organizationAID);
+                myAgent.send(aclMessage);
+            }
+
+            // </editor-fold>
         }
         
         /**
@@ -288,15 +319,31 @@ public class Player extends Agent {
          */
         private class SendRefuse extends ActiveState {
 
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "send-refuse";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                ACLMessage aclMessage = EnactProtocol.getInstance().getACLMessage(ACLMessage.REFUSE);
+                aclMessage.addReceiver(organizationAID);
+                myAgent.send(aclMessage);
+            }
+
+            // </editor-fold>
         }
         
         /**
@@ -305,15 +352,36 @@ public class Player extends Agent {
          */
         private class ReceiveRoleAID extends PassiveState {
 
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-role-aid";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                RoleAIDMessage roleAIDMessage = (RoleAIDMessage)receive(RoleAIDMessage.class);
+                if (roleAIDMessage != null) {
+                    AID roleAID = roleAIDMessage.getRoleAID();
+                    RoleInfo roleInfo = new RoleInfo(roleAID, organizationAID);
+                    knowledgeBase.enactRole(roleInfo);
+                } else {
+                    block();
+                }
+            }
+
+            // </editor-fold>
         }
         
         /**
@@ -322,15 +390,29 @@ public class Player extends Agent {
          */
         private class End extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            // </editor-fold>
         }
         
         // </editor-fold>

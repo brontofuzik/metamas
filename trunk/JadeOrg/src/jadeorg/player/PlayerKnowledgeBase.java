@@ -75,5 +75,13 @@ class PlayerKnowledgeBase {
     
     // ----- UPDATE -----
     
+    void enactRole(RoleInfo roleInfo) {
+        enactedRoles.put(roleInfo.getRoleName(), roleInfo);
+    }
+    
+    void deactRole(RoleInfo roleInfo) {
+        enactedRoles.remove(roleInfo.getRoleName());
+    }
+    
     // </editor-fold>
 }

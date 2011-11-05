@@ -71,14 +71,6 @@ public abstract class Organization extends Agent {
         registerWithDF();
     }
     
-    public void send(Message message) {
-        // Generate the ACL message from the message.
-        ACLMessage aclMessage = message.getProtocol().generate(message.getClass(), message);
-        
-        // Send the ACL message.
-        send(aclMessage);
-    }
-    
     // ---------- PROTECTED ----------
     
     protected void addRole(Class roleClass) {
@@ -367,7 +359,7 @@ public abstract class Organization extends Agent {
                 requirementsMessage.setRequirements(requirements.get(roleName));
                 
                 // Send the 'Requirements' message.
-                getOrganization().send(requirementsMessage);
+                send(RequirementsMessage.class, requirementsMessage);
             }
             
             // </editor-fold>
@@ -402,7 +394,7 @@ public abstract class Organization extends Agent {
                 refuseMessage.setPlayer(player);
       
                 // Set the 'Refuse' message.
-                getOrganization().send(refuseMessage);
+                send(RefuseMessage.class, refuseMessage);
             }
             
             // </editor-fold>
@@ -487,7 +479,7 @@ public abstract class Organization extends Agent {
                 roleAIDMessage.setRoleAID(role.getAID());
                 
                 // Send the 'RoleAID' message.
-                getOrganization().send(roleAIDMessage);
+                send(RoleAIDMessage.class, roleAIDMessage);
             }
             
             // ---------- PRIVATE ----------
@@ -734,14 +726,7 @@ public abstract class Organization extends Agent {
                 FailureMessage failureMessage = new FailureMessage();
                 failureMessage.setPlayer(player);
                 
-                getOrganization().send(failureMessage);
-                
-                // Generate the ACL message from the 'Failure' message.
-                ACLMessage aclMessage = OrganizationProtocol.getInstance()
-                    .generate(FailureMessage.class, failureMessage);
-                
-                // Send the ACL message.
-                myAgent.send(aclMessage);
+                send(FailureMessage.class, failureMessage);
             }
             
             // </editor-fold>
