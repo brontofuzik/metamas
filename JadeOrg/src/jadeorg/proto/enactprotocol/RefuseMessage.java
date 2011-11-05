@@ -8,8 +8,8 @@ import jadeorg.lang.MessageParser;
 import jadeorg.lang.PlayerMessage;
 
 /**
- * A refuse message parser/generator.
- * A refuse message is a message send from an Organization agent to a Player agent
+ * A 'Refuse' message.
+ * A 'Refuse' message is a message send from an Organization agent to a Player agent
  * containing a refusal to enact/deact a certain role.
  * @author Lukáš Kúdela
  * @since 2011-10-21
@@ -17,8 +17,6 @@ import jadeorg.lang.PlayerMessage;
 public class RefuseMessage extends PlayerMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    // ---------- PROTECTED ----------
 
     @Override
     protected int getPerformative() {

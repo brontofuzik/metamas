@@ -319,15 +319,19 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
             public void action() {
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -344,6 +348,15 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
@@ -355,11 +368,6 @@ public abstract class Organization extends Agent {
                 
                 // Send the 'Requirements' message.
                 getOrganization().send(requirementsMessage);
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -376,6 +384,15 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+            
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
@@ -386,11 +403,6 @@ public abstract class Organization extends Agent {
       
                 // Set the 'Refuse' message.
                 getOrganization().send(refuseMessage);
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -405,6 +417,15 @@ public abstract class Organization extends Agent {
             
             private static final String NAME = "receive-requirements-inform";
             
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -427,11 +448,6 @@ public abstract class Organization extends Agent {
                     block();
                 }
             }
-
-            @Override
-            public String getName() {
-                return NAME;
-            }
         
             // </editor-fold>
         }
@@ -445,6 +461,15 @@ public abstract class Organization extends Agent {
             
             private static final String NAME = "send-role-aid";
             
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -463,11 +488,6 @@ public abstract class Organization extends Agent {
                 
                 // Send the 'RoleAID' message.
                 getOrganization().send(roleAIDMessage);
-            }
-            
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // ---------- PRIVATE ----------
@@ -529,15 +549,19 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
             public void action() {
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -633,16 +657,20 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -659,16 +687,20 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
@@ -683,6 +715,15 @@ public abstract class Organization extends Agent {
             
             private static final String NAME = "send-deact-failure";
             
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -702,11 +743,6 @@ public abstract class Organization extends Agent {
                 // Send the ACL message.
                 myAgent.send(aclMessage);
             }
-
-            @Override
-            public String getName() {
-                return NAME;
-            }
             
             // </editor-fold>
         }
@@ -722,15 +758,19 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
+            }
+                        
+            // </editor-fold>
+            
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
             public void action() {
-            }
-
-            @Override
-            public String getName() {
-                return NAME;
             }
             
             // </editor-fold>
