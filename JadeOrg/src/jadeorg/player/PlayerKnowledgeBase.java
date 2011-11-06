@@ -15,7 +15,7 @@ class PlayerKnowledgeBase {
     
     private Hashtable<String, RoleInfo> enactedRoles = new Hashtable<String, RoleInfo>();
     
-    private String activeRole;
+    private RoleInfo activeRole;
     
     // </editor-fold>
     
@@ -71,7 +71,7 @@ class PlayerKnowledgeBase {
     }
     
     RoleInfo getActiveRoleInfo() {
-        return getRoleInfo(activeRole);
+        return activeRole;
     }
     
     // ----- UPDATE -----
@@ -90,6 +90,18 @@ class PlayerKnowledgeBase {
             
     void deactRole(RoleInfo roleInfo) {
         deactRole(roleInfo.getRoleName());
+    }
+    
+    void activateRole(String roleName) {
+        activateRole(getRoleInfo(roleName));
+    }
+    
+    void activateRole(RoleInfo roleInfo) {
+        activeRole = roleInfo;
+    }
+    
+    void deactivateRole() {
+        activeRole = null;
     }
     
     // </editor-fold>
