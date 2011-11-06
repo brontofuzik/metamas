@@ -21,6 +21,8 @@ import jadeorg.proto.activateprotocol.ActivateProtocol;
 import jadeorg.proto.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.deactprotocol.DeactProtocol;
 import jadeorg.proto.enactprotocol.EnactProtocol;
+import jadeorg.proto.enactprotocol.RefuseMessage;
+import jadeorg.proto.enactprotocol.RequirementsMessage;
 import jadeorg.proto.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 
@@ -30,7 +32,7 @@ import jadeorg.proto.organizationprotocol.EnactRequestMessage;
  * @since 2011-10-17
  * @version %I% %G%
  */
-public class Player extends Agent {
+public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -44,6 +46,8 @@ public class Player extends Agent {
     public void setup() {
         initialize();
     }
+    
+    protected abstract boolean evaluateRequirements(String[] requirements);
     
     // ----- INITIALIZE -----
     
@@ -274,7 +278,25 @@ public class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                // TODO A 'Refuse' (ACL) message can be receied as well.
+                Message message = receive(RequirementsMessage.class);
+                    
+                if (message != null) {
+                    if (message instanceof RequirementsMessage) {
+                        RequirementsMessage requirementsMessage = (RequirementsMessage)message;
+                        if (evaluateRequirements(requirementsMessage.getRequirements())) {
+                            setExitValue(Event.SUCCESS);
+                        } else {
+                            setExitValue(Event.FAILURE);
+                        }
+                    } else if (message instanceof RefuseMessage) {
+                        setExitValue(Event.FAILURE); 
+                    } else {
+                        // TODO Send 'Not understood' message.
+                    }
+                } else {
+                    block();
+                }
             }
 
             // </editor-fold>

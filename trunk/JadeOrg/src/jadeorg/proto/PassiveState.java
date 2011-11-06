@@ -19,7 +19,7 @@ public abstract class PassiveState extends CyclicBehaviour
     /** The parent party. */
     private Party myParty;
     
-    /** The exist value. */
+    /** The exit value. */
     private Event exitValue;
     
     // </editor-fold>
@@ -40,6 +40,10 @@ public abstract class PassiveState extends CyclicBehaviour
      */
     public void setParty(Party protocol) {
         this.myParty = protocol;
+    }
+    
+    public void setExitValue(Event exitValue) {
+        this.exitValue = exitValue;
     }
     
     // </editor-fold>
