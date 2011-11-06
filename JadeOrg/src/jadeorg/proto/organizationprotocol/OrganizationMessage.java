@@ -12,54 +12,82 @@ import jadeorg.lang.Message;
  * @version %I% %G%
  */
 public abstract class OrganizationMessage extends Message {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The organization AID. */
-    private AID organization;
-    
-    /** The player AID. */
-    private AID player;
-    
-    // </editor-fold>
-    
+   
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the organization AID.
-     * @return the organization AID
+     * Gets the sender organization.
+     * @return the sender organization AID
      */
-    public AID getOrganization() {
-        return organization;
+    public AID getSenderOrganization() {
+        return getSender();
     }
     
     /**
-     * Sets the organization AID.
+     * Sets the sender organization.
      * DP: Fluent interface
-     * @param organization the organization AID
+     * @param organization the sender organization AID
      * @return this 'Organization' message
      */
-    public OrganizationMessage setOrganization(AID organization) {
-        this.organization = organization;
+    public OrganizationMessage setSenderOrganization(AID organization) {
+        setSender(organization);
         return this;
     }
     
     /**
-     * Gets the player AID.
-     * @return the player AID
+     * Gets the receiver organization.
+     * @return the receiver organization AID
      */
-    public AID getPlayer() {
-        return player;
+    public AID getReceiverOrganization() {
+        return getReceivers()[0];
     }
     
     /**
-     * Sets the player AID.
+     * Sets the receiver organization.
      * DP: Fluent interface
-     * @param player the player AID
+     * @param organization the receiver organization AID
+     * @return this 'Organization' message
+     */
+    public OrganizationMessage setReceiverOrganization(AID organization) {
+        addReceiver(organization);
+        return this;
+    }
+    
+    /**
+     * Gets the sender player.
+     * @return the sender player AID
+     */
+    public AID getSenderPlayer() {
+        return getSender();
+    }
+    
+    /**
+     * Sets the sener player.
+     * DP: Fluent interface
+     * @param player the sender player AID
      * @return this 'Player' message
      */
-    public OrganizationMessage setPlayer(AID player) {
-        this.player = player;
+    public OrganizationMessage setSenderPlayer(AID player) {
+        setSender(player);
+        return this;
+    }
+    
+    /**
+     * Gets the receiver player.
+     * @return the receiver player AID
+     */
+    public AID getReceiverPlayer() {
+        return getReceivers()[0];
+    }
+    
+    /**
+     * Sets the receiver player.
+     * DP: Fluent interface
+     * @param player the receiver player AID
+     * @return this 'Organization' message
+     */
+    public OrganizationMessage setReceiverPlayer(AID player) {
+        addReceiver(player);
         return this;
     }
     

@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -85,10 +86,10 @@ public abstract class Protocol {
         return getGenerator(messageClass).generate(message);
     }
     
-    public ACLMessage getACLMessage(int performative) {
-        ACLMessage aclMessage = new ACLMessage(performative);
-        aclMessage.setProtocol(getName());
-        return aclMessage;
+    public ACLMessageWrapper getACLMessageWrapper(int performative) {
+        ACLMessageWrapper aclMessageWrapper = new ACLMessageWrapper(new ACLMessage(performative));
+        aclMessageWrapper.setProtocol(this);
+        return aclMessageWrapper;
     }
     
     // ---------- PRIVATE ----------

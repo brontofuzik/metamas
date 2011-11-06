@@ -23,6 +23,7 @@ import jadeorg.proto.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 import jadeorg.proto.roleprotocol.ActivateRequestMessage;
+import jadeorg.proto.roleprotocol.DeactivateRequestMessage;
 
 /**
  * A player agent.
@@ -241,7 +242,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 EnactRequestMessage message = new EnactRequestMessage();
-                message.setOrganization(organizationAID);
+                message.setReceiverOrganization(organizationAID);
                 message.setRoleName(roleName);
                 
                 send(EnactRequestMessage.class, message);
@@ -321,10 +322,12 @@ public abstract class Player extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
             @Override
-            public void action() {
-                ACLMessage aclMessage = EnactProtocol.getInstance().getACLMessage(ACLMessage.AGREE);
-                aclMessage.addReceiver(organizationAID);
-                myAgent.send(aclMessage);
+            public void action() {           
+                ACLMessageWrapper aclMessageWrapper = EnactProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.AGREE);
+                aclMessageWrapper.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, aclMessageWrapper);
             }
 
             // </editor-fold>
@@ -354,9 +357,11 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                ACLMessage aclMessage = EnactProtocol.getInstance().getACLMessage(ACLMessage.REFUSE);
-                aclMessage.addReceiver(organizationAID);
-                myAgent.send(aclMessage);
+                ACLMessageWrapper aclMessageWrapper = EnactProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.REFUSE);
+                aclMessageWrapper.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, aclMessageWrapper);
             }
 
             // </editor-fold>
@@ -526,7 +531,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 DeactRequestMessage message = new DeactRequestMessage();
-                message.setOrganization(organizationAID);
+                message.setReceiverOrganization(organizationAID);
                 message.setRoleName(roleName);
                 
                 send(DeactRequestMessage.class, message);
@@ -700,7 +705,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-                activateRequestMessage.setRole(roleInfo.getRoleAID());
+                activateRequestMessage.setReceiverRole(roleInfo.getRoleAID());
                 
                 send(ActivateRequestMessage.class, activateRequestMessage);
             }
@@ -878,7 +883,10 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
+                deactivateRequestMessage.setReceiverRole(roleInfo.getRoleAID());
+                
+                send(DeactivateRequestMessage.class, deactivateRequestMessage);
             }
             
             // </editor-fold>
@@ -938,7 +946,6 @@ public abstract class Player extends Agent {
                                  
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
             }
             
             // </editor-fold>

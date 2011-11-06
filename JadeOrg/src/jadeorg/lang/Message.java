@@ -1,7 +1,9 @@
 package jadeorg.lang;
 
+import jade.core.AID;
 import jadeorg.proto.Protocol;
 import jade.lang.acl.MessageTemplate;
+import java.util.List;
 
 /**
  * A message in an interaction protocol.
@@ -15,6 +17,10 @@ public abstract class Message {
     
     /** The associated protocol. */
     private Protocol protocol;
+    
+    private AID sender;
+    
+    private List<AID> receivers;
     
     /** The message template singleton. */
     private MessageTemplate templateSingleton;
@@ -43,6 +49,37 @@ public abstract class Message {
      */
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
+    }
+    
+    public AID getSender() {
+        return sender;
+    }
+    
+    public Message setSender(AID sender) {
+        this.sender = sender;
+        return this;
+    }
+    
+    public AID[] getReceivers() {
+        return receivers.toArray(new AID[receivers.size()]);
+    }
+    
+    public Message addReceiver(AID receiver) {
+        // ----- Preconditions -----
+        assert !receivers.contains(receiver);
+        // -------------------------
+        
+        receivers.add(receiver);
+        return this;
+    }
+    
+    public Message removeReceiver(AID receiver) {
+        // ----- Preconditions -----
+        assert receivers.contains(receiver);
+        // -------------------------
+        
+        receivers.remove(receiver);
+        return this;
     }
     
     /**

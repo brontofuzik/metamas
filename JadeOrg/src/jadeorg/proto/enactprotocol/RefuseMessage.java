@@ -82,7 +82,7 @@ public class RefuseMessage extends OrganizationMessage {
             // Generate the message header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REFUSE);
             aclMessage.setProtocol(EnactProtocol.getInstance().getName());
-            aclMessage.addReceiver(refuseMessage.getPlayer());
+            aclMessage.addReceiver(refuseMessage.getReceiverPlayer());
 
             // Generate the content.
             aclMessage.setContent(generateContent(refuseMessage));

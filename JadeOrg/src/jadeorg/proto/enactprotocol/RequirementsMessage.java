@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /**
  * A 'Requirements' message.
- * A 'Requirements' message is a message send from an Organization agent to a Player agent
+ * A 'Requirements' message is a message send from an organization to a player
  * containing information about requirements to enact a certain role.
  * @author Lukáš Kúdela
  * @since 2011-10-20
@@ -88,7 +88,7 @@ public class RequirementsMessage extends OrganizationMessage {
             RequirementsMessage requirementsMessage = new RequirementsMessage();
 
             // Parse the header.
-            requirementsMessage.setPlayer(aclMessage.getSender());
+            requirementsMessage.setSenderOrganization(aclMessage.getSender());
 
             // Parse the content.
             parseContent(aclMessage.getContent(), requirementsMessage);
@@ -129,7 +129,7 @@ public class RequirementsMessage extends OrganizationMessage {
             // Generate the ACL message header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
             aclMessage.setProtocol(EnactProtocol.getInstance().getName());
-            aclMessage.addReceiver(requirementsMessage.getPlayer());
+            aclMessage.addReceiver(requirementsMessage.getReceiverPlayer());
 
             // Generate the ACL message content.
             aclMessage.setContent(generateContent(requirementsMessage));

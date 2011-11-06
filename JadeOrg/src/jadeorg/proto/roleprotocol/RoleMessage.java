@@ -17,61 +17,89 @@ import jadeorg.lang.Message;
  */
 public abstract class RoleMessage extends Message {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The role AID. */
-    private AID roleAID;
-    
-    /** The player AID. */
-    private AID playerAID;
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the role AID.
-     * @return the role AID
+     * Gets the sender role.
+     * @return the sender role AID
      */
-    public AID getRole() {
-        return roleAID;
+    public AID getSenderRole() {
+        return getSender();
     }
     
     /**
-     * Sets the role AID.
+     * Sets the sender role.
      * DP: Fluent interface
-     * @param playerAID the role AID
+     * @param role the sender role AID
      * @return this 'Role' message
      */
-    public RoleMessage setRole(AID roleAID) {
+    public RoleMessage setSenderRole(AID role) {
         // ----- Preconditions -----
-        assert roleAID != null;
+        assert role != null;
         // -------------------------
         
-        this.roleAID = roleAID;
+        setSender(role);
         return this;
     }
     
     /**
-     * Gets the player AID.
-     * @return the player AID
+     * Gets the reciver role.
+     * @return the receiver role AID
      */
-    public AID getPlayer() {
-        return playerAID;
+    public AID getReceiverRole() {
+        return getReceivers()[0];
     }
     
     /**
-     * Sets the player AID.
+     * Sets the reciver role.
      * DP: Fluent interface
-     * @param playerAID the player AID
+     * @param role the receiver role AID
      * @return this 'Role' message
      */
-    public RoleMessage setPlayer(AID playerAID) {
+    public RoleMessage setReceiverRole(AID role) {
+        addReceiver(role);
+        return this;
+    }
+    
+    /**
+     * Gets the sender player.
+     * @return the sender player AID
+     */
+    public AID getSenderPlayer() {
+        return getSender();
+    }
+    
+    /**
+     * Sets the sender player.
+     * DP: Fluent interface
+     * @param player the sender player AID
+     * @return this 'Role' message
+     */
+    public RoleMessage setSenderPlayer(AID player) {
         // ----- Preconditions -----
-        assert playerAID != null;
+        assert player != null;
         // -------------------------
         
-        this.playerAID = playerAID;
+        setSender(player);
+        return this;
+    }
+    
+    /**
+     * Gets the receier player
+     * @return the receiver player AID
+     */
+    public AID getReceiverPlayer() {
+        return getReceivers()[0];
+    }
+    
+    /**
+     * Sets the receiver player.
+     * DP: Fluent interface
+     * @param player the receiver player AID
+     * @return this 'Role' message
+     */
+    public RoleMessage setReceiverPlayer(AID player) {
+        addReceiver(player);
         return this;
     }
     
