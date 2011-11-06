@@ -181,7 +181,7 @@ public abstract class Organization extends Agent {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        class ReceiveOrganizationRequest extends PassiveState {
+        private class ReceiveOrganizationRequest extends PassiveState {
            
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -189,13 +189,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveOrganizationRequest() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
                  
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -330,13 +329,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveEnactRequest() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -359,11 +357,10 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendRequirementsInform() {
+                super(NAME);
             }
             
             // </editor-fold>
@@ -389,17 +386,16 @@ public abstract class Organization extends Agent {
          */
         private class SendRefuse extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-failure";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendRefuse() {
+                super(NAME);
             }
             
             // </editor-fold>
@@ -424,19 +420,18 @@ public abstract class Organization extends Agent {
          */
         private class ReceiveRequirementsInform extends PassiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-requirements-inform";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveRequirementsInform() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -474,13 +469,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendRoleAID() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -560,13 +554,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            End() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -662,19 +655,18 @@ public abstract class Organization extends Agent {
          */
         class ReceiveDeactRequest extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-deact-request";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveDeactRequest() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -698,13 +690,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendDeactInformation() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -728,13 +719,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendDeactFailure() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -762,13 +752,12 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            End() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">

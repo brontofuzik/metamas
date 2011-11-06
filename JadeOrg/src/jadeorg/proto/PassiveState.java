@@ -17,6 +17,9 @@ public abstract class PassiveState extends CyclicBehaviour
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The name of this passive state. */
+    private String name;
+    
     /** The parent party. */
     private Party myParty;
     
@@ -25,7 +28,21 @@ public abstract class PassiveState extends CyclicBehaviour
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public PassiveState(String name) {
+        // ----- Preconditions -----
+        assert name != null && !name.isEmpty();
+        // -------------------------
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    public String getName() {
+        return name;
+    }
     
     /**
      * Gets the parent party.
