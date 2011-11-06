@@ -23,10 +23,6 @@ public abstract class Party extends FSMBehaviour {
         return (Organization)myAgent;
     }
     
-    protected Player getPlayer() {
-        return (Player)myAgent;
-    }
-    
     protected abstract Protocol getProtocol();
     
     // </editor-fold>
@@ -66,7 +62,7 @@ public abstract class Party extends FSMBehaviour {
         ACLMessage aclMessage = getProtocol().generate(messageClass, message);
                 
         // Send the JadeOrg message.
-        getOrganization().send(aclMessage);
+        myAgent.send(aclMessage);
     }
     
     /**
@@ -93,7 +89,7 @@ public abstract class Party extends FSMBehaviour {
         }
         
         // Receive the ACL message.
-        ACLMessage aclMessage = getOrganization().receive(messageTemplate);
+        ACLMessage aclMessage = myAgent.receive(messageTemplate);
         
         // Parse the ACL message.
         return getProtocol().parse(messageClass, aclMessage);

@@ -12,6 +12,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
+import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
 import jadeorg.proto.enactprotocol.EnactProtocol;
 import jadeorg.proto.enactprotocol.RefuseMessage;
@@ -206,10 +207,10 @@ public abstract class Organization extends Agent {
                 if (organizationMessage != null) {
                     if (organizationMessage instanceof EnactRequestMessage) {
                         EnactRequestMessage enactRequestMessage = (EnactRequestMessage)organizationMessage;
-                        enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getPlayer());
+                        enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getSenderPlayer());
                     } else if (organizationMessage instanceof DeactRequestMessage) {
                         DeactRequestMessage deactRequestMessage = (DeactRequestMessage)organizationMessage;
-                        deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getPlayer());
+                        deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getSenderPlayer());
                     } else {
                         // TODO Send not understood.
                         assert false;
@@ -234,7 +235,7 @@ public abstract class Organization extends Agent {
         
         private String roleName;
         
-        private AID player;
+        private AID playerAID;
         
         // </editor-fold>
         
@@ -247,7 +248,7 @@ public abstract class Organization extends Agent {
             // -------------------------
             
             this.roleName = roleName;
-            this.player = player;
+            this.playerAID = player;
             
             registerStatesAndTransitions();       
         }
@@ -371,7 +372,7 @@ public abstract class Organization extends Agent {
             public void action() {
                 // Create the 'Requirements' message.
                 RequirementsMessage requirementsMessage = new RequirementsMessage();
-                requirementsMessage.setPlayer(player);
+                requirementsMessage.setReceiverPlayer(playerAID);
                 requirementsMessage.setRequirements(requirements.get(roleName));
                 
                 // Send the 'Requirements' message.
@@ -406,7 +407,7 @@ public abstract class Organization extends Agent {
             public void action() {
                 // Create the 'Refuse' message.
                 RefuseMessage refuseMessage = new RefuseMessage();
-                refuseMessage.setPlayer(player);
+                refuseMessage.setReceiverPlayer(playerAID);
       
                 // Set the 'Refuse' message.
                 send(RefuseMessage.class, refuseMessage);
@@ -439,16 +440,14 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Receive the ACL message.
-                ACLMessage aclMessage = getOrganization()
-                    .receive(EnactProtocol.getInstance().getTemplate());
-                
-                if (aclMessage != null) {
-                    if (aclMessage.getPerformative() == ACLMessage.AGREE) {
+                ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, playerAID);                                     
+                if (aclMessageWrapper != null) {
+                    if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
                         // TODO
-                    } else if (aclMessage.getPerformative() == ACLMessage.REFUSE) {
+                    } else if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
                         // TODO
                     } else {
-                        sendNotUnderstood(player);
+                        sendNotUnderstood(playerAID);
                     }
                 } else {
                     block();
@@ -484,11 +483,11 @@ public abstract class Organization extends Agent {
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
                 
-                knowledgeBase.updateRoleIsEnacted(role, player);
+                knowledgeBase.updateRoleIsEnacted(role, playerAID);
                 
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
-                roleAIDMessage.setPlayer(player);
+                roleAIDMessage.setReceiverPlayer(playerAID);
                 roleAIDMessage.setRoleAID(role.getAID());
                 
                 // Send the 'RoleAID' message.
@@ -733,7 +732,7 @@ public abstract class Organization extends Agent {
             public void action() {
                 // Create the 'Failure' message.
                 FailureMessage failureMessage = new FailureMessage();
-                failureMessage.setPlayer(player);
+                failureMessage.setReceiverPlayer(player);
                 
                 send(FailureMessage.class, failureMessage);
             }

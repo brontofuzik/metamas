@@ -10,8 +10,9 @@ import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 
 /**
+ * An 'Activate request' message.
  * An 'Activate request' message is a message sent from a player to a role
- * containing a request to activate the role.
+ * containing a request to activate a particular role.
  * @author Lukáš Kúdela
  * @since 2011-11-06
  * @verison %I% %G%

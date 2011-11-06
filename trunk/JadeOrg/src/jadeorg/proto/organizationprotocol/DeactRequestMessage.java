@@ -88,7 +88,7 @@ public class DeactRequestMessage extends OrganizationMessage {
             EnactRequestMessage deactRequestMessage = new EnactRequestMessage();
 
             // Parse the header.
-            deactRequestMessage.setOrganization(aclMessage.getSender());
+            deactRequestMessage.setSenderPlayer(aclMessage.getSender());
 
             // Parse the content.
             parseContent(aclMessage.getContent(), deactRequestMessage);
@@ -129,7 +129,7 @@ public class DeactRequestMessage extends OrganizationMessage {
             // Generate the ACL message header.
             ACLMessage aclMessage = new ACLMessage(deactRequestMessage.getPerformative());
             aclMessage.setProtocol(DeactProtocol.getInstance().getName());
-            aclMessage.addReceiver(deactRequestMessage.getOrganization());
+            aclMessage.addReceiver(deactRequestMessage.getReceiverOrganization());
 
             // Generate the ACL message content.
             aclMessage.setContent(generateContent(deactRequestMessage));
