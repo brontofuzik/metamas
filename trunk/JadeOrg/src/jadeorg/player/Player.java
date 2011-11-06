@@ -732,7 +732,23 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                ACLMessageWrapper aclMessageWraper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, roleInfo.getRoleAID());
+                
+                if (aclMessageWraper != null) {
+                    if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                        // The 'Activate' request was agreed.
+                        knowledgeBase.activateRole(roleInfo);
+                        setExitValue(Event.SUCCESS);
+                    } else if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                        // The 'Activate' request was refused.
+                        setExitValue(Event.FAILURE);
+                    } else {
+                        // TODO Send not understood to the role.
+                        assert false;
+                    }
+                } else {
+                    block();
+                }
             }
 
             // </editor-fold>
