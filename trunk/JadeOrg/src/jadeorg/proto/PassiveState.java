@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -74,16 +75,8 @@ public abstract class PassiveState extends CyclicBehaviour
      * @param messageClass the message class
      * @return the received message
      */
-    public Message receive(Class messageClass) {
-        return getParty().receive(messageClass);
-    }
-    
-    /**
-     * Receives an ACL message.
-     * @return the received message
-     */
-    public ACLMessage receive() {
-        return getParty().receive();
+    public Message receive(Class messageClass, AID senderAID) {
+        return getParty().receive(messageClass, senderAID);
     }
     
     @Override

@@ -2,15 +2,11 @@ package jadeorg.player;
 
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.YellowPages;
+import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
@@ -24,6 +20,7 @@ import jadeorg.proto.enactprotocol.EnactProtocol;
 import jadeorg.proto.enactprotocol.RefuseMessage;
 import jadeorg.proto.enactprotocol.RequirementsMessage;
 import jadeorg.proto.enactprotocol.RoleAIDMessage;
+import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 
 /**
@@ -278,8 +275,8 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                // TODO A 'Refuse' (ACL) message can be receied as well.
-                Message message = receive(RequirementsMessage.class);
+                // TODO A 'Refuse' (ACL) message can be received as well.
+                Message message = receive(RequirementsMessage.class, organizationAID);
                     
                 if (message != null) {
                     if (message instanceof RequirementsMessage) {
@@ -393,7 +390,7 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                RoleAIDMessage roleAIDMessage = (RoleAIDMessage)receive(RoleAIDMessage.class);
+                RoleAIDMessage roleAIDMessage = (RoleAIDMessage)receive(RoleAIDMessage.class, organizationAID);
                 if (roleAIDMessage != null) {
                     AID roleAID = roleAIDMessage.getRoleAID();
                     RoleInfo roleInfo = new RoleInfo(roleAID, organizationAID);
@@ -448,7 +445,7 @@ public abstract class Player extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         /** The organization AID */
-        private AID organization;
+        private AID organizationAID;
         
         /** The role name */
         private String roleName;
@@ -463,7 +460,7 @@ public abstract class Player extends Agent {
             assert roleName != null && !roleName.isEmpty();
             // -------------------------
             
-            this.organization = organization;
+            this.organizationAID = organization;
             this.roleName = roleName;
             
             registerStatesAndTransitions();
@@ -515,15 +512,33 @@ public abstract class Player extends Agent {
          */
         private class SendDeactRequest extends ActiveState {
 
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-deact-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                DeactRequestMessage message = new DeactRequestMessage();
+                message.setOrganization(organizationAID);
+                message.setRoleName(roleName);
+                
+                send(DeactRequestMessage.class, message);
+            }
+
+            // </editor-fold>
         }
         
         /**
@@ -532,15 +547,42 @@ public abstract class Player extends Agent {
          */
         private class ReceiveDeactReply extends PassiveState {
 
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-deact-reply";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return NAME;
             }
+                        
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, organizationAID);            
+                if (aclMessageWrapper != null) {
+                    if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                        // The request was agreed.
+                        knowledgeBase.deactRole(roleName);
+                    } else if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                        // The request was refused.
+                    } else {
+                        // TODO Send not understood.
+                        assert false;
+                    }
+                } else {
+                    block();
+                }
+            }
+            
+            // </editor-fold>
         }
         
         /**
@@ -548,16 +590,31 @@ public abstract class Player extends Agent {
          * A state in which the 'Deact' initiator party ends.
          */
         private class End extends ActiveState {
-
-            @Override
-            public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
+            
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
             @Override
             public String getName() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
+                        
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+
+            @Override
+            public void action() {
+                // TODO Implement.
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>

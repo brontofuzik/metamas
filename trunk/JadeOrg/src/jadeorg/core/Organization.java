@@ -6,19 +6,15 @@ import jadeorg.proto.State;
 import jadeorg.proto.Party;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.wrapper.AgentController;
 import jadeorg.lang.Message;
 import jadeorg.proto.enactprotocol.EnactProtocol;
 import jadeorg.proto.enactprotocol.RefuseMessage;
-import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import jadeorg.proto.enactprotocol.RequirementsMessage;
 import jadeorg.proto.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.OrganizationProtocol;
@@ -26,6 +22,8 @@ import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.deactprotocol.DeactProtocol;
 import jadeorg.proto.deactprotocol.FailureMessage;
+import jadeorg.proto.organizationprotocol.DeactRequestMessage;
+import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -91,7 +89,7 @@ public abstract class Organization extends Agent {
     }
 
     private void initializeBehaviour() {
-        addBehaviour(new OrganizationManagerBehaviour());
+        addBehaviour(new OrganizationManager());
     }
 
     /** Registers this organization with the DF. */
@@ -114,8 +112,7 @@ public abstract class Organization extends Agent {
             DFService.modify(this, agentDescription);
         } catch (FIPAException ex) {
             ex.printStackTrace();
-        }
-        
+        }    
     }
        
     /**
@@ -128,6 +125,42 @@ public abstract class Organization extends Agent {
         send(message);
     }
     
+    /** Enacts a role.
+     * @param roleName the name of the role
+     * @param player the player
+     */
+    // TODO Move the precondition assertions to the 'Enact' protocol responder behaviour.
+    private void enactRole(String roleName, AID player) {
+        // If the role is defined for this organization ...
+        if (roles.containsKey(roleName)) {
+
+            // ... and it is currently not enacted by any player ...
+            if (!knowledgeBase.isRoleEnacted(roleName)) {
+
+                // ... respond according to the 'Enact' protocol.
+                addBehaviour(new EnactProtocolResponder(roleName, player));
+            }          
+        }
+    }
+    
+    /** Deacts a role.
+     * @param roleName the name of the role
+     * @param player the player
+     */
+    // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
+    private void deactRole(String roleName, AID player) {
+        // If the role is defined for this organization ...
+        if (roles.containsKey(roleName)) {
+
+            // ... and it is currently enacted by the player.
+            if (knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
+
+                // ... respond according to the the 'Deact' protocol.
+                addBehaviour(new DeactProtocolResponder(roleName, player));
+            }
+        }      
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -135,73 +168,59 @@ public abstract class Organization extends Agent {
     /**
      * An organization manager behaviour.
      */
-    private class OrganizationManagerBehaviour extends CyclicBehaviour {
+    private class OrganizationManager extends Party {
         
-        // <editor-fold defaultstate="collapsed" desc="Methods">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        public void action() {
-            // Receive the 'Organization' message.
-            MessageTemplate organizationMessageTemplate = OrganizationProtocol.getInstance()
-                .getTemplate(OrganizationMessage.class);
-            ACLMessage message = myAgent.receive(organizationMessageTemplate);
-            if (message != null) {
-                // Parse the ACL message.
-                OrganizationMessage organizationMessage = (OrganizationMessage)OrganizationProtocol
-                    .getInstance().parse(OrganizationMessage.class, message);
-                   
-                switch (organizationMessage.getAction()) {
-                    case ENACT_ACTION:
-                        enactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
-                        break;                     
-                    case DEACT_ACTION:
-                        deactRole(organizationMessage.getRole(), organizationMessage.getPlayer());
-                        break;                     
-                    default:
-                        sendNotUnderstood(organizationMessage.getPlayer());
-                        break;
-                }
-            } else {
-                block();
-            }
+        protected Protocol getProtocol() {
+            return OrganizationProtocol.getInstance();
         }
-        
-        // ---------- PRIVATE ----------
-        
-        /** Enacts a role.
-         * @param roleName the name of the role
-         * @param player the player
-         */
-        // TODO Move the precondition assertions to the 'Enact' protocol responder behaviour.
-        private void enactRole(String roleName, AID player) {
-            // If the role is defined for this organization ...
-            if (roles.containsKey(roleName)) {
                 
-                // ... and it is currently not enacted by any player ...
-                if (!knowledgeBase.isRoleEnacted(roleName)) {
-                    
-                    // ... respond according to the 'Enact' protocol.
-                    addBehaviour(new EnactProtocolResponder(roleName, player));
-                }          
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        class ReceiveOrganizationRequest extends PassiveState {
+           
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-organization-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            
+            @Override
+            public String getName() {
+                return NAME;
             }
-        }
+                        
+            // </editor-fold>
+                 
+            // <editor-fold defaultstate="collapsed" desc="Methods">
 
-        /** Deacts a role.
-         * @param roleName the name of the role
-         * @param player the player
-         */
-        // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-        private void deactRole(String roleName, AID player) {
-            // If the role is defined for this organization ...
-            if (roles.containsKey(roleName)) {
-                
-                // ... and it is currently enacted by the player.
-                if (knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
-                
-                    // ... respond according to the the 'Deact' protocol.
-                    addBehaviour(new DeactProtocolResponder(roleName, player));
+            @Override
+            public void action() {
+                // Receive the 'Organization' message.
+                Message organizationMessage = receive(null, null);
+                if (organizationMessage != null) {
+                    if (organizationMessage instanceof EnactRequestMessage) {
+                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage)organizationMessage;
+                        enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getPlayer());
+                    } else if (organizationMessage instanceof DeactRequestMessage) {
+                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage)organizationMessage;
+                        deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getPlayer());
+                    } else {
+                        // TODO Send not understood.
+                        assert false;
+                    }
+                } else {
+                    block();
                 }
-            }      
+            }
+            
+            // </editor-fold>
         }
                 
         // </editor-fold>

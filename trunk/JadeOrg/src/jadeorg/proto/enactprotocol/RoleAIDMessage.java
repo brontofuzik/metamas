@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.lang.PlayerMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 
 /**
  * A 'Role AID' message.
@@ -15,7 +15,7 @@ import jadeorg.lang.PlayerMessage;
  * @since 2011-10-23
  * @version %I% %G%
  */
-public class RoleAIDMessage extends PlayerMessage {
+public class RoleAIDMessage extends OrganizationMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

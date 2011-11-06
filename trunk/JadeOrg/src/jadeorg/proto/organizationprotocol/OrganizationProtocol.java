@@ -21,7 +21,6 @@ public class OrganizationProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     private OrganizationProtocol() {
-        registerMessages();
     }
     
     // </editor-fold>
@@ -42,12 +41,6 @@ public class OrganizationProtocol extends Protocol {
             singleton = new OrganizationProtocol();
         }
         return singleton;
-    }
-    
-    // ---------- PRIVATE ----------
-    
-    private void registerMessages() {
-        registerMessage(new OrganizationMessage());
     }
     
     // </editor-fold>
