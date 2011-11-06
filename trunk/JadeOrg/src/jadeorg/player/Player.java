@@ -227,13 +227,12 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-            
-            @Override
-            public String getName() {
-                return NAME;
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+            SendEnactRequest() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -262,13 +261,12 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveRequirementsInfo() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -305,19 +303,18 @@ public abstract class Player extends Agent {
          */
         private class SendAgree extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-agree";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendAgree() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -338,17 +335,16 @@ public abstract class Player extends Agent {
          */
         private class SendRefuse extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-refuse";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            SendRefuse() {
+                super(NAME);
             }
             
             // </editor-fold>
@@ -377,11 +373,10 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveRoleAID() {
+                super(NAME);
             }
             
             // </editor-fold>
@@ -409,17 +404,16 @@ public abstract class Player extends Agent {
          */
         private class End extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "end";
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            End() {
+                super(NAME);
             }
             
             // </editor-fold>
@@ -518,13 +512,12 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-            
-            @Override
-            public String getName() {
-                return NAME;
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+            SendDeactRequest() {
+                super(NAME);
             }
-            
+  
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -553,13 +546,12 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                return NAME;
+            ReceiveDeactReply() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -597,13 +589,12 @@ public abstract class Player extends Agent {
             
             // </editor-fold>
             
-            // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
+            End() {
+                super(NAME);
             }
-                        
+            
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -689,15 +680,28 @@ public abstract class Player extends Agent {
          */
         private class SendActivateRequest extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-activate-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendActivateRequest() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            
+            // </editor-fold>
         }
         
         /**
@@ -706,15 +710,28 @@ public abstract class Player extends Agent {
          */
         private class ReceiveActivateReply extends PassiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-activate-reply";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveActivateReply() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">         
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            // </editor-fold>
         }
         
         /**
@@ -723,15 +740,28 @@ public abstract class Player extends Agent {
          */
         private class End extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            End() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>
@@ -804,15 +834,28 @@ public abstract class Player extends Agent {
          */
         private class SendDeactivateRequest extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-deactivate-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendDeactivateRequest()  {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            
+            // </editor-fold>
         }
         
         /**
@@ -821,15 +864,28 @@ public abstract class Player extends Agent {
          */
         private class ReceiveDeactivateReply extends PassiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-deactivate-reply";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveDeactivateReply() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            // </editor-fold>
         }
         
         /**
@@ -838,15 +894,28 @@ public abstract class Player extends Agent {
          */
         private class End extends ActiveState {
 
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            End() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+                                 
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
-
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>

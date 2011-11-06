@@ -16,12 +16,31 @@ public abstract class ActiveState extends OneShotBehaviour
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The name of this active state. */
+    private String name;
+    
     /** The parent party. */
     private Party myParty;
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public ActiveState(String name) {
+        // ----- Preconditions -----
+        assert name != null && !name.isEmpty();
+        // -------------------------
+        
+        this.name = name;
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    public String getName() {
+        return name;
+    }
     
     /** Gets the parent protocol.
      * @returns the parent protocol
