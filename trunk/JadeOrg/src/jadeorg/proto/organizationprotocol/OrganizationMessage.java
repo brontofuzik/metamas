@@ -5,7 +5,7 @@ import jadeorg.lang.Message;
 
 /**
  * An 'Organization' message.
- * An organization message is a message exchanged between an organization and a player
+ * An 'Organization' message is a message exchanged between an organization and a player
  * containing a request to enact/deact a role.
  * @author Lukáš Kúdela
  * @since 2011-11-06

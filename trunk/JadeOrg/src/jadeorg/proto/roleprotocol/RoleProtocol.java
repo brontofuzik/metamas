@@ -1,32 +1,32 @@
-package jadeorg.proto.organizationprotocol;
+package jadeorg.proto.roleprotocol;
 
 import jadeorg.proto.Protocol;
 
 /**
- * The 'Organization' protocol.
+ * The 'Role' protocol.
  * DP: Singleton - Singleton
  * DP: Abstract factory - Concrete factory
  * @author Lukáš Kúdela
- * @since 2011-10-21
+ * @since 2011-11-06
  * @version %I% %G%
  */
-public class OrganizationProtocol extends Protocol {
-   
+public class RoleProtocol extends Protocol {
+
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "organization-protocol";
+    private static final String NAME = "role-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static OrganizationProtocol singleton;
-        
+    private static RoleProtocol singleton;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private OrganizationProtocol() {
+    private RoleProtocol() {
     }
     
     // </editor-fold>
@@ -37,14 +37,14 @@ public class OrganizationProtocol extends Protocol {
     public String getName() {
         return NAME;
     }
-        
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public static OrganizationProtocol getInstance() {
+    public static RoleProtocol getInstance() {
         if (singleton == null) {
-            singleton = new OrganizationProtocol();
+            singleton = new RoleProtocol();
         }
         return singleton;
     }
