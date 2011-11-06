@@ -22,6 +22,7 @@ import jadeorg.proto.enactprotocol.RequirementsMessage;
 import jadeorg.proto.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
+import jadeorg.proto.roleprotocol.ActivateRequestMessage;
 
 /**
  * A player agent.
@@ -698,7 +699,10 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
+                activateRequestMessage.setRole(roleInfo.getRoleAID());
+                
+                send(ActivateRequestMessage.class, activateRequestMessage);
             }
             
             // </editor-fold>
@@ -759,6 +763,12 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+            @Override
+            public int onEnd() {
+                // TODO Implement.
+                return 0;
             }
             
             // </editor-fold>
