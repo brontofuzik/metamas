@@ -1,5 +1,6 @@
 package jadeorg.player;
 
+import jade.core.AID;
 import java.util.Hashtable;
 
 /**
@@ -75,12 +76,20 @@ class PlayerKnowledgeBase {
     
     // ----- UPDATE -----
     
+    void enactRole(AID roleAID, AID organizationAID) {
+        enactRole(new RoleInfo(roleAID, organizationAID));
+    }
+    
     void enactRole(RoleInfo roleInfo) {
         enactedRoles.put(roleInfo.getRoleName(), roleInfo);
     }
     
+    void deactRole(String roleName) {
+        enactedRoles.remove(roleName);
+    }
+            
     void deactRole(RoleInfo roleInfo) {
-        enactedRoles.remove(roleInfo.getRoleName());
+        deactRole(roleInfo.getRoleName());
     }
     
     // </editor-fold>

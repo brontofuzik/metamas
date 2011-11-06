@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -69,34 +70,33 @@ public abstract class Party extends FSMBehaviour {
     }
     
     /**
-     * Sends an ACL message.
-     * @param aclMessage the message
-     */
-    public void send(ACLMessage aclMessage) {
-        getOrganization().send(aclMessage);
-    }
-    
-    /**
      * Receives a JadeOrg message.
      * @param messageClass the message class
      * @return the received message
      */
-    public Message receive(Class messageClass) {
+    public Message receive(Class messageClass, AID senderAID) {
+        MessageTemplate messageTemplate = null;
+        
+        // Constrain the message class if specified.
+        if (messageClass != null) {
+            messageTemplate = getProtocol().getTemplate(messageClass);
+        }
+        
+        // Constrain the sender if specified.
+        if (senderAID != null) {
+            MessageTemplate senderMessageTemplate = MessageTemplate.MatchSender(senderAID);
+            if (messageTemplate != null) {
+                messageTemplate = MessageTemplate.and(messageTemplate, senderMessageTemplate);
+            } else {
+                messageTemplate = senderMessageTemplate;
+            }
+        }
+        
         // Receive the ACL message.
-        MessageTemplate messageTemplate = getProtocol().getTemplate(messageClass);
         ACLMessage aclMessage = getOrganization().receive(messageTemplate);
         
         // Parse the ACL message.
         return getProtocol().parse(messageClass, aclMessage);
-    }
-    
-    /**
-     * Receives an ACL message.
-     * @return the received message
-     */
-    public ACLMessage receive() {
-        MessageTemplate messageTemplate = getProtocol().getTemplate();
-        return getOrganization().receive(messageTemplate);
     }
     
     // </editor-fold>

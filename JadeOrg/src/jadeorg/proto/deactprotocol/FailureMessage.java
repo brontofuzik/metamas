@@ -4,7 +4,7 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.lang.PlayerMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 
 /**
  * A 'Failure' message.
@@ -12,7 +12,7 @@ import jadeorg.lang.PlayerMessage;
  * @since 2011-10-23
  * @version %I% %G%
  */
-public class FailureMessage extends PlayerMessage {
+public class FailureMessage extends OrganizationMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     

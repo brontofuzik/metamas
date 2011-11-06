@@ -1,11 +1,10 @@
 package jadeorg.proto.enactprotocol;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.lang.PlayerMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import java.util.Arrays;
 
 /**
@@ -16,7 +15,7 @@ import java.util.Arrays;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public class RequirementsMessage extends PlayerMessage {
+public class RequirementsMessage extends OrganizationMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.lang.PlayerMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 
 /**
  * A 'Refuse' message.
@@ -14,7 +14,7 @@ import jadeorg.lang.PlayerMessage;
  * @author Lukáš Kúdela
  * @since 2011-10-21
  */
-public class RefuseMessage extends PlayerMessage {
+public class RefuseMessage extends OrganizationMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 

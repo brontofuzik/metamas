@@ -1,20 +1,25 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package jadeorg.proto.organizationprotocol;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.proto.enactprotocol.EnactProtocol;
+import jadeorg.proto.deactprotocol.DeactProtocol;
 
 /**
- * An 'Enact request' message.
- * An 'Enact request' message is a message send from a player to an organization
- * containing the request to enact a role.
+ * A 'Deact request' message.
+ * A 'Deact request' message is a message send from a player to an organization
+ * containing the request to deact a role.
  * @author Lukáš Kúdela
- * @since 2011-11-05
+ * @since 2011-11-06
  * @version %I% %G%
  */
-public class EnactRequestMessage extends OrganizationMessage {
+public class DeactRequestMessage extends OrganizationMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -28,7 +33,7 @@ public class EnactRequestMessage extends OrganizationMessage {
         return roleName;
     }
     
-    public EnactRequestMessage setRoleName(String roleName) {
+    public DeactRequestMessage setRoleName(String roleName) {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
@@ -50,12 +55,12 @@ public class EnactRequestMessage extends OrganizationMessage {
     
     @Override
     protected MessageParser createParser() {
-        return new EnactRequestMessageParser();
+        return new DeactRequestMessageParser();
     }
     
     @Override
     protected MessageGenerator createGenerator() {
-        return new EnactRequestMessageGenerator();
+        return new DeactRequestMessageGenerator();
     }
     
     // </editor-fold>
@@ -63,13 +68,13 @@ public class EnactRequestMessage extends OrganizationMessage {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Enact request' message parser.
+     * The 'Deact request' message parser.
      * DP: Singleton - Singleton
      * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela (2011-11-05)
+     * @author Lukáš Kúdela (2011-11-06)
      * @version %I% %G%
      */
-    class EnactRequestMessageParser extends MessageParser {
+    class DeactRequestMessageParser extends MessageParser {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -80,21 +85,21 @@ public class EnactRequestMessage extends OrganizationMessage {
          */
         @Override
         public Message parse(ACLMessage aclMessage) {
-            EnactRequestMessage enactRequestMessage = new EnactRequestMessage();
+            EnactRequestMessage deactRequestMessage = new EnactRequestMessage();
 
             // Parse the header.
-            enactRequestMessage.setOrganization(aclMessage.getSender());
+            deactRequestMessage.setOrganization(aclMessage.getSender());
 
             // Parse the content.
-            parseContent(aclMessage.getContent(), enactRequestMessage);
+            parseContent(aclMessage.getContent(), deactRequestMessage);
 
-            return enactRequestMessage;
+            return deactRequestMessage;
         }
         
         /**
          * Parses the content of the ACL message.
          */
-        private void parseContent(String content, EnactRequestMessage enactRequestMessage) {
+        private void parseContent(String content, EnactRequestMessage deactRequestMessage) {
             // TODO
         }
         
@@ -102,42 +107,42 @@ public class EnactRequestMessage extends OrganizationMessage {
     }
     
     /**
-     * The 'Enact request' message generator.
+     * The 'Deact request' message generator.
      * DP: Singleton - Singleton
      * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela (2011-11-05)
+     * @author Lukáš Kúdela (2011-11-06)
      * @version %I% %G%
      */
-    class EnactRequestMessageGenerator extends MessageGenerator {
+    class DeactRequestMessageGenerator extends MessageGenerator {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         /**
-         * Generates an ACL message from a 'Enact request' message.
-         * @param message the 'Enact request' message
+         * Generates an ACL message from a 'Deact request' message.
+         * @param message the 'Deact request' message
          * @return the ACL message
          */
         @Override
         public ACLMessage generate(Message message) {
-           EnactRequestMessage enactRequestMessage = (EnactRequestMessage)message;
+           EnactRequestMessage deactRequestMessage = (EnactRequestMessage)message;
 
             // Generate the ACL message header.
-            ACLMessage aclMessage = new ACLMessage(enactRequestMessage.getPerformative());
-            aclMessage.setProtocol(EnactProtocol.getInstance().getName());
-            aclMessage.addReceiver(enactRequestMessage.getOrganization());
+            ACLMessage aclMessage = new ACLMessage(deactRequestMessage.getPerformative());
+            aclMessage.setProtocol(DeactProtocol.getInstance().getName());
+            aclMessage.addReceiver(deactRequestMessage.getOrganization());
 
             // Generate the ACL message content.
-            aclMessage.setContent(generateContent(enactRequestMessage));
+            aclMessage.setContent(generateContent(deactRequestMessage));
 
             return aclMessage;
         }
         
         /**
-         * Generates the ACL message content from a 'Enact request' message.
-         * @param requirementsMessage the 'Enact request' message
+         * Generates the ACL message content from a 'Deact request' message.
+         * @param requirementsMessage the 'Deact request' message
          * @return the ACL message content
          */
-        private String generateContent(EnactRequestMessage enactRequestMessage) {
+        private String generateContent(EnactRequestMessage deactRequestMessage) {
             // TODO
             return "";
         }

@@ -78,13 +78,5 @@ public abstract class ActiveState extends OneShotBehaviour
         getParty().send(messageClass, message);
     }
     
-    /**
-     * Sends an ACL message.
-     * @param aclMessage the message
-     */
-    public void send(ACLMessage message) {
-        getParty().send(message);
-    }
-    
     // </editor-fold>
 }

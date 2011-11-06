@@ -1,146 +1,66 @@
 package jadeorg.proto.organizationprotocol;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.lang.PlayerMessage;
-import java.util.StringTokenizer;
 
 /**
- * An organization message.
- * An organization message is a message send from a Player agent to an Organization agent
- * containing a request to enact/deact a certain role.
+ * An 'Organization' message.
+ * An organization message is a message exchanged between an organization and a player
+ * containing a request to enact/deact a role.
  * @author Lukáš Kúdela
- * @since 2011-10-20
+ * @since 2011-11-06
  * @version %I% %G%
  */
-public class OrganizationMessage extends PlayerMessage {
+public abstract class OrganizationMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String action = "";
-
-    private String role = "";
-
+    /** The organization AID. */
+    private AID organization;
+    
+    /** The player AID. */
+    private AID player;
+    
     // </editor-fold>
-        
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public String getAction() {
-        return action;
-    }
-    
-    public OrganizationMessage setAction(String action) {
-        this.action = action;
-        return this;
-    }
-
-    public String getRole() {
-        return role;
-    }
-    
-    public OrganizationMessage setRole(String role) {
-        this.role = role;
-        return this;
-    }
-    
-    // ---------- PROTECTED ----------
-    
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.REQUEST;
-    }
-        
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    protected MessageParser createParser() {
-        return new OrganizationMessageParser();
-    }
-
-    @Override
-    protected MessageGenerator createGenerator() {
-        return new OrganizationMessageGenerator();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
     /**
-     * The 'Organization' message parser.
-     * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
-     * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
-     * @author Lukáš Kúdela (2011-10-21)
-     * @version %I% %G%
+     * Gets the organization AID.
+     * @return the organization AID
      */
-    class OrganizationMessageParser extends MessageParser {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            OrganizationMessage organizationMessage = new OrganizationMessage();
-
-            // Parse the player.
-            organizationMessage.setPlayer(aclMessage.getSender());
-
-            // Parse the content.
-            parseContent(aclMessage.getContent(), organizationMessage);
-
-            return organizationMessage;
-        }
-        
-        // ---------- PRIVATE ----------
-
-        private void parseContent(String content, OrganizationMessage organiationMessage) {
-            StringTokenizer tokenizer = new StringTokenizer(content);
-
-            // Parse the action.
-            if (tokenizer.hasMoreTokens()) {
-                organiationMessage.setAction(tokenizer.nextToken());
-            }
-
-            // Parse the role.
-            if (tokenizer.hasMoreTokens()) {
-                organiationMessage.setRole(tokenizer.nextToken());
-            }
-        }
-
-        // </editor-fold>
+    public AID getOrganization() {
+        return organization;
     }
     
     /**
-     * The 'Organization' message generator.
-     * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
-     * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
-     * @author Lukáš Kúdela (2011-10-21)
-     * @version %I% %G%
+     * Sets the organization AID.
+     * DP: Fluent interface
+     * @param organization the organization AID
+     * @return this 'Organization' message
      */
-    class OrganizationMessageGenerator extends MessageGenerator {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        public ACLMessage generate(Message message) {
-            OrganizationMessage organizationMessage = (OrganizationMessage)message;
-
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setContent(generateContent(organizationMessage));
-            return aclMessage;
-        }
-
-        // ---------- PRIVATE ----------
-        
-        private String generateContent(OrganizationMessage organizationMessage) {
-            return "";
-        }
-
-        // </editor-fold>
+    public OrganizationMessage setOrganization(AID organization) {
+        this.organization = organization;
+        return this;
+    }
+    
+    /**
+     * Gets the player AID.
+     * @return the player AID
+     */
+    public AID getPlayer() {
+        return player;
+    }
+    
+    /**
+     * Sets the player AID.
+     * DP: Fluent interface
+     * @param player the player AID
+     * @return this 'Player' message
+     */
+    public OrganizationMessage setPlayer(AID player) {
+        this.player = player;
+        return this;
     }
     
     // </editor-fold>
