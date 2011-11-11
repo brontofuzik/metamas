@@ -1,4 +1,4 @@
-package jadeorg.core;
+package jadeorg.core.organization;
 
 import jadeorg.proto.State;
 import jade.core.behaviours.FSMBehaviour;

@@ -1,4 +1,4 @@
-package jadeorg.core;
+package jadeorg.core.organization;
 
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;

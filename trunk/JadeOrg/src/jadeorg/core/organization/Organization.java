@@ -1,5 +1,6 @@
-package jadeorg.core;
+package jadeorg.core.organization;
 
+import jadeorg.core.organization.kb.OrganizationKnowledgeBase;
 import jade.wrapper.StaleProxyException;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
