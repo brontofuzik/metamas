@@ -13,9 +13,9 @@ class PlayerKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Hashtable<String, RoleInfo> enactedRoles = new Hashtable<String, RoleInfo>();
+    private Hashtable<String, RoleDescription> enactedRoles = new Hashtable<String, RoleDescription>();
     
-    private RoleInfo activeRole;
+    private RoleDescription activeRole;
     
     // </editor-fold>
     
@@ -62,7 +62,7 @@ class PlayerKnowledgeBase {
         return roleName.equals(activeRole);
     }
     
-    RoleInfo getRoleInfo(String roleName) {
+    RoleDescription getRoleDescription(String roleName) {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
@@ -70,34 +70,34 @@ class PlayerKnowledgeBase {
         return enactedRoles.get(roleName);
     }
     
-    RoleInfo getActiveRoleInfo() {
+    RoleDescription getActiveRoleDescription() {
         return activeRole;
     }
     
     // ----- UPDATE -----
     
     void enactRole(AID roleAID, AID organizationAID) {
-        enactRole(new RoleInfo(roleAID, organizationAID));
+        enactRole(new RoleDescription(roleAID, organizationAID));
     }
     
-    void enactRole(RoleInfo roleInfo) {
-        enactedRoles.put(roleInfo.getRoleName(), roleInfo);
+    void enactRole(RoleDescription roleDescription) {
+        enactedRoles.put(roleDescription.getRoleName(), roleDescription);
     }
     
     void deactRole(String roleName) {
         enactedRoles.remove(roleName);
     }
             
-    void deactRole(RoleInfo roleInfo) {
-        deactRole(roleInfo.getRoleName());
+    void deactRole(RoleDescription roleDescription) {
+        deactRole(roleDescription.getRoleName());
     }
     
     void activateRole(String roleName) {
-        activateRole(getRoleInfo(roleName));
+        activateRole(getRoleDescription(roleName));
     }
     
-    void activateRole(RoleInfo roleInfo) {
-        activeRole = roleInfo;
+    void activateRole(RoleDescription roleDescription) {
+        activeRole = roleDescription;
     }
     
     void deactivateRole() {

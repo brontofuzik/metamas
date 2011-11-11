@@ -46,7 +46,7 @@ public class Role extends Agent {
     
     private RoleState state = RoleState.IDLE;
     
-    private PlayerInfo playerInfo;
+    private PlayerDescription playerDescription;
     
     private Logger logger;
     
@@ -132,7 +132,7 @@ public class Role extends Agent {
     // ----- Activation/deactivation -----
     
     private void activateRole(AID playerAID) {
-        if (playerAID.equals(playerInfo.getAID())) {
+        if (playerAID.equals(playerDescription.getAID())) {
             addBehaviour(new ActivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.
@@ -140,7 +140,7 @@ public class Role extends Agent {
     }
 
     private void deactivateRole(AID playerAID) {
-        if (playerAID.equals(playerInfo.getAID())) {
+        if (playerAID.equals(playerDescription.getAID())) {
             addBehaviour(new DeactivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.
