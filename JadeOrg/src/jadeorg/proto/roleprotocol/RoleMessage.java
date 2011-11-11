@@ -9,8 +9,8 @@ import jadeorg.lang.Message;
 
 /**
  * A 'Role' message.
- * An 'Role' message is a message exchanged between aa role and a player
- * containing a request to activate/deactivate a role.
+ * An 'Role' message is a message exchanged between a role and a player
+ * containing a request to activate/deactivate a role or invoke a responsibility.
  * @author Lukáš Kúdela
  * @since 2011-11-06
  * @version %I% %G%

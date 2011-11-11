@@ -9,7 +9,7 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.proto.deactprotocol.DeactProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 
 /**
  * A 'Deact request' message.
