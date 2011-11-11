@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package jadeorg.proto.roleprotocol;
+package jadeorg.proto.roleprotocol.activateprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.proto.roleprotocol.RoleMessage;
 
 /**
  * An 'Activate request' message.

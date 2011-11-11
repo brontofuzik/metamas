@@ -13,17 +13,17 @@ import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
-import jadeorg.proto.activateprotocol.ActivateProtocol;
-import jadeorg.proto.deactivateprotocol.DeactivateProtocol;
-import jadeorg.proto.deactprotocol.DeactProtocol;
-import jadeorg.proto.enactprotocol.EnactProtocol;
-import jadeorg.proto.enactprotocol.RefuseMessage;
-import jadeorg.proto.enactprotocol.RequirementsMessage;
-import jadeorg.proto.enactprotocol.RoleAIDMessage;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.RefuseMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
-import jadeorg.proto.roleprotocol.ActivateRequestMessage;
-import jadeorg.proto.roleprotocol.DeactivateRequestMessage;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
 
 /**
  * A player agent.

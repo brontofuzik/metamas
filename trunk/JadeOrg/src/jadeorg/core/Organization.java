@@ -14,15 +14,15 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
-import jadeorg.proto.enactprotocol.EnactProtocol;
-import jadeorg.proto.enactprotocol.RefuseMessage;
-import jadeorg.proto.enactprotocol.RequirementsMessage;
-import jadeorg.proto.enactprotocol.RoleAIDMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.RefuseMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.OrganizationProtocol;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
-import jadeorg.proto.deactprotocol.DeactProtocol;
-import jadeorg.proto.deactprotocol.FailureMessage;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.FailureMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 import java.lang.reflect.Constructor;
@@ -524,7 +524,7 @@ public abstract class Organization extends Agent {
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
-                role.setRoleName(roleName);
+                role.setName(roleName);
                 role.setOrganization((Organization)myAgent);
                 return role;
             }

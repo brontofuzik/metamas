@@ -1,9 +1,10 @@
-package jadeorg.proto.roleprotocol;
+package jadeorg.proto.roleprotocol.deactivateprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.proto.roleprotocol.RoleMessage;
 
 /**
  * A 'Deactivate request' message.

@@ -1,14 +1,29 @@
 package jadeorg.core;
 
+import jadeorg.utils.Logger;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import jadeorg.proto.ActiveState;
+import jadeorg.proto.Party;
+import jadeorg.proto.PassiveState;
+import jadeorg.proto.Protocol;
+import jadeorg.proto.State;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
+import jadeorg.proto.roleprotocol.RoleMessage;
+import jadeorg.proto.roleprotocol.RoleProtocol;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateReplyMessage;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateReplyMessage;
+import jadeorg.proto.roleprotocol.invokeprotocol.InvokeRequestMessage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -21,48 +36,78 @@ import java.util.StringTokenizer;
  */
 public class Role extends Agent {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private final String ROLE_PROTOCOL = "role-protocol";
-    
-    private final String ACTIVATE_ACTION = "activate";
-    
-    private final String DEACTIVATE_ACTION = "deactivate";
-    
-    private final String INVOKE_POWER_ACTION = "invoke-power";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private MessageTemplate roleMessageTemplate = MessageTemplate.and(
-            MessageTemplate.MatchProtocol(ROLE_PROTOCOL),
-            MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+    private String name;
+    
+    private Organization myOrganization;
+    
+    //private PowerManager powerManager = new PowerManager();
+    
+    private RoleState state = RoleState.IDLE;
     
     private PlayerInfo playerInfo;
     
+    private Logger logger;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Enums">
+    
+    private enum RoleState
+    {
+        IDLE,
+        READY,
+        ACTIVE,
+        INACTIVE
+    }
+        
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    void setRoleName(String roleName) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    void setName(String name) {
+        // ----- Preconditions -----
+        assert name != null && !name.isEmpty();
+        // -------------------------
+        
+        this.name = name;
     }
     
     void setOrganization(Organization organization) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        // ----- Preconditions -----
+        assert organization != null;
+        // -------------------------
+        
+        this.myOrganization = organization;
+    }
+    
+    private DFAgentDescription getAgentDescription()
+    {
+        // Create the agent description.
+        DFAgentDescription agentDescription = new DFAgentDescription();
+        agentDescription.setName(getAID());
+        
+        // Create the service description.
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType("TODO");
+        serviceDescription.setName("TODO");
+        agentDescription.addServices(serviceDescription);
+        
+        return agentDescription;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void setup() {
+    @Override
+    protected void setup() {
         initialize();
         registerWithDF();
     }
     
-    // ---------- PRIVATE ----------
+    // ----- Initialization -----
     
     private void initialize() {
         initializeState();
@@ -73,40 +118,42 @@ public class Role extends Agent {
     }
 
     private void initializeBehaviour() {
-        addBehaviour(new RoleManagerBehaviour());
+        addBehaviour(new RoleManager());
     }
     
     private void registerWithDF() {
         try {
-            DFAgentDescription agentDescription = new DFAgentDescription();
-            agentDescription.setName(getAID());
-            DFService.register(this, agentDescription);
+            DFService.register(this, getAgentDescription());
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
     }
     
-    private void activateRole(AID player) {
-        if (player.equals(playerInfo.getAID())) {
-            addBehaviour(new ActivateProtocolResponder());
+    // ----- Activation/deactivation -----
+    
+    private void activateRole(AID playerAID) {
+        if (playerAID.equals(playerInfo.getAID())) {
+            addBehaviour(new ActivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.
         }
     }
 
-    private void deactivateRole(AID player) {
-        if (player.equals(playerInfo.getAID())) {
-            addBehaviour(new DeactivateProtocolResponder());
+    private void deactivateRole(AID playerAID) {
+        if (playerAID.equals(playerInfo.getAID())) {
+            addBehaviour(new DeactivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.
         }
     }
     
-    private void invokePower(AID player, String power, List<String> args) {
+    // ----- Power invocation -----
+    
+    private void invokePower(AID player, String power, String[] args) {
     }
     
     /**
-     * Sends a NOT_UNDERSTOOD message.
+     * Sends a 'Not understood' message.
      * @param receiver the receiver.
      */
     private void sendNotUnderstood(AID receiver) {
@@ -122,129 +169,375 @@ public class Role extends Agent {
     /**
      * A role manager behaviour.
      */
-    private class RoleManagerBehaviour extends CyclicBehaviour {
+    private class RoleManager extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
         @Override
-        public void action() {
-            ACLMessage message = myAgent.receive(roleMessageTemplate);
-            if (message != null) {
-                RoleMessage roleMessage = new RoleMessage(message);
-                roleMessage.process();
-            } else {
-                block();
-            }
+        protected Protocol getProtocol() {
+            return RoleProtocol.getInstance();
         }
+                
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        class ReceiveRoleRequest extends PassiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-role-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            public ReceiveRoleRequest() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                RoleMessage roleMessage = (RoleMessage)receive(RoleMessage.class, null);              
+                if (roleMessage != null) {
+                    if (roleMessage instanceof ActivateRequestMessage) {
+                        ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)roleMessage;
+                        activateRole(activateRequestMessage.getSenderPlayer());
+                    } else if (roleMessage instanceof DeactivateRequestMessage) {
+                        DeactivateRequestMessage deactivateRequestMessage = (DeactivateRequestMessage)roleMessage;
+                        deactivateRole(deactivateRequestMessage.getSenderPlayer());
+                    } else if (roleMessage instanceof InvokeRequestMessage) {
+                        InvokeRequestMessage invokeRequestMessage = (InvokeRequestMessage)roleMessage;
+                        invokePower(invokeRequestMessage.getSenderPlayer(), invokeRequestMessage.getPower(), invokeRequestMessage.getArgs());
+                    } else {
+                        // TODO Send 'Not understood' message to the player.
+                        assert false;
+                    }
+                } else {
+                    block();
+                }
+            }
+            
+            // </editor-fold>
+        }
+        
+        // </editor-fold>
     }
     
     /**
      * An 'Activate' protocol responder behaviour.
      */
-    private class ActivateProtocolResponder extends FSMBehaviour {
+    private class ActivateProtocolResponder extends Party {
+
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private AID playerAID;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ActivateProtocolResponder(AID playerAID) {
+            this.playerAID = playerAID;
+            
+            registerStatesAndTransitions();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected Protocol getProtocol() {
+            return ActivateProtocol.getInstance();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        private void registerStatesAndTransitions() {
+            // ----- States -----
+            State receiveActivateRequest = new ReceiveActivateRequest();
+            State sendActivateReply = new SendActivateReply();
+            State end = new End();
+            // ------------------
+            
+            // Register states.
+            registerFirstState(receiveActivateRequest);
+            registerState(sendActivateReply);
+            registerLastState(end);
+            
+            // Register transitions.
+            receiveActivateRequest.registerDefaultTransition(sendActivateReply);
+            sendActivateReply.registerDefaultTransition(end);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        /**
+         * The 'Receive activate request' (passive) state.
+         * Messages received:
+         * - 'Activate request' message
+         */
+        private class ReceiveActivateRequest extends PassiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "receive-activate-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveActivateRequest() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Send activate reply' (active) state.
+         * Messages sent:
+         * - 'Activate reply' message
+         */
+        private class SendActivateReply extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-activate-reply";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendActivateReply() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                ActivateReplyMessage activateReplyMessage = new ActivateReplyMessage();      
+                if (isActivable()) {
+                    activateReplyMessage.setAgree(true);
+                    state = RoleState.ACTIVE;
+                } else {
+                    activateReplyMessage.setAgree(false);
+                }
+                activateReplyMessage.addReceiver(playerAID);
+                    
+                send(ActivateReplyMessage.class, activateReplyMessage);
+            }
+            
+            private boolean isActivable() {
+                return state == RoleState.READY || state == RoleState.INACTIVE;
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'End' (active) state.
+         */
+        private class End extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            End() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Do nothing.
+            }
+            
+            // </editor-fold>
+        }
+        
+        // </editor-fold>
     }
     
     /**
      * A 'Deactivate' protocol responder behaviour.
      */
-    private class DeactivateProtocolResponder extends FSMBehaviour {
-    }
-    
-    /**
-     * A message send to a Role agent from a Player agent.
-     */
-    private class RoleMessage {
+    private class DeactivateProtocolResponder extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        private String action;
+        private AID playerAID;
         
-        private String power;
-        
-        private List<String> args = new ArrayList<String>();
-        
-        private AID player;
-
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public RoleMessage(ACLMessage message) {
-            StringTokenizer tokenizer = new StringTokenizer(message.getContent());
+        DeactivateProtocolResponder(AID playerAID) {
+            this.playerAID = playerAID;
             
-            // Get the action.
-            if (tokenizer.hasMoreTokens()) {
-                action = tokenizer.nextToken();
-            }
-            
-            switch (action) {
-                case ACTIVATE_ACTION:
-                    parseActivateMessage(tokenizer);
-                    break;
-                case DEACTIVATE_ACTION:
-                    parseDeactivateMessage(tokenizer);
-                    break;
-                case INVOKE_POWER_ACTION:
-                    parseInvokePowerMessage(tokenizer);
-                    break;
-                default:
-                    assert false;
-            }
-            
-            // Get the player.
-            player = message.getSender();
+            registerStatesAndTransitions();
         }
                 
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        public String getAction() {
-            return action;
-        }
-        
-        public String getPower() {
-            return power;
-        }
-        
-        public AID getPlayer() {
-            return player;
+        @Override
+        protected Protocol getProtocol() {
+            return DeactivateProtocol.getInstance();
         }
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
-        public void process() {
-            switch (action) {
-                case ACTIVATE_ACTION:
-                    activateRole(player);
-                    break;
-                case DEACTIVATE_ACTION:
-                    deactivateRole(player);
-                    break;
-                case INVOKE_POWER_ACTION:
-                    invokePower(player, power, args);
-                default:
-                    sendNotUnderstood(player);
-                    break;
-            }
+        private void registerStatesAndTransitions() {
+            // ----- States -----
+            State receiveDeactivateRequest = new ReceiveDeactivateRequest();
+            State sendDeactivateReply = new SendDeactivateReply();
+            State end = new End();
+            // ------------------
+            
+            // Register states.
+            registerFirstState(receiveDeactivateRequest);
+            registerState(sendDeactivateReply);
+            registerLastState(end);
+            
+            // Register transitions.
+            receiveDeactivateRequest.registerDefaultTransition(sendDeactivateReply);
+            sendDeactivateReply.registerDefaultTransition(end);
         }
         
-        private void parseActivateMessage(StringTokenizer tokenizer) {
-        }
+        // </editor-fold>
 
-        private void parseDeactivateMessage(StringTokenizer tokenizer) {
-        }
+        // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private void parseInvokePowerMessage(StringTokenizer tokenizer) {
-            // Get the power.
-            if (tokenizer.hasMoreTokens()) {
-                power = tokenizer.nextToken();
+        /**
+         * The 'Receive deactivate request' (passive) state.
+         */
+        private class ReceiveDeactivateRequest extends PassiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "recive-deactivate-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveDeactivateRequest() {
+                super(NAME);
             }
             
-            // Get the arguments.
-            while (tokenizer.hasMoreTokens()) {
-                args.add(tokenizer.nextToken());
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
             }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Send deactivate reply' (active) state.
+         */
+        private class SendDeactivateReply extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Fields">
+            
+            private static final String NAME = "send-deactivate-reply";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendDeactivateReply() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                DeactivateReplyMessage deactivateReplyMessage = new DeactivateReplyMessage();      
+                if (isDeactivable()) {
+                    deactivateReplyMessage.setAgree(true);
+                    state = RoleState.INACTIVE;
+                } else {
+                    deactivateReplyMessage.setAgree(false);
+                }
+                deactivateReplyMessage.addReceiver(playerAID);
+                    
+                send(DeactivateReplyMessage.class, deactivateReplyMessage);
+            }
+            
+            private boolean isDeactivable() {
+                return state == RoleState.READY || state == RoleState.INACTIVE;
+            }
+            
+            // </editor-fold>  
+        }
+        
+        /**
+         * The 'End' (active) state.
+         */
+        private class End extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            End() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Do nothing.
+            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>

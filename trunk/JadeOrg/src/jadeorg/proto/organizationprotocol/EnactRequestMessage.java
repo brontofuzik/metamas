@@ -4,7 +4,7 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
-import jadeorg.proto.enactprotocol.EnactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
 
 /**
  * An 'Enact request' message.
