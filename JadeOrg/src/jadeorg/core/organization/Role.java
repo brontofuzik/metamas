@@ -1,10 +1,8 @@
-package jadeorg.core;
+package jadeorg.core.organization;
 
 import jadeorg.utils.Logger;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.FSMBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -24,9 +22,6 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateReplyMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateReplyMessage;
 import jadeorg.proto.roleprotocol.invokeprotocol.InvokeRequestMessage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * A role agent.
@@ -46,7 +41,7 @@ public class Role extends Agent {
     
     private RoleState state = RoleState.IDLE;
     
-    private PlayerDescription playerDescription;
+    private AID playerAID;
     
     private Logger logger;
     
@@ -132,7 +127,7 @@ public class Role extends Agent {
     // ----- Activation/deactivation -----
     
     private void activateRole(AID playerAID) {
-        if (playerAID.equals(playerDescription.getAID())) {
+        if (playerAID.equals(this.playerAID)) {
             addBehaviour(new ActivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.
@@ -140,7 +135,7 @@ public class Role extends Agent {
     }
 
     private void deactivateRole(AID playerAID) {
-        if (playerAID.equals(playerDescription.getAID())) {
+        if (playerAID.equals(this.playerAID)) {
             addBehaviour(new DeactivateProtocolResponder(playerAID));
         } else {
             // You are not enacting this role.

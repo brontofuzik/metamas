@@ -5,9 +5,9 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.core.Organization;
+import jadeorg.core.organization.Organization;
 import jadeorg.lang.Message;
-import jadeorg.player.Player;
+import jadeorg.core.player.Player;
 
 /**
  * A communication protocol - a FSM behaviour.

@@ -1,4 +1,4 @@
-package jadeorg.core;
+package jadeorg.core.organization.kb;
 
 import jade.core.AID;
 import java.util.HashSet;

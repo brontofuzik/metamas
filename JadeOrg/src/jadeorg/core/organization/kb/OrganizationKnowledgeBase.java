@@ -1,6 +1,7 @@
-package jadeorg.core;
+package jadeorg.core.organization.kb;
 
 import jade.core.AID;
+import jadeorg.core.organization.Role;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import java.util.Map;
  * @since 2011-10-27
  * @version %I% %G%
  */
-class OrganizationKnowledgeBase {
+public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -26,7 +27,7 @@ class OrganizationKnowledgeBase {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
+   
     // ----- QUERY -----
     
     /**
@@ -71,7 +72,7 @@ class OrganizationKnowledgeBase {
      * @param role the role
      * @param player 
      */
-    void updateRoleIsEnacted(Role role, AID player) {
+    public void updateRoleIsEnacted(Role role, AID player) {
         // ----- Preconditions -----
         assert role != null;
         assert player != null;
@@ -88,7 +89,7 @@ class OrganizationKnowledgeBase {
      * @param role the role 
      * @param player
      */
-    void roleIsDeactedByPlayer(Role role, AID player) {
+    public void roleIsDeactedByPlayer(Role role, AID player) {
         // ----- Preconditions -----
         assert role != null;
         assert player != null;
