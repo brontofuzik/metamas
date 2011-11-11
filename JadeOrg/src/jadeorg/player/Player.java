@@ -93,8 +93,8 @@ public abstract class Player extends Agent {
     private void activate(String roleName) throws PlayerException {
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
-            RoleInfo roleInfo = (RoleInfo)knowledgeBase.getRoleInfo(roleName);
-            addBehaviour(new ActivateProtocolInitiator(roleInfo));
+            RoleDescription roleDescription = (RoleDescription)knowledgeBase.getRoleDescription(roleName);
+            addBehaviour(new ActivateProtocolInitiator(roleDescription));
         } else {
             // The role can not be activated.
             String message = String.format("I cannot activate the role '%1$' because I do not enact it.", roleName);
@@ -105,8 +105,8 @@ public abstract class Player extends Agent {
     private void deactivate(String roleName) throws PlayerException {
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
-            RoleInfo roleInfo = (RoleInfo)knowledgeBase.getRoleInfo(roleName);
-            addBehaviour(new DeactivateProtocolInitiator(roleInfo));
+            RoleDescription roleDescription = (RoleDescription)knowledgeBase.getRoleDescription(roleName);
+            addBehaviour(new DeactivateProtocolInitiator(roleDescription));
         } else {
             // The role can not be deactivated.
             String message = String.format("I cannot deactivate the role '%1$' because I do not play it.", roleName);
@@ -394,8 +394,8 @@ public abstract class Player extends Agent {
                 RoleAIDMessage roleAIDMessage = (RoleAIDMessage)receive(RoleAIDMessage.class, organizationAID);
                 if (roleAIDMessage != null) {
                     AID roleAID = roleAIDMessage.getRoleAID();
-                    RoleInfo roleInfo = new RoleInfo(roleAID, organizationAID);
-                    knowledgeBase.enactRole(roleInfo);
+                    RoleDescription roleDescription = new RoleDescription(roleAID, organizationAID);
+                    knowledgeBase.enactRole(roleDescription);
                 } else {
                     block();
                 }
@@ -624,18 +624,18 @@ public abstract class Player extends Agent {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        private RoleInfo roleInfo;
+        private RoleDescription roleDescription;
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ActivateProtocolInitiator(RoleInfo roleInfo) {
+        public ActivateProtocolInitiator(RoleDescription roleDescription) {
             // ----- Preconditions -----
-            assert roleInfo != null;
+            assert roleDescription != null;
             // -------------------------
             
-            this.roleInfo = roleInfo;
+            this.roleDescription = roleDescription;
             
             registerStatesAndtransitions();
         }
@@ -705,7 +705,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-                activateRequestMessage.setReceiverRole(roleInfo.getRoleAID());
+                activateRequestMessage.setReceiverRole(roleDescription.getRoleAID());
                 
                 send(ActivateRequestMessage.class, activateRequestMessage);
             }
@@ -737,12 +737,12 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                ACLMessageWrapper aclMessageWraper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, roleInfo.getRoleAID());
+                ACLMessageWrapper aclMessageWraper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, roleDescription.getRoleAID());
                 
                 if (aclMessageWraper != null) {
                     if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
                         // The 'Activate' request was agreed.
-                        knowledgeBase.activateRole(roleInfo);
+                        knowledgeBase.activateRole(roleDescription);
                         setExitValue(Event.SUCCESS);
                     } else if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
                         // The 'Activate' request was refused.
@@ -805,18 +805,18 @@ public abstract class Player extends Agent {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        private RoleInfo roleInfo;
+        private RoleDescription roleDescription;
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public DeactivateProtocolInitiator(RoleInfo roleInfo) {
+        public DeactivateProtocolInitiator(RoleDescription roleDescription) {
             // ----- Preconditions -----
-            assert roleInfo != null;
+            assert roleDescription != null;
             // -------------------------
             
-            this.roleInfo = roleInfo;
+            this.roleDescription = roleDescription;
         }
         
         // </editor-fold>
@@ -884,7 +884,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
-                deactivateRequestMessage.setReceiverRole(roleInfo.getRoleAID());
+                deactivateRequestMessage.setReceiverRole(roleDescription.getRoleAID());
                 
                 send(DeactivateRequestMessage.class, deactivateRequestMessage);
             }

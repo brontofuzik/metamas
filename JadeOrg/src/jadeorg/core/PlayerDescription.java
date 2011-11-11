@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A player info.
+ * A player description.
  * @author Lukáš Kúdela
  * @since 2011-10-18
  * @version %I% %G%
  */
-class PlayerInfo {
+class PlayerDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -27,7 +27,7 @@ class PlayerInfo {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public PlayerInfo(AID playerAID) {
+    public PlayerDescription(AID playerAID) {
         // ----- Preconditions -----
         if (playerAID == null) {
             throw new NullPointerException("playerAID");

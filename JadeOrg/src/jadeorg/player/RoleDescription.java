@@ -3,12 +3,12 @@ package jadeorg.player;
 import jade.core.AID;
 
 /**
- * A role info.
+ * A role description.
  * @author Lukáš Kúdela
  * @since 2011-10-29
  * @version %I% %G%
  */
-class RoleInfo {
+class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -28,7 +28,7 @@ class RoleInfo {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RoleInfo(AID roleAID, AID organizationAID) {
+    public RoleDescription(AID roleAID, AID organizationAID) {
         this.roleAID = roleAID;
         roleName = roleAID.getName();
         

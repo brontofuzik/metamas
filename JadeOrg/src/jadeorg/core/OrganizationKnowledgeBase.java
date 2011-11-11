@@ -21,7 +21,7 @@ class OrganizationKnowledgeBase {
     private Map<String, Role> enactedRoles = new Hashtable<String, Role>();
     
     /** The players enacting roles. */
-    public Hashtable <AID, PlayerInfo> players = new Hashtable <AID, PlayerInfo>();
+    public Hashtable <AID, PlayerDescription> players = new Hashtable <AID, PlayerDescription>();
     
     // </editor-fold>
     
@@ -108,15 +108,15 @@ class OrganizationKnowledgeBase {
         // ------------------------
         
         // Get the player info.
-        PlayerInfo playerInfo = getPlayerInfo(playerAID);
+        PlayerDescription playerDescription = getPlayerDescription(playerAID);
         
         // Create the player info if the player is unemployed.
-        if (!playerInfo.isEmployed()) {
-            players.put(playerAID, playerInfo);
+        if (!playerDescription.isEmployed()) {
+            players.put(playerAID, playerDescription);
         }
         
         // Enact the role.
-        playerInfo.enactRole(roleName);
+        playerDescription.enactRole(roleName);
     }
 
     private void updatePlayerDeactsRole(AID playerAID, String roleName) {
@@ -126,23 +126,23 @@ class OrganizationKnowledgeBase {
         // ------------------------
         
         // Get the player info.
-        PlayerInfo playerInfo = getPlayerInfo(playerAID);
+        PlayerDescription playerDescription = getPlayerDescription(playerAID);
         
         // Deact the role.
-        playerInfo.deactRole(roleName);
+        playerDescription.deactRole(roleName);
         
         // Delete the player info if the player is unemployed.
-        if (!playerInfo.isEmployed()) {
+        if (!playerDescription.isEmployed()) {
             players.remove(playerAID);
         }
     }
     
-    private PlayerInfo getPlayerInfo(AID playerAID) {
-        PlayerInfo playerInfo = players.get(playerAID);
-        if (playerInfo == null) {
-            playerInfo = new PlayerInfo(playerAID);
+    private PlayerDescription getPlayerDescription(AID playerAID) {
+        PlayerDescription playerDescription = players.get(playerAID);
+        if (playerDescription == null) {
+            playerDescription = new PlayerDescription(playerAID);
         }
-        return playerInfo;
+        return playerDescription;
     }
     
     // </editor-fold>  
