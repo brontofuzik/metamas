@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.behaviours.Behaviour;
 import jadeorg.proto.PassiveState.Event;
 
 /**
@@ -16,7 +17,7 @@ public interface State {
      * Gets the name of the state.
      * @return the name of the state
      */
-    public abstract String getName();
+    public String getName();
     
     public Party getParty();
     
@@ -44,6 +45,12 @@ public interface State {
      * @param targetState the target state.
      */
     public void registerDefaultTransition(State targetState);
+    
+    /**
+     * Converts this state to a Jade Behaviour.
+     * @return the Jade Behaviour
+     */
+    public Behaviour toBehaviour();
     
     // </editor-fold>
 }

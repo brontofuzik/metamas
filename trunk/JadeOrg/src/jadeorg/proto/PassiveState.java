@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -99,6 +100,14 @@ public abstract class PassiveState extends CyclicBehaviour
     @Override
     public int onEnd() {
         return exitValue.getCode();
+    }
+    
+    /**
+     * Converts this state to a Jade Behaviour.
+     * @return the Jade Behaviour
+     */
+    public Behaviour toBehaviour() {
+        return this;
     }
     
     // ---------- PRIVATE ----------
