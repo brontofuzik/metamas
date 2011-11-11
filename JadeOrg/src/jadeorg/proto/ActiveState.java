@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
@@ -95,6 +96,14 @@ public abstract class ActiveState extends OneShotBehaviour
      */
     public void send(Class messageClass, Message message) {
         getParty().send(messageClass, message);
+    }
+    
+    /**
+     * Converts this state to a Jade Behaviour.
+     * @return the Jade Behaviour
+     */
+    public Behaviour toBehaviour() {
+        return this;
     }
     
     // </editor-fold>
