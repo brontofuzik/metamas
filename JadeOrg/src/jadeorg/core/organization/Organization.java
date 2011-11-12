@@ -172,6 +172,20 @@ public abstract class Organization extends Agent {
      */
     private class OrganizationManager extends Party {
         
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "organization-manager";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        OrganizationManager() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -232,6 +246,12 @@ public abstract class Organization extends Agent {
      */
     private class EnactProtocolResponder extends Party {
         
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "enact-protocol-responder";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private String roleName;
@@ -243,6 +263,7 @@ public abstract class Organization extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public EnactProtocolResponder(String roleName, AID player) {
+            super(NAME);
             // ----- Preconditions -----
             assert !roleName.isEmpty();
             assert player != null;
@@ -579,6 +600,12 @@ public abstract class Organization extends Agent {
      */
     private class DeactProtocolResponder extends Party {
         
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "deact-protocol-responder";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private String roleName;
@@ -590,6 +617,7 @@ public abstract class Organization extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public DeactProtocolResponder(String roleName, AID player) {
+            super(NAME);
             // ----- Preconditions -----
             assert !roleName.isEmpty();
             assert player != null;

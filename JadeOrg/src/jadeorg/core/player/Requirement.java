@@ -3,7 +3,6 @@ package jadeorg.core.player;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jadeorg.proto.Party;
-import jadeorg.proto.PassiveState.Event;
 import jadeorg.proto.State;
 
 /**
@@ -12,7 +11,7 @@ import jadeorg.proto.State;
  * @since 2011-11-11
  * @version %I% %G%
  */
-class Requirement extends Behaviour implements State {
+class Requirement extends State {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -29,7 +28,7 @@ class Requirement extends Behaviour implements State {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Requirement(String name) {
-        setBehaviourName(name);
+        super(name);
     }
     
     // </editor-fold>
@@ -72,21 +71,6 @@ class Requirement extends Behaviour implements State {
         return this;
     }
     
-    @Override
-    public String getName() {
-        return getBehaviourName();
-    }
-
-    @Override
-    public Party getParty() {
-        return (Party)getParent();
-    }
-
-    @Override
-    public void setParty(Party party) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -94,26 +78,6 @@ class Requirement extends Behaviour implements State {
     @Override
     public void action() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public boolean done() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public void registerTransition(Event event, State targetState) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void registerDefaultTransition(State targetState) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public Behaviour toBehaviour() {
-        return this;
     }
     
     // </editor-fold>

@@ -166,6 +166,20 @@ public class Role extends Agent {
      */
     private class RoleManager extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "role-manager";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        RoleManager() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -228,6 +242,12 @@ public class Role extends Agent {
      */
     private class ActivateProtocolResponder extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "activate-protocol-responder";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private AID playerAID;
@@ -237,6 +257,7 @@ public class Role extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ActivateProtocolResponder(AID playerAID) {
+            super(NAME);
             this.playerAID = playerAID;
             
             registerStatesAndTransitions();
@@ -388,6 +409,12 @@ public class Role extends Agent {
      */
     private class DeactivateProtocolResponder extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "deactivate-protocol-responder";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private AID playerAID;
@@ -397,6 +424,7 @@ public class Role extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         DeactivateProtocolResponder(AID playerAID) {
+            super(NAME);
             this.playerAID = playerAID;
             
             registerStatesAndTransitions();

@@ -1,15 +1,30 @@
 package jadeorg.proto;
 
-import jade.core.behaviours.Behaviour;
-import jadeorg.proto.PassiveState.Event;
+import jade.core.behaviours.OneShotBehaviour;
 
 /**
- * A protocol state - a one-shot behaviour.
+ * A protocol state.
  * @author Lukáš Kúdela
  * @since 2011-10-20
  * @version %I% %G%
  */
-public interface State {
+public abstract class State extends OneShotBehaviour {
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    // TODO This field probably belongs to the PassiveState class.
+    /** The exit value. */
+    private Event exitValue;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public State(String name) {
+        setBehaviourName(name);
+    }
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
@@ -17,15 +32,25 @@ public interface State {
      * Gets the name of the state.
      * @return the name of the state
      */
-    public String getName();
+    public String getName() {
+        return getBehaviourName();
+    }
     
-    public Party getParty();
+    public Party getParty() {
+        return (Party)getParent();
+    }
     
-    /**
-     * Sets the parent party.
-     * @protocol the parent party
-     */
-    public void setParty(Party party);
+    public Protocol getProtocol() {
+        return getParty().getProtocol();
+    }
+    
+    public Event getExitValue() {
+        return exitValue;
+    }
+    
+    public void setExitValue(Event exitValue) {
+        this.exitValue = exitValue;
+    }
     
     // </editor-fold>
     
@@ -36,7 +61,9 @@ public interface State {
      * @param event the event triggering the transition
      * @param targetState the target state
      */
-    public void registerTransition(Event event, State targetState);
+    public void registerTransition(Event event, State targetState) {
+        getParty().registerTransition(this, targetState, event);
+    }
     
     /**
      * Registers a default transition from this state.
@@ -44,13 +71,48 @@ public interface State {
      * that is not associated with a custom transition.
      * @param targetState the target state.
      */
-    public void registerDefaultTransition(State targetState);
+    public void registerDefaultTransition(State targetState) {
+        getParty().registerDefaultTransition(this, targetState);
+    }
+    
+    @Override
+    public int onEnd() {
+        return exitValue.getCode();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * Converts this state to a Jade Behaviour.
-     * @return the Jade Behaviour
+     * Transition event.
      */
-    public Behaviour toBehaviour();
+    public enum Event {
+        SUCCESS(0),
+        FAILURE(1);
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int code;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        private Event(int code) {
+            this.code = code;
+        }
+                
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        public int getCode() {
+            return code;
+        }
+        
+        // </editor-fold>
+    }
     
     // </editor-fold>
 }
