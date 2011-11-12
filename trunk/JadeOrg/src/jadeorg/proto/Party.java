@@ -7,23 +7,35 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.core.organization.Organization;
 import jadeorg.lang.Message;
-import jadeorg.core.player.Player;
+import jadeorg.proto.State.Event;
 
 /**
- * A communication protocol - a FSM behaviour.
+ * A protocol party.
  * @author Lukáš Kúdela
  * @since 2011-10-20
  * @version %I% %G%
  */
 public abstract class Party extends FSMBehaviour {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    protected Party(String name) {
+        setBehaviourName(name);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    public String getName() {
+        return getBehaviourName();
+    }
+    
+    protected abstract Protocol getProtocol();
     
     protected Organization getOrganization() {
         return (Organization)myAgent;
     }
-    
-    protected abstract Protocol getProtocol();
     
     // </editor-fold>
     
@@ -31,20 +43,17 @@ public abstract class Party extends FSMBehaviour {
     
     public void registerState(State state) {
         registerState((Behaviour)state, state.getName());
-        state.setParty(this);
     }  
     
     public void registerFirstState(State state) {
         registerFirstState((Behaviour)state, state.getName());
-        state.setParty(this);
     }
     
     public void registerLastState(State state) {
         registerLastState((Behaviour)state, state.getName());
-        state.setParty(this);
     }
     
-    public void registerTransition(State fromState, State toState, PassiveState.Event event) {
+    public void registerTransition(State fromState, State toState, Event event) {
         registerTransition(fromState.getName(), toState.getName(), event.getCode());
     }
     

@@ -132,6 +132,12 @@ public abstract class Player extends Agent {
      */
     private class EnactProtocolInitiator extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "enact-protocol-initiator";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         /** The organization AID. */
@@ -145,6 +151,7 @@ public abstract class Player extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public EnactProtocolInitiator(AID organization, String roleName) {
+            super(NAME);
             // ----- Preconditions -----
             assert organization != null;
             assert roleName != null && !roleName.isEmpty();
@@ -440,6 +447,12 @@ public abstract class Player extends Agent {
      */
     private class DeactProtocolInitiator extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "deact-protocol-initiator";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         /** The organization AID */
@@ -453,6 +466,7 @@ public abstract class Player extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public DeactProtocolInitiator(AID organization, String roleName) {
+            super(NAME);
             // ----- Preconditions -----
             assert organization != null;
             assert roleName != null && !roleName.isEmpty();
@@ -620,6 +634,12 @@ public abstract class Player extends Agent {
      */
     private class ActivateProtocolInitiator extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "activate-protocol-initiator";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private AID roleAID;
@@ -629,6 +649,7 @@ public abstract class Player extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public ActivateProtocolInitiator(AID roleAID) {
+            super(NAME);
             // ----- Preconditions -----
             assert roleAID != null;
             // -------------------------
@@ -801,6 +822,12 @@ public abstract class Player extends Agent {
      */
     private class DeactivateProtocolInitiator extends Party {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "deactivate-protocol-initiator";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private AID roleAID;
@@ -810,6 +837,7 @@ public abstract class Player extends Agent {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public DeactivateProtocolInitiator(AID roleAID) {
+            super(NAME);
             // ----- Preconditions -----
             assert roleAID != null;
             // -------------------------

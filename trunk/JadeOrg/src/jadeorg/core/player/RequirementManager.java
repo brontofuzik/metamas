@@ -42,11 +42,11 @@ public class RequirementManager extends FSMBehaviour {
     }
     
     public void addRequirement(Requirement requirement) {
-        String requirementName = requirement.toBehaviour().getBehaviourName();
+        String requirementName = requirement.getName();
         requirements.put(requirementName, requirement);
         
         // Register the state.
-        registerState(requirement.toBehaviour(), requirementName);
+        registerState(requirement, requirementName);
         
         // Register the transitions.
         registerTransition("send-request-param", requirementName, requirement.hashCode());
@@ -94,10 +94,10 @@ public class RequirementManager extends FSMBehaviour {
         // ------------------
         
         // Register the states.
-        registerFirstState(sendRequestParam.toBehaviour(), sendRequestParam.getName());
-        registerState(receiveParam.toBehaviour(), receiveParam.getName());
-        registerLastState(sendResult.toBehaviour(), sendResult.getName());
-        registerLastState(end.toBehaviour(), end.getName());
+        registerFirstState(sendRequestParam, sendRequestParam.getName());
+        registerState(receiveParam, receiveParam.getName());
+        registerLastState(sendResult, sendResult.getName());
+        registerLastState(end, end.getName());
         
         // Register the transitions.
         registerDefaultTransition(sendRequestParam.getName(), receiveParam.getName());
