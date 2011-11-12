@@ -3,9 +3,11 @@ package jadeorg.core.player;
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.State;
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -61,6 +63,28 @@ public class RequirementManager extends FSMBehaviour {
     
     // ---------- PRIVATE ----------
     
+    private static MessageTemplate createMessageTemplate(String protocol, int[] performatives, AID senderAID) {
+        // Match protocol.
+        MessageTemplate messageTemplate = MessageTemplate.MatchProtocol(protocol);
+        
+        // Match peformatives.
+        MessageTemplate performativeTemplate = null;
+        for (int performative : performatives) {
+            performativeTemplate = MessageTemplate.or(
+                performativeTemplate,
+                MessageTemplate.MatchPerformative(performative));
+        }
+        messageTemplate = messageTemplate.and(
+            messageTemplate,
+            messageTemplate);
+        
+        // Match sender AID.
+        messageTemplate = MessageTemplate.and(
+            messageTemplate,
+            MessageTemplate.MatchSender(senderAID));
+        return messageTemplate;
+    }
+    
     private void registerStatesAndTransitions() {
         // ----- States -----
         State sendRequestParam = new SendRequestParam();
@@ -114,6 +138,8 @@ public class RequirementManager extends FSMBehaviour {
             aclMessage.setProtocol("requirement-protcol");
             aclMessage.setContent("param");
             aclMessage.addReceiver(currentRequirement.getRoleAID());
+            
+            // Send the ACL message.
             myAgent.send(aclMessage);
         }
         
@@ -138,7 +164,32 @@ public class RequirementManager extends FSMBehaviour {
         
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            MessageTemplate messageTemplate = createMessageTemplate(
+                    "requirement-protocol",
+                    new int[] { ACLMessage.INFORM, ACLMessage.FAILURE },
+                    currentRequirement.getRoleAID());
+
+            // Receive the ACL message.
+            ACLMessage aclMessage = myAgent.receive(messageTemplate);
+            if (aclMessage != null) {
+                switch (aclMessage.getPerformative()) {
+                    case ACLMessage.INFORM:
+                        try {
+                            currentRequirement.setArgument(aclMessage.getContentObject());
+                        } catch (Exception e) {
+                            System.out.println(e);
+                        }
+                        // TODO Rework.
+                        //setExitValue(currentRequirement.hashCode());
+                        break;
+                    case ACLMessage.FAILURE:
+                        // TODO Rework.
+                        //setExitValue(currentRequirement.hashCode());
+                        break;
+                }
+            } else {
+                block();
+            }
         }
     }
     
@@ -160,7 +211,22 @@ public class RequirementManager extends FSMBehaviour {
         
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            // TODO Rework.    
+            ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
+            aclMessage.setProtocol("requirement-protocol");
+            aclMessage.addReceiver(currentRequirement.getRoleAID());
+            try {
+                aclMessage.setContentObject((Serializable)currentRequirement.getResult());
+            } catch (Exception ex) {
+                aclMessage.setPerformative(ACLMessage.FAILURE);
+                aclMessage.setContent(ex.toString());
+            }
+            
+            // Send the ACL message.
+            myAgent.send(aclMessage);
+
+            currentRequirement.reset();
+            getParent().reset();
         }
     }
     

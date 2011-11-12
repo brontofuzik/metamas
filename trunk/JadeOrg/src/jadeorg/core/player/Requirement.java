@@ -12,43 +12,95 @@ import jadeorg.proto.State;
  * @since 2011-11-11
  * @version %I% %G%
  */
-class Requirement implements State {
+class Requirement extends Behaviour implements State {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private Player myPlayer;
+    
     private AID roleAID;
+    
+    private Object argument;
+    
+    private Object result;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    Requirement(String name) {
+        setBehaviourName(name);
+    }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public AID getRoleAID() {
+    Player getMyPlayer() {
+        return myPlayer;
+    }
+    
+    Requirement setMyPlayer(Player player) {
+        this.myPlayer = player;
+        return this;
+    }
+    
+    AID getRoleAID() {
         return roleAID;
     }
     
-    public Requirement setRoleAID(AID roleAID) {
+    Requirement setRoleAID(AID roleAID) {
         this.roleAID = roleAID;
         return this;
     }
     
-    // </editor-fold>
+    Object getArgument() {
+        return argument;
+    }
     
+    Requirement setArgument(Object argument) {
+        this.argument = argument;
+        return this;
+    }
+    
+    Object getResult() {
+        return result;
+    }
+    
+    Requirement setResult() {
+        this.result = result;
+        return this;
+    }
     
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getBehaviourName();
     }
 
     @Override
     public Party getParty() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (Party)getParent();
     }
 
     @Override
     public void setParty(Party party) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    public void action() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
+    @Override
+    public boolean done() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     @Override
     public void registerTransition(Event event, State targetState) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -58,9 +110,11 @@ class Requirement implements State {
     public void registerDefaultTransition(State targetState) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
     @Override
     public Behaviour toBehaviour() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this;
     }
+    
+    // </editor-fold>
 }
