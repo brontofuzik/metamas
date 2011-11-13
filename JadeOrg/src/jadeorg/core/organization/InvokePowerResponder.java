@@ -8,12 +8,12 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * A power manager (FSM) behaviour.
+ * An 'Invoke power responder' (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2011-11-12
  * @version %I% %G%
  */
-public class PowerManager extends FSMBehaviour {
+public class InvokePowerResponder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -29,7 +29,7 @@ public class PowerManager extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
    
-    PowerManager() {
+    InvokePowerResponder() {
         initializeFSM();
     }
     
@@ -68,7 +68,7 @@ public class PowerManager extends FSMBehaviour {
     }
     
     public void addPower(Power power) {    
-        power.makeFSM();
+        power.buildFSM();
         
         powers.put(power.getName(), power);
         
