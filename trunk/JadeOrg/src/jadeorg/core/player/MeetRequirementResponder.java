@@ -7,17 +7,18 @@ import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.State;
+import jadeorg.utils.MessageTemplateBuilder;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * A requirement manager (FSM) behaviour.
+ * A 'Meet requirement responder' (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2011-11-11
  * @version %I% %G%
  */
-public class RequirementManager extends FSMBehaviour {
+public class MeetRequirementResponder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -33,7 +34,7 @@ public class RequirementManager extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RequirementManager() {
+    public MeetRequirementResponder() {
         initializeFSM();
     }
     
@@ -86,27 +87,7 @@ public class RequirementManager extends FSMBehaviour {
     
     // ---------- PRIVATE ----------
     
-    private static MessageTemplate createMessageTemplate(String protocol, int[] performatives, AID senderAID) {
-        // Match protocol.
-        MessageTemplate messageTemplate = MessageTemplate.MatchProtocol(protocol);
-        
-        // Match peformatives.
-        MessageTemplate performativeTemplate = null;
-        for (int performative : performatives) {
-            performativeTemplate = MessageTemplate.or(
-                performativeTemplate,
-                MessageTemplate.MatchPerformative(performative));
-        }
-        messageTemplate = messageTemplate.and(
-            messageTemplate,
-            messageTemplate);
-        
-        // Match sender AID.
-        messageTemplate = MessageTemplate.and(
-            messageTemplate,
-            MessageTemplate.MatchSender(senderAID));
-        return messageTemplate;
-    }
+
     
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);
@@ -167,7 +148,7 @@ public class RequirementManager extends FSMBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate messageTemplate = createMessageTemplate(
+            MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
                     "requirement-protocol",
                     new int[] { ACLMessage.INFORM, ACLMessage.FAILURE },
                     currentRequirement.getRoleAID());

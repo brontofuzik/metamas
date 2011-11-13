@@ -33,10 +33,6 @@ public abstract class Party extends FSMBehaviour {
     
     protected abstract Protocol getProtocol();
     
-    protected Organization getOrganization() {
-        return (Organization)myAgent;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">

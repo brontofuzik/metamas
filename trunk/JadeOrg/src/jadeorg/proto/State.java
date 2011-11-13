@@ -12,6 +12,10 @@ public abstract class State extends OneShotBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private String requirement;
+    
+    private String exception;
+    
     // TODO This field probably belongs to the PassiveState class.
     /** The exit value. */
     private int exitValue;
@@ -23,6 +27,53 @@ public abstract class State extends OneShotBehaviour {
     public State(String name) {
         setBehaviourName(name);
     }
+    
+    public State(String name, String requirement) {
+        this(name);
+        this.requirement = requirement;
+    }
+
+    // TAG NO-USAGES
+    public State(String name, String requirement, String exception) {
+        this(name, requirement);
+        this.exception = exception;
+    } 
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Enums">
+    
+   /**
+     * Transition event.
+     */
+    public enum Event {
+        SUCCESS(0),
+        FAILURE(1),
+        SUCCESS_LOOP(2),
+        FAILURE_LOOP(3);
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int code;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        private Event(int code) {
+            this.code = code;
+        }
+                
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        public int getCode() {
+            return code;
+        }
+        
+        // </editor-fold>
+    } 
     
     // </editor-fold>
     
@@ -42,6 +93,14 @@ public abstract class State extends OneShotBehaviour {
     
     public Protocol getProtocol() {
         return getParty().getProtocol();
+    }
+    
+    public String getRequirement() {
+        return requirement;
+    }
+    
+    public String getException() {
+        return exception;
     }
     
     public int getExitValue() {
@@ -82,40 +141,6 @@ public abstract class State extends OneShotBehaviour {
     @Override
     public int onEnd() {
         return exitValue;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * Transition event.
-     */
-    public enum Event {
-        SUCCESS(0),
-        FAILURE(1);
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private int code;
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        private Event(int code) {
-            this.code = code;
-        }
-                
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        public int getCode() {
-            return code;
-        }
-        
-        // </editor-fold>
     }
     
     // </editor-fold>
