@@ -1,12 +1,12 @@
 package jadeorg.core.organization;
 
-import jadeorg.proto.State;
+import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
 
 /**
- * A power.
+ * A power (FSM) behaviour.
  * @author Lukáš Kúdela
- * @since 2011-11-19
+ * @since 2011-11-09
  * @version %I% %G%
  */
 public class Power extends FSMBehaviour {
@@ -42,6 +42,26 @@ public class Power extends FSMBehaviour {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    public String getName() {
+        return getBehaviourName();
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     // </editor-fold>
+
+    void setPlayerAID(AID playerAID) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    void setArguments(String arguments) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    void makeFSM() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

@@ -1,7 +1,6 @@
 package jadeorg.proto;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
 import jadeorg.lang.Message;
 
 /**
