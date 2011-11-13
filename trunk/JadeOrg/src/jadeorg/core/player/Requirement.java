@@ -1,12 +1,10 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
-import jadeorg.proto.Party;
 import jadeorg.proto.State;
 
 /**
- * A requirement.
+ * A requirement (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2011-11-11
  * @version %I% %G%

@@ -12,7 +12,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * A requirement manager.
+ * A requirement manager (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2011-11-11
  * @version %I% %G%
@@ -25,12 +25,36 @@ public class RequirementManager extends FSMBehaviour {
     
     private Requirement currentRequirement;
     
+    private State sendArgumentRequest;
+    
+    private State sendRequirementResult;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public RequirementManager() {
-        registerStatesAndTransitions();
+        initializeFSM();
+    }
+    
+    private void initializeFSM() {
+        // ----- States -----
+        sendArgumentRequest = new SendArgumentRequest();
+        State receiveParam = new ReceiveParam();
+        sendRequirementResult = new SendRequirementResult();
+        State end = new End();
+        // ------------------
+        
+        // Register the states.
+        registerFirstState(sendArgumentRequest, sendArgumentRequest.getName());
+        registerState(receiveParam, receiveParam.getName());
+        registerLastState(sendRequirementResult, sendRequirementResult.getName());
+        registerLastState(end, end.getName());
+        
+        // Register the transitions.
+        registerDefaultTransition(sendArgumentRequest.getName(), receiveParam.getName());
+        registerTransition(receiveParam.getName(), end.getName(), 1);
+        registerDefaultTransition(sendRequirementResult.getName(), end.getName());
     }
     
     // </editor-fold>
@@ -42,15 +66,14 @@ public class RequirementManager extends FSMBehaviour {
     }
     
     public void addRequirement(Requirement requirement) {
-        String requirementName = requirement.getName();
-        requirements.put(requirementName, requirement);
+        requirements.put(requirement.getName(), requirement);
         
         // Register the state.
-        registerState(requirement, requirementName);
+        registerState(requirement, requirement.getName());
         
         // Register the transitions.
-        registerTransition("send-request-param", requirementName, requirement.hashCode());
-        registerDefaultTransition(requirementName, "send-result");
+        registerTransition(sendArgumentRequest.getName(), requirement.getName(), requirement.hashCode());
+        registerDefaultTransition(requirement.getName(), sendRequirementResult.getName());
     }
     
     protected void invokeRequirement(String requirementName, AID roleAID) {
@@ -85,26 +108,6 @@ public class RequirementManager extends FSMBehaviour {
         return messageTemplate;
     }
     
-    private void registerStatesAndTransitions() {
-        // ----- States -----
-        State sendRequestParam = new SendRequestParam();
-        State receiveParam = new ReceiveParam();
-        State sendResult = new SendResult();
-        State end = new End();
-        // ------------------
-        
-        // Register the states.
-        registerFirstState(sendRequestParam, sendRequestParam.getName());
-        registerState(receiveParam, receiveParam.getName());
-        registerLastState(sendResult, sendResult.getName());
-        registerLastState(end, end.getName());
-        
-        // Register the transitions.
-        registerDefaultTransition(sendRequestParam.getName(), receiveParam.getName());
-        registerTransition(receiveParam.getName(), end.getName(), 1);
-        registerDefaultTransition(sendResult.getName(), end.getName());
-    }
-    
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);
     }
@@ -113,17 +116,17 @@ public class RequirementManager extends FSMBehaviour {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    class SendRequestParam extends ActiveState {
+    class SendArgumentRequest extends ActiveState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "send-request-param";
+        private static final String NAME = "send-argument-request";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SendRequestParam() {
+        SendArgumentRequest() {
             super(NAME);
         }
         
@@ -193,17 +196,17 @@ public class RequirementManager extends FSMBehaviour {
         }
     }
     
-    class SendResult extends ActiveState {
+    class SendRequirementResult extends ActiveState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "send-result";
+        private static final String NAME = "send-requirement-result";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SendResult() {
+        SendRequirementResult() {
             super(NAME);
         }
         

@@ -14,7 +14,7 @@ public abstract class State extends OneShotBehaviour {
     
     // TODO This field probably belongs to the PassiveState class.
     /** The exit value. */
-    private Event exitValue;
+    private int exitValue;
     
     // </editor-fold>
     
@@ -44,12 +44,16 @@ public abstract class State extends OneShotBehaviour {
         return getParty().getProtocol();
     }
     
-    public Event getExitValue() {
+    public int getExitValue() {
         return exitValue;
     }
     
-    public void setExitValue(Event exitValue) {
+    public void setExitValue(int exitValue) {
         this.exitValue = exitValue;
+    }
+    
+    public void setExitValue(Event event) {
+        setExitValue(event.getCode());
     }
     
     // </editor-fold>
@@ -77,7 +81,7 @@ public abstract class State extends OneShotBehaviour {
     
     @Override
     public int onEnd() {
-        return exitValue.getCode();
+        return exitValue;
     }
     
     // </editor-fold>
