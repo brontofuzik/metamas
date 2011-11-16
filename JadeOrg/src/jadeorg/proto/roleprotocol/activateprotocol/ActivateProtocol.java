@@ -22,6 +22,14 @@ public class ActivateProtocol extends Protocol {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    private ActivateProtocol() {
+        super(NAME);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     public static ActivateProtocol getInstance() {
@@ -29,11 +37,6 @@ public class ActivateProtocol extends Protocol {
             singleton = new ActivateProtocol();
         }
         return singleton;
-    }
-    
-    @Override
-    public String getName() {
-        return NAME;
     }
     
     // </editor-fold>

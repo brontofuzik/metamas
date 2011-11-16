@@ -20,9 +20,19 @@ public abstract class Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private String name;
+    
     private Map<Class, Message> messages = new Hashtable<Class, Message>();
     
     private Map<Class, Party> parties = new Hashtable<Class, Party>();
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    protected Protocol(String name) {
+        this.name = name;
+    }
     
     // </editor-fold>
     
@@ -30,11 +40,11 @@ public abstract class Protocol {
     
     /**
      * Gets the protocol name.
-     * NOTE FOR DEVELOPERS:
-     * Implement this getter by simply returning the protocol name.
-     * @return the protocol name.
+     * @return the protocol name
      */
-    public abstract String getName();
+    public String getName() {
+        return name;
+    }
     
     // </editor-fold>
     

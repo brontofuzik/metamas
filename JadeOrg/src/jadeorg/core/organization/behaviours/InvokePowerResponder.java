@@ -1,8 +1,10 @@
-package jadeorg.core.organization;
+package jadeorg.core.organization.behaviours;
 
 import jade.core.AID;
-import jade.core.behaviours.FSMBehaviour;
+import jadeorg.core.organization.Role;
 import jadeorg.proto.ActiveState;
+import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
 import java.util.Hashtable;
 import java.util.Map;
@@ -13,7 +15,13 @@ import java.util.Map;
  * @since 2011-11-12
  * @version %I% %G%
  */
-public class InvokePowerResponder extends FSMBehaviour {
+public class InvokePowerResponder extends ResponderParty {
+    
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+
+    private static final String NAME = "invoke-power-responder";
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -30,6 +38,7 @@ public class InvokePowerResponder extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
    
     InvokePowerResponder() {
+        super(NAME);
         initializeFSM();
     }
     
@@ -81,6 +90,12 @@ public class InvokePowerResponder extends FSMBehaviour {
     }
     
     // ---------- PROTECTED ----------
+    
+    @Override
+    protected Protocol getProtocol() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
     protected void invokePower(String powerName, AID playerAID, String arguments) {
         if (containsPower(powerName)) {

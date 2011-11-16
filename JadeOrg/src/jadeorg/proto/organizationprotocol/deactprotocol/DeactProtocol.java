@@ -27,6 +27,7 @@ public class DeactProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     private DeactProtocol() {
+        super(NAME);
         registerMessages();
     }
     
@@ -39,11 +40,6 @@ public class DeactProtocol extends Protocol {
             singleton = new DeactProtocol();
         }
         return singleton;              
-    }
-    
-    @Override
-    public String getName() {
-        return NAME;
     }
         
     // </editor-fold>
