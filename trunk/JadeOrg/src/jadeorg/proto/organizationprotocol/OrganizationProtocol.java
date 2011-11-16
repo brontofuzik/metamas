@@ -27,20 +27,12 @@ public class OrganizationProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     private OrganizationProtocol() {
+        super(NAME);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public String getName() {
-        return NAME;
-    }
-        
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public static OrganizationProtocol getInstance() {
         if (singleton == null) {
@@ -48,6 +40,6 @@ public class OrganizationProtocol extends Protocol {
         }
         return singleton;
     }
-    
+        
     // </editor-fold>
 }

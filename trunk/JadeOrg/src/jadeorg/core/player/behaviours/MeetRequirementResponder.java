@@ -1,11 +1,12 @@
-package jadeorg.core.player;
+package jadeorg.core.player.behaviours;
 
 import jade.core.AID;
-import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
+import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
 import jadeorg.utils.MessageTemplateBuilder;
 import java.io.Serializable;
@@ -18,8 +19,17 @@ import java.util.Map;
  * @since 2011-11-11
  * @version %I% %G%
  */
-public class MeetRequirementResponder extends FSMBehaviour {
+public class MeetRequirementResponder extends ResponderParty {
     
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    private static final String NAME = "meet-requirement-responder";
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // </editor-fold>
+     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private Map<String, Requirement> requirements = new Hashtable<String, Requirement>();
@@ -35,6 +45,7 @@ public class MeetRequirementResponder extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public MeetRequirementResponder() {
+        super(NAME);
         initializeFSM();
     }
     
@@ -77,6 +88,14 @@ public class MeetRequirementResponder extends FSMBehaviour {
         registerDefaultTransition(requirement.getName(), sendRequirementResult.getName());
     }
     
+    // ----------- PROTECTED ----------
+    
+    @Override
+    protected Protocol getProtocol() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     protected void invokeRequirement(String requirementName, AID roleAID) {
         if (containsRequirement(requirementName)) {
             currentRequirement = getRequirement(requirementName);
@@ -86,8 +105,6 @@ public class MeetRequirementResponder extends FSMBehaviour {
     }
     
     // ---------- PRIVATE ----------
-    
-
     
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);

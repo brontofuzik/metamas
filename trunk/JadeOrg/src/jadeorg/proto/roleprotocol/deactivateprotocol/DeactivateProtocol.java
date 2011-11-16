@@ -23,6 +23,14 @@ public class DeactivateProtocol extends Protocol {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    private DeactivateProtocol() {
+        super(NAME);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     public static DeactivateProtocol getInstance() {
@@ -30,11 +38,6 @@ public class DeactivateProtocol extends Protocol {
             singleton = new DeactivateProtocol();
         }
         return singleton;
-    }
-    
-    @Override
-    public String getName() {
-        return NAME;
     }
     
     // </editor-fold>

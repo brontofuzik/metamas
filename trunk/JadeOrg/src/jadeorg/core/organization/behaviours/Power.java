@@ -1,7 +1,8 @@
-package jadeorg.core.organization;
+package jadeorg.core.organization.behaviours;
 
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
+import jadeorg.core.organization.Role;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.State;
 import java.util.LinkedList;

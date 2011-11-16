@@ -12,6 +12,12 @@ import jadeorg.proto.Protocol;
  */
 public class EnactProtocol extends Protocol {
    
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    private static final String NAME = "enact-protocol";
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
    
     private static EnactProtocol singleton;
@@ -20,23 +26,6 @@ public class EnactProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    @Override
-    public String getName() {
-        return "enact-protocol";
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private EnactProtocol() {
-        registerMessages();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
     public static EnactProtocol getInstance() {
         if (singleton == null) {
             singleton = new EnactProtocol();
@@ -44,8 +33,15 @@ public class EnactProtocol extends Protocol {
         return singleton;
     }
     
-    // ---------- PRIVATE ----------
-
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    private EnactProtocol() {
+        super(NAME);
+        registerMessages();
+    }
+    
     private void registerMessages() {
         registerMessage(new RequirementsMessage());        
         registerMessage(new RefuseMessage());

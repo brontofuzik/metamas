@@ -1,32 +1,33 @@
-package jadeorg.proto.roleprotocol;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jadeorg.proto.Protocol;
 
 /**
- * The 'Role' protocol.
- * DP: Singleton - Singleton
- * DP: Abstract factory - Concrete factory
  * @author Lukáš Kúdela
- * @since 2011-11-06
+ * @since 2011-11-16
  * @version %I% %G%
  */
-public class RoleProtocol extends Protocol {
+public class MeetRequirementProtocol extends Protocol {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "role-protocol";
+    private static final String NAME = "meet-requirement-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static RoleProtocol singleton;
+    private static MeetRequirementProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private RoleProtocol() {
+    private MeetRequirementProtocol() {
         super(NAME);
     }
     
@@ -34,18 +35,9 @@ public class RoleProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    @Override
-    public String getName() {
-        return NAME;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    public static RoleProtocol getInstance() {
+    public static MeetRequirementProtocol getInstance() {
         if (singleton == null) {
-            singleton = new RoleProtocol();
+            singleton = new MeetRequirementProtocol();
         }
         return singleton;
     }
