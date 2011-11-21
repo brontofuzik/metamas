@@ -2,12 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1">
         <file>
-            <url>src/jadeorg/core/organization/Organization.java</url>
-            <line>431</line>
-        </file>
-        <file>
             <url>src/jadeorg/core/org/Organization.java</url>
             <line>409</line>
+        </file>
+        <file>
+            <url>src/jadeorg/core/organization/Organization.java</url>
+            <line>431</line>
         </file>
         <file>
             <url>src/jadeorg/core/Organization.java</url>
