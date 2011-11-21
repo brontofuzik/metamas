@@ -37,7 +37,7 @@ public class InvokePowerResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
    
-    InvokePowerResponder() {
+    public InvokePowerResponder() {
         super(NAME);
         initializeFSM();
     }

@@ -8,6 +8,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jadeorg.core.organization.behaviours.InvokePowerResponder;
+import jadeorg.core.organization.behaviours.Power;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -37,7 +39,7 @@ public class Role extends Agent {
     
     private Organization myOrganization;
     
-    //private PowerManager powerManager = new PowerManager();
+    private InvokePowerResponder invokePowerResponder = new InvokePowerResponder();
     
     private RoleState state = RoleState.IDLE;
     
@@ -61,7 +63,19 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    void setName(String name) {
+    /**
+     * Gets the name of this role.
+     * @return the name of this role
+     */
+    String getRoleName() {
+        return name;
+    }
+    
+    /**
+     * Sets the name of this role.
+     * @param name the name of this role
+     */
+    void setRoleName(String name) {
         // ----- Preconditions -----
         assert name != null && !name.isEmpty();
         // -------------------------
@@ -69,27 +83,24 @@ public class Role extends Agent {
         this.name = name;
     }
     
-    void setOrganization(Organization organization) {
+    /**
+     * Gets my organization
+     * @return my organization
+     */
+    Organization getMyOrganization() {
+        return myOrganization;
+    }
+    
+    /**
+     * Sets my organizaiton
+     * @param organization my organization
+     */
+    void setMyOrganization(Organization organization) {
         // ----- Preconditions -----
         assert organization != null;
         // -------------------------
         
         this.myOrganization = organization;
-    }
-    
-    private DFAgentDescription getAgentDescription()
-    {
-        // Create the agent description.
-        DFAgentDescription agentDescription = new DFAgentDescription();
-        agentDescription.setName(getAID());
-        
-        // Create the service description.
-        ServiceDescription serviceDescription = new ServiceDescription();
-        serviceDescription.setType("TODO");
-        serviceDescription.setName("TODO");
-        agentDescription.addServices(serviceDescription);
-        
-        return agentDescription;
     }
     
     // </editor-fold>
@@ -99,7 +110,13 @@ public class Role extends Agent {
     @Override
     protected void setup() {
         initialize();
-        registerWithDF();
+        
+        // TAG YellowPages
+        //registerWithYellowPages();
+    }
+    
+    protected void addPower(Power power) {
+        invokePowerResponder.addPower(power);
     }
     
     // ----- Initialization -----
@@ -116,15 +133,33 @@ public class Role extends Agent {
         addBehaviour(new RoleManager());
     }
     
-    private void registerWithDF() {
+    // ----- Yellow pages registration -----
+    
+    // TAG YellowPages
+    private void registerWithYellowPages() { 
         try {
-            DFService.register(this, getAgentDescription());
+            DFService.register(this, createAgentDescription());
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
     }
     
-    // ----- Activation/deactivation -----
+    // TAG YellowPages
+    private DFAgentDescription createAgentDescription() {
+        // Create the agent description.
+        DFAgentDescription agentDescription = new DFAgentDescription();
+        agentDescription.setName(getAID());
+        
+        // Create the service description.
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType("TODO");
+        serviceDescription.setName("TODO");
+        agentDescription.addServices(serviceDescription);
+        
+        return agentDescription;
+    }
+    
+    // ----- Role activation/deactivation -----
     
     private void activateRole(AID playerAID) {
         if (playerAID.equals(this.playerAID)) {
@@ -144,8 +179,10 @@ public class Role extends Agent {
     
     // ----- Power invocation -----
     
-    private void invokePower(AID player, String power, String[] args) {
+    private void invokePower(AID player, String power, String[] arguments) {
     }
+    
+    // ----- Error handling -----
     
     /**
      * Sends a 'Not understood' message.

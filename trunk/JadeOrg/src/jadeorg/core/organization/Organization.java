@@ -39,14 +39,6 @@ import java.util.Map;
  */
 public abstract class Organization extends Agent {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String ENACT_ACTION = "enact";
-        
-    private static final String DEACT_ACTION = "deact";
-        
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /** The organization roles. */
@@ -60,26 +52,41 @@ public abstract class Organization extends Agent {
     
     /** The knowledge base. */
     private OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
-    
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    public void setup() {
+    protected void setup() {
         initialize();
-        registerWithDF();
+
+        // TAG YellowPages
+        //registerWithDF();
     }
-    
-    // ---------- PROTECTED ----------
-    
-    protected void addRole(Class roleClass) {
-        String roleName = roleClass.getName();       
+
+    /**
+     * Adds a role.
+     * @param roleClass the role class
+     * @param requirements the role requirements
+     */
+    protected void addRole(Class roleClass, String[] requirements) {
+        String roleName = roleClass.getName();
         roles.put(roleName, roleClass);
+        this.requirements.put(roleName, requirements);
         
-        registerRoleWithDF(roleName);
+        // TAG YellowPages
+        //registerRoleWithDF(roleName);
     }
     
+    /**
+     * Adds a role.
+     * @param roleClass the role class 
+     */
+    protected void addRole(Class roleClass) {
+        addRole(roleClass, null);
+    }
+
     // ---------- PRIVATE ----------
     
     private void initialize() {
@@ -94,29 +101,44 @@ public abstract class Organization extends Agent {
         addBehaviour(new OrganizationManager());
     }
 
-    /** Registers this organization with the DF. */
-    private void registerWithDF() {
-        agentDescription = new OrganizationAgentDescription(getAID());
-        
+    // TAG YellowPages
+    /**
+     * Registers this organization with the Yellow pages.
+     */
+    private void registerWithYellowPages() {
+        agentDescription = createOrganizationDescription();
+
         try {
             DFService.register(this, agentDescription);
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
     }
-    
-    /** Register a role with the DF. */
-    private void registerRoleWithDF(String roleName) {
-        RoleServiceDescription serviceDescription = new RoleServiceDescription(roleName);
-        agentDescription.addServices(serviceDescription);
-        
+
+    // TAG YellowPages
+    private OrganizationAgentDescription createOrganizationDescription() {
+        return new OrganizationAgentDescription(getAID());
+    }
+
+    // TAG YellowPages
+    /**
+     * Register a role with the Yellow pages.
+     */
+    private void registerRoleWithYellowPages(String roleName) {
+        agentDescription.addServices(createRoleDescription(roleName));
+
         try {
             DFService.modify(this, agentDescription);
         } catch (FIPAException ex) {
             ex.printStackTrace();
-        }    
+        }
     }
-       
+
+    // TAG YellowPages
+    private RoleServiceDescription createRoleDescription(String roleName) {
+        return new RoleServiceDescription(roleName);
+    }
+
     /**
      * Sends a NOT_UNDERSTOOD message.
      * @param receiver the receiver.
@@ -126,7 +148,7 @@ public abstract class Organization extends Agent {
         message.addReceiver(receiver);
         send(message);
     }
-    
+
     /** Enacts a role.
      * @param roleName the name of the role
      * @param player the player
@@ -141,10 +163,10 @@ public abstract class Organization extends Agent {
 
                 // ... respond according to the 'Enact' protocol.
                 addBehaviour(new EnactProtocolResponder(roleName, player));
-            }          
+            }
         }
     }
-    
+
     /** Deacts a role.
      * @param roleName the name of the role
      * @param player the player
@@ -160,22 +182,61 @@ public abstract class Organization extends Agent {
                 // ... respond according to the the 'Deact' protocol.
                 addBehaviour(new DeactProtocolResponder(roleName, player));
             }
-        }      
+        }
     }
-    
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    // TAG YellowPages
+    /**
+     * An organization agent description.
+     */
+    private static class OrganizationAgentDescription extends DFAgentDescription {
+
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public OrganizationAgentDescription(AID organization) {
+            super();
+            setName(organization);
+        }
+        
+        // </editor-fold>
+    }
+
+    // TAG YellowPages
+    /**
+     * A role service description.
+     */
+    private static class RoleServiceDescription extends ServiceDescription {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String ROLE_SERVICE_TYPE = "role";
+
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public RoleServiceDescription(String roleName) {
+            super();
+            setType(ROLE_SERVICE_TYPE);
+            setName(roleName);
+        }
+        
+        // </editor-fold>
+    }
     
     /**
      * An organization manager behaviour.
      */
     private class OrganizationManager extends Party {
-        
+
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         private static final String NAME = "organization-manager";
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -183,7 +244,7 @@ public abstract class Organization extends Agent {
         OrganizationManager() {
             super(NAME);
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -192,39 +253,38 @@ public abstract class Organization extends Agent {
         protected Protocol getProtocol() {
             return OrganizationProtocol.getInstance();
         }
-                
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
         private class ReceiveOrganizationRequest extends PassiveState {
-           
+
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-organization-request";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
             ReceiveOrganizationRequest() {
                 super(NAME);
             }
-            
-            // </editor-fold>
-                 
-            // <editor-fold defaultstate="collapsed" desc="Methods">
 
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
             public void action() {
                 // Receive the 'Organization' message.
                 Message organizationMessage = receive(null, null);
                 if (organizationMessage != null) {
                     if (organizationMessage instanceof EnactRequestMessage) {
-                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage)organizationMessage;
+                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage) organizationMessage;
                         enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getSenderPlayer());
                     } else if (organizationMessage instanceof DeactRequestMessage) {
-                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage)organizationMessage;
+                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage) organizationMessage;
                         deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getSenderPlayer());
                     } else {
                         // TODO Send not understood.
@@ -237,15 +297,15 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
         }
-                
+        
         // </editor-fold>
     }
-    
+
     /**
      * An 'Enact' protocol responder.
      */
     private class EnactProtocolResponder extends Party {
-        
+
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         private static final String NAME = "enact-protocol-responder";
@@ -257,7 +317,7 @@ public abstract class Organization extends Agent {
         private String roleName;
         
         private AID playerAID;
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -268,13 +328,13 @@ public abstract class Organization extends Agent {
             assert !roleName.isEmpty();
             assert player != null;
             // -------------------------
-            
+
             this.roleName = roleName;
             this.playerAID = player;
-            
-            registerStatesAndTransitions();       
+
+            registerStatesAndTransitions();
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -283,7 +343,7 @@ public abstract class Organization extends Agent {
         protected Protocol getProtocol() {
             return EnactProtocol.getInstance();
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -300,7 +360,7 @@ public abstract class Organization extends Agent {
             State sendRoleAID = new SendRoleAID();
             State end = new End();
             // ------------------
-        
+
             // Register the states.
             registerFirstState(new ReceiveEnactRequest());
             registerState(new SendRequirementsInform());
@@ -308,20 +368,20 @@ public abstract class Organization extends Agent {
             registerState(new ReceiveRequirementsInform());
             registerState(new SendRoleAID());
             registerLastState(new End());
-            
+
             // Register the transitions (OLD).
             registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
             registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
-            
+
             registerDefaultTransition(sendRequirementsInform, receiveRequirementsInform);
-            
+
             registerTransition(receiveRequirementsInform, sendRoleAID, PassiveState.Event.SUCCESS);
-            registerTransition(receiveRequirementsInform, end, PassiveState.Event.FAILURE);   
-            
+            registerTransition(receiveRequirementsInform, end, PassiveState.Event.FAILURE);
+
             registerDefaultTransition(sendRoleAID, end);
-            
+
             registerDefaultTransition(sendFailure, end);
-            
+
 //            // Register the transitions (NEW).
 //            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
 //            receiveEnactRequest.registerTransition(1, sendFailure);
@@ -336,7 +396,7 @@ public abstract class Organization extends Agent {
 //            
 //            sendFailure.registerDefaultTransition(end);
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -349,7 +409,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-enact-request";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -357,7 +417,7 @@ public abstract class Organization extends Agent {
             ReceiveEnactRequest() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -368,7 +428,7 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
         }
-        
+
         /**
          * The state in which the 'Requirements' message is send.
          */
@@ -377,7 +437,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-requirements-inform";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -385,7 +445,7 @@ public abstract class Organization extends Agent {
             SendRequirementsInform() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -396,14 +456,14 @@ public abstract class Organization extends Agent {
                 RequirementsMessage requirementsMessage = new RequirementsMessage();
                 requirementsMessage.setReceiverPlayer(playerAID);
                 requirementsMessage.setRequirements(requirements.get(roleName));
-                
+
                 // Send the 'Requirements' message.
                 send(RequirementsMessage.class, requirementsMessage);
             }
             
             // </editor-fold>
         }
-        
+
         /**
          * The state in which the 'Refuse' message is send.
          */
@@ -412,7 +472,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-failure";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -420,7 +480,7 @@ public abstract class Organization extends Agent {
             SendRefuse() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -430,14 +490,14 @@ public abstract class Organization extends Agent {
                 // Create the 'Refuse' message.
                 RefuseMessage refuseMessage = new RefuseMessage();
                 refuseMessage.setReceiverPlayer(playerAID);
-      
+
                 // Set the 'Refuse' message.
                 send(RefuseMessage.class, refuseMessage);
             }
             
             // </editor-fold>
         }
-        
+
         /**
          * The state in which the 'Requirements' message is received.
          */
@@ -446,7 +506,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-requirements-inform";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -454,7 +514,7 @@ public abstract class Organization extends Agent {
             ReceiveRequirementsInform() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -462,7 +522,7 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Receive the ACL message.
-                ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, playerAID);                                     
+                ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper) receive(ACLMessageWrapper.class, playerAID);
                 if (aclMessageWrapper != null) {
                     if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
                         // TODO
@@ -475,10 +535,10 @@ public abstract class Organization extends Agent {
                     block();
                 }
             }
-        
+            
             // </editor-fold>
         }
-        
+
         /**
          * The state in which the 'Role AID' message is send.
          */
@@ -487,7 +547,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-role-aid";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -495,7 +555,7 @@ public abstract class Organization extends Agent {
             SendRoleAID() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -504,20 +564,20 @@ public abstract class Organization extends Agent {
             public void action() {
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
-                
+
                 knowledgeBase.updateRoleIsEnacted(role, playerAID);
-                
+
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
                 roleAIDMessage.setReceiverPlayer(playerAID);
                 roleAIDMessage.setRoleAID(role.getAID());
-                
+
                 // Send the 'RoleAID' message.
                 send(RoleAIDMessage.class, roleAIDMessage);
             }
-            
-            // ---------- PRIVATE ----------
 
+            // ---------- PRIVATE ----------
+            
             /**
              * Create a role agent.
              * @param roleClassName the name of the role agent class.
@@ -536,7 +596,7 @@ public abstract class Organization extends Agent {
                 }
                 Role role = null;
                 try {
-                    role = (Role)roleConstructor.newInstance();
+                    role = (Role) roleConstructor.newInstance();
                 } catch (InstantiationException ex) {
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {
@@ -546,11 +606,11 @@ public abstract class Organization extends Agent {
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
-                role.setName(roleName);
-                role.setOrganization((Organization)myAgent);
+                role.setRoleName(roleName);
+                role.setMyOrganization((Organization) myAgent);
                 return role;
             }
-            
+
             private void startRoleAgent(Role role) {
                 AgentController agentController = null;
                 try {
@@ -558,12 +618,12 @@ public abstract class Organization extends Agent {
                     agentController.start();
                 } catch (StaleProxyException ex) {
                     ex.printStackTrace();
-                }             
+                }
             }
             
             // </editor-fold>    
         }
-        
+
         /**
          * The ending state.
          */
@@ -572,7 +632,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "end";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -580,7 +640,7 @@ public abstract class Organization extends Agent {
             End() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -588,18 +648,17 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
             }
-            
             // </editor-fold>
+            
         }
-        
         // </editor-fold>
     }
-    
+
     /**
      * A 'Deact' protocol responder.
      */
     private class DeactProtocolResponder extends Party {
-        
+
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         private static final String NAME = "deact-protocol-responder";
@@ -611,7 +670,7 @@ public abstract class Organization extends Agent {
         private String roleName;
         
         private AID player;
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -622,26 +681,26 @@ public abstract class Organization extends Agent {
             assert !roleName.isEmpty();
             assert player != null;
             // -------------------------
-            
+
             this.roleName = roleName;
             this.player = player;
-            
+
             registerStatesAndTransitions();
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-       @Override
+        @Override
         protected Protocol getProtocol() {
             return DeactProtocol.getInstance();
         }
-        
+
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         /**
          * Registers the transitions and transitions.
          */
@@ -650,21 +709,21 @@ public abstract class Organization extends Agent {
             State sendDeactInformation = new SendDeactInformation();
             State sendDeactFailure = new SendDeactFailure();
             State end = new End();
-        
+
             // Register the states.
             registerFirstState(receiveDeactRequest);
             registerState(sendDeactInformation);
             registerState(sendDeactFailure);
             registerLastState(end);
-            
+
             // Register the transisions (OLD).
             registerTransition(receiveDeactRequest, sendDeactInformation, PassiveState.Event.SUCCESS);
             registerTransition(receiveDeactRequest, sendDeactFailure, PassiveState.Event.FAILURE);
-            
+
             registerDefaultTransition(sendDeactInformation, end);
-            
+
             registerDefaultTransition(sendDeactFailure, end);
-            
+
 //            // Register the transisions (NEW).
 //            receiveDeactRequest.registerTransition(PassiveState.Event.SUCCESS, sendDeactInformation);
 //            receiveDeactRequest.registerTransition(PassiveState.Event.FAILURE, sendDeactFailure);
@@ -673,11 +732,10 @@ public abstract class Organization extends Agent {
 //            
 //            sendDeactFailure.registerDefaultTransition(end);
         }
-        
+
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
-        
         /**
          * The 'Receive deact request' active state.
          */
@@ -686,7 +744,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-deact-request";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -694,7 +752,7 @@ public abstract class Organization extends Agent {
             ReceiveDeactRequest() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -706,7 +764,7 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
         }
-        
+
         /**
          * The 'Send deact information' active state.
          */
@@ -715,7 +773,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-deact-information";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -723,7 +781,7 @@ public abstract class Organization extends Agent {
             SendDeactInformation() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -735,7 +793,7 @@ public abstract class Organization extends Agent {
             
             // </editor-fold>
         }
-        
+
         /**
          * The 'Send deact failure' active state.
          */
@@ -744,7 +802,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "send-deact-failure";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -752,7 +810,7 @@ public abstract class Organization extends Agent {
             SendDeactFailure() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -762,13 +820,13 @@ public abstract class Organization extends Agent {
                 // Create the 'Failure' message.
                 FailureMessage failureMessage = new FailureMessage();
                 failureMessage.setReceiverPlayer(player);
-                
+
                 send(FailureMessage.class, failureMessage);
             }
             
             // </editor-fold>
         }
-        
+
         /**
          * The 'End' active state.
          */
@@ -777,7 +835,7 @@ public abstract class Organization extends Agent {
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "end";
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -785,7 +843,7 @@ public abstract class Organization extends Agent {
             End() {
                 super(NAME);
             }
-            
+
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -795,43 +853,6 @@ public abstract class Organization extends Agent {
             }
             
             // </editor-fold>
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * An organization agent description.
-     */
-    private class OrganizationAgentDescription extends DFAgentDescription {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public OrganizationAgentDescription(AID organization) {
-            super();
-            setName(organization);
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * A role service description.
-     */
-    private class RoleServiceDescription extends ServiceDescription {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-        private static final String ROLE_SERVICE_TYPE = "role";
-    
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-        public RoleServiceDescription(String roleName) {
-            super();
-            setType(ROLE_SERVICE_TYPE);
-            setName(roleName);
         }
         
         // </editor-fold>
