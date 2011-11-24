@@ -14,17 +14,17 @@ public class Participant_Player extends Player {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static Set<String> abilities = new HashSet<String>();
+    private static final Set<String> abilities = new HashSet<String>();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     static {
-        abilities.add("task"); // Auctioneer
-        abilities.add("propose"); // Bidder
-        abilities.add("evaluate"); // Auctioneer
-        abilities.add("execute"); // Bidder
+        abilities.add("propose-task"); // Auctioneer
+        abilities.add("evaluate-task"); // Bidder
+        abilities.add("evaluate-bidders"); // Auctioneer
+        abilities.add("execute-task"); // Bidder
     }
     
     // </editor-fold>
@@ -38,6 +38,18 @@ public class Participant_Player extends Player {
      */
     @Override
     protected boolean evaluateRequirements(String[] requirements) {
+        return evaluateAllRequirements(requirements);
+    }
+  
+    // ---------- PRIVATE ----------
+    
+    // TODO Consider moving this method to the Player superclass.
+    /**
+     * Evaluates a set of requirements.
+     * @param requirements the set of requirements to evaluate
+     * @return <c>true</c> if all requirement can be met; <c>false</c> otherwise
+     */
+    private boolean evaluateAllRequirements(String[] requirements) {
         for (String requirement : requirements) {
             if (evaluateRequirement(requirement)) {
                 return false;
@@ -45,13 +57,14 @@ public class Participant_Player extends Player {
         }
         return true;
     }
-  
+    
+    // TODO Consider moving this method to the Player superclass.
     /**
      * Evaluates a set of requirements.
      * @param requirements the set of requirements to evaluate
      * @return <c>true</c> if any requirement can be met; <c>false</c> otherwise
      */
-    protected boolean evaluteAnyRequirement(String[] requirements) {
+    private boolean evaluteAnyRequirement(String[] requirements) {
         for (String requirement : requirements) {
             if (evaluateRequirement(requirement)) {
                 return true;
@@ -60,8 +73,7 @@ public class Participant_Player extends Player {
         return false;
     }
     
-    // ---------- PRIVATE ----------
-    
+    // TODO Consider moving this method to the Player superclass. 
     /**
      * Evaluates a requirement.
      * @param requirement the requirement to evaluate

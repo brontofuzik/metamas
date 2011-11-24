@@ -1,5 +1,7 @@
 package auctionjadehandwritten.organizations;
 
+import auctionjadehandwritten.organizations.powers.Auction_Power;
+import auctionjadehandwritten.organizations.powers.Bid_Power;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 

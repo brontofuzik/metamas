@@ -1,4 +1,4 @@
-package auctionjadehandwritten.organizations;
+package auctionjadehandwritten.organizations.powers;
 
 import jadeorg.core.organization.behaviours.Power;
 
@@ -12,7 +12,7 @@ public class Auction_Power extends Power {
 
     private static final String NAME = "auction";
     
-    Auction_Power() {
+    public Auction_Power() {
         super(NAME);
     }
 }
