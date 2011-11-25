@@ -6,6 +6,7 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
+import jade.util.Logger;
 import jadeorg.core.organization.YellowPages;
 import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
@@ -25,6 +26,7 @@ import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
+import java.util.logging.Level;
 
 /**
  * A player agent.
@@ -38,16 +40,30 @@ public abstract class Player extends Agent {
     
     private PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
+    private Logger logger;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    public Player() {
+        logger = jade.util.Logger.getMyLogger(this.getClass().getName());
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    public void setup() {
+    protected void setup() {
         initialize();
     }
     
     protected abstract boolean evaluateRequirements(String[] requirements);
+    
+    protected void log(Level level, String message) {
+        logger.log(level, message);
+    }
     
     // ----- INITIALIZE -----
     

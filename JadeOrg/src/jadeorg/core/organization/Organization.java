@@ -12,6 +12,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.util.Logger;
 import jade.wrapper.AgentController;
 import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
@@ -30,6 +31,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * An organization agent.
@@ -53,6 +55,16 @@ public abstract class Organization extends Agent {
     /** The knowledge base. */
     private OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
 
+    private Logger logger;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public Organization() {
+        logger = jade.util.Logger.getMyLogger(this.getClass().getName());
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -60,7 +72,7 @@ public abstract class Organization extends Agent {
     @Override
     protected void setup() {
         initialize();
-
+        
         // TAG YellowPages
         //registerWithDF();
     }
@@ -86,12 +98,17 @@ public abstract class Organization extends Agent {
     protected void addRole(Class roleClass) {
         addRole(roleClass, null);
     }
+    
+    protected void log(Level level, String message) {
+        logger.log(level, message);
+    }
 
     // ---------- PRIVATE ----------
     
     private void initialize() {
         initializeState();
         initializeBehaviour();
+        
     }
 
     private void initializeState() {

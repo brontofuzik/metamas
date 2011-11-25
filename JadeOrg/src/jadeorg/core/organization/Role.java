@@ -1,6 +1,5 @@
 package jadeorg.core.organization;
 
-import jadeorg.utils.Logger;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -8,6 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.util.Logger;
 import jadeorg.core.organization.behaviours.InvokePowerResponder;
 import jadeorg.core.organization.behaviours.Power;
 import jadeorg.proto.ActiveState;
@@ -24,6 +24,7 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateReplyMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateReplyMessage;
 import jadeorg.proto.roleprotocol.invokeprotocol.InvokeRequestMessage;
+import java.util.logging.Level;
 
 /**
  * A role agent.
@@ -46,6 +47,14 @@ public class Role extends Agent {
     private AID playerAID;
     
     private Logger logger;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    public Role() {
+        logger = jade.util.Logger.getMyLogger(this.getClass().getName());
+    }
     
     // </editor-fold>
     
@@ -117,6 +126,10 @@ public class Role extends Agent {
     
     protected void addPower(Power power) {
         invokePowerResponder.addPower(power);
+    }
+    
+    protected void log(Level level, String message) {
+        logger.log(level, message);
     }
     
     // ----- Initialization -----
