@@ -4,6 +4,7 @@ import auctionjadehandwritten.organizations.powers.Auction_Power;
 import auctionjadehandwritten.organizations.powers.Bid_Power;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
+import java.util.logging.Level;
 
 /**
  * An English auction organization.
@@ -18,10 +19,13 @@ public class EnglishAuction_Organization extends Organization {
     @Override
     protected void setup() {
         super.setup();
-        
-        // Add roles.
+        addRoles();
+    }
+    
+    private void addRoles() {
         addRole(Auctioneer_Role.class);
         addRole(Bidder_Role.class);
+        log(Level.INFO, "Roles added.");
     }
     
     // </editor-fold>
