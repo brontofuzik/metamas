@@ -83,24 +83,35 @@ public abstract class Organization extends Agent {
      * @param requirements the role requirements
      */
     protected void addRole(Class roleClass, String[] requirements) {
-        String roleName = roleClass.getName();
+        // ----- Preconditions -----
+        if (roleClass == null) {
+            throw new IllegalArgumentException("roleClass");
+        }
+        if (requirements == null) {
+            throw new IllegalArgumentException("requirements");
+        }
+        // -------------------------
+        
+        String roleName = roleClass.getSimpleName();
         roles.put(roleName, roleClass);
         this.requirements.put(roleName, requirements);
         
         // TAG YellowPages
         //registerRoleWithDF(roleName);
+        
+        log(Level.INFO, String.format("Role (%1$s) added.", roleName));
     }
     
     /**
      * Adds a role.
      * @param roleClass the role class 
      */
-    protected void addRole(Class roleClass) {
-        addRole(roleClass, null);
+    protected void addRole(Class roleClass) {        
+        addRole(roleClass, new String[0]);
     }
     
     protected void log(Level level, String message) {
-        logger.log(level, message);
+        logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
     }
 
     // ---------- PRIVATE ----------
@@ -108,10 +119,11 @@ public abstract class Organization extends Agent {
     private void initialize() {
         initializeState();
         initializeBehaviour();
-        
+        log(Level.INFO, "Initialized.");
     }
 
     private void initializeState() {
+        // Process arguments.
     }
 
     private void initializeBehaviour() {
@@ -130,6 +142,7 @@ public abstract class Organization extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
+        log(Level.INFO, "Registered with the Yellow Pages.");
     }
 
     // TAG YellowPages
@@ -149,6 +162,7 @@ public abstract class Organization extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
+        log(Level.INFO, String.format("role (%1$) registered with the Yellow Pages", roleName));
     }
 
     // TAG YellowPages
