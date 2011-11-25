@@ -8,7 +8,7 @@ import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
-import jadeorg.utils.MessageTemplateBuilder;
+import jadeorg.util.MessageTemplateBuilder;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;

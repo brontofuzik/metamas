@@ -9,7 +9,7 @@ import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementRequestMessage;
-import jadeorg.utils.MessageTemplateBuilder;
+import jadeorg.util.MessageTemplateBuilder;
 import java.io.IOException;
 import java.io.Serializable;
 
