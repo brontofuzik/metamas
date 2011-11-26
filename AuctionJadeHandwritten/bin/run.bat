@@ -21,19 +21,20 @@ SET ROOT_NAMESPACE=auctionjadehandwritten
 
 REM ----- Organizations -----
 SET ORGANIZATION_PACKAGE=%ROOT_NAMESPACE%.organizations
-SET ENGLISH_AUCTION1_ORGANIZATION=englishAuction1_Organization:%ORGANIZATION_PACKAGE%.EnglishAuction_Organization("englishAuction1")
+SET ENGLISH_AUCTION1_ORGANIZATION=englishAuction1_Organization:%ORGANIZATION_PACKAGE%.EnglishAuction_Organization
 SET ORGANIZATIONS=%ENGLISH_AUCTION1_ORGANIZATION%
 
 REM ----- Players -----
 SET PLAYER_PACKAGE=%ROOT_NAMESPACE%.players
-SET PARTICIPANT1_PLAYER=participant1_Player:%PLAYER_PACKAGE%.Participant_Player("participant1")
-SET PARTICIPANT2_PLAYER=participant2_Player:%PLAYER_PACKAGE%.Participant_Player("participant2")
-SET PARTICIPANT3_PLAYER=participant3_Player:%PLAYER_PACKAGE%.Participant_Player("participant3")
-SET PLAYERS=%PARTICIPANT1_PLAYER%;%PARTICIPANT2_PLAYER%;%PARTICIPANT3_PLAYER%
+SET PARTICIPANT1_PLAYER=participant1_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.Auctioneer_Role)
+SET PARTICIPANT2_PLAYER=participant2_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.Bidder_Role)
+SET PARTICIPANT3_PLAYER=participant3_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.BIdder_Role)
+SET PLAYERS=%PARTICIPANT1_PLAYER%
 
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
 SET OPTIONS=-gui
-SET AGENTS=%ORGANIZATIONS%;%PLAYERS%
+SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
+SET AGENTS=%SNIFFER%;%ORGANIZATIONS%;%PLAYERS%
 
 @ECHO ON
 

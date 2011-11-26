@@ -1,8 +1,11 @@
 package auctionjadehandwritten.players;
 
 import jadeorg.core.player.Player;
+import jadeorg.core.player.PlayerException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A Participant player.
@@ -30,6 +33,20 @@ public class Participant_Player extends Player {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected void setup() {
+        super.setup();
+        
+        for (Object argument : getArguments()) {            
+            RoleFullName roleFullName = new RoleFullName((String)argument);
+            try {
+                enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+            } catch (PlayerException ex) {
+                log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+            }
+        }
+    }
     
     /**
      * Evaluates a set of requirements.
@@ -81,6 +98,33 @@ public class Participant_Player extends Player {
      */
     private boolean evaluateRequirement(String requirement) {
         return abilities.contains(requirement);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private static class RoleFullName {
+        
+        /** The name of organization instance. */
+        private String organizationName;
+        
+        /** The name of role class. */
+        private String roleName;
+        
+        RoleFullName(String roleFullName) {
+            String[] organizationNameAndRoleName = roleFullName.split("\\.");
+            organizationName = organizationNameAndRoleName[0];
+            roleName = organizationNameAndRoleName[1];
+        }
+        
+        String getOrganizationName() {
+            return organizationName;
+        }
+        
+        String getRoleName() {
+            return roleName;
+        }
     }
     
     // </editor-fold>

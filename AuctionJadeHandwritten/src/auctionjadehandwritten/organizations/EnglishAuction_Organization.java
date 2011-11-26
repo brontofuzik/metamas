@@ -18,8 +18,9 @@ public class EnglishAuction_Organization extends Organization {
     
     @Override
     protected void setup() {
-        super.setup();
         addRoles();
+        
+        super.setup();
     }
     
     private void addRoles() {
