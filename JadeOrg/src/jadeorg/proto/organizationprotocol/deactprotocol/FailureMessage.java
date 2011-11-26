@@ -1,6 +1,7 @@
 package jadeorg.proto.organizationprotocol.deactprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -14,16 +15,12 @@ import jadeorg.proto.organizationprotocol.OrganizationMessage;
  */
 public class FailureMessage extends OrganizationMessage {
 
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected int getPerformative() {
-        return ACLMessage.FAILURE;
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.FAILURE);
     }
-        
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
     protected MessageParser createParser() {

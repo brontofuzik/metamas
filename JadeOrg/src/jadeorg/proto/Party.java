@@ -37,26 +37,6 @@ public abstract class Party extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void registerState(State state) {
-        registerState((Behaviour)state, state.getName());
-    }  
-    
-    public void registerFirstState(State state) {
-        registerFirstState((Behaviour)state, state.getName());
-    }
-    
-    public void registerLastState(State state) {
-        registerLastState((Behaviour)state, state.getName());
-    }
-    
-    public void registerTransition(State fromState, State toState, Event event) {
-        registerTransition(fromState.getName(), toState.getName(), event.getCode());
-    }
-    
-    public void registerDefaultTransition(State fromState, State toState) {
-        registerDefaultTransition(fromState.getName(), toState.getName());
-    }
-    
     /**
      * Sends a JadeOrg message.
      * @param messageClass the message class
@@ -65,8 +45,12 @@ public abstract class Party extends FSMBehaviour {
     public void send(Class messageClass, Message message) {
         // Generate the ACL message.
         ACLMessage aclMessage = getProtocol().generate(messageClass, message);
-                
-        // Send the JadeOrg message.
+        
+        myAgent.send(aclMessage);
+    }
+    
+    // TAG DEBUGGING
+    public void sendACLMessage(ACLMessage aclMessage) {        
         myAgent.send(aclMessage);
     }
     
@@ -82,7 +66,7 @@ public abstract class Party extends FSMBehaviour {
         if (messageClass != null) {
             messageTemplate = getProtocol().getTemplate(messageClass);
         }
-        
+             
         // Constrain the sender if specified.
         if (senderAID != null) {
             MessageTemplate senderMessageTemplate = MessageTemplate.MatchSender(senderAID);
@@ -92,12 +76,62 @@ public abstract class Party extends FSMBehaviour {
                 messageTemplate = senderMessageTemplate;
             }
         }
-        
+                
         // Receive the ACL message.
-        ACLMessage aclMessage = myAgent.receive(messageTemplate);
+        ACLMessage aclMessage = null;
+        if (messageTemplate != null) {
+            aclMessage = myAgent.receive(messageTemplate);
+        } else {
+            aclMessage = myAgent.receive();
+        }
         
-        // Parse the ACL message.
-        return getProtocol().parse(messageClass, aclMessage);
+        if (aclMessage != null) {
+            // Parse the ACL message.
+            return getProtocol().parse(messageClass, aclMessage);
+        } else {
+            return null;
+        }
+    }
+    
+    public ACLMessage receiveACLMessage() {
+        return myAgent.receive();
+    }
+    
+    // ---------- PROTECTED ----------
+    
+    protected void registerState(State state) {
+        registerState((Behaviour)state, state.getName());
+        
+        // TODO Move this piece of logic somewhere else.
+        if (state instanceof PassiveState) {
+            registerTransition(state, state, Event.LOOP);
+        }
+    }  
+    
+    protected void registerFirstState(State state) {
+        registerFirstState((Behaviour)state, state.getName());
+        
+        // TODO Move this piece of logic somewhere else.
+        if (state instanceof PassiveState) {
+            registerTransition(state, state, Event.LOOP);
+        }
+    }
+    
+    protected void registerLastState(State state) {
+        registerLastState((Behaviour)state, state.getName());
+        
+        // TODO Move this piece of logic somewhere else.
+        if (state instanceof PassiveState) {
+            registerTransition(state, state, Event.LOOP);
+        }
+    }
+    
+    protected void registerTransition(State fromState, State toState, Event event) {
+        registerTransition(fromState.getName(), toState.getName(), event.getCode());
+    }
+    
+    protected void registerDefaultTransition(State fromState, State toState) {
+        registerDefaultTransition(fromState.getName(), toState.getName());
     }
     
     // </editor-fold>

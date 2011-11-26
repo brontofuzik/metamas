@@ -1,40 +1,38 @@
 package jadeorg.proto.organizationprotocol.enactprotocol;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.organizationprotocol.OrganizationMessage;
 
 /**
- * A 'Refuse' message.
- * A 'Refuse' message is a message send from an Organization agent to a Player agent
- * containing a refusal to enact/deact a certain role.
+ * A 'Requirements reply' message.
+ * A 'Requirements reply' message is a message send from a player to an organization
+ * containing a reply whether the role enactment requirements are met.
  * @author Lukáš Kúdela
  * @since 2011-10-21
  */
-public class RefuseMessage extends OrganizationMessage {
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.REFUSE;
-    }
-    
-    // </editor-fold>
+public class RequirementsReplyMessage extends OrganizationMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.or(
+            MessageTemplate.MatchPerformative(ACLMessage.AGREE),
+            MessageTemplate.MatchPerformative(ACLMessage.REFUSE));
+    }
+    
+    @Override
     protected MessageParser createParser() {
-        return new RefuseMessageParser();
+        return new RequirementsReplyMessageParser();
     }
 
     @Override
     protected MessageGenerator createGenerator() {
-        return new RefuseMessageGenerator();
+        return new RequirementsReplyMessageGenerator();
     }
       
     // </editor-fold>
@@ -42,13 +40,13 @@ public class RefuseMessage extends OrganizationMessage {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * A 'Refuse' message parser.
+     * A 'Requirements reply' message parser.
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
      * @version %I% %G%
      */
-    class RefuseMessageParser extends MessageParser {
+    class RequirementsReplyMessageParser extends MessageParser {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -57,7 +55,7 @@ public class RefuseMessage extends OrganizationMessage {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
-        private void parseContent(ACLMessage aclMessage, RefuseMessage refuseMessage) {
+        private void parseContent(ACLMessage aclMessage, RequirementsReplyMessage refuseMessage) {
             // TODO
         }
 
@@ -65,19 +63,19 @@ public class RefuseMessage extends OrganizationMessage {
     }
     
     /**
-     * A 'Refuse' message generator.
+     * A 'Requirements reply' message generator.
      * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
      * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
      * @author Lukáš Kúdela (2011-10-21)
      * @version %I% %G%
      */
-    class RefuseMessageGenerator extends MessageGenerator {
+    class RequirementsReplyMessageGenerator extends MessageGenerator {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public ACLMessage generate(Message message) {
-            RefuseMessage refuseMessage = (RefuseMessage)message;
+            RequirementsReplyMessage refuseMessage = (RequirementsReplyMessage)message;
 
             // Generate the message header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REFUSE);
@@ -90,7 +88,7 @@ public class RefuseMessage extends OrganizationMessage {
             return aclMessage;
         }
 
-        private String generateContent(RefuseMessage refuseMessage) {
+        private String generateContent(RequirementsReplyMessage refuseMessage) {
             return "refuse";
         }
 

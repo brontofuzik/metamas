@@ -76,6 +76,12 @@ class Requirement extends State {
     
     @Override
     public void action() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public boolean done() {
+        // Implement.
         throw new UnsupportedOperationException("Not supported yet.");
     }
     

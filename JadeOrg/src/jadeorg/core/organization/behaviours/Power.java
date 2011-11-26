@@ -112,7 +112,7 @@ public class Power extends FSMBehaviour {
             // state ---[FAILURE]---> finalState
             registerTransition(state.getName(), finalState.getName(), State.Event.FAILURE.getCode());
             // state ---[FAILURE_LOOP]---> state
-            registerTransition(state.getName(), state.getName(), State.Event.FAILURE_LOOP.getCode());
+            registerTransition(state.getName(), state.getName(), State.Event.LOOP.getCode());
 
             if (!states.isEmpty()) {
                 // There is a next state.

@@ -1,5 +1,7 @@
 package jadeorg.proto.roleprotocol.deactivateprotocol;
 
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -32,8 +34,10 @@ public class DeactivateReplyMessage extends Message {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected int getPerformative() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.or(
+            MessageTemplate.MatchPerformative(ACLMessage.AGREE),
+            MessageTemplate.MatchPerformative(ACLMessage.REFUSE));
     }
 
     @Override

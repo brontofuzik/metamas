@@ -19,7 +19,7 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.RefuseMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsReplyMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
@@ -56,46 +56,60 @@ public abstract class Player extends Agent {
     
     @Override
     protected void setup() {
-        initialize();
+        addBehaviours();
     }
     
     protected abstract boolean evaluateRequirements(String[] requirements);
     
+    /**
+     * Logs a message.
+     * @param level the level
+     * @param message the message
+     */
     protected void log(Level level, String message) {
-        logger.log(level, message);
+        if (logger.isLoggable(level)) {
+            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        }
     }
     
-    // ----- INITIALIZE -----
+    /**
+     * Logs an INFO-level message.
+     * @param message the INFO-level message
+     */
+    protected void logInfo(String message) {
+        log(Level.INFO, message);
+    }
     
-    private void initialize() {
-        initializeState();
-        initializeBehaviour();
-    }
-
-    private void initializeState() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private void initializeBehaviour() {
+    // ---------- PRIVATE ----------
+    
+    private void addBehaviours() {
         addBehaviour(new PlayerManagerBehaviour());
+        logInfo("Behaviours added.");
     }
     
     // ----- ENACT & DEACT -----
     
-    private void enact(String organizationName, String roleName) throws PlayerException {
-        DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-        if (organization != null) {
-            // The role exists.
-            addBehaviour(new EnactProtocolInitiator(organization.getName(), roleName));
+    protected void enactRole(String organizationName, String roleName) throws PlayerException {
+        logInfo(String.format("Enacting the role '%1$s' in the organization '%2$s'.", roleName, organizationName));
+        
+        // TAG YELLOW-PAGES
+        //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+        
+        // Get the organization AID.
+        AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
+        
+        if (organizationAID != null) {
+            // The organization exists.
+            addBehaviour(new EnactProtocolInitiator(organizationAID, roleName));
         } else {
-            // The role does not exist.
-            String message = "I cannot enact the role '%1$' because it does not exist.";
-            throw new PlayerException(this, message);
+            // The organization does not exist.
+            throw new PlayerException(this, String.format(
+                "Error enacting a role. The organization '%1$s' does not exist.", organizationName));
         }
     }
     
     // TODO Check if the role is enacted.
-    private void deact(String organizationName, String roleName) throws PlayerException {
+    protected void deactRole(String organizationName, String roleName) throws PlayerException {        
         DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
         if (organization != null) {
             addBehaviour(new DeactProtocolInitiator(organization.getName(), roleName));
@@ -107,7 +121,7 @@ public abstract class Player extends Agent {
     
     // ----- ACTIVATE & DEACTIVATE -----
     
-    private void activate(String roleName) throws PlayerException {
+    protected void activateRole(String roleName) throws PlayerException {
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
             addBehaviour(new ActivateProtocolInitiator(knowledgeBase.getRoleAID(roleName)));
@@ -118,7 +132,7 @@ public abstract class Player extends Agent {
         }
     }
     
-    private void deactivate(String roleName) throws PlayerException {
+    protected void deactivateRole(String roleName) throws PlayerException {
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
             addBehaviour(new DeactivateProtocolInitiator(knowledgeBase.getRoleAID(roleName)));
@@ -127,6 +141,14 @@ public abstract class Player extends Agent {
             String message = String.format("I cannot deactivate the role '%1$' because I do not play it.", roleName);
             throw new PlayerException(this, message);
         }
+    }
+    
+    // ---------- PRIVATE ----------
+    
+    private void sendNotUnderstood(AID receiver) {
+        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
+        message.addReceiver(receiver);
+        send(message);
     }
     
     // </editor-fold>
@@ -138,9 +160,14 @@ public abstract class Player extends Agent {
      */
     private class PlayerManagerBehaviour extends CyclicBehaviour {
         
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
+            // TODO Implement.
         }
+        
+        // </editor-fold>
     }
     
     /**
@@ -263,11 +290,13 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
+                logInfo("Sending enact request.");
                 EnactRequestMessage message = new EnactRequestMessage();
                 message.setReceiverOrganization(organizationAID);
                 message.setRoleName(roleName);
                 
                 send(EnactRequestMessage.class, message);
+                logInfo("Enact request sent.");
             }
 
             // </editor-fold>
@@ -297,23 +326,27 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
+                logInfo("Receiving requirements info.");
+                
                 // TODO A 'Refuse' (ACL) message can be received as well.
                 Message message = receive(RequirementsMessage.class, organizationAID);
-                    
+                
                 if (message != null) {
                     if (message instanceof RequirementsMessage) {
+                        logInfo("Requirements info received.");
                         RequirementsMessage requirementsMessage = (RequirementsMessage)message;
                         if (evaluateRequirements(requirementsMessage.getRequirements())) {
                             setExitValue(Event.SUCCESS);
                         } else {
                             setExitValue(Event.FAILURE);
                         }
-                    } else if (message instanceof RefuseMessage) {
-                        setExitValue(Event.FAILURE); 
                     } else {
                         // TODO Send 'Not understood' message.
+                        //sendNotUnderstood(message.getSender());
+                        setExitValue(Event.LOOP);
                     }
                 } else {
+                    setExitValue(Event.LOOP);
                     block();
                 }
             }

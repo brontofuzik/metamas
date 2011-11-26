@@ -1,6 +1,6 @@
 package jadeorg.proto;
 
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.SimpleBehaviour;
 
 /**
  * A protocol state.
@@ -8,7 +8,7 @@ import jade.core.behaviours.OneShotBehaviour;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public abstract class State extends OneShotBehaviour {
+public abstract class State extends SimpleBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -49,8 +49,7 @@ public abstract class State extends OneShotBehaviour {
     public enum Event {
         SUCCESS(0),
         FAILURE(1),
-        SUCCESS_LOOP(2),
-        FAILURE_LOOP(3);
+        LOOP(3);
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         

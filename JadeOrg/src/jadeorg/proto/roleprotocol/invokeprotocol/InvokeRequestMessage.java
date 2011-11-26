@@ -1,5 +1,7 @@
 package jadeorg.proto.roleprotocol.invokeprotocol;
 
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.roleprotocol.RoleMessage;
@@ -25,8 +27,8 @@ public class InvokeRequestMessage extends RoleMessage {
     // </editor-fold>
     
     @Override
-    protected int getPerformative() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
     }
 
     @Override

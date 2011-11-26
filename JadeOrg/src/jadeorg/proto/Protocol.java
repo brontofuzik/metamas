@@ -6,6 +6,8 @@ import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -22,9 +24,12 @@ public abstract class Protocol {
     
     private String name;
     
+    private Protocol parentProtocol;
+    
     private Map<Class, Message> messages = new Hashtable<Class, Message>();
     
-    private Map<Class, Party> parties = new Hashtable<Class, Party>();
+    // TAG NOT-USED
+    private Map<String, Class> parties = new Hashtable<String, Class>();
     
     // </editor-fold>
     
@@ -46,33 +51,17 @@ public abstract class Protocol {
         return name;
     }
     
+    protected Protocol getParentProtocol() {
+        return parentProtocol;
+    }
+    
+    protected void setParentProtocol(Protocol parentProtocol) {
+        this.parentProtocol = parentProtocol;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    /**
-     * Registers a message with this protocol.
-     * @param message the message.
-     */
-    public void registerMessage(Message message) {
-        // ----- Preconditions -----
-        if (message == null) {
-            throw new NullPointerException();
-        }
-        // -------------------------
-        
-        messages.put(message.getClass(), message);
-    }
-    
-    public void registerParty(Party party) {
-        // ----- Preconditions -----
-        if (party == null) {
-            throw new NullPointerException();
-        }
-        // -------------------------
-        
-        parties.put(party.getClass(), party);
-    }
     
     // Convenience method.
     // TODO Replace the messageClass parameter with generics.
@@ -102,6 +91,48 @@ public abstract class Protocol {
         return aclMessageWrapper;
     }
     
+    // ---------- PROTECTED ----------
+    
+    /**
+     * Registers a message with this protocol.
+     * @param message the message.
+     */
+    protected void registerMessage(Class messageClass) {
+        // ----- Preconditions -----
+        if (messageClass == null) {
+            throw new IllegalArgumentException("messageClass");
+        }
+        // -------------------------
+        
+        Message message = instantiateMessageClass(messageClass);
+        messages.put(messageClass, message);
+        message.setProtocol(this);
+    }
+    
+    // TAG NOT-USED
+    protected void registerParty(Class partyClass) {
+        // ----- Preconditions -----
+        if (partyClass == null) {
+            throw new IllegalArgumentException("partyClass");
+        }
+        // -------------------------
+        
+        parties.put(partyClass.getName(), partyClass);
+    }
+    
+    protected Message getMessage(Class messageClass) {
+        Message message = messages.get(messageClass);
+        if (message != null) {
+            return message;
+        } else {
+            if (getParentProtocol() != null) {
+                return getParentProtocol().getMessage(messageClass);
+            } else {
+                return null;
+            }
+        }
+    }
+    
     // ---------- PRIVATE ----------
     
     /**
@@ -122,8 +153,30 @@ public abstract class Protocol {
         return getMessage(messageClass).getGenerator();
     }
     
-    private Message getMessage(Class messageClass) {
-        return messages.get(messageClass);
+    private Message instantiateMessageClass(Class messageClass) {
+        Constructor constructor = null;
+        try {
+            constructor = messageClass.getConstructor(new Class[0]);
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+        
+        Message message = null;
+        try {
+            message = (Message)constructor.newInstance();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
+        
+        return message;
     }
     
     // </editor-fold>
