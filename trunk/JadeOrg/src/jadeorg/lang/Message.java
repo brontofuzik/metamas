@@ -3,6 +3,7 @@ package jadeorg.lang;
 import jade.core.AID;
 import jadeorg.proto.Protocol;
 import jade.lang.acl.MessageTemplate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public abstract class Message {
     
     private AID sender;
     
-    private List<AID> receivers;
+    private List<AID> receivers = new ArrayList<AID>();
     
     /** The message template singleton. */
     private MessageTemplate templateSingleton;
@@ -64,7 +65,7 @@ public abstract class Message {
         return receivers.toArray(new AID[receivers.size()]);
     }
     
-    public Message addReceiver(AID receiver) {
+    public Message addReceiver(AID receiver) {        
         // ----- Preconditions -----
         assert !receivers.contains(receiver);
         // -------------------------
@@ -115,25 +116,26 @@ public abstract class Message {
         return generatorSingleton;
     }
     
-    // ---------- PROTECTED ----------
-    
-    protected abstract int getPerformative();
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    protected abstract MessageTemplate createPerformativeTemplate();
+    
     protected abstract MessageParser createParser();
     
     protected abstract MessageGenerator createGenerator();
-    
-    
+      
     // ---------- PRIVATE ----------
     
     private MessageTemplate createTemplate() {
         return MessageTemplate.and(
-            MessageTemplate.MatchPerformative(getPerformative()),
-            MessageTemplate.MatchProtocol(protocol.getName()));
+            createProtocolTemplate(),
+            createPerformativeTemplate());
+    }
+    
+    private MessageTemplate createProtocolTemplate() {
+        return MessageTemplate.MatchProtocol(protocol.getName());
     }
     
     // </editor-fold>

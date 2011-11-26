@@ -33,5 +33,10 @@ class ErrorHandler extends State {
         setExitValue(Event.FAILURE);
     }
     
+    public boolean done() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
     // </editor-fold>
 }

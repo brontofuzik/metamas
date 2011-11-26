@@ -1,6 +1,7 @@
 package jadeorg.proto.organizationprotocol.enactprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -42,16 +43,14 @@ public class RequirementsMessage extends OrganizationMessage {
         return this;
     }
     
-    // ---------- PROTECTED ----------
-    
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.INFORM;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+    }
     
     @Override
     protected MessageParser createParser() {

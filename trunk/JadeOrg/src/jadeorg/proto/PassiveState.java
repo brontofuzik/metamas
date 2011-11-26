@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 
 /**
@@ -11,6 +12,12 @@ import jadeorg.lang.Message;
  */
 public abstract class PassiveState extends State {
     
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private boolean isDone;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public PassiveState(String name) {
@@ -19,8 +26,26 @@ public abstract class PassiveState extends State {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    @Override
+    public void setExitValue(Event event) {
+        super.setExitValue(event);
+        if (event == Event.SUCCESS || event == Event.FAILURE) {
+            isDone = true;
+        } else if (event == Event.LOOP) {
+            isDone = false;
+        }      
+    }
+    
+    // </editor-fold>    
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
    
+    public boolean done() {
+        return isDone;
+    }
+    
     /**
      * Receives a JadeOrg message.
      * @param messageClass the message class
@@ -28,6 +53,11 @@ public abstract class PassiveState extends State {
      */
     public Message receive(Class messageClass, AID senderAID) {
         return getParty().receive(messageClass, senderAID);
+    }
+    
+    // TAG DEBUGGING
+    public ACLMessage receiveACLMessage() {
+        return getParty().receiveACLMessage();
     }
     
     // </editor-fold>

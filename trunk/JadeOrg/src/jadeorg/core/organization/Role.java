@@ -118,7 +118,7 @@ public class Role extends Agent {
     
     @Override
     protected void setup() {
-        initialize();
+        addBehaviours();
         
         // TAG YellowPages
         //registerWithYellowPages();
@@ -128,22 +128,30 @@ public class Role extends Agent {
         invokePowerResponder.addPower(power);
     }
     
+    /**
+     * Logs a message.
+     * @param level the level
+     * @param message the message
+     */
     protected void log(Level level, String message) {
-        logger.log(level, message);
+        if (logger.isLoggable(level)) {
+            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        }
+    }
+    
+    /**
+     * Logs an INFO-level message.
+     * @param message the INFO-level message
+     */
+    protected void logInfo(String message) {
+        log(Level.INFO, message);
     }
     
     // ----- Initialization -----
-    
-    private void initialize() {
-        initializeState();
-        initializeBehaviour();
-    }
-    
-    private void initializeState() {       
-    }
 
-    private void initializeBehaviour() {
+    private void addBehaviours() {
         addBehaviour(new RoleManager());
+        logInfo("Behaviours added.");
     }
     
     // ----- Yellow pages registration -----
@@ -155,6 +163,7 @@ public class Role extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
+        logInfo("Registered with the Yellow Pages");
     }
     
     // TAG YellowPages

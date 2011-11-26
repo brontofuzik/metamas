@@ -47,7 +47,7 @@ public class DeactProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     private void registerMessages() {
-        registerMessage(new FailureMessage());
+        registerMessage(FailureMessage.class);
     }
     
     // </editor-fold>

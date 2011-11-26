@@ -5,6 +5,7 @@
 package jadeorg.proto.roleprotocol.activateprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -19,18 +20,14 @@ import jadeorg.proto.roleprotocol.RoleMessage;
  * @verison %I% %G%
  */
 public class ActivateRequestMessage extends RoleMessage {
-
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.REQUEST;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
+      
+    @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+    }
+    
     @Override
     protected MessageParser createParser() {
         return new ActivateRequestMessageParser();

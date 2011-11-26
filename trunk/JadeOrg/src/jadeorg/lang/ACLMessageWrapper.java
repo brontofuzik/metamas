@@ -1,6 +1,7 @@
 package jadeorg.lang;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 /**
  * An ACL message wrapper.
@@ -35,14 +36,15 @@ public class ACLMessageWrapper extends Message {
         return wrappedACLMessage;
     }
     
-    @Override
-    protected int getPerformative() {
-        return wrappedACLMessage.getPerformative();
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+        
+    @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return null;
+    }
     
     @Override
     protected MessageParser createParser() {

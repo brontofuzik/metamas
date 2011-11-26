@@ -1,10 +1,13 @@
 package jadeorg.proto.organizationprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An 'Enact request' message.
@@ -15,8 +18,10 @@ import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
  * @version %I% %G%
  */
 public class EnactRequestMessage extends OrganizationMessage {
-
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final Pattern contentPattern = Pattern.compile("enact\\((.*)\\)");
     
     private String roleName;
     
@@ -37,16 +42,25 @@ public class EnactRequestMessage extends OrganizationMessage {
         return this;
     }
     
-    // ---------- PROTECTED ----------
-    
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.REQUEST;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    public String generateContent() {
+        return String.format("enact(%1$s)", roleName);
+    }
+    
+    public void parseContent(String content) {
+        Matcher matcher = contentPattern.matcher(content);
+        roleName = matcher.group(1);
+    }
+    
+    // ---------- PROTECTED ----------
+    
+    @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+    }
     
     @Override
     protected MessageParser createParser() {
@@ -86,16 +100,9 @@ public class EnactRequestMessage extends OrganizationMessage {
             enactRequestMessage.setSenderPlayer(aclMessage.getSender());
 
             // Parse the content.
-            parseContent(aclMessage.getContent(), enactRequestMessage);
+            enactRequestMessage.parseContent(aclMessage.getContent());
 
             return enactRequestMessage;
-        }
-        
-        /**
-         * Parses the content of the ACL message.
-         */
-        private void parseContent(String content, EnactRequestMessage enactRequestMessage) {
-            // TODO
         }
         
         // </editor-fold>
@@ -122,24 +129,14 @@ public class EnactRequestMessage extends OrganizationMessage {
            EnactRequestMessage enactRequestMessage = (EnactRequestMessage)message;
 
             // Generate the ACL message header.
-            ACLMessage aclMessage = new ACLMessage(enactRequestMessage.getPerformative());
+            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setProtocol(EnactProtocol.getInstance().getName());
             aclMessage.addReceiver(enactRequestMessage.getReceiverOrganization());
 
             // Generate the ACL message content.
-            aclMessage.setContent(generateContent(enactRequestMessage));
+            aclMessage.setContent(enactRequestMessage.generateContent());
 
             return aclMessage;
-        }
-        
-        /**
-         * Generates the ACL message content from a 'Enact request' message.
-         * @param requirementsMessage the 'Enact request' message
-         * @return the ACL message content
-         */
-        private String generateContent(EnactRequestMessage enactRequestMessage) {
-            // TODO
-            return "";
         }
         
         // </editor-fold>

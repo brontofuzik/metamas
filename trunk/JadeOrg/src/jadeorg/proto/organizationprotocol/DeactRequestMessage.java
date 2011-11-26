@@ -6,6 +6,7 @@ package jadeorg.proto.organizationprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
@@ -41,17 +42,15 @@ public class DeactRequestMessage extends OrganizationMessage {
         this.roleName = roleName;
         return this;
     }
-    
-    // ---------- PROTECTED ----------
-    
-    @Override
-    protected int getPerformative() {
-        return ACLMessage.REQUEST;
-    }
-    
+        
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    protected MessageTemplate createPerformativeTemplate() {
+        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+    }
     
     @Override
     protected MessageParser createParser() {
@@ -127,7 +126,7 @@ public class DeactRequestMessage extends OrganizationMessage {
            EnactRequestMessage deactRequestMessage = (EnactRequestMessage)message;
 
             // Generate the ACL message header.
-            ACLMessage aclMessage = new ACLMessage(deactRequestMessage.getPerformative());
+            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setProtocol(DeactProtocol.getInstance().getName());
             aclMessage.addReceiver(deactRequestMessage.getReceiverOrganization());
 

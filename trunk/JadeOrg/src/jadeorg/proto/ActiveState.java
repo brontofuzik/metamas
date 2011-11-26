@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 
 /**
@@ -20,6 +21,10 @@ public abstract class ActiveState extends State {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    public boolean done() {
+        return true;
+    }
+    
     /**
      * Sends a JadeOrg message.
      * @param messageClass the message class
@@ -27,6 +32,11 @@ public abstract class ActiveState extends State {
      */
     public void send(Class messageClass, Message message) {
         getParty().send(messageClass, message);
+    }
+    
+    // TAG DEBUGGING
+    public void sendACLMessage(ACLMessage aclMessage) {
+        getParty().sendACLMessage(aclMessage);
     }
     
     // </editor-fold>

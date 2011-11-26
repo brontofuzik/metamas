@@ -17,7 +17,7 @@ import jade.wrapper.AgentController;
 import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.lang.Message;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.RefuseMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsReplyMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.OrganizationProtocol;
@@ -27,6 +27,7 @@ import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.FailureMessage;
 import jadeorg.proto.organizationprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.EnactRequestMessage;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -71,10 +72,10 @@ public abstract class Organization extends Agent {
     
     @Override
     protected void setup() {
-        initialize();
+        addBehaviours();
         
         // TAG YellowPages
-        //registerWithDF();
+        //registerWithYellowPages();
     }
 
     /**
@@ -99,7 +100,7 @@ public abstract class Organization extends Agent {
         // TAG YellowPages
         //registerRoleWithDF(roleName);
         
-        log(Level.INFO, String.format("Role (%1$s) added.", roleName));
+        logInfo(String.format("Role (%1$s) added.", roleName));
     }
     
     /**
@@ -110,24 +111,30 @@ public abstract class Organization extends Agent {
         addRole(roleClass, new String[0]);
     }
     
+    /**
+     * Logs a message.
+     * @param level the level
+     * @param message the message
+     */
     protected void log(Level level, String message) {
-        logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        if (logger.isLoggable(level)) {
+            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        }
+    }
+    
+    /**
+     * Logs an INFO-level message.
+     * @param message the INFO-level message
+     */
+    protected void logInfo(String message) {
+        log(Level.INFO, message);
     }
 
     // ---------- PRIVATE ----------
     
-    private void initialize() {
-        initializeState();
-        initializeBehaviour();
-        log(Level.INFO, "Initialized.");
-    }
-
-    private void initializeState() {
-        // Process arguments.
-    }
-
-    private void initializeBehaviour() {
+    private void addBehaviours() {
         addBehaviour(new OrganizationManager());
+        logInfo("Behaviours addded.");
     }
 
     // TAG YellowPages
@@ -142,7 +149,7 @@ public abstract class Organization extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
-        log(Level.INFO, "Registered with the Yellow Pages.");
+        logInfo("Registered with the Yellow Pages.");
     }
 
     // TAG YellowPages
@@ -162,7 +169,7 @@ public abstract class Organization extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
-        log(Level.INFO, String.format("role (%1$) registered with the Yellow Pages", roleName));
+        logInfo(String.format("Role (%1$) registered with the Yellow Pages.", roleName));
     }
 
     // TAG YellowPages
@@ -274,6 +281,8 @@ public abstract class Organization extends Agent {
         
         OrganizationManager() {
             super(NAME);
+            
+            registerStatesAndTransitions();
         }
 
         // </editor-fold>
@@ -285,6 +294,19 @@ public abstract class Organization extends Agent {
             return OrganizationProtocol.getInstance();
         }
 
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        private void registerStatesAndTransitions() {
+            // ----- States -----
+            State receiveOrganizationRequest = new ReceiveOrganizationRequest();
+            // ------------------
+            
+            // Register the states.
+            registerFirstState(receiveOrganizationRequest);
+        }
+        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -306,22 +328,45 @@ public abstract class Organization extends Agent {
             
             // <editor-fold defaultstate="collapsed" desc="Methods">
             
+//            @Override
+//            public void action() {
+//                ACLMessage aclMessage = receiveACLMessage();
+//                if (aclMessage != null) {
+//                    System.out.println("Received!!!");
+//                    
+//                    setExitValue(Event.LOOP);
+//                } else {
+//                    setExitValue(Event.LOOP);
+//                    block();
+//                }
+//            }
+            
             @Override
             public void action() {
+                logInfo("Receiving organization request.");
+                
                 // Receive the 'Organization' message.
-                Message organizationMessage = receive(null, null);
+                Message organizationMessage = receive(OrganizationMessage.class, null);
+                
                 if (organizationMessage != null) {
+                    System.out.println("HERE");
                     if (organizationMessage instanceof EnactRequestMessage) {
-                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage) organizationMessage;
+                        logInfo("Received enact request.");
+                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage)organizationMessage;
                         enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getSenderPlayer());
+                        setExitValue(Event.LOOP);
                     } else if (organizationMessage instanceof DeactRequestMessage) {
-                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage) organizationMessage;
+                        logInfo("Received deact request.");
+                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage)organizationMessage;
                         deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getSenderPlayer());
+                        setExitValue(Event.LOOP);
                     } else {
                         // TODO Send not understood.
-                        assert false;
+                        //sendNotUnderstood(organizationMessage.getSender());
+                        setExitValue(Event.LOOP);
                     }
                 } else {
+                    setExitValue(Event.LOOP);
                     block();
                 }
             }
@@ -519,11 +564,11 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Create the 'Refuse' message.
-                RefuseMessage refuseMessage = new RefuseMessage();
+                RequirementsReplyMessage refuseMessage = new RequirementsReplyMessage();
                 refuseMessage.setReceiverPlayer(playerAID);
 
                 // Set the 'Refuse' message.
-                send(RefuseMessage.class, refuseMessage);
+                send(RequirementsReplyMessage.class, refuseMessage);
             }
             
             // </editor-fold>

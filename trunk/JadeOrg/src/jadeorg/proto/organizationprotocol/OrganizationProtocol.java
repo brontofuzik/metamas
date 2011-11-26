@@ -28,6 +28,14 @@ public class OrganizationProtocol extends Protocol {
     
     private OrganizationProtocol() {
         super(NAME);
+        
+        registerMessages();
+        setParentProtocol(null);
+    }
+    
+    private void registerMessages() {
+        registerMessage(EnactRequestMessage.class);
+        registerMessage(DeactRequestMessage.class);
     }
     
     // </editor-fold>
