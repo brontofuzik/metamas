@@ -38,10 +38,12 @@ public class Participant_Player extends Player {
     protected void setup() {
         super.setup();
         
+        doWait(1000);
+        
         for (Object argument : getArguments()) {            
             RoleFullName roleFullName = new RoleFullName((String)argument);
             try {
-                enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+                enactRoleInitiator(roleFullName.getOrganizationName(), roleFullName.getRoleName());
             } catch (PlayerException ex) {
                 log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
             }
