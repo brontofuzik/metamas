@@ -2,14 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package jadeorg.proto.organizationprotocol;
+package jadeorg.proto.organizationprotocol.deactprotocol;
 
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 
 /**

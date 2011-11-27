@@ -1,7 +1,6 @@
 package jadeorg.proto.organizationprotocol.enactprotocol;
 
 import jadeorg.proto.Protocol;
-import jadeorg.proto.organizationprotocol.OrganizationProtocol;
 
 /**
  * The 'Enact' protocol.
@@ -30,13 +29,6 @@ public class EnactProtocol extends Protocol {
     private EnactProtocol() {
         super(NAME);
         registerMessages();
-        setParentProtocol(OrganizationProtocol.getInstance());
-    }
-    
-    private void registerMessages() {
-        registerMessage(RequirementsMessage.class);        
-        registerMessage(RequirementsReplyMessage.class);
-        registerMessage(RoleAIDMessage.class);
     }
     
     // </editor-fold>
@@ -48,6 +40,16 @@ public class EnactProtocol extends Protocol {
             singleton = new EnactProtocol();
         }
         return singleton;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    private void registerMessages() {
+        registerMessage(EnactRequestMessage.class);
+        registerMessage(RequirementsInformMessage.class);
+        registerMessage(RoleAIDMessage.class);
     }
     
     // </editor-fold>

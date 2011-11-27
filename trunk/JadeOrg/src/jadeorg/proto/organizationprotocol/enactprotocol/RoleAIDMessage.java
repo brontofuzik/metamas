@@ -43,42 +43,22 @@ public class RoleAIDMessage extends OrganizationMessage {
     protected MessageTemplate createPerformativeTemplate() {
         return MessageTemplate.MatchPerformative(ACLMessage.INFORM);
     }
-    
-    @Override
-    protected MessageParser createParser() {
-        return new RoleAIDMessageParser();
-    }
 
     @Override
     protected MessageGenerator createGenerator() {
         return new RoleAIDMessageGenerator();
     }
     
+    @Override
+    protected MessageParser createParser() {
+        return new RoleAIDMessageParser();
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    class RoleAIDMessageParser extends MessageParser {
-
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            // TODO
-            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
-            
-            // Parse the content.
-            parseContent(aclMessage.getContent(), roleAIDMessage);
-            
-            return roleAIDMessage;
-        }
-        
-        // ---------- PRIVATE ----------
-        
-        private void parseContent(String content, RoleAIDMessage roleAIDMessage) {
-            roleAIDMessage.setRoleAID(new AID(content, true));
-        }
-    }
-    
-    class RoleAIDMessageGenerator extends MessageGenerator {
+    static class RoleAIDMessageGenerator extends MessageGenerator {
 
         @Override
         public ACLMessage generate(Message message) {
@@ -100,5 +80,25 @@ public class RoleAIDMessage extends OrganizationMessage {
         }
     }
     
+    static class RoleAIDMessageParser extends MessageParser {
+
+        @Override
+        public Message parse(ACLMessage aclMessage) {
+            // TODO
+            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
+            
+            // Parse the content.
+            parseContent(aclMessage.getContent(), roleAIDMessage);
+            
+            return roleAIDMessage;
+        }
+        
+        // ---------- PRIVATE ----------
+        
+        private void parseContent(String content, RoleAIDMessage roleAIDMessage) {
+            roleAIDMessage.setRoleAID(new AID(content, true));
+        }
+    }
+        
     // </editor-fold>
 }
