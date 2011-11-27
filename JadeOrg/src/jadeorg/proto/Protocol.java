@@ -24,8 +24,6 @@ public abstract class Protocol {
     
     private String name;
     
-    private Protocol parentProtocol;
-    
     private Map<Class, Message> messages = new Hashtable<Class, Message>();
     
     // TAG NOT-USED
@@ -37,6 +35,7 @@ public abstract class Protocol {
     
     protected Protocol(String name) {
         this.name = name;
+        registerMessages();
     }
     
     // </editor-fold>
@@ -49,14 +48,6 @@ public abstract class Protocol {
      */
     public String getName() {
         return name;
-    }
-    
-    protected Protocol getParentProtocol() {
-        return parentProtocol;
-    }
-    
-    protected void setParentProtocol(Protocol parentProtocol) {
-        this.parentProtocol = parentProtocol;
     }
     
     // </editor-fold>
@@ -120,20 +111,11 @@ public abstract class Protocol {
         parties.put(partyClass.getName(), partyClass);
     }
     
-    protected Message getMessage(Class messageClass) {
-        Message message = messages.get(messageClass);
-        if (message != null) {
-            return message;
-        } else {
-            if (getParentProtocol() != null) {
-                return getParentProtocol().getMessage(messageClass);
-            } else {
-                return null;
-            }
-        }
-    }
-    
     // ---------- PRIVATE ----------
+    
+    private void registerMessages() {
+        registerMessage(ACLMessageWrapper.class);
+    }
     
     /**
      * Gets a message parser for a given message class.
@@ -179,5 +161,8 @@ public abstract class Protocol {
         return message;
     }
     
+    private Message getMessage(Class messageClass) {
+        return messages.get(messageClass);
+    }
     // </editor-fold>
 }

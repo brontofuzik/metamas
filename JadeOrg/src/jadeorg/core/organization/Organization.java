@@ -12,22 +12,20 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 import jade.wrapper.AgentController;
 import jadeorg.lang.ACLMessageWrapper;
-import jadeorg.lang.Message;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsReplyMessage;
-import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
-import jadeorg.proto.organizationprotocol.OrganizationProtocol;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.FailureMessage;
-import jadeorg.proto.organizationprotocol.DeactRequestMessage;
-import jadeorg.proto.organizationprotocol.EnactRequestMessage;
-import jadeorg.proto.organizationprotocol.OrganizationMessage;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactRequestMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRequestMessage;
+import jadeorg.util.ManagerBehaviour;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -187,40 +185,21 @@ public abstract class Organization extends Agent {
         send(message);
     }
 
-    /** Enacts a role.
-     * @param roleName the name of the role
+    /**
+     * Enacts a role.
      * @param player the player
      */
-    // TODO Move the precondition assertions to the 'Enact' protocol responder behaviour.
-    private void enactRole(String roleName, AID player) {
-        // If the role is defined for this organization ...
-        if (roles.containsKey(roleName)) {
-
-            // ... and it is currently not enacted by any player ...
-            if (!knowledgeBase.isRoleEnacted(roleName)) {
-
-                // ... respond according to the 'Enact' protocol.
-                addBehaviour(new EnactProtocolResponder(roleName, player));
-            }
-        }
+    private void enactRoleResponder(AID player) {
+        addBehaviour(new EnactProtocolResponder(player));
     }
 
-    /** Deacts a role.
-     * @param roleName the name of the role
+    /**
+     * Deacts a role.
      * @param player the player
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    private void deactRole(String roleName, AID player) {
-        // If the role is defined for this organization ...
-        if (roles.containsKey(roleName)) {
+    private void deactRoleResponder(AID player) {
 
-            // ... and it is currently enacted by the player.
-            if (knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
-
-                // ... respond according to the the 'Deact' protocol.
-                addBehaviour(new DeactProtocolResponder(roleName, player));
-            }
-        }
     }
 
     // </editor-fold>
@@ -269,111 +248,47 @@ public abstract class Organization extends Agent {
     /**
      * An organization manager behaviour.
      */
-    private class OrganizationManager extends Party {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "organization-manager";
-
-        // </editor-fold>
+    private class OrganizationManager extends ManagerBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         OrganizationManager() {
-            super(NAME);
-            
-            registerStatesAndTransitions();
-        }
-
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected Protocol getProtocol() {
-            return OrganizationProtocol.getInstance();
-        }
-
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        private void registerStatesAndTransitions() {
-            // ----- States -----
-            State receiveOrganizationRequest = new ReceiveOrganizationRequest();
-            // ------------------
-            
-            // Register the states.
-            registerFirstState(receiveOrganizationRequest);
+            addHandler(new EnactRoleHandler());
+            addHandler(new DeactRoleHandler());
         }
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class ReceiveOrganizationRequest extends PassiveState {
+        private class EnactRoleHandler extends HandlerBehaviour {
 
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "receive-organization-request";
-
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            ReceiveOrganizationRequest() {
-                super(NAME);
-            }
-
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-//            @Override
-//            public void action() {
-//                ACLMessage aclMessage = receiveACLMessage();
-//                if (aclMessage != null) {
-//                    System.out.println("Received!!!");
-//                    
-//                    setExitValue(Event.LOOP);
-//                } else {
-//                    setExitValue(Event.LOOP);
-//                    block();
-//                }
-//            }
-            
             @Override
             public void action() {
-                logInfo("Receiving organization request.");
-                
-                // Receive the 'Organization' message.
-                Message organizationMessage = receive(OrganizationMessage.class, null);
-                
-                if (organizationMessage != null) {
-                    System.out.println("HERE");
-                    if (organizationMessage instanceof EnactRequestMessage) {
-                        logInfo("Received enact request.");
-                        EnactRequestMessage enactRequestMessage = (EnactRequestMessage)organizationMessage;
-                        enactRole(enactRequestMessage.getRoleName(), enactRequestMessage.getSenderPlayer());
-                        setExitValue(Event.LOOP);
-                    } else if (organizationMessage instanceof DeactRequestMessage) {
-                        logInfo("Received deact request.");
-                        DeactRequestMessage deactRequestMessage = (DeactRequestMessage)organizationMessage;
-                        deactRole(deactRequestMessage.getRoleName(), deactRequestMessage.getSenderPlayer());
-                        setExitValue(Event.LOOP);
-                    } else {
-                        // TODO Send not understood.
-                        //sendNotUnderstood(organizationMessage.getSender());
-                        setExitValue(Event.LOOP);
-                    }
-                } else {
-                    setExitValue(Event.LOOP);
-                    block();
+                MessageTemplate enactRequestTemplate = EnactProtocol.getInstance()
+                    .getTemplate(EnactRequestMessage.class);
+                ACLMessage enactRequestMessage = receive(enactRequestTemplate);
+                if (enactRequestMessage != null) {
+                    putBack(enactRequestMessage);
+                    enactRoleResponder(enactRequestMessage.getSender());
                 }
             }
-            
-            // </editor-fold>
         }
         
+        private class DeactRoleHandler extends HandlerBehaviour {
+
+            @Override
+            public void action() {
+                MessageTemplate deactRequestTemplate = DeactProtocol.getInstance()
+                    .getTemplate(DeactRequestMessage.class);
+                ACLMessage deactRequestMessage = receive(deactRequestTemplate);
+                if (deactRequestMessage != null) {
+                    putBack(deactRequestMessage);
+                    deactRoleResponder(deactRequestMessage.getSender());
+                }
+            }
+        }
+       
         // </editor-fold>
     }
 
@@ -390,22 +305,20 @@ public abstract class Organization extends Agent {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        private String roleName;
-        
         private AID playerAID;
+        
+        private String roleName;
 
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public EnactProtocolResponder(String roleName, AID player) {
+        public EnactProtocolResponder(AID player) {
             super(NAME);
             // ----- Preconditions -----
-            assert !roleName.isEmpty();
             assert player != null;
             // -------------------------
 
-            this.roleName = roleName;
             this.playerAID = player;
 
             registerStatesAndTransitions();
@@ -431,32 +344,33 @@ public abstract class Organization extends Agent {
             // ----- States -----
             State receiveEnactRequest = new ReceiveEnactRequest();
             State sendRequirementsInform = new SendRequirementsInform();
-            State sendFailure = new SendRefuse();
-            State receiveRequirementsInform = new ReceiveRequirementsInform();
+            State sendFailure = new SendFailure();
+            State receiveRequirementsReply = new ReceiveRequirementsReply();
             State sendRoleAID = new SendRoleAID();
-            State end = new End();
+            State successEnd = new SuccessEnd();
+            State failureEnd = new FailureEnd();
             // ------------------
 
             // Register the states.
-            registerFirstState(new ReceiveEnactRequest());
-            registerState(new SendRequirementsInform());
-            registerState(new SendRefuse());
-            registerState(new ReceiveRequirementsInform());
-            registerState(new SendRoleAID());
-            registerLastState(new End());
+            registerFirstState(receiveEnactRequest);
+            registerState(sendRequirementsInform);
+            registerState(sendFailure);
+            registerState(receiveRequirementsReply);
+            registerState(sendRoleAID);
+            registerLastState(successEnd);
 
             // Register the transitions (OLD).
             registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
             registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
 
-            registerDefaultTransition(sendRequirementsInform, receiveRequirementsInform);
+            registerDefaultTransition(sendRequirementsInform, receiveRequirementsReply);
 
-            registerTransition(receiveRequirementsInform, sendRoleAID, PassiveState.Event.SUCCESS);
-            registerTransition(receiveRequirementsInform, end, PassiveState.Event.FAILURE);
+            registerTransition(receiveRequirementsReply, sendRoleAID, PassiveState.Event.SUCCESS);
+            registerTransition(receiveRequirementsReply, failureEnd, PassiveState.Event.FAILURE);
 
-            registerDefaultTransition(sendRoleAID, end);
+            registerDefaultTransition(sendRoleAID, successEnd);
 
-            registerDefaultTransition(sendFailure, end);
+            registerDefaultTransition(sendFailure, failureEnd);
 
 //            // Register the transitions (NEW).
 //            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
@@ -464,7 +378,6 @@ public abstract class Organization extends Agent {
 //            
 //            sendRequirementsInform.registerDefaultTransition(receiveRequirementsInform);
 //            
-//            receiveRequirementsInform.registerTransition(2, receiveRequirementsInform);
 //            receiveRequirementsInform.registerTransition(0, sendRoleAID);
 //            receiveRequirementsInform.registerTransition(1, sendFailure);   
 //            
@@ -500,6 +413,31 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
+                logInfo("Receiving enact request.");
+                
+                EnactRequestMessage enactRequestMessage = (EnactRequestMessage)
+                    receive(EnactRequestMessage.class, playerAID);
+                
+                if (enactRequestMessage != null) {
+                    logInfo("Enact request received.");
+                    roleName = enactRequestMessage.getRoleName();
+  
+                    if (roles.containsKey(roleName)) {
+                        // The role is defined for this organizaiton.
+                        if (!knowledgeBase.isRoleEnacted(roleName)) {
+                            // The role is not yet enacted.
+                            setExitValue(Event.SUCCESS);
+                        } else {
+                            // The role is already enacted.
+                            setExitValue(Event.FAILURE);
+                        }
+                    } else {
+                        // The role is not defined for this organization.
+                        setExitValue(Event.FAILURE);
+                    }
+                }  else {
+                    loop();
+                }
             }
             
             // </editor-fold>
@@ -528,13 +466,18 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
+                logInfo("Sending requirements inform.");
+                
                 // Create the 'Requirements' message.
-                RequirementsMessage requirementsMessage = new RequirementsMessage();
-                requirementsMessage.setReceiverPlayer(playerAID);
-                requirementsMessage.setRequirements(requirements.get(roleName));
+                RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
+                requirementsInformMessage.setReceiverPlayer(playerAID);
+
+                requirementsInformMessage.setRequirements(requirements.get(roleName));
 
                 // Send the 'Requirements' message.
-                send(RequirementsMessage.class, requirementsMessage);
+                send(RequirementsInformMessage.class, requirementsInformMessage);
+                
+                logInfo("Requirements inform sent.");
             }
             
             // </editor-fold>
@@ -543,7 +486,7 @@ public abstract class Organization extends Agent {
         /**
          * The state in which the 'Refuse' message is send.
          */
-        private class SendRefuse extends ActiveState {
+        private class SendFailure extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -553,7 +496,7 @@ public abstract class Organization extends Agent {
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            SendRefuse() {
+            SendFailure() {
                 super(NAME);
             }
 
@@ -563,12 +506,12 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                // Create the 'Refuse' message.
-                RequirementsReplyMessage refuseMessage = new RequirementsReplyMessage();
-                refuseMessage.setReceiverPlayer(playerAID);
+                // Create the 'Failure' JadeOrg message.
+                ACLMessageWrapper failureMessage = EnactProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.FAILURE);
+                failureMessage.addReceiver(playerAID);
 
-                // Set the 'Refuse' message.
-                send(RequirementsReplyMessage.class, refuseMessage);
+                send(ACLMessageWrapper.class, failureMessage);
             }
             
             // </editor-fold>
@@ -577,17 +520,17 @@ public abstract class Organization extends Agent {
         /**
          * The state in which the 'Requirements' message is received.
          */
-        private class ReceiveRequirementsInform extends PassiveState {
+        private class ReceiveRequirementsReply extends PassiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "receive-requirements-inform";
+            private static final String NAME = "receive-requirements-reply";
 
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            ReceiveRequirementsInform() {
+            ReceiveRequirementsReply() {
                 super(NAME);
             }
 
@@ -597,18 +540,20 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                // Receive the ACL message.
-                ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper) receive(ACLMessageWrapper.class, playerAID);
-                if (aclMessageWrapper != null) {
-                    if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
-                        // TODO
-                    } else if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
-                        // TODO
-                    } else {
-                        sendNotUnderstood(playerAID);
+                logInfo("Receiving requirements reply.");
+              
+                ACLMessageWrapper requirementsReplyMessage = (ACLMessageWrapper)
+                    receive(ACLMessageWrapper.class, playerAID);
+                if (requirementsReplyMessage != null) {
+                    logInfo("Requirements reply received.");
+                    
+                    if (requirementsReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                        setExitValue(Event.SUCCESS);
+                    } else if (requirementsReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                        setExitValue(Event.FAILURE);
                     }
                 } else {
-                    block();
+                    loop();
                 }
             }
             
@@ -638,11 +583,19 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
+                logInfo("Creating role agent.");
+               
                 Role role = createRoleAgent(roleName, roleName);
                 startRoleAgent(role);
 
                 knowledgeBase.updateRoleIsEnacted(role, playerAID);
-
+                
+                logInfo("Role agent created.");
+                
+                // TODO Consider moving the following section to a separate state.
+                
+                logInfo("Sending role AID.");
+                
                 // Create the 'RoleAID' message.
                 RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
                 roleAIDMessage.setReceiverPlayer(playerAID);
@@ -650,6 +603,7 @@ public abstract class Organization extends Agent {
 
                 // Send the 'RoleAID' message.
                 send(RoleAIDMessage.class, roleAIDMessage);
+                logInfo("Role AID sent.");
             }
 
             // ---------- PRIVATE ----------
@@ -662,17 +616,22 @@ public abstract class Organization extends Agent {
              */
             private Role createRoleAgent(String roleClassName, String roleName) {
                 Class roleClass = roles.get(roleClassName);
+                //System.out.println("ROLE CLASS: " + roleClass);
+                Class organizationClass = myAgent.getClass();
+                //System.out.println("ORGANIZATION CLASS: " + organizationClass);
+                
                 Constructor roleConstructor = null;
                 try {
-                    roleConstructor = roleClass.getConstructor();
+                    roleConstructor = roleClass.getConstructor(organizationClass);
                 } catch (NoSuchMethodException ex) {
                     ex.printStackTrace();
                 } catch (SecurityException ex) {
                     ex.printStackTrace();
                 }
+                //System.out.println("CTOR: " + roleConstructor.getParameterTypes());
                 Role role = null;
                 try {
-                    role = (Role) roleConstructor.newInstance();
+                    role = (Role)roleConstructor.newInstance(myAgent);
                 } catch (InstantiationException ex) {
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {
@@ -682,8 +641,9 @@ public abstract class Organization extends Agent {
                 } catch (InvocationTargetException ex) {
                     ex.printStackTrace();
                 }
+                //System.out.println("ROLE: " + role);
                 role.setRoleName(roleName);
-                role.setMyOrganization((Organization) myAgent);
+                role.setMyOrganization((Organization)myAgent);
                 return role;
             }
 
@@ -701,19 +661,19 @@ public abstract class Organization extends Agent {
         }
 
         /**
-         * The ending state.
+         * The 'Success end' state.
          */
-        public class End extends ActiveState {
+        public class SuccessEnd extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "end";
+            private static final String NAME = "success-end";
 
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            End() {
+            SuccessEnd() {
                 super(NAME);
             }
 
@@ -723,10 +683,41 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
+                logInfo("Enact role protocol succeeded.");
             }
+            
+            // </editor-fold>           
+        }
+        
+        /**
+         * The 'Failure end' state.
+         */
+        public class FailureEnd extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "failure-end";
+
             // </editor-fold>
             
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            FailureEnd() {
+                super(NAME);
+            }
+
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Enact role protocol failed.");
+            }
+            
+            // </editor-fold>        
         }
+        
         // </editor-fold>
     }
 
@@ -815,7 +806,7 @@ public abstract class Organization extends Agent {
         /**
          * The 'Receive deact request' active state.
          */
-        class ReceiveDeactRequest extends ActiveState {
+        class ReceiveDeactRequest extends PassiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -835,7 +826,26 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                logInfo("Receiving deact request.");
+                
+                DeactRequestMessage deactRequestMessage = (DeactRequestMessage)
+                    receive(DeactRequestMessage.class, null);
+                if (deactRequestMessage != null) {
+                    roleName = deactRequestMessage.getRoleName();
+  
+                    if (roles.containsKey(roleName)) {
+                        // The role is defined for this organization.
+                        if (knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
+                            // The is enacted by the player.
+                        } else {
+                            // The role is not enacted by the player.
+                        }
+                    } else {
+                        // The role is not defined for this organization.
+                    }
+                } else {
+                    loop();
+                }
             }
             
             // </editor-fold>

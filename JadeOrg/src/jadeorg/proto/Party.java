@@ -46,6 +46,7 @@ public abstract class Party extends FSMBehaviour {
         // Generate the ACL message.
         ACLMessage aclMessage = getProtocol().generate(messageClass, message);
         
+        System.out.println("SENDING MESSAGE: " + aclMessage.toString());
         myAgent.send(aclMessage);
     }
     
@@ -87,6 +88,7 @@ public abstract class Party extends FSMBehaviour {
         
         if (aclMessage != null) {
             // Parse the ACL message.
+            System.out.println("RECEIVED MESSAGE: " + aclMessage.toString());
             return getProtocol().parse(messageClass, aclMessage);
         } else {
             return null;

@@ -6,12 +6,12 @@
             <line>409</line>
         </file>
         <file>
-            <url>src/jadeorg/core/organization/Organization.java</url>
-            <line>431</line>
-        </file>
-        <file>
             <url>src/jadeorg/core/Organization.java</url>
             <line>409</line>
+        </file>
+        <file>
+            <url>src/jadeorg/core/organization/Organization.java</url>
+            <line>524</line>
         </file>
     </editor-bookmarks>
 </project-private>

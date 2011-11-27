@@ -74,15 +74,6 @@ public abstract class Message {
         return this;
     }
     
-    public Message removeReceiver(AID receiver) {
-        // ----- Preconditions -----
-        assert receivers.contains(receiver);
-        // -------------------------
-        
-        receivers.remove(receiver);
-        return this;
-    }
-    
     /**
      * Gets the template to receive this message.
      * @return the template to receive this message 
@@ -129,9 +120,14 @@ public abstract class Message {
     // ---------- PRIVATE ----------
     
     private MessageTemplate createTemplate() {
-        return MessageTemplate.and(
-            createProtocolTemplate(),
-            createPerformativeTemplate());
+        MessageTemplate template = createProtocolTemplate();
+        MessageTemplate performativeTemplate = createPerformativeTemplate();
+        if (performativeTemplate != null) {
+            template = MessageTemplate.and(
+                template,
+                performativeTemplate);
+        }
+        return template;
     }
     
     private MessageTemplate createProtocolTemplate() {

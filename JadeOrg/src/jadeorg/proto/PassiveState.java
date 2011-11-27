@@ -60,5 +60,10 @@ public abstract class PassiveState extends State {
         return getParty().receiveACLMessage();
     }
     
+    protected void loop() {
+        setExitValue(Event.LOOP);
+        block();
+    }
+    
     // </editor-fold>
 }

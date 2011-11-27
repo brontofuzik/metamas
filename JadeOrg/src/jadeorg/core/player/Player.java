@@ -19,11 +19,10 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsReplyMessage;
-import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
-import jadeorg.proto.organizationprotocol.DeactRequestMessage;
-import jadeorg.proto.organizationprotocol.EnactRequestMessage;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactRequestMessage;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRequestMessage;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
 import java.util.logging.Level;
@@ -62,9 +61,9 @@ public abstract class Player extends Agent {
     protected abstract boolean evaluateRequirements(String[] requirements);
     
     /**
-     * Logs a message.
+     * Logs a requirementsInformMessage.
      * @param level the level
-     * @param message the message
+     * @param requirementsInformMessage the requirementsInformMessage
      */
     protected void log(Level level, String message) {
         if (logger.isLoggable(level)) {
@@ -73,8 +72,8 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Logs an INFO-level message.
-     * @param message the INFO-level message
+     * Logs an INFO-level requirementsInformMessage.
+     * @param requirementsInformMessage the INFO-level requirementsInformMessage
      */
     protected void logInfo(String message) {
         log(Level.INFO, message);
@@ -89,7 +88,7 @@ public abstract class Player extends Agent {
     
     // ----- ENACT & DEACT -----
     
-    protected void enactRole(String organizationName, String roleName) throws PlayerException {
+    protected void enactRoleInitiator(String organizationName, String roleName) throws PlayerException {
         logInfo(String.format("Enacting the role '%1$s' in the organization '%2$s'.", roleName, organizationName));
         
         // TAG YELLOW-PAGES
@@ -109,7 +108,7 @@ public abstract class Player extends Agent {
     }
     
     // TODO Check if the role is enacted.
-    protected void deactRole(String organizationName, String roleName) throws PlayerException {        
+    protected void deactRoleInitiator(String organizationName, String roleName) throws PlayerException {        
         DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
         if (organization != null) {
             addBehaviour(new DeactProtocolInitiator(organization.getName(), roleName));
@@ -222,32 +221,34 @@ public abstract class Player extends Agent {
         private void registerStatesAndTransitions() {
             // ----- States -----
             State sendEnactRequest = new SendEnactRequest();
-            State receiveRequirementsInfo = new ReceiveRequirementsInfo();
-            State sendAgree = new SendAgree();
-            State sendRefuse = new SendRefuse();
+            State receiveRequirementsInform = new ReceiveRequirementsInform();
+            State sendRequirementsReply = new SendRequirementsReply();
+            State sendFailure = new SendFailure();
             State receiveRoleAID = new ReceiveRoleAID();
-            State end = new End();
+            State successEnd = new SuccessEnd();
+            State failureEnd = new FailureEnd();
             // ------------------
             
             // Register the states.
             registerFirstState(sendEnactRequest);
-            registerState(receiveRequirementsInfo);
-            registerState(sendAgree);
-            registerState(sendRefuse);
+            registerState(receiveRequirementsInform);
+            registerState(sendRequirementsReply);
+            registerState(sendFailure);
             registerState(receiveRoleAID);
-            registerLastState(end);
+            registerLastState(successEnd);
+            registerLastState(failureEnd);
             
             // Register the transitions (OLD).
-            registerDefaultTransition(sendEnactRequest, receiveRequirementsInfo);
+            registerDefaultTransition(sendEnactRequest, receiveRequirementsInform);
             
-            registerTransition(receiveRequirementsInfo, sendAgree, PassiveState.Event.SUCCESS);
-            registerTransition(receiveRequirementsInfo, sendRefuse, PassiveState.Event.FAILURE);
+            registerTransition(receiveRequirementsInform, sendRequirementsReply, PassiveState.Event.SUCCESS);
+            registerTransition(receiveRequirementsInform, sendFailure, PassiveState.Event.FAILURE);
             
-            registerDefaultTransition(sendAgree, receiveRoleAID);
+            registerDefaultTransition(sendRequirementsReply, receiveRoleAID);
             
-            registerDefaultTransition(sendRefuse, end);
+            registerDefaultTransition(sendFailure, failureEnd);
             
-            registerDefaultTransition(receiveRoleAID, end);
+            registerDefaultTransition(receiveRoleAID, successEnd);
             
 //            // Register the transitions (NEW).
 //            sendEnactRequest.registerDefaultTransition(receiveRequirementsInfo);
@@ -257,9 +258,9 @@ public abstract class Player extends Agent {
 //            
 //            sendAgree.registerDefaultTransition(receiveRoleAID);
 //            
-//            sendRefuse.registerDefaultTransition(end);
+//            sendRefuse.registerDefaultTransition(failureEnd);
 //            
-//            receiveRoleAID.registerDefaultTransition(end);
+//            receiveRoleAID.registerDefaultTransition(successEnd);
         }
         
         // </editor-fold>
@@ -306,17 +307,17 @@ public abstract class Player extends Agent {
          * The 'Receive requirements info' passive state.
          * A state in which the 'Requirements' info is received.
          */
-        private class ReceiveRequirementsInfo extends PassiveState {
+        private class ReceiveRequirementsInform extends PassiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "receive-requirements-info";
+            private static final String NAME = "receive-requirements-inform";
             
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            ReceiveRequirementsInfo() {
+            ReceiveRequirementsInform() {
                 super(NAME);
             }
             
@@ -329,25 +330,20 @@ public abstract class Player extends Agent {
                 logInfo("Receiving requirements info.");
                 
                 // TODO A 'Refuse' (ACL) message can be received as well.
-                Message message = receive(RequirementsMessage.class, organizationAID);
+                RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)
+                    receive(RequirementsInformMessage.class, organizationAID);
                 
-                if (message != null) {
-                    if (message instanceof RequirementsMessage) {
-                        logInfo("Requirements info received.");
-                        RequirementsMessage requirementsMessage = (RequirementsMessage)message;
-                        if (evaluateRequirements(requirementsMessage.getRequirements())) {
-                            setExitValue(Event.SUCCESS);
-                        } else {
-                            setExitValue(Event.FAILURE);
-                        }
+                if (requirementsInformMessage != null) {
+                    logInfo("Requirements info received.");
+                    if (evaluateRequirements(requirementsInformMessage.getRequirements())) {
+                        // The player meets the requirements.
+                        setExitValue(Event.SUCCESS);
                     } else {
-                        // TODO Send 'Not understood' message.
-                        //sendNotUnderstood(message.getSender());
-                        setExitValue(Event.LOOP);
+                        // The player does not meet the requirements.
+                        setExitValue(Event.FAILURE);
                     }
                 } else {
-                    setExitValue(Event.LOOP);
-                    block();
+                    loop();
                 }
             }
 
@@ -356,53 +352,19 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Send agree' active state.
-         * A state in which the 'Agree' message is send.
+         * A state in which the 'Agree' requirementsInformMessage is send.
          */
-        private class SendAgree extends ActiveState {
+        private class SendRequirementsReply extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "send-agree";
+            private static final String NAME = "send-requirements-reply";
             
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            SendAgree() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {           
-                ACLMessageWrapper aclMessageWrapper = EnactProtocol.getInstance()
-                    .getACLMessageWrapper(ACLMessage.AGREE);
-                aclMessageWrapper.addReceiver(organizationAID);
-                
-                send(ACLMessageWrapper.class, aclMessageWrapper);
-            }
-
-            // </editor-fold>
-        }
-        
-        /**
-         * The 'Send refuse' active state,
-         * A state in which the 'Refuse' message is send.
-         */
-        private class SendRefuse extends ActiveState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "send-refuse";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendRefuse() {
+            SendRequirementsReply() {
                 super(NAME);
             }
             
@@ -412,11 +374,52 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                ACLMessageWrapper aclMessageWrapper = EnactProtocol.getInstance()
-                    .getACLMessageWrapper(ACLMessage.REFUSE);
-                aclMessageWrapper.addReceiver(organizationAID);
+                logInfo("Sending requirements reply.");
                 
-                send(ACLMessageWrapper.class, aclMessageWrapper);
+                // Create the 'Requirements reply' JadeOrg message.
+                ACLMessageWrapper requirementsReplyMessage = EnactProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.AGREE);
+                System.out.println(requirementsReplyMessage.getWrappedACLMessage().getProtocol());
+                requirementsReplyMessage.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, requirementsReplyMessage);
+                
+                logInfo("Requirements reply sent.");
+            }
+
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Send failure' active state,
+         * A state in which the 'Refuse' requirementsInformMessage is send.
+         */
+        private class SendFailure extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-failure";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendFailure() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Create the 'Failure' JadeOrg message.
+                ACLMessageWrapper failureMessage = EnactProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.FAILURE);
+                failureMessage.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, failureMessage);
             }
 
             // </editor-fold>
@@ -424,7 +427,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Receive role AID' passive state.
-         * A state in which the 'Role AID' message is received.
+         * A state in which the 'Role AID' requirementsInformMessage is received.
          */
         private class ReceiveRoleAID extends PassiveState {
 
@@ -459,20 +462,20 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'End' state.
+         * The 'Success end' state.
          * A state in which the 'Enact' protocol initiator party ends.
          */
-        private class End extends ActiveState {
+        private class SuccessEnd extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "end";
+            private static final String NAME = "success-end";
             
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            End() {
+            SuccessEnd() {
                 super(NAME);
             }
             
@@ -482,7 +485,37 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                logInfo("Enact role protocol succeeded.");
+            }
+
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Fail end' state.
+         * A state in which the 'Enact' protocol initiator party ends.
+         */
+        private class FailureEnd extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "failure-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            FailureEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Enact role protocol failed.");
             }
 
             // </editor-fold>
@@ -569,7 +602,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Send deact request' active state.
-         * A state in which the 'Deact request' message is send.
+         * A state in which the 'Deact request' requirementsInformMessage is send.
          */
         private class SendDeactRequest extends ActiveState {
 
@@ -603,7 +636,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Receive deact reply' passive state.
-         * A state in which the 'Deact reply' message is send.
+         * A state in which the 'Deact reply' requirementsInformMessage is send.
          */
         private class ReceiveDeactReply extends PassiveState {
 
@@ -750,7 +783,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Send activate request' active state.
-         * A state in which the 'Activate request' message is send.
+         * A state in which the 'Activate request' requirementsInformMessage is send.
          */
         private class SendActivateRequest extends ActiveState {
 
@@ -783,7 +816,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Receive activate reply' passive state.
-         * A state in which the 'Activate reply' message is received.
+         * A state in which the 'Activate reply' requirementsInformMessage is received.
          */
         private class ReceiveActivateReply extends PassiveState {
 
@@ -936,7 +969,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Send deactivate request' active state.
-         * A state in which the 'Deactivate request' message is send.
+         * A state in which the 'Deactivate request' requirementsInformMessage is send.
          */
         private class SendDeactivateRequest extends ActiveState {
 
@@ -969,7 +1002,7 @@ public abstract class Player extends Agent {
         
         /**
          * The 'Receive deactivate reply' passive state.
-         * A state in which the 'Deactivate reply' message is received.
+         * A state in which the 'Deactivate reply' requirementsInformMessage is received.
          */
         private class ReceiveDeactivateReply extends PassiveState {
 
