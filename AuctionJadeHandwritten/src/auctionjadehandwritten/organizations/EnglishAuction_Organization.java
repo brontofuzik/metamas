@@ -24,8 +24,8 @@ public class EnglishAuction_Organization extends Organization {
     }
     
     private void addRoles() {
-        addRole(Auctioneer_Role.class);
-        addRole(Bidder_Role.class);
+        addRole(Auctioneer_Role.class/*, new String[] { "propose-task", "evaluate-bidders" }*/);
+        addRole(Bidder_Role.class/*, new String[] { "evaluate-task", "execute-task" }*/);
         log(Level.INFO, "Roles added.");
     }
     
@@ -37,8 +37,8 @@ public class EnglishAuction_Organization extends Organization {
      * @since 2011-11-20
      * @version %I% %G%
      */
-    private class Auctioneer_Role extends Role {
-    
+    public class Auctioneer_Role extends Role {
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -58,7 +58,7 @@ public class EnglishAuction_Organization extends Organization {
      * @since 2011-11-20
      * @version %I% %G%
      */
-    private class Bidder_Role extends Role {
+    public class Bidder_Role extends Role {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
