@@ -64,8 +64,10 @@ public class RoleAIDMessage extends OrganizationMessage {
         public ACLMessage generate(Message message) {
             RoleAIDMessage roleAIDMessage = (RoleAIDMessage)message;
             
+            // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.setProtocol(roleAIDMessage.getProtocol().getName());
+            aclMessage.setProtocol(EnactProtocol.getInstance().getName());
+            aclMessage.addReceiver(roleAIDMessage.getReceiverPlayer());
             
             // Generate the content.
             aclMessage.setContent(generateContent(roleAIDMessage));
@@ -76,7 +78,7 @@ public class RoleAIDMessage extends OrganizationMessage {
         // ---------- PRIVATE ----------
 
         private String generateContent(RoleAIDMessage roleAIDMessage) {
-            return roleAIDMessage.toString();
+            return String.format("role-aid(%1$s)", roleAIDMessage.getRoleAID().getName());
         }
     }
     
@@ -88,14 +90,14 @@ public class RoleAIDMessage extends OrganizationMessage {
             RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
             
             // Parse the content.
-            parseContent(aclMessage.getContent(), roleAIDMessage);
+            parseContent(roleAIDMessage, aclMessage.getContent());
             
             return roleAIDMessage;
         }
         
         // ---------- PRIVATE ----------
         
-        private void parseContent(String content, RoleAIDMessage roleAIDMessage) {
+        private void parseContent(RoleAIDMessage roleAIDMessage, String content) {
             roleAIDMessage.setRoleAID(new AID(content, true));
         }
     }

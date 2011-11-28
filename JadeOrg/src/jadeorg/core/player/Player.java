@@ -335,6 +335,7 @@ public abstract class Player extends Agent {
                 
                 if (requirementsInformMessage != null) {
                     logInfo("Requirements info received.");
+                    
                     if (evaluateRequirements(requirementsInformMessage.getRequirements())) {
                         // The player meets the requirements.
                         setExitValue(Event.SUCCESS);
@@ -449,10 +450,17 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                RoleAIDMessage roleAIDMessage = (RoleAIDMessage)receive(RoleAIDMessage.class, organizationAID);
+                logInfo("Receiving role AID.");
+                
+                RoleAIDMessage roleAIDMessage = (RoleAIDMessage)
+                    receive(RoleAIDMessage.class, organizationAID);
+                
                 if (roleAIDMessage != null) {
+                    logInfo("Role AID received.");
+                    
                     AID roleAID = roleAIDMessage.getRoleAID();
                     knowledgeBase.enactRole(roleAID, organizationAID);
+                    setExitValue(Event.SUCCESS);
                 } else {
                     block();
                 }
@@ -485,7 +493,7 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                logInfo("Enact role protocol succeeded.");
+                logInfo("Enact role initiator party succeeded.");
             }
 
             // </editor-fold>
@@ -515,7 +523,7 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                logInfo("Enact role protocol failed.");
+                logInfo("Enact role initiator party failed.");
             }
 
             // </editor-fold>

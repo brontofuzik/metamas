@@ -683,7 +683,7 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                logInfo("Enact role protocol succeeded.");
+                logInfo("Enact role responder party succeeded.");
             }
             
             // </editor-fold>           
@@ -712,7 +712,7 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
-                logInfo("Enact role protocol failed.");
+                logInfo("Enact role responder party failed.");
             }
             
             // </editor-fold>        
