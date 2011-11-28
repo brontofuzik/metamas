@@ -90,12 +90,12 @@ public class RequirementsInformMessage extends OrganizationMessage {
         public ACLMessage generate(Message message) {           
             RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)message;
 
-            // Generate the ACL message header.
+            // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
             aclMessage.setProtocol(EnactProtocol.getInstance().getName());
             aclMessage.addReceiver(requirementsInformMessage.getReceiverPlayer());
 
-            // Generate the ACL message content.
+            // Generate the content.
             aclMessage.setContent(generateContent(requirementsInformMessage));
 
             return aclMessage;

@@ -84,12 +84,12 @@ public class EnactRequestMessage extends OrganizationMessage {
         public ACLMessage generate(Message message) {
            EnactRequestMessage enactRequestMessage = (EnactRequestMessage)message;
 
-            // Generate the ACL message header.
+            // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setProtocol(EnactProtocol.getInstance().getName());
             aclMessage.addReceiver(enactRequestMessage.getReceiverOrganization());
 
-            // Generate the ACL message content.
+            // Generate the content.
             aclMessage.setContent(generateContent(enactRequestMessage));
 
             return aclMessage;

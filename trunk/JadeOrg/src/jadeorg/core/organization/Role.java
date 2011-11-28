@@ -163,7 +163,7 @@ public class Role extends Agent {
         } catch (FIPAException ex) {
             ex.printStackTrace();
         }
-        logInfo("Registered with the Yellow Pages");
+        logInfo("Registered with the Yellow Pages.");
     }
     
     // TAG YellowPages
