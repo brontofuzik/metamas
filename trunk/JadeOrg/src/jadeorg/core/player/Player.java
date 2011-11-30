@@ -15,6 +15,7 @@ import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
+import jadeorg.proto.State.Event;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
@@ -37,7 +38,7 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    protected PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     private Logger logger;
     
@@ -94,16 +95,15 @@ public abstract class Player extends Agent {
         // TAG YELLOW-PAGES
         //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
         
-        // Get the organization AID.
+        // Check if the organization exists.
         AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-        
         if (organizationAID != null) {
             // The organization exists.
             addBehaviour(new EnactProtocolInitiator(organizationAID, roleName));
         } else {
             // The organization does not exist.
-            throw new PlayerException(this, String.format(
-                "Error enacting a role. The organization '%1$s' does not exist.", organizationName));
+            String message = String.format("Error enacting a role. The organization '%1$s' does not exist.", organizationName);
+            throw new PlayerException(this, message);
         }
     }
     
@@ -120,21 +120,25 @@ public abstract class Player extends Agent {
     
     // ----- ACTIVATE & DEACTIVATE -----
     
-    protected void activateRole(String roleName) throws PlayerException {
+    protected void activateRoleInitiator(String roleName) throws PlayerException {
+        logInfo(String.format("Activating the role '%1$s'.", roleName));
+        
+        // Check if the role can be activated.
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
-            addBehaviour(new ActivateProtocolInitiator(knowledgeBase.getRoleAID(roleName)));
+            AID roleAID = knowledgeBase.getEnactedRole(roleName).getRoleAID();
+            addBehaviour(new ActivateProtocolInitiator(roleAID));
         } else {
             // The role can not be activated.
-            String message = String.format("I cannot activate the role '%1$' because I do not enact it.", roleName);
+            String message = String.format("Error activating the role '%1$s'. It is not enacted.", roleName);
             throw new PlayerException(this, message);
         }
     }
     
-    protected void deactivateRole(String roleName) throws PlayerException {
+    protected void deactivateRoleInitiator(String roleName) throws PlayerException {
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
-            addBehaviour(new DeactivateProtocolInitiator(knowledgeBase.getRoleAID(roleName)));
+            addBehaviour(new DeactivateProtocolInitiator(knowledgeBase.getEnactedRole(roleName).getRoleAID()));
         } else {
             // The role can not be deactivated.
             String message = String.format("I cannot deactivate the role '%1$' because I do not play it.", roleName);
@@ -470,7 +474,7 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'Success end' state.
+         * The 'SuccessEnd successEnd' state.
          * A state in which the 'Enact' protocol initiator party ends.
          */
         private class SuccessEnd extends ActiveState {
@@ -500,7 +504,7 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'Fail end' state.
+         * The 'Fail successEnd' state.
          * A state in which the 'Enact' protocol initiator party ends.
          */
         private class FailureEnd extends ActiveState {
@@ -601,7 +605,7 @@ public abstract class Player extends Agent {
 //            // Register the transitions (NEW).
 //            sendDeactRequest.registerDefaultTransition(receiveDeactReply);
 //            
-//            receiveDeactReply.registerDefaultTransition(end);
+//            receiveDeactReply.registerDefaultTransition(successEnd);
         }
         
         // </editor-fold>
@@ -686,7 +690,7 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'End' active state.
+         * The 'SuccessEnd' active state.
          * A state in which the 'Deact' initiator party ends.
          */
         private class End extends ActiveState {
@@ -766,23 +770,27 @@ public abstract class Player extends Agent {
             // ----- States -----
             State sendActivateRequest = new SendActivateRequest();
             State receiveActivateReply = new ReceiveActivateReply();
-            State end = new End();
+            State successEnd = new SuccessEnd();
+            State failureEnd = new FailureEnd();
             // ------------------
             
             // Register the states.
             registerFirstState(sendActivateRequest);
             registerState(receiveActivateReply);
-            registerLastState(end);
+            registerLastState(successEnd);
+            registerLastState(failureEnd);
             
             // Register the transitions (OLD).
             registerDefaultTransition(sendActivateRequest, receiveActivateReply);
             
-            registerDefaultTransition(receiveActivateReply, end);
+            registerTransition(receiveActivateReply, successEnd, Event.SUCCESS);
+            registerTransition(receiveActivateReply, failureEnd, Event.FAILURE);
            
 //            // Register the transitions (NEW).
 //            sendActivateRequest.registerDefaultTransition(receiveActivateReply);
 //            
-//            receiveActivateReply.registerDefaultTransition(end);  
+//            receiveActivateReply.registerTransition(Event.SUCCESS, successEnd); 
+//            receiveActivateReply.registerTransition(Event.FAILURE, failureEnd);
         }
         
         // </editor-fold>
@@ -869,20 +877,20 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'End' active state.
+         * The 'Success end' active state.
          * A state in which the 'Activate' protocol initiator party ends.
          */
-        private class End extends ActiveState {
+        private class SuccessEnd extends ActiveState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "end";
+            private static final String NAME = "success-end";
             
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            End() {
+            SuccessEnd() {
                 super(NAME);
             }
             
@@ -892,13 +900,37 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                logInfo("Activate role initiator party succeeded.");
             }
             
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Failure end' active state.
+         * A state in which the 'Activate' protocol initiator party ends.
+         */
+        private class FailureEnd extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "failure-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            FailureEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
             @Override
-            public int onEnd() {
-                // TODO Implement.
-                return 0;
+            public void action() {
+                logInfo("Activate role initiator party failed.");
             }
             
             // </editor-fold>
@@ -968,7 +1000,7 @@ public abstract class Player extends Agent {
 //            // Register the transitions (NEW).
 //            sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 //            
-//            receiveDeactivateReply.registerDefaultTransition(end);  
+//            receiveDeactivateReply.registerDefaultTransition(successEnd);  
         }
         
         // </editor-fold>
@@ -1039,7 +1071,7 @@ public abstract class Player extends Agent {
         }
         
         /**
-         * The 'End' active state.
+         * The 'SuccessEnd' active state.
          * A state in which the 'Deactivate' protocol initiator party ends.
          */
         private class End extends ActiveState {

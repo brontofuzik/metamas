@@ -8,21 +8,21 @@ import jade.core.AID;
  * @since 2011-10-29
  * @version %I% %G%
  */
-class RoleDescription {
+public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The role AID. */
-    private AID roleAID;
     
     /** The name of the role */
     private String roleName;
     
-    /** The organization AID. */
-    private AID organizationAID;
+    /** The role AID. */
+    private AID roleAID;
     
     /** The name of the organization */
     private String organizationName;
+    
+    /** The organization AID. */
+    private AID organizationAID;
 
     // </editor-fold>
     
