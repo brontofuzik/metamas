@@ -3,6 +3,7 @@ package jadeorg.core.player.kb;
 import jadeorg.core.player.kb.RoleDescription;
 import jade.core.AID;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * A player knowledge base.
@@ -16,7 +17,7 @@ public class PlayerKnowledgeBase {
     
     private Hashtable<String, RoleDescription> enactedRoles = new Hashtable<String, RoleDescription>();
     
-    private String activeRole;
+    private RoleDescription activeRole;
     
     // </editor-fold>
     
@@ -24,8 +25,16 @@ public class PlayerKnowledgeBase {
 
     // ----- QUERY -----
     
-    public AID getRoleAID(String roleName) {
-        return getRoleDescription(roleName).getRoleAID();
+    public Iterable<RoleDescription> getEnactedRoles() {
+        return enactedRoles.values();
+    }
+    
+    public RoleDescription getEnactedRole(String roleName) {
+        return enactedRoles.get(roleName);
+    }
+    
+    public RoleDescription getActiveRole() {
+        return activeRole;
     }
     
     /**
@@ -51,7 +60,7 @@ public class PlayerKnowledgeBase {
         return roleName.equals(activeRole);
     }
     
-        public boolean canActivateRole(String roleName) {
+    public boolean canActivateRole(String roleName) {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
@@ -64,7 +73,7 @@ public class PlayerKnowledgeBase {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------   
     
-        return doesPlayRole(roleName);
+        return doesEnactRole(roleName) && doesPlayRole(roleName);
     }
     
     // ----- UPDATE -----
@@ -83,26 +92,12 @@ public class PlayerKnowledgeBase {
         assert enactedRoles.contains(roleName);
         // -------------------------
         
-        activeRole = roleName;
+        activeRole = getEnactedRole(roleName);
     }
     
     public void deactivateRole() {
         activeRole = null;
     }
-    
-    // ---------- PRIVATE ----------
-    
-    private RoleDescription getRoleDescription(String roleName) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        // -------------------------
         
-        return enactedRoles.get(roleName);
-    }
-    
-    private RoleDescription getActiveRoleDescription() {
-        return getRoleDescription(activeRole);
-    }
-    
     // </editor-fold>
 }
