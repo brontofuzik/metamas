@@ -7,6 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 import jadeorg.core.organization.behaviours.InvokePowerResponder;
 import jadeorg.core.organization.behaviours.Power;
@@ -15,6 +16,7 @@ import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
+import jadeorg.proto.State.Event;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.RoleMessage;
@@ -23,7 +25,9 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateReplyMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateReplyMessage;
-import jadeorg.proto.roleprotocol.invokeprotocol.InvokeRequestMessage;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokeRequestMessage;
+import jadeorg.util.ManagerBehaviour;
 import java.util.logging.Level;
 
 /**
@@ -223,74 +227,69 @@ public class Role extends Agent {
     /**
      * A role manager behaviour.
      */
-    private class RoleManager extends Party {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "role-manager";
-        
-        // </editor-fold>
+    private class RoleManager extends ManagerBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         RoleManager() {
-            super(NAME);
+            addHandler(new ActivateRoleHandler());
+            addHandler(new DeactivateRoleHandler());
+            addHandler(new InvokePowerHandler());
         }
         
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected Protocol getProtocol() {
-            return RoleProtocol.getInstance();
-        }
-                
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        class ReceiveRoleRequest extends PassiveState {
+        /**
+         * The 'Activate role' protocol handler.
+         */
+        private class ActivateRoleHandler extends HandlerBehaviour {
 
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "receive-role-request";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            public ReceiveRoleRequest() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
             @Override
             public void action() {
-                RoleMessage roleMessage = (RoleMessage)receive(RoleMessage.class, null);              
-                if (roleMessage != null) {
-                    if (roleMessage instanceof ActivateRequestMessage) {
-                        ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)roleMessage;
-                        activateRole(activateRequestMessage.getSenderPlayer());
-                    } else if (roleMessage instanceof DeactivateRequestMessage) {
-                        DeactivateRequestMessage deactivateRequestMessage = (DeactivateRequestMessage)roleMessage;
-                        deactivateRole(deactivateRequestMessage.getSenderPlayer());
-                    } else if (roleMessage instanceof InvokeRequestMessage) {
-                        InvokeRequestMessage invokeRequestMessage = (InvokeRequestMessage)roleMessage;
-                        invokePower(invokeRequestMessage.getSenderPlayer(), invokeRequestMessage.getPower(), invokeRequestMessage.getArgs());
-                    } else {
-                        // TODO Send 'Not understood' message to the player.
-                        assert false;
-                    }
-                } else {
-                    block();
+                MessageTemplate activateRequestTemplate = ActivateProtocol.getInstance()
+                    .getTemplate(ActivateRequestMessage.class);
+                ACLMessage activateRequestMessage = receive(activateRequestTemplate);
+                if (activateRequestMessage != null) {
+                    putBack(activateRequestMessage);
+                    activateRole(activateRequestMessage.getSender());
                 }
             }
-            
-            // </editor-fold>
+        }
+        
+        /**
+         * The 'Deactivate role' protocol handler.
+         */
+        private class DeactivateRoleHandler extends HandlerBehaviour {
+
+            @Override
+            public void action() {
+                MessageTemplate deactivateRequestTemplate = DeactivateProtocol.getInstance()
+                    .getTemplate(DeactivateRequestMessage.class);
+                ACLMessage deactivateRequestMessage = receive(deactivateRequestTemplate);
+                if (deactivateRequestMessage != null) {
+                    putBack(deactivateRequestMessage);
+                    deactivateRole(deactivateRequestMessage.getSender());
+                }
+            }
+        }
+        
+        /**
+         * The 'Invoke power' protocol handler.
+         */
+        private class InvokePowerHandler extends HandlerBehaviour {
+
+            @Override
+            public void action() {
+                MessageTemplate invokeRequestTemplate = InvokePowerProtocol.getInstance()
+                    .getTemplate(InvokeRequestMessage.class);
+                ACLMessage invokeRequestMessage = receive(invokeRequestTemplate);
+                if (invokeRequestMessage != null) {
+                    putBack(invokeRequestMessage);
+ //                   invokePower(invokeRequestMessage.getSender());
+                }
+            }
         }
         
         // </editor-fold>
@@ -339,17 +338,27 @@ public class Role extends Agent {
             // ----- States -----
             State receiveActivateRequest = new ReceiveActivateRequest();
             State sendActivateReply = new SendActivateReply();
-            State end = new End();
+            State sendFailure = new SendFailure();
+            State successEnd = new SuccessEnd();
+            State failureEnd = new FailureEnd();
             // ------------------
             
             // Register states.
             registerFirstState(receiveActivateRequest);
             registerState(sendActivateReply);
-            registerLastState(end);
+            registerState(sendFailure);
+            registerLastState(successEnd);
+            registerLastState(failureEnd);
             
             // Register transitions.
-            receiveActivateRequest.registerDefaultTransition(sendActivateReply);
-            sendActivateReply.registerDefaultTransition(end);
+            receiveActivateRequest.registerTransition(Event.SUCCESS ,sendActivateReply);
+            receiveActivateRequest.registerTransition(Event.FAILURE, sendFailure);
+          
+            sendActivateReply.registerDefaultTransition(successEnd);
+            
+            sendActivateReply.registerDefaultTransition(successEnd);
+            
+            sendFailure.registerDefaultTransition(failureEnd);
         }
         
         // </editor-fold>
@@ -358,12 +367,10 @@ public class Role extends Agent {
         
         /**
          * The 'Receive activate request' (passive) state.
-         * Messages received:
-         * - 'Activate request' message
          */
         private class ReceiveActivateRequest extends PassiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
             private static final String NAME = "receive-activate-request";
             
@@ -389,8 +396,6 @@ public class Role extends Agent {
         
         /**
          * The 'Send activate reply' (active) state.
-         * Messages sent:
-         * - 'Activate reply' message
          */
         private class SendActivateReply extends ActiveState {
 
@@ -432,19 +437,19 @@ public class Role extends Agent {
         }
         
         /**
-         * The 'End' (active) state.
+         * The 'Send failure' (active) state.
          */
-        private class End extends ActiveState {
+        private class SendFailure extends ActiveState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
-            private static final String NAME = "end";
+            private static final String NAME = "send-failure";
             
             // </editor-fold>
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            End() {
+            SendFailure() {
                 super(NAME);
             }
             
@@ -454,7 +459,65 @@ public class Role extends Agent {
             
             @Override
             public void action() {
-                // Do nothing.
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Success end' (active) state.
+         */
+        private class SuccessEnd extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "success-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SuccessEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Activate role initiator protocol succeeded.");
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Failure end' (active) state.
+         */
+        private class FailureEnd extends ActiveState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "failure-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            FailureEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Activate role initiator protocol failed.");
             }
             
             // </editor-fold>
@@ -594,7 +657,7 @@ public class Role extends Agent {
         }
         
         /**
-         * The 'End' (active) state.
+         * The 'SuccessEnd' (active) state.
          */
         private class End extends ActiveState {
 
