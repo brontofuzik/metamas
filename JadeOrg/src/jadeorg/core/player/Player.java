@@ -16,16 +16,16 @@ import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
 import jadeorg.proto.State.Event;
-import jadeorg.proto.roleprotocol.activateprotocol.ActivateRoleProtocol;
-import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRoleProtocol;
-import jadeorg.proto.organizationprotocol.deactprotocol.DeactRoleProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.EnactRoleProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsInformMessage;
-import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
-import jadeorg.proto.organizationprotocol.deactprotocol.DeactRequestMessage;
-import jadeorg.proto.organizationprotocol.enactprotocol.EnactRequestMessage;
-import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
-import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
+import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
+import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import java.util.logging.Level;
 
 /**
