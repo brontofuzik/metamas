@@ -1,1 +1,0 @@
-DemoOrgJadeGenerated\bin\run.bat

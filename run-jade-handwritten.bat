@@ -1,1 +1,0 @@
-DemoOrgJadeHandwritten\bin\run.bat
