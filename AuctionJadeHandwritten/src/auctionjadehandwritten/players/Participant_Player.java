@@ -1,11 +1,13 @@
 package auctionjadehandwritten.players;
 
+import jade.core.Agent;
+import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import jadeorg.core.player.PlayerException;
+import jadeorg.core.player.kb.RoleDescription;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A Participant player.
@@ -38,16 +40,10 @@ public class Participant_Player extends Player {
     protected void setup() {
         super.setup();
         
-        doWait(1000);
-        
-        for (Object argument : getArguments()) {            
-            RoleFullName roleFullName = new RoleFullName((String)argument);
-            try {
-                enactRoleInitiator(roleFullName.getOrganizationName(), roleFullName.getRoleName());
-            } catch (PlayerException ex) {
-                log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
-            }
-        }
+        addBehaviour(new EnactRolesWakerBehaviour(this));
+        addBehaviour(new ActivateRoleWakerBehaviour(this));
+        addBehaviour(new DeactivateRoleWakerBehaviour(this));
+        addBehaviour(new DeactRolesWakerBehaviour(this));
     }
     
     /**
@@ -106,12 +102,103 @@ public class Participant_Player extends Player {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    private static class EnactRolesWakerBehaviour extends WakerBehaviour {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        EnactRolesWakerBehaviour(Agent agent) {
+            super(agent, 2000);
+        }
+        
+        // </editor-fold>
+        
+        @Override
+        protected void handleElapsedTimeout() {
+            for (Object argument : myAgent.getArguments()) {            
+                RoleFullName roleToEnact = new RoleFullName((String)argument);
+                try {
+                    ((Player)myAgent).enactRoleInitiator(roleToEnact.getOrganizationName(), roleToEnact.getRoleName());
+                } catch (PlayerException ex) {
+                    ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                }
+            }
+        }
+        
+    }
+    
+    private static class ActivateRoleWakerBehaviour extends WakerBehaviour {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ActivateRoleWakerBehaviour(Agent agent) {
+            super(agent, 4000);
+        }
+        
+        // </editor-fold>
+        
+        @Override
+        protected void handleElapsedTimeout() {
+            RoleDescription roleToActivate = ((Player)myAgent).knowledgeBase.getEnactedRoles().iterator().next();
+            try {
+                ((Player)myAgent).activateRoleInitiator(roleToActivate.getRoleName());
+            } catch (PlayerException ex) {
+                ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+            }
+        }
+        
+    }
+        
+    private static class DeactivateRoleWakerBehaviour extends WakerBehaviour {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        DeactivateRoleWakerBehaviour(Agent agent) {
+            super(agent, 6000);
+        }
+        
+        // </editor-fold>
+        
+        @Override
+        protected void handleElapsedTimeout() {
+            RoleDescription roleToDeactivate = ((Player)myAgent).knowledgeBase.getActiveRole();
+            try {
+                ((Player)myAgent).deactivateRoleInitiator(roleToDeactivate.getRoleName());
+            } catch (PlayerException ex) {
+                ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+            }
+        }
+        
+    }
+            
+    private static class DeactRolesWakerBehaviour extends WakerBehaviour {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        DeactRolesWakerBehaviour(Agent agent) {
+            super(agent, 8000);
+        }
+        
+        // </editor-fold>
+        
+        @Override
+        protected void handleElapsedTimeout() {
+                for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
+                try {
+                    ((Player)myAgent).deactRoleInitiator(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
+                } catch (PlayerException ex) {
+                    ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                }
+            }
+        }
+        
+    }
+    
     private static class RoleFullName {
         
         /** The name of organization instance. */
         private String organizationName;
         
-        /** The name of role class. */
+        /** The name of roleToDeact class. */
         private String roleName;
         
         RoleFullName(String roleFullName) {
