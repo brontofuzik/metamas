@@ -11,6 +11,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 import jadeorg.core.organization.behaviours.InvokePowerResponder;
 import jadeorg.core.organization.behaviours.Power;
+import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -45,7 +46,7 @@ public class Role extends Agent {
     
     private InvokePowerResponder invokePowerResponder = new InvokePowerResponder();
     
-    private RoleState state = RoleState.IDLE;
+    private RoleState state = RoleState.INACTIVE;
     
     private AID playerAID;
     
@@ -65,10 +66,8 @@ public class Role extends Agent {
     
     private enum RoleState
     {
-        IDLE,
-        READY,
+        INACTIVE,
         ACTIVE,
-        INACTIVE
     }
         
     // </editor-fold>
@@ -113,6 +112,14 @@ public class Role extends Agent {
         // -------------------------
         
         this.myOrganization = organization;
+    }
+    
+    AID getPlayerAID() {
+        return playerAID;
+    }
+    
+    void setPlayerAID(AID playerAID) {
+        this.playerAID = playerAID;
     }
     
     // </editor-fold>
@@ -186,7 +193,9 @@ public class Role extends Agent {
     
     // ----- Role activation/deactivation -----
     
-    private void activateRole(AID playerAID) {
+    private void activateRoleResponder(AID playerAID) {
+        logInfo("Responding to the 'Activate role' protocol.");
+        
         if (playerAID.equals(this.playerAID)) {
             addBehaviour(new ActivateProtocolResponder(playerAID));
         } else {
@@ -194,7 +203,9 @@ public class Role extends Agent {
         }
     }
 
-    private void deactivateRole(AID playerAID) {
+    private void deactivateRoleResponder(AID playerAID) {
+        logInfo("Responding to the 'Deactivate role' protocol.");
+        
         if (playerAID.equals(this.playerAID)) {
             addBehaviour(new DeactivateProtocolResponder(playerAID));
         } else {
@@ -252,7 +263,7 @@ public class Role extends Agent {
                 ACLMessage activateRequestMessage = receive(activateRequestTemplate);
                 if (activateRequestMessage != null) {
                     putBack(activateRequestMessage);
-                    activateRole(activateRequestMessage.getSender());
+                    activateRoleResponder(activateRequestMessage.getSender());
                 }
             }
         }
@@ -269,7 +280,7 @@ public class Role extends Agent {
                 ACLMessage deactivateRequestMessage = receive(deactivateRequestTemplate);
                 if (deactivateRequestMessage != null) {
                     putBack(deactivateRequestMessage);
-                    deactivateRole(deactivateRequestMessage.getSender());
+                    deactivateRoleResponder(deactivateRequestMessage.getSender());
                 }
             }
         }
@@ -387,7 +398,30 @@ public class Role extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                logInfo("Receiving activate request.");
+                
+                ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)
+                    receive(ActivateRequestMessage.class, playerAID);
+                
+                if (activateRequestMessage != null) {
+                    logInfo("Activate request received.");
+                    
+                    if (isActivable()) {
+                        state = RoleState.ACTIVE;
+                        setExitValue(Event.SUCCESS);
+                    } else {
+                        setExitValue(Event.FAILURE);
+                    }
+                } else {
+                    loop();
+                }
+            }
+            
+            // ---------- PRIVATE ----------
+            
+            private boolean isActivable() {
+                System.out.println(state);
+                return state == RoleState.INACTIVE;
             }
             
             // </editor-fold>
@@ -416,20 +450,15 @@ public class Role extends Agent {
             
             @Override
             public void action() {
-//                ActivateReplyMessage activateReplyMessage = new ActivateReplyMessage();      
-//                if (isActivable()) {
-//                    activateReplyMessage.setAgree(true);
-//                    state = RoleState.ACTIVE;
-//                } else {
-//                    activateReplyMessage.setAgree(false);
-//                }
-//                activateReplyMessage.addReceiver(playerAID);
-//                    
-//                send(ActivateReplyMessage.class, activateReplyMessage);
-            }
+                logInfo("Sending activate reply.");
             
-            private boolean isActivable() {
-                return state == RoleState.READY || state == RoleState.INACTIVE;
+                // Create the 'Activate reply' JadeOrg message.
+                ACLMessageWrapper activateReplyMessage = ActivateRoleProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.AGREE);
+                activateReplyMessage.addReceiver(playerAID);
+
+                send(ACLMessageWrapper.class, activateReplyMessage);
+                logInfo("Activate reply sent");
             }
             
             // </editor-fold>
@@ -458,7 +487,15 @@ public class Role extends Agent {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                logInfo("Sending failure.");
+                
+                // Create the 'Failure' JadeOrg message.
+                ACLMessageWrapper failureMessage = ActivateRoleProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.FAILURE);
+                failureMessage.addReceiver(playerAID);
+
+                send(ACLMessageWrapper.class, failureMessage);
+                logInfo("Failure sent.");
             }
             
             // </editor-fold>
@@ -649,7 +686,7 @@ public class Role extends Agent {
             }
             
             private boolean isDeactivable() {
-                return state == RoleState.READY || state == RoleState.INACTIVE;
+                return state == RoleState.ACTIVE;
             }
             
             // </editor-fold>  

@@ -7,6 +7,8 @@ import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.organizationprotocol.OrganizationMessage;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A 'Role AID' message.
@@ -60,6 +62,8 @@ public class RoleAIDMessage extends OrganizationMessage {
     
     static class RoleAIDMessageGenerator extends MessageGenerator {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public ACLMessage generate(Message message) {
             RoleAIDMessage roleAIDMessage = (RoleAIDMessage)message;
@@ -80,10 +84,20 @@ public class RoleAIDMessage extends OrganizationMessage {
         private String generateContent(RoleAIDMessage roleAIDMessage) {
             return String.format("role-aid(%1$s)", roleAIDMessage.getRoleAID().getName());
         }
+        
+        // </editor-fold>
     }
     
     static class RoleAIDMessageParser extends MessageParser {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private static final Pattern contentPattern = Pattern.compile("role-aid\\((.*)\\)");
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public Message parse(ACLMessage aclMessage) {
             // TODO
@@ -98,8 +112,14 @@ public class RoleAIDMessage extends OrganizationMessage {
         // ---------- PRIVATE ----------
         
         private void parseContent(RoleAIDMessage roleAIDMessage, String content) {
-            roleAIDMessage.setRoleAID(new AID(content, true));
+            Matcher matcher = contentPattern.matcher(content);
+            matcher.matches();
+            
+            String roleAID = matcher.group(1);
+            roleAIDMessage.setRoleAID(new AID(roleAID, true));
         }
+        
+        // </editor-fold> 
     }
         
     // </editor-fold>

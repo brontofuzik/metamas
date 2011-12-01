@@ -28,12 +28,12 @@ public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RoleDescription(AID roleAID, AID organizationAID) {
+    public RoleDescription(String roleName, AID roleAID, String organizationName, AID organizationAID) {
+        this.roleName = roleName;
         this.roleAID = roleAID;
-        roleName = roleAID.getName();
         
-        this.organizationAID = organizationAID;
-        organizationName = organizationAID.getName();       
+        this.organizationName = organizationName;
+        this.organizationAID = organizationAID;      
     }
     
     // </editor-fold>

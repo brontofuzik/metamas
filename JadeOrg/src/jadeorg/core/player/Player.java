@@ -38,7 +38,7 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    protected PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    public PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     private Logger logger;
     
@@ -66,7 +66,7 @@ public abstract class Player extends Agent {
      * @param level the level
      * @param requirementsInformMessage the requirementsInformMessage
      */
-    protected void log(Level level, String message) {
+    public void log(Level level, String message) {
         if (logger.isLoggable(level)) {
             logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
         }
@@ -76,7 +76,7 @@ public abstract class Player extends Agent {
      * Logs an INFO-level requirementsInformMessage.
      * @param requirementsInformMessage the INFO-level requirementsInformMessage
      */
-    protected void logInfo(String message) {
+    public void logInfo(String message) {
         log(Level.INFO, message);
     }
     
@@ -89,8 +89,8 @@ public abstract class Player extends Agent {
     
     // ----- ENACT & DEACT -----
     
-    protected void enactRoleInitiator(String organizationName, String roleName) throws PlayerException {
-        logInfo(String.format("Enacting the role '%1$s' in the organization '%2$s'.", roleName, organizationName));
+    public void enactRoleInitiator(String organizationName, String roleName) throws PlayerException {
+        logInfo(String.format("Initiating the 'Enact role' (%1$s: %2$s) protocol.", organizationName, roleName));
         
         // TAG YELLOW-PAGES
         //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
@@ -108,7 +108,9 @@ public abstract class Player extends Agent {
     }
     
     // TODO Check if the role is enacted.
-    protected void deactRoleInitiator(String organizationName, String roleName) throws PlayerException {        
+    public void deactRoleInitiator(String organizationName, String roleName) throws PlayerException {        
+        logInfo(String.format("Initiating the 'Deact role' (%1$s: %2$s) protocol.", organizationName, roleName));
+        
         DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
         if (organization != null) {
             addBehaviour(new DeactProtocolInitiator(organization.getName(), roleName));
@@ -120,8 +122,8 @@ public abstract class Player extends Agent {
     
     // ----- ACTIVATE & DEACTIVATE -----
     
-    protected void activateRoleInitiator(String roleName) throws PlayerException {
-        logInfo(String.format("Activating the role '%1$s'.", roleName));
+    public void activateRoleInitiator(String roleName) throws PlayerException {
+        logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.", roleName));
         
         // Check if the role can be activated.
         if (knowledgeBase.canActivateRole(roleName)) {
@@ -135,7 +137,9 @@ public abstract class Player extends Agent {
         }
     }
     
-    protected void deactivateRoleInitiator(String roleName) throws PlayerException {
+    public void deactivateRoleInitiator(String roleName) throws PlayerException {
+        logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.", roleName));
+        
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
             addBehaviour(new DeactivateProtocolInitiator(knowledgeBase.getEnactedRole(roleName).getRoleAID()));
@@ -463,7 +467,7 @@ public abstract class Player extends Agent {
                     logInfo("Role AID received.");
                     
                     AID roleAID = roleAIDMessage.getRoleAID();
-                    knowledgeBase.enactRole(roleAID, organizationAID);
+                    knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
                     setExitValue(Event.SUCCESS);
                 } else {
                     block();
@@ -858,14 +862,19 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
-                ACLMessageWrapper aclMessageWraper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, roleAID);
+                logInfo("Receiving activate reply.");
                 
-                if (aclMessageWraper != null) {
-                    if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                ACLMessageWrapper activateReplyMessage = (ACLMessageWrapper)
+                    receive(ACLMessageWrapper.class, roleAID);
+                
+                if (activateReplyMessage != null) {
+                    logInfo("Activate reply received.");
+                    
+                    if (activateReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
                         // The 'Activate' request was agreed.
                         knowledgeBase.activateRole(roleAID.getName());
                         setExitValue(Event.SUCCESS);
-                    } else if (aclMessageWraper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                    } else if (activateReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
                         // The 'Activate' request was refused.
                         setExitValue(Event.FAILURE);
                     } else {
