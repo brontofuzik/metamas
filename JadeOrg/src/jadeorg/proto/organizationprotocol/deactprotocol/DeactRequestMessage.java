@@ -12,7 +12,7 @@ import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.organizationprotocol.OrganizationMessage;
-import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactRoleProtocol;
 
 /**
  * A 'Deact request' message.
@@ -129,7 +129,7 @@ public class DeactRequestMessage extends OrganizationMessage {
 
             // Generate the ACL message header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(DeactProtocol.getInstance().getName());
+            aclMessage.setProtocol(DeactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(deactRequestMessage.getReceiverOrganization());
 
             // Generate the ACL message content.

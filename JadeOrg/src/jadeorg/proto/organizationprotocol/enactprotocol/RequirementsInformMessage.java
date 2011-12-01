@@ -92,7 +92,7 @@ public class RequirementsInformMessage extends OrganizationMessage {
 
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.setProtocol(EnactProtocol.getInstance().getName());
+            aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(requirementsInformMessage.getReceiverPlayer());
 
             // Generate the content.

@@ -8,23 +8,23 @@ import jadeorg.proto.Protocol;
  * @since 2011-10-29
  * @version %I% %G%
  */
-public class ActivateProtocol extends Protocol {
+public class ActivateRoleProtocol extends Protocol {
 
     // <editor-fold defaultstate="collapsed" desc="Constant field">
     
-    private static final String NAME = "activate-protocol";
+    private static final String NAME = "activate-role-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static ActivateProtocol singleton;
+    private static ActivateRoleProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private ActivateProtocol() {
+    private ActivateRoleProtocol() {
         super(NAME);
     }
     
@@ -32,9 +32,9 @@ public class ActivateProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public static ActivateProtocol getInstance() {
+    public static ActivateRoleProtocol getInstance() {
         if (singleton == null) {
-            singleton = new ActivateProtocol();
+            singleton = new ActivateRoleProtocol();
         }
         return singleton;
     }

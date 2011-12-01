@@ -16,10 +16,10 @@ import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
 import jadeorg.proto.State.Event;
-import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
-import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
-import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
-import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateRoleProtocol;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRoleProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactRoleProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactRequestMessage;
@@ -215,7 +215,7 @@ public abstract class Player extends Agent {
 
         @Override
         protected Protocol getProtocol() {
-            return EnactProtocol.getInstance();
+            return EnactRoleProtocol.getInstance();
         }
         
         // </editor-fold>
@@ -382,7 +382,7 @@ public abstract class Player extends Agent {
                 logInfo("Sending requirements reply.");
                 
                 // Create the 'Requirements reply' JadeOrg message.
-                ACLMessageWrapper requirementsReplyMessage = EnactProtocol.getInstance()
+                ACLMessageWrapper requirementsReplyMessage = EnactRoleProtocol.getInstance()
                     .getACLMessageWrapper(ACLMessage.AGREE);
                 System.out.println(requirementsReplyMessage.getWrappedACLMessage().getProtocol());
                 requirementsReplyMessage.addReceiver(organizationAID);
@@ -420,7 +420,7 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 // Create the 'Failure' JadeOrg message.
-                ACLMessageWrapper failureMessage = EnactProtocol.getInstance()
+                ACLMessageWrapper failureMessage = EnactRoleProtocol.getInstance()
                     .getACLMessageWrapper(ACLMessage.FAILURE);
                 failureMessage.addReceiver(organizationAID);
                 
@@ -578,7 +578,7 @@ public abstract class Player extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return DeactProtocol.getInstance();
+            return DeactRoleProtocol.getInstance();
         }
         
         // </editor-fold>
@@ -759,7 +759,7 @@ public abstract class Player extends Agent {
 
         @Override
         protected Protocol getProtocol() {
-            return ActivateProtocol.getInstance();
+            return ActivateRoleProtocol.getInstance();
         }
         
         // </editor-fold>
@@ -821,10 +821,14 @@ public abstract class Player extends Agent {
             
             @Override
             public void action() {
+                logInfo("Sending activate request.");
+                
                 ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
                 activateRequestMessage.setReceiverRole(roleAID);
                 
                 send(ActivateRequestMessage.class, activateRequestMessage);
+                
+                logInfo("Activate request sent.");
             }
             
             // </editor-fold>
@@ -973,7 +977,7 @@ public abstract class Player extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return DeactivateProtocol.getInstance();
+            return DeactivateRoleProtocol.getInstance();
         }
         
         // </editor-fold>

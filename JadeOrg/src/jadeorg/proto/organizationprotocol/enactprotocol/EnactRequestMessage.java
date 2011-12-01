@@ -6,7 +6,7 @@ import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
 import jadeorg.proto.organizationprotocol.OrganizationMessage;
-import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRoleProtocol;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,7 +86,7 @@ public class EnactRequestMessage extends OrganizationMessage {
 
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(EnactProtocol.getInstance().getName());
+            aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(enactRequestMessage.getReceiverOrganization());
 
             // Generate the content.

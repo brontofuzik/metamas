@@ -10,23 +10,23 @@ import jadeorg.proto.Protocol;
  * @since 2011-10-21
  * @version %I% %G%
  */
-public class EnactProtocol extends Protocol {
+public class EnactRoleProtocol extends Protocol {
    
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "enact-protocol";
+    private static final String NAME = "enact-role-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
    
-    private static EnactProtocol singleton;
+    private static EnactRoleProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private EnactProtocol() {
+    private EnactRoleProtocol() {
         super(NAME);
         registerMessages();
     }
@@ -35,9 +35,9 @@ public class EnactProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public static EnactProtocol getInstance() {
+    public static EnactRoleProtocol getInstance() {
         if (singleton == null) {
-            singleton = new EnactProtocol();
+            singleton = new EnactRoleProtocol();
         }
         return singleton;
     }

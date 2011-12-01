@@ -9,23 +9,23 @@ import jadeorg.proto.Protocol;
  * @since 2011-10-29
  * @version %I% %G%
  */
-public class DeactivateProtocol extends Protocol {
+public class DeactivateRoleProtocol extends Protocol {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "deactivate-protocol";
+    private static final String NAME = "deactivate-role-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static DeactivateProtocol singleton;
+    private static DeactivateRoleProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private DeactivateProtocol() {
+    private DeactivateRoleProtocol() {
         super(NAME);
     }
     
@@ -33,9 +33,9 @@ public class DeactivateProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public static DeactivateProtocol getInstance() {
+    public static DeactivateRoleProtocol getInstance() {
         if (singleton == null) {
-            singleton = new DeactivateProtocol();
+            singleton = new DeactivateRoleProtocol();
         }
         return singleton;
     }
