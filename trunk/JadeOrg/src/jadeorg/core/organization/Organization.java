@@ -506,12 +506,15 @@ public abstract class Organization extends Agent {
             
             @Override
             public void action() {
+                logInfo("Sending failure.");
+                
                 // Create the 'Failure' JadeOrg message.
                 ACLMessageWrapper failureMessage = EnactRoleProtocol.getInstance()
                     .getACLMessageWrapper(ACLMessage.FAILURE);
                 failureMessage.addReceiver(playerAID);
 
                 send(ACLMessageWrapper.class, failureMessage);
+                logInfo("Failure sent");
             }
             
             // </editor-fold>
@@ -586,6 +589,7 @@ public abstract class Organization extends Agent {
                 logInfo("Creating role agent.");
                
                 Role role = createRoleAgent(roleName, roleName);
+                role.setPlayerAID(playerAID);
                 startRoleAgent(role);
 
                 knowledgeBase.updateRoleIsEnacted(role, playerAID);

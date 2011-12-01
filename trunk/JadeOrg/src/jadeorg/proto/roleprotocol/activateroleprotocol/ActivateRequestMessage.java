@@ -29,39 +29,18 @@ public class ActivateRequestMessage extends RoleMessage {
     }
     
     @Override
-    protected MessageParser createParser() {
-        return new ActivateRequestMessageParser();
-    }
-
-    @Override
     protected MessageGenerator createGenerator() {
         return new ActivateRequestMessageGenerator();
+    }
+    
+    @Override
+    protected MessageParser createParser() {
+        return new ActivateRequestMessageParser();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Activate request' message parser.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private class ActivateRequestMessageParser extends MessageParser {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public Message parse(ACLMessage message) {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        // </editor-fold>
-    }
     
     /**
      * The 'Activate request' message generator.
@@ -71,16 +50,65 @@ public class ActivateRequestMessage extends RoleMessage {
      * @since 2011-11-06
      * @version %I% %G%
      */
-    private class ActivateRequestMessageGenerator extends MessageGenerator {
+    private static class ActivateRequestMessageGenerator extends MessageGenerator {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public ACLMessage generate(Message message) {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)message;
+
+            // Generate the header.
+            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
+            aclMessage.setProtocol(ActivateRoleProtocol.getInstance().getName());
+            aclMessage.addReceiver(activateRequestMessage.getReceiverRole());
+
+            // Generate the content.
+            aclMessage.setContent(generateContent(activateRequestMessage));
+
+            return aclMessage;
+        }
+      
+        // ---------- PRIVATE ----------
+        
+        private String generateContent(ActivateRequestMessage activateRequestMessage) {
+            return "activate";
         }
                 
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Activate request' message parser.
+     * DP: Singleton - Singleton
+     * DP: Abstract factory - Concrete product
+     * @author Lukáš Kúdela
+     * @since 2011-11-06
+     * @version %I% %G%
+     */
+    private static class ActivateRequestMessageParser extends MessageParser {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public Message parse(ACLMessage aclMessage) {
+            ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
+
+            // Parse the header.
+            activateRequestMessage.setSenderPlayer(aclMessage.getSender());
+
+            // Parse the content.
+            parseContent(activateRequestMessage, aclMessage.getContent());
+
+            return activateRequestMessage;
+        }
+        
+        // ---------- PRIVATE ----------
+        
+        private void parseContent(ActivateRequestMessage activateRequestMessage, String content) {
+            // Do nothing.
+        }
+        
         // </editor-fold>
     }
     

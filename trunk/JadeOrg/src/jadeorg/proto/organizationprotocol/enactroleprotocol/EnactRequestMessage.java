@@ -71,7 +71,7 @@ public class EnactRequestMessage extends OrganizationMessage {
      * @author Lukáš Kúdela (2011-11-05)
      * @version %I% %G%
      */
-    static class EnactRequestMessageGenerator extends MessageGenerator {
+    private static class EnactRequestMessageGenerator extends MessageGenerator {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -82,7 +82,7 @@ public class EnactRequestMessage extends OrganizationMessage {
          */
         @Override
         public ACLMessage generate(Message message) {
-           EnactRequestMessage enactRequestMessage = (EnactRequestMessage)message;
+            EnactRequestMessage enactRequestMessage = (EnactRequestMessage)message;
 
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
@@ -94,6 +94,8 @@ public class EnactRequestMessage extends OrganizationMessage {
 
             return aclMessage;
         }
+        
+        // ---------- PRIVATE ----------
         
         private String generateContent(EnactRequestMessage enactRequestMessage) {
             return String.format("enact(%1$s)", enactRequestMessage.getRoleName());
@@ -109,7 +111,7 @@ public class EnactRequestMessage extends OrganizationMessage {
      * @author Lukáš Kúdela (2011-11-05)
      * @version %I% %G%
      */
-    static class EnactRequestMessageParser extends MessageParser {
+    private static class EnactRequestMessageParser extends MessageParser {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
@@ -136,6 +138,8 @@ public class EnactRequestMessage extends OrganizationMessage {
 
             return enactRequestMessage;
         }
+        
+        // ---------- PRIVATE ----------
         
         private void parseContent(EnactRequestMessage enactRequestMessage, String content) {
             Matcher matcher = contentPattern.matcher(content);

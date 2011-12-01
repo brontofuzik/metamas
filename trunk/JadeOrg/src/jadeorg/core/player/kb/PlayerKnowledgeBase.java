@@ -49,7 +49,7 @@ public class PlayerKnowledgeBase {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
         
-        return enactedRoles.contains(roleName);
+        return enactedRoles.containsKey(roleName);
     }
     
     public boolean doesPlayRole(String roleName) {
@@ -78,9 +78,9 @@ public class PlayerKnowledgeBase {
     
     // ----- UPDATE -----
     
-    public void enactRole(AID roleAID, AID organizationAID) {
-        RoleDescription roleDescription = new RoleDescription(roleAID, organizationAID);
-        enactedRoles.put(roleDescription.getRoleName(), roleDescription);
+    public void enactRole(String roleName, AID roleAID, String organizationName, AID organizationAID) {
+        RoleDescription roleDescription = new RoleDescription(roleName, roleAID, organizationName, organizationAID);
+        enactedRoles.put(roleName, roleDescription);
     }
     
     public void deactRole(String roleName) {
