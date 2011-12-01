@@ -16,12 +16,12 @@ import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 import jade.wrapper.AgentController;
 import jadeorg.lang.ACLMessageWrapper;
-import jadeorg.proto.organizationprotocol.enactprotocol.EnactProtocol;
+import jadeorg.proto.organizationprotocol.enactprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.RoleAIDMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.PassiveState;
-import jadeorg.proto.organizationprotocol.deactprotocol.DeactProtocol;
+import jadeorg.proto.organizationprotocol.deactprotocol.DeactRoleProtocol;
 import jadeorg.proto.organizationprotocol.deactprotocol.FailureMessage;
 import jadeorg.proto.organizationprotocol.deactprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactprotocol.EnactRequestMessage;
@@ -265,7 +265,7 @@ public abstract class Organization extends Agent {
 
             @Override
             public void action() {
-                MessageTemplate enactRequestTemplate = EnactProtocol.getInstance()
+                MessageTemplate enactRequestTemplate = EnactRoleProtocol.getInstance()
                     .getTemplate(EnactRequestMessage.class);
                 ACLMessage enactRequestMessage = receive(enactRequestTemplate);
                 if (enactRequestMessage != null) {
@@ -279,7 +279,7 @@ public abstract class Organization extends Agent {
 
             @Override
             public void action() {
-                MessageTemplate deactRequestTemplate = DeactProtocol.getInstance()
+                MessageTemplate deactRequestTemplate = DeactRoleProtocol.getInstance()
                     .getTemplate(DeactRequestMessage.class);
                 ACLMessage deactRequestMessage = receive(deactRequestTemplate);
                 if (deactRequestMessage != null) {
@@ -330,7 +330,7 @@ public abstract class Organization extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return EnactProtocol.getInstance();
+            return EnactRoleProtocol.getInstance();
         }
 
         // </editor-fold>
@@ -507,7 +507,7 @@ public abstract class Organization extends Agent {
             @Override
             public void action() {
                 // Create the 'Failure' JadeOrg message.
-                ACLMessageWrapper failureMessage = EnactProtocol.getInstance()
+                ACLMessageWrapper failureMessage = EnactRoleProtocol.getInstance()
                     .getACLMessageWrapper(ACLMessage.FAILURE);
                 failureMessage.addReceiver(playerAID);
 
@@ -761,7 +761,7 @@ public abstract class Organization extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return DeactProtocol.getInstance();
+            return DeactRoleProtocol.getInstance();
         }
 
         // </editor-fold>

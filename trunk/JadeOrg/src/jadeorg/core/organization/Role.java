@@ -21,9 +21,9 @@ import jadeorg.proto.roleprotocol.activateprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.RoleMessage;
 import jadeorg.proto.roleprotocol.RoleProtocol;
-import jadeorg.proto.roleprotocol.activateprotocol.ActivateProtocol;
+import jadeorg.proto.roleprotocol.activateprotocol.ActivateRoleProtocol;
 import jadeorg.proto.roleprotocol.activateprotocol.ActivateReplyMessage;
-import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateProtocol;
+import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateprotocol.DeactivateReplyMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokeRequestMessage;
@@ -248,7 +248,7 @@ public class Role extends Agent {
 
             @Override
             public void action() {
-                MessageTemplate activateRequestTemplate = ActivateProtocol.getInstance()
+                MessageTemplate activateRequestTemplate = ActivateRoleProtocol.getInstance()
                     .getTemplate(ActivateRequestMessage.class);
                 ACLMessage activateRequestMessage = receive(activateRequestTemplate);
                 if (activateRequestMessage != null) {
@@ -265,7 +265,7 @@ public class Role extends Agent {
 
             @Override
             public void action() {
-                MessageTemplate deactivateRequestTemplate = DeactivateProtocol.getInstance()
+                MessageTemplate deactivateRequestTemplate = DeactivateRoleProtocol.getInstance()
                     .getTemplate(DeactivateRequestMessage.class);
                 ACLMessage deactivateRequestMessage = receive(deactivateRequestTemplate);
                 if (deactivateRequestMessage != null) {
@@ -327,7 +327,7 @@ public class Role extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return ActivateProtocol.getInstance();
+            return ActivateRoleProtocol.getInstance();
         }
         
         // </editor-fold>
@@ -558,7 +558,7 @@ public class Role extends Agent {
         
         @Override
         protected Protocol getProtocol() {
-            return DeactivateProtocol.getInstance();
+            return DeactivateRoleProtocol.getInstance();
         }
         
         // </editor-fold>
