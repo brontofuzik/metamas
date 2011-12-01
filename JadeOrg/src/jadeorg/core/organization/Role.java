@@ -22,7 +22,6 @@ import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessag
 import jadeorg.proto.roleprotocol.RoleMessage;
 import jadeorg.proto.roleprotocol.RoleProtocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateReplyMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateReplyMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
@@ -417,16 +416,16 @@ public class Role extends Agent {
             
             @Override
             public void action() {
-                ActivateReplyMessage activateReplyMessage = new ActivateReplyMessage();      
-                if (isActivable()) {
-                    activateReplyMessage.setAgree(true);
-                    state = RoleState.ACTIVE;
-                } else {
-                    activateReplyMessage.setAgree(false);
-                }
-                activateReplyMessage.addReceiver(playerAID);
-                    
-                send(ActivateReplyMessage.class, activateReplyMessage);
+//                ActivateReplyMessage activateReplyMessage = new ActivateReplyMessage();      
+//                if (isActivable()) {
+//                    activateReplyMessage.setAgree(true);
+//                    state = RoleState.ACTIVE;
+//                } else {
+//                    activateReplyMessage.setAgree(false);
+//                }
+//                activateReplyMessage.addReceiver(playerAID);
+//                    
+//                send(ActivateReplyMessage.class, activateReplyMessage);
             }
             
             private boolean isActivable() {

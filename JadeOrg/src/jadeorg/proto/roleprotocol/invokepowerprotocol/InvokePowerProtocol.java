@@ -15,31 +15,52 @@ public class InvokePowerProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
+    /** The name of the protocol. */
     private static final String NAME = "invoke-power-protocol";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The singleton instance of this protocol. */
     private static InvokePowerProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Creates a new instance of the InvokePowerProtocol class.
+     */
     private InvokePowerProtocol() {
         super(NAME);
+        registerMessages();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the singleton instance of this protocol.
+     * @return the singleton instance of this protocol
+     */
     public static InvokePowerProtocol getInstance() {
         if (singleton == null) {
             singleton = new InvokePowerProtocol();
         }
         return singleton;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Registers the messages.
+     */
+    private void registerMessages() {
+        registerMessage(InvokeRequestMessage.class);
     }
     
     // </editor-fold>
