@@ -1,0 +1,1 @@
+cd AuctionJadeGenerated\bin
