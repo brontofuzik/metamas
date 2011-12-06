@@ -5,7 +5,6 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.core.organization.Organization;
 import jadeorg.lang.Message;
 import jadeorg.proto.State.Event;
 
@@ -108,7 +107,11 @@ public abstract class Party extends FSMBehaviour {
         if (state instanceof PassiveState) {
             registerTransition(state, state, Event.LOOP);
         }
-    }  
+    }
+    
+    // TAG STATES-IMPROVEMENT
+    protected void registerState(jadeorg.proto_new.State state) {
+    }
     
     protected void registerFirstState(State state) {
         registerFirstState((Behaviour)state, state.getName());
@@ -117,6 +120,10 @@ public abstract class Party extends FSMBehaviour {
         if (state instanceof PassiveState) {
             registerTransition(state, state, Event.LOOP);
         }
+    }
+    
+    // TAG STATES-IMPROVEMENT
+    protected void registerFirstState(jadeorg.proto_new.State state) {
     }
     
     protected void registerLastState(State state) {
@@ -128,11 +135,25 @@ public abstract class Party extends FSMBehaviour {
         }
     }
     
+    // TAG STATES-IMPROVEMENT
+    protected void registerLastState(jadeorg.proto_new.State state) {
+    }
+    
     protected void registerTransition(State fromState, State toState, Event event) {
         registerTransition(fromState.getName(), toState.getName(), event.getCode());
     }
     
+    // TAG STATES-IMPROVEMENT
+    protected void registerTransition(jadeorg.proto_new.State fromState, jadeorg.proto_new.State toState) {
+        registerTransition(fromState.getName(), toState.getName(), toState.getCode());
+    }
+    
     protected void registerDefaultTransition(State fromState, State toState) {
+        registerDefaultTransition(fromState.getName(), toState.getName());
+    }
+    
+    // TAG STATES-IMPROVEMENT
+    protected void registerDefaultTransition(jadeorg.proto_new.State fromState, jadeorg.proto_new.State toState) {
         registerDefaultTransition(fromState.getName(), toState.getName());
     }
     

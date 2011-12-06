@@ -9,7 +9,6 @@ import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import jadeorg.core.organization.YellowPages;
 import jadeorg.lang.ACLMessageWrapper;
-import jadeorg.lang.Message;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -26,6 +25,9 @@ import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
+import jadeorg.proto_new.MultiReceiverState;
+import jadeorg.proto_new.MultiSenderState;
+import jadeorg.proto_new.SimpleState;
 import java.util.logging.Level;
 
 /**
@@ -783,18 +785,12 @@ public abstract class Player extends Agent {
             registerState(receiveActivateReply);
             registerLastState(successEnd);
             registerLastState(failureEnd);
-            
-            // Register the transitions (OLD).
-            registerDefaultTransition(sendActivateRequest, receiveActivateReply);
-            
-            registerTransition(receiveActivateReply, successEnd, Event.SUCCESS);
-            registerTransition(receiveActivateReply, failureEnd, Event.FAILURE);
            
-//            // Register the transitions (NEW).
-//            sendActivateRequest.registerDefaultTransition(receiveActivateReply);
-//            
-//            receiveActivateReply.registerTransition(Event.SUCCESS, successEnd); 
-//            receiveActivateReply.registerTransition(Event.FAILURE, failureEnd);
+            // Register the transitions (NEW).
+            sendActivateRequest.registerDefaultTransition(receiveActivateReply);
+            
+            receiveActivateReply.registerTransition(Event.SUCCESS, successEnd); 
+            receiveActivateReply.registerTransition(Event.FAILURE, failureEnd);
         }
         
         // </editor-fold>
@@ -826,12 +822,12 @@ public abstract class Player extends Agent {
             @Override
             public void action() {
                 logInfo("Sending activate request.");
-                
+
                 ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
                 activateRequestMessage.setReceiverRole(roleAID);
-                
+
                 send(ActivateRequestMessage.class, activateRequestMessage);
-                
+
                 logInfo("Activate request sent.");
             }
             
@@ -950,6 +946,331 @@ public abstract class Player extends Agent {
         }
         
         // </editor-fold>
+    }
+    
+    private class ActivateProtocolInitiator_New extends Party {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "activate-protocol-initiator-new";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private AID roleAID;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public ActivateProtocolInitiator_New(AID roleAID) {
+            super(NAME);
+            // ----- Preconditions -----
+            assert roleAID != null;
+            // -------------------------
+            
+            this.roleAID = roleAID;
+            
+            registerStatesAndtransitions();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+
+        @Override
+        protected Protocol getProtocol() {
+            return ActivateRoleProtocol.getInstance();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        private void registerStatesAndtransitions() {
+            // ----- States -----
+            jadeorg.proto_new.State sendActivateRequest = new SendActivateRequest();
+            jadeorg.proto_new.State receiveActivateReply = new ReceiveActivateReply();
+            jadeorg.proto_new.State successEnd = new SuccessEnd();
+            jadeorg.proto_new.State failureEnd = new FailureEnd();
+            // ------------------
+            
+            // Register the states.
+            registerFirstState(sendActivateRequest);
+            registerState(receiveActivateReply);
+            registerLastState(successEnd);
+            registerLastState(failureEnd);
+           
+            // Register the transitions.
+            sendActivateRequest.registerDefaultTransition(receiveActivateReply);
+            
+            receiveActivateReply.registerTransition(ReceiveActivateReply.AGREE, successEnd); 
+            receiveActivateReply.registerTransition(ReceiveActivateReply.REFUSE, failureEnd);
+        }
+        
+        // </editor-fold>
+        
+        /**
+         * The 'Send activate request' active state.
+         * A state in which the 'Activate request' requirementsInformMessage is send.
+         */
+        private class SendActivateRequest extends MultiSenderState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-activate-request";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendActivateRequest() {
+                super(NAME);
+                
+                setEntry(this.new Entry());
+                setManager(this.new Manager());
+                addSender(0, new SendActivateRequestInner());
+                setExit(this.new Exit());
+                buildFSM();
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Classes">
+            
+            private class Entry extends EntryState {
+
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    logInfo("Sending activate request.");
+                }
+                
+                // </editor-fold>
+            }
+            
+            private class Manager extends ManagerState {
+
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    setExitValue(ACLMessage.REQUEST);
+                }
+                
+                // </editor-fold>
+            }
+            
+            private class SendActivateRequestInner extends SenderState {
+
+                // <editor-fold defaultstate="collapsed" desc="Constant fields">
+                
+                private static final String NAME = "send-activate-request-inner";
+                
+                // </editor-fold>
+                
+                // <editor-fold defaultstate="collapsed" desc="Constructors">
+                
+                SendActivateRequestInner() {
+                    super(NAME);
+                }
+                
+                // </editor-fold>
+                
+                @Override
+                public void action() {
+                    ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
+                    activateRequestMessage.setReceiverRole(roleAID);
+
+                    send(ActivateRequestMessage.class, activateRequestMessage);                  
+                }
+            }
+            
+            private class Exit extends ExitState {
+
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    logInfo("Activate request sent.");
+                }
+                
+                // </editor-fold>
+            }
+            
+            // </editor-fold>
+        }
+        
+        private class ReceiveActivateReply extends MultiReceiverState {
+            
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receive-activate-request";
+            
+            // ----- Exit values -----
+            static final int AGREE = 0;
+            static final int REFUSE = 1;
+            // -----------------------
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveActivateReply() {
+                super(NAME);
+                
+                setEntry(this.new Entry());
+                setSenderAID(roleAID);
+                addReceiver(ACLMessage.AGREE, this.new ReceiveAgree());
+                addReceiver(ACLMessage.REFUSE, this.new ReceiveRefuse());
+                setExit(this.new Exit());
+                buildFSM();
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Classes">
+            
+            private class Entry extends EntryState {
+
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    logInfo("Receiving activate reply.");
+                }
+                
+                // </editor-fold>
+            }
+            
+            private class ReceiveAgree extends ReceiverState {
+
+                // <editor-fold defaultstate="collapsed" desc="Constant fields">
+                
+                private static final String NAME = "receive-agree";
+                
+                  // </editor-fold>
+                
+                // <editor-fold defaultstate="collapsed" desc="Constructors">
+                
+                ReceiveAgree() {
+                    super(NAME);
+                }
+                
+                // </editor-fold>
+                
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    setExitValue(AGREE);
+                }
+                
+                // </editor-fold>
+            }
+            
+            private class ReceiveRefuse extends ReceiverState {
+
+                // <editor-fold defaultstate="collapsed" desc="Constant fields">
+                
+                private static final String NAME = "receive-refuse";
+                
+                // </editor-fold>
+                
+                // <editor-fold defaultstate="collapsed" desc="Constructors">
+                
+                ReceiveRefuse() {
+                    super(NAME);
+                }
+                
+               // </editor-fold>
+                
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    setExitValue(REFUSE);
+                }
+                
+                // </editor-fold>
+            }
+            
+            private class Exit extends ExitState {
+
+                // <editor-fold defaultstate="collapsed" desc="Methods">
+                
+                @Override
+                public void action() {
+                    logInfo("Activate reply received.");
+                }
+                
+                // </editor-fold>
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Success end' active state.
+         * A state in which the 'Activate' protocol initiator party ends.
+         */
+        private class SuccessEnd extends SimpleState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "success-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SuccessEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Activate role initiator party succeeded.");
+            }
+            
+            // </editor-fold>
+        }
+        
+        /**
+         * The 'Failure end' active state.
+         * A state in which the 'Activate' protocol initiator party ends.
+         */
+        private class FailureEnd extends SimpleState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "failure-end";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            FailureEnd() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                logInfo("Activate role initiator party failed.");
+            }
+            
+            // </editor-fold>
+        }
     }
     
     /**
