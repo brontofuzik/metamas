@@ -5,7 +5,7 @@ import jadeorg.lang.Message;
 /**
  * A receiver state.
  * @author Lukáš Kúdela
- * @since
+ * @since 2011-12-06
  * @version %I% %G%
  */
 public interface ReceiverState {

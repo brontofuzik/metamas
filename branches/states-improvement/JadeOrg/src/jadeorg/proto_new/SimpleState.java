@@ -3,7 +3,7 @@ package jadeorg.proto_new;
 /**
  * A simple state.
  * @author Lukáš Kúdela
- * @since
+ * @since 2011-12-06
  * @version %I% %G%
  */
 public abstract class SimpleState extends OneShotBehaviourState {
