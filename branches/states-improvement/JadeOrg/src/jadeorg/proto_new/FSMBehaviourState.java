@@ -110,5 +110,22 @@ abstract class FSMBehaviourState extends FSMBehaviour implements State {
         // </editor-fold>
     }
     
+    protected abstract class SendFailure extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "send-failure";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        protected SendFailure() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+    }
+    
     // </editor-fold>
 }
