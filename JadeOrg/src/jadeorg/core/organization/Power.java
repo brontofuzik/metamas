@@ -1,8 +1,7 @@
-package jadeorg.core.organization.behaviours;
+package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
-import jadeorg.core.organization.Role;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.State;
 import java.util.LinkedList;
@@ -122,7 +121,7 @@ public class Power extends FSMBehaviour {
                 String requirement = state.getRequirement();                    
                 if (requirement != null) {
                     // There is a requirement.
-                    MeetRequirementInitiator requestRequirementState = new MeetRequirementInitiator(requirement);  
+                    Role_MeetRequirementInitiator requestRequirementState = new Role_MeetRequirementInitiator(requirement);  
                     
                     // Register the state.
                     registerState(requestRequirementState, requestRequirementState.getName());
@@ -167,12 +166,12 @@ public class Power extends FSMBehaviour {
     }
     
     public void setRequirementArgument(String requirementName, Object argument) {
-        MeetRequirementInitiator requirementState = (MeetRequirementInitiator)getState(requirementName);
+        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
         requirementState.setArgument(argument);
     }
     
     public Object getRequirementResult(String requirementName) {
-        MeetRequirementInitiator requirementState = (MeetRequirementInitiator)getState(requirementName);
+        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
         return requirementState.getResult();
     }
     

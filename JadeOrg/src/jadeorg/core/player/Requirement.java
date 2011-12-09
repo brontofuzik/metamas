@@ -1,7 +1,6 @@
-package jadeorg.core.player.behaviours;
+package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.core.player.Player;
 import jadeorg.proto.State;
 
 /**

@@ -1,4 +1,4 @@
-package jadeorg.core.organization.behaviours;
+package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * A 'Meet requirement initiator' (FSM) behaviour.
+ * A 'Meet requirement' protocol initiator.
  * @author Lukáš Kúdela
  * @since 2011-11-13
  * @version %I% %G%
  */
-public class MeetRequirementInitiator extends InitiatorParty {
+public class Role_MeetRequirementInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -37,7 +37,7 @@ public class MeetRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    MeetRequirementInitiator(String requirement) {
+    Role_MeetRequirementInitiator(String requirement) {
         super(NAME);
         initializeFSM();
     }

@@ -1,10 +1,10 @@
-package jadeorg.proto_new;
+package jadeorg.proto_new.toplevel;
 
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
-import jadeorg.lang.Message;
+import jadeorg.proto_new.FSMBehaviourReceiverState;
+import jadeorg.proto_new.OneShotBehaviourState;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,19 +13,15 @@ import java.util.Map;
  * @since 2011-12-01
  * @version %I% %G%
  */
-public abstract class MultiReceiverState extends FSMBehaviourState {
+public abstract class MultiReceiverState extends FSMBehaviourReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     // ----- States -----
-    private EntryState entry;
-    private ManagerState manager = new ManagerState();
     private Map<Integer, ReceiverState> receivers = new HashMap<Integer, ReceiverState>();
-    private BlockerState blocker = new BlockerState();
-    private ExitState exit;
     // ------------------
     
-    private ACLMessage receivedACLMessage;
+    //private ACLMessage receivedACLMessage;
     
     private int exitValue;
       
@@ -41,28 +37,6 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public ACLMessage getReceivedACLMessage() {
-        return receivedACLMessage;
-    }
-    
-    public void setReceivedACLMessage(ACLMessage receivedACLMessage) {
-        this.receivedACLMessage = receivedACLMessage;
-    }
-    
-    // ---------- PROTECTED ----------
-    
-    protected void setEntry(EntryState entry) {
-        this.entry = entry;
-    }
-    
-    protected void setSenderAID(AID senderAID) {
-        manager.setSenderAID(senderAID);
-    }
-    
-    protected void setExit(ExitState exit) {
-        this.exit = exit;
-    }
-    
     protected int getExitValue() {
         return exitValue;
     }
@@ -74,10 +48,6 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    public Message receive(Class messageClass, AID senderAID) {
-        return getParty().receive(messageClass, senderAID);
-    }
     
     @Override
     public int onEnd() {
@@ -100,12 +70,26 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
         registerStatesAndTransitions();
     }
     
+    protected abstract void onEntry();
+    
+    protected void onManager() {
+    }
+    
+    protected abstract void onExit();
+    
     // ---------- PRIVATE ----------
 
     /**
      * Registers the states and trasitions of this multi-receiver.
      */
-    private void registerStatesAndTransitions() {  
+    private void registerStatesAndTransitions() {
+        // ----- States -----
+        EntryState entry = new EntryState();
+        ManagerState manager = new ManagerState();
+        BlockerState blocker = new BlockerState();
+        ExitState exit = new ExitState();
+        // ------------------
+        
         // Register the states.
         registerFirstState(entry);
         registerState(manager);
@@ -118,21 +102,32 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
         // Register the transitions.
         // entry ---[Default]---> manager
         entry.registerDefaultTransition(manager);
-             
-        for (Map.Entry<Integer, ReceiverState> eventReceiverPair : receivers.entrySet()) {
-            // manager ---[<Performative>]---> receiver
-            manager.registerTransition(eventReceiverPair.getKey(), eventReceiverPair.getValue());
-        }
-        // manager ---[Default]---> blocker
-        manager.registerDefaultTransition(blocker);
         
-        for (ReceiverState receiver : receivers.values()) {
-            // receiver ---[Default]---> exit
-            receiver.registerDefaultTransition(receiver);
+        // manager ---[Default]---> receiver_0
+        List<ReceiverState> receiverList = getReceiverList();
+        manager.registerDefaultTransition(receiverList.get(0));
+             
+        for (int i = 0; i < receivers.size() - 1; i++) {
+            // receiver_i ---[RECEIVED]---> exit
+            receiverList.get(i).registerTransition(ReceiverState.RECEIVED, exit);
+            // receiver_i ---[NOT_RECEIVED]---> receiver_(i+1)
+            receiverList.get(i).registerTransition(ReceiverState.NOT_RECEIVED, receiverList.get(i + 1));
         }
+        // receiver_(N-1) ---[RECEIVED]---> exit
+        receiverList.get(receiverList.size() - 1).registerTransition(ReceiverState.RECEIVED, exit);
+        // receiver_(N-1) ---[NOT_RECEIVED]---> blocker
+        receiverList.get(receiverList.size() - 1).registerTransition(exitValue, blocker);
         
         // blocker ---[Default]---> manager
         blocker.registerDefaultTransition(manager, new String[] { manager.getName() });
+    }
+    
+    private List<ReceiverState> getReceiverList() {
+        List<ReceiverState> receiverList = new ArrayList<ReceiverState>();
+        for (ReceiverState receiver : receivers.values()) {
+            receiverList.add(receiver);
+        }
+        return receiverList;
     }
     
     // </editor-fold>
@@ -140,6 +135,13 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     protected abstract class ReceiverState extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        public static final int RECEIVED = 0;
+        public static final int NOT_RECEIVED = 1;
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -160,17 +162,37 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
     
     // ---------- PRIVATE ----------
     
+    private class EntryState extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "entry";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+        private EntryState() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            onEntry();
+        }
+        
+        // </editor-fold>
+    }
+    
     private class ManagerState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receiver-manager";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private AID senderAID;
+        private static final String NAME = "manager";
         
         // </editor-fold>
         
@@ -182,30 +204,16 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
         
         // </editor-fold>
         
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        public void setSenderAID(AID senderAID) {
-            this.senderAID = senderAID;
-        }
-        
-        // </editor-fold>   
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            // Receive the 'Activate reply' message.
-            ACLMessageWrapper activateReply = (ACLMessageWrapper)
-                receive(ACLMessageWrapper.class, senderAID);
-
-            if (activateReply != null) {
-                // The 'Activate reply' message was received.
-                setReceivedACLMessage(activateReply.getWrappedACLMessage());
-                setExitValue(activateReply.getWrappedACLMessage().getPerformative());
-            } else {
-                // The 'Activate reply' message was not received.
-                setExitValue(0);
-            }
+            onManager();
+        }
+        
+        @Override
+        public int onEnd() {
+            return getExitValue();
         }
         
         // </editor-fold>
@@ -237,5 +245,31 @@ public abstract class MultiReceiverState extends FSMBehaviourState {
         // </editor-fold>
     }
     
+    private class ExitState extends OneShotBehaviourState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "exit";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        private ExitState() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            onExit();
+        }
+        
+        // </editor-fold>
+    }
+       
     // </editor-fold>
 }

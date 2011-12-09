@@ -1,4 +1,4 @@
-package jadeorg.core.organization.behaviours;
+package jadeorg.core.organization;
 
 import jadeorg.proto.State;
 

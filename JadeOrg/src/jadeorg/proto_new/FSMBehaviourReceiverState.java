@@ -8,7 +8,7 @@ import jadeorg.lang.Message;
  * @since 2011-12-05
  * @version %I% %G%
  */
-abstract class FSMBehaviourReceiverState extends FSMBehaviourState implements ReceiverState {
+public abstract class FSMBehaviourReceiverState extends FSMBehaviourState implements ReceiverState {
 
     protected FSMBehaviourReceiverState(String name) {
         super(name);
