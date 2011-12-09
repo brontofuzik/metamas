@@ -1,6 +1,6 @@
 package auctionjadehandwritten.organizations.powers;
 
-import jadeorg.core.organization.behaviours.Power;
+import jadeorg.core.organization.Power;
 
 /**
  * A Bid power.
