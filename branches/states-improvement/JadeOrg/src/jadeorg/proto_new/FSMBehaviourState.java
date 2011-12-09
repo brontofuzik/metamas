@@ -10,7 +10,7 @@ import jadeorg.proto.Party;
  * @since 2011-12-02
  * @version %I% %G%
  */
-abstract class FSMBehaviourState extends FSMBehaviour implements State {
+public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

@@ -1,4 +1,4 @@
-package jadeorg.core.player.behaviours;
+package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @since 2011-11-11
  * @version %I% %G%
  */
-public class MeetRequirementResponder extends ResponderParty {
+public class Player_MeetRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -44,7 +44,7 @@ public class MeetRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public MeetRequirementResponder() {
+    public Player_MeetRequirementResponder() {
         super(NAME);
         initializeFSM();
     }

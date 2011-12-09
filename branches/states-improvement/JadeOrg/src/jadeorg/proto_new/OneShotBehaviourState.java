@@ -10,7 +10,7 @@ import jadeorg.proto.Party;
  * @since 2011-12-02
  * @version %I% %G%
  */
-abstract class OneShotBehaviourState extends OneShotBehaviour implements State {
+public abstract class OneShotBehaviourState extends OneShotBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

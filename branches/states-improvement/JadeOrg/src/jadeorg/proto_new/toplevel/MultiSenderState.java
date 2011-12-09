@@ -1,6 +1,8 @@
-package jadeorg.proto_new;
+package jadeorg.proto_new.toplevel;
 
 import jade.core.behaviours.OneShotBehaviour;
+import jadeorg.proto_new.FSMBehaviourSenderState;
+import jadeorg.proto_new.OneShotBehaviourState;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,12 +16,7 @@ public abstract class MultiSenderState extends FSMBehaviourSenderState {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
        
-    // ----- States -----
-    private EntryState entry;
-    private ManagerState manager;
     private Map<Integer, SenderState> senders = new HashMap<Integer, SenderState>();
-    private ExitState exit;
-    // ------------------
     
     private int exitValue;
     
@@ -34,18 +31,6 @@ public abstract class MultiSenderState extends FSMBehaviourSenderState {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    protected void setEntry(EntryState entry) {
-        this.entry = entry;
-    }
-    
-    protected void setManager(ManagerState manager) {
-        this.manager = manager;
-    }
-    
-    protected void setExit(ExitState exit) {
-        this.exit = exit;
-    }
     
     protected int getExitValue() {
         return exitValue;
@@ -80,9 +65,21 @@ public abstract class MultiSenderState extends FSMBehaviourSenderState {
         registerStatesAndTransitions();
     }
     
+    protected abstract void onEntry();
+    
+    protected abstract int onManager();
+    
+    protected abstract void onExit();
+    
     // ---------- PRIVATE ----------
     
     private void registerStatesAndTransitions() {
+        // ----- States -----
+        EntryState entry = new EntryState();
+        ManagerState manager = new ManagerState();
+        ExitState exit = new ExitState();
+        // ------------------
+        
         // Register the states.
         registerFirstState(entry);
         registerState(manager);
@@ -110,7 +107,46 @@ public abstract class MultiSenderState extends FSMBehaviourSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    protected abstract class ManagerState extends OneShotBehaviourState {
+    protected abstract class SenderState extends OneShotBehaviourState {
+       
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        protected SenderState(String name) {
+            super(name);
+        }
+        
+        // </editor-fold>
+    }
+    
+    // ---------- PRIVATE ----------
+    
+    private class EntryState extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "entry";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+        private EntryState() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            onEntry();
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class ManagerState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -125,14 +161,43 @@ public abstract class MultiSenderState extends FSMBehaviourSenderState {
         }
         
         // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            setExitValue(onManager());
+        }
+        
+        @Override
+        public int onEnd() {
+            return getExitValue();
+        }
+        
+        // </editor-fold>
     }
     
-    protected abstract class SenderState extends OneShotBehaviourState {
-       
+    private class ExitState extends OneShotBehaviourState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "exit";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected SenderState(String name) {
-            super(name);
+        private ExitState() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            onExit();
         }
         
         // </editor-fold>

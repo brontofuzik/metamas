@@ -1,4 +1,6 @@
-package jadeorg.proto_new;
+package jadeorg.proto_new.toplevel;
+
+import jadeorg.proto_new.OneShotBehaviourState;
 
 /**
  * A simple state.
