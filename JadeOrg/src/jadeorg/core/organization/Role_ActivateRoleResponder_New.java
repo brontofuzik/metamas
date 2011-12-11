@@ -119,7 +119,7 @@ public class Role_ActivateRoleResponder_New extends Party {
     
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class ReceiveActivateRequest_Receiver extends ReceiverState {
+        private class ReceiveActivateRequest_Receiver extends BottomLevelReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Fields">
             
@@ -205,7 +205,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class SendAgree extends SenderState {
+        private class SendAgree extends BottomLevelSenderState {
             
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -235,7 +235,7 @@ public class Role_ActivateRoleResponder_New extends Party {
             // </editor-fold>
         }
         
-        private class SendRefuse extends SenderState {
+        private class SendRefuse extends BottomLevelSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -265,43 +265,6 @@ public class Role_ActivateRoleResponder_New extends Party {
             // </editor-fold>
         }
         
-        // </editor-fold>
-    }
-
-    /**
-     * The 'Send failure' (active) state.
-     */
-    private class SendFailure extends SimpleState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-failure";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendFailure() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        public void action() {
-            ((Role)myAgent).logInfo("Sending failure.");
-
-            // Create the 'Failure' JadeOrg message.
-            ACLMessageWrapper failureMessage = ActivateRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.FAILURE);
-            failureMessage.addReceiver(playerAID);
-
-            send(ACLMessageWrapper.class, failureMessage);
-            ((Role)myAgent).logInfo("Failure sent.");
-        }
-
         // </editor-fold>
     }
 
