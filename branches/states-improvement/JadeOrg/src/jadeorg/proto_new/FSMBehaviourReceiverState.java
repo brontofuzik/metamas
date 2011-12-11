@@ -1,5 +1,6 @@
 package jadeorg.proto_new;
 
+import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
@@ -14,7 +15,10 @@ public abstract class FSMBehaviourReceiverState extends FSMBehaviourState implem
         super(name);
     }
     
-    @Override
+    public Message receive(Class messageClass, AID senderAID) {
+        return getParty().receive(messageClass, senderAID);
+    } 
+    
     public Message receive(Class messageClass) {
         return getParty().receive(messageClass, null);
     } 

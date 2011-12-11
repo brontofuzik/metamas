@@ -101,7 +101,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
         SendActivateRequest() {
             super(NAME);
 
-            addSender(SENDER1, new SendActivateRequestInner());
+            addSender(SENDER1, new SendActivateRequest_Sender());
             buildFSM();
         }
 
@@ -128,17 +128,17 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Classes">
 
-        private class SendActivateRequestInner extends SenderState {
+        private class SendActivateRequest_Sender extends SenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-            private static final String NAME = "send-activate-request-inner";
+            private static final String NAME = "sender";
 
             // </editor-fold>
 
             // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-            SendActivateRequestInner() {
+            SendActivateRequest_Sender() {
                 super(NAME);
             }
 
@@ -160,12 +160,12 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-        private static final String NAME = "receive-activate-request";
-
         // ----- Exit values -----
         static final int AGREE = 0;
         static final int REFUSE = 1;
         // -----------------------
+        
+        private static final String NAME = "receive-activate-request";
 
         // </editor-fold>
 

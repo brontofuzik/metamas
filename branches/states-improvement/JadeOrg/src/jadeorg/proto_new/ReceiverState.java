@@ -1,5 +1,6 @@
 package jadeorg.proto_new;
 
+import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
@@ -9,6 +10,8 @@ import jadeorg.lang.Message;
  * @version %I% %G%
  */
 public interface ReceiverState {
+    
+    Message receive(Class messageClass, AID senderAID);
     
     Message receive(Class messageClass);
 }

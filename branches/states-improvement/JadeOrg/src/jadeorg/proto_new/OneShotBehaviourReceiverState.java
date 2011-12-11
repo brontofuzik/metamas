@@ -1,5 +1,6 @@
 package jadeorg.proto_new;
 
+import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
@@ -18,10 +19,11 @@ public abstract class OneShotBehaviourReceiverState extends OneShotBehaviourStat
     
     // </editor-fold>
     
-    @Override
-    public Message receive(Class messageClass) {
+    public Message receive(Class messageClass, AID senderAID) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    
+    public Message receive(Class messageClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
