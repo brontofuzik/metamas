@@ -40,7 +40,7 @@ public class Player_EnactRoleInitiator extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player_EnactRoleInitiator(AID organization, String roleName) {
+    Player_EnactRoleInitiator(AID organization, String roleName) {
         super(NAME);
         // ----- Preconditions -----
         assert organization != null;

@@ -128,7 +128,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Classes">
 
-        private class SendActivateRequest_Sender extends SenderState {
+        private class SendActivateRequest_Sender extends BottomLevelSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -197,7 +197,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Classes">     
 
-        private class ReceiveAgree extends ReceiverState {
+        private class ReceiveAgree extends BottomLevelReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -223,7 +223,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
             // </editor-fold>
         }
 
-        private class ReceiveRefuse extends ReceiverState {
+        private class ReceiveRefuse extends BottomLevelReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
