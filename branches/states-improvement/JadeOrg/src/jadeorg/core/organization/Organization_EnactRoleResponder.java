@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-09
  * @version %I% %G%
  */
-public class Organization_EnactRoleResponder extends Party {
+class Organization_EnactRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -43,7 +43,7 @@ public class Organization_EnactRoleResponder extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Organization_EnactRoleResponder(AID player) {
+    Organization_EnactRoleResponder(AID player) {
         super(NAME);
         // ----- Preconditions -----
         assert player != null;
@@ -397,7 +397,7 @@ public class Organization_EnactRoleResponder extends Party {
     /**
      * The 'Success end' state.
      */
-    public class SuccessEnd extends ActiveState {
+    private class SuccessEnd extends ActiveState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -426,7 +426,7 @@ public class Organization_EnactRoleResponder extends Party {
     /**
      * The 'Failure end' state.
      */
-    public class FailureEnd extends ActiveState {
+    private class FailureEnd extends ActiveState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 

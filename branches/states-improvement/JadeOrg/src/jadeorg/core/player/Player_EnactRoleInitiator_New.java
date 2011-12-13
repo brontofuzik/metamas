@@ -22,7 +22,7 @@ import jadeorg.proto_new.toplevel.SingleSenderState;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public class Player_EnactRoleInitiator_New extends Party {
+class Player_EnactRoleInitiator_New extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
