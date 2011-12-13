@@ -2,7 +2,6 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.core.player.Player;
 import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
@@ -20,7 +19,7 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
  * @since 2011-12-09
  * @version %I% %G%
  */
-public class Player_EnactRoleInitiator extends Party {
+class Player_EnactRoleInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
