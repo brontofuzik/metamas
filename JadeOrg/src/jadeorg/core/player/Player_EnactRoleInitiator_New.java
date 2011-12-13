@@ -1,6 +1,8 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import jadeorg.lang.ACLMessageWrapper;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -35,6 +37,8 @@ public class Player_EnactRoleInitiator_New extends Party {
 
     /** The role name */
     private String roleName;
+    
+    private String[] requirements;
 
     // </editor-fold>
     
@@ -90,8 +94,8 @@ public class Player_EnactRoleInitiator_New extends Party {
         receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.OK, sendRequirementsReply);
         receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.FAILURE, failureEnd);
         
-        sendRequirementsReply.registerTransition(SendRequirementsReply.OK, receiveRoleAID);
-        sendRequirementsReply.registerTransition(SendRequirementsReply.FAILURE, failureEnd);
+        sendRequirementsReply.registerTransition(SendRequirementsReply.AGREE, receiveRoleAID);
+        sendRequirementsReply.registerTransition(SendRequirementsReply.REFUSE, failureEnd);
 
         receiveRoleAID.registerDefaultTransition(successEnd);
     }
@@ -212,9 +216,8 @@ public class Player_EnactRoleInitiator_New extends Party {
                 RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)
                     receive(RequirementsInformMessage.class, organizationAID);
                 if (requirementsInformMessage != null) {
+                    requirements = requirementsInformMessage.getRequirements();
                     setExitValue(OK);
-                } else {
-                    setExitValue(FAILURE);
                 }
             }
             
@@ -231,6 +234,11 @@ public class Player_EnactRoleInitiator_New extends Party {
     private class SendRequirementsReply extends MultiSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int AGREE = 1;
+        public static final int REFUSE = 2;
+        // -----------------------
 
         private static final String NAME = "send-requirements-reply";
 
@@ -247,20 +255,92 @@ public class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
+        protected void onEntry() {
             ((Player)myAgent).logInfo("Sending requirements reply.");
-
-            // Create the 'Requirements reply' JadeOrg message.
-            ACLMessageWrapper requirementsReplyMessage = EnactRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.AGREE);
-            System.out.println(requirementsReplyMessage.getWrappedACLMessage().getProtocol());
-            requirementsReplyMessage.addReceiver(organizationAID);
-
-            send(ACLMessageWrapper.class, requirementsReplyMessage);
-
+        }
+        
+        @Override
+        protected int onManager() {
+            if (((Player)myAgent).evaluateRequirements(requirements)) {
+                // The player meets the requirements.
+                return AGREE;
+            } else {
+                // The player does not meet the requirements.
+                return REFUSE;
+            }
+        }
+        
+        @Override
+        protected void onExit() {
             ((Player)myAgent).logInfo("Requirements reply sent.");
         }
 
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        private class SendAgree extends BottomLevelSenderState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-agree";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendAgree() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Create the 'Agree' JadeOrg message.
+                ACLMessageWrapper agreeMessage = EnactRoleProtocol.getInstance()
+                .getACLMessageWrapper(ACLMessage.AGREE);
+                agreeMessage.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, agreeMessage);
+            }
+            
+            // </editor-fold>
+        }
+        
+        private class SendRefuse extends BottomLevelSenderState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "send-refuse";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            SendRefuse() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                // Create the 'Refuse' JadeOrg message.
+                ACLMessageWrapper refuseMessage = EnactRoleProtocol.getInstance()
+                    .getACLMessageWrapper(ACLMessage.AGREE);
+                refuseMessage.addReceiver(organizationAID);
+                
+                send(ACLMessageWrapper.class, refuseMessage);
+            }
+            
+            // </editor-fold>
+        }
+        
         // </editor-fold>
     }
     
