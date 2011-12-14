@@ -4,9 +4,8 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.core.organization.Organization;
-import jadeorg.core.organization.Role;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -238,12 +237,13 @@ class Organization_EnactRoleResponder extends Party {
         public void action() {
             ((Organization)myAgent).logInfo("Sending failure.");
 
-            // Create the 'Failure' JadeOrg message.
-            ACLMessageWrapper failureMessage = EnactRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.FAILURE);
+            // Create the 'Failure' message.
+            FailureMessage failureMessage = new FailureMessage();
             failureMessage.addReceiver(playerAID);
 
-            send(ACLMessageWrapper.class, failureMessage);
+            // Send the message.
+            send(FailureMessage.class, failureMessage);
+            
             ((Organization)myAgent).logInfo("Failure sent");
         }
 
@@ -275,14 +275,14 @@ class Organization_EnactRoleResponder extends Party {
         public void action() {
             ((Organization)myAgent).logInfo("Receiving requirements reply.");
 
-            ACLMessageWrapper requirementsReplyMessage = (ACLMessageWrapper)
-                receive(ACLMessageWrapper.class, playerAID);
+            SimpleMessage requirementsReplyMessage = (SimpleMessage)
+                receive(SimpleMessage.class, playerAID);
             if (requirementsReplyMessage != null) {
                 ((Organization)myAgent).logInfo("Requirements reply received.");
 
-                if (requirementsReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                if (requirementsReplyMessage.getPerformative() == ACLMessage.AGREE) {
                     setExitValue(Event.SUCCESS);
-                } else if (requirementsReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                } else if (requirementsReplyMessage.getPerformative() == ACLMessage.REFUSE) {
                     setExitValue(Event.FAILURE);
                 }
             } else {

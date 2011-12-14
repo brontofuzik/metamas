@@ -1,6 +1,6 @@
 package jadeorg.proto_new.toplevel;
 
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.FSMBehaviourReceiverState;
 import jadeorg.proto_new.OneShotBehaviourState;
 
@@ -168,7 +168,7 @@ abstract class TopLevelReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            receive(ACLMessageWrapper.class);
+            receive(SimpleMessage.class);
         }
 
         // </editor-fold>

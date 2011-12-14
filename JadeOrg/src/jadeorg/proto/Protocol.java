@@ -2,10 +2,13 @@ package jadeorg.proto;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageGenerator;
 import jadeorg.lang.MessageParser;
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.RefuseMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -76,12 +79,6 @@ public abstract class Protocol {
         return getGenerator(messageClass).generate(message);
     }
     
-    public ACLMessageWrapper getACLMessageWrapper(int performative) {
-        ACLMessageWrapper aclMessageWrapper = new ACLMessageWrapper(new ACLMessage(performative));
-        aclMessageWrapper.setProtocol(this);
-        return aclMessageWrapper;
-    }
-    
     // ---------- PROTECTED ----------
     
     /**
@@ -114,7 +111,9 @@ public abstract class Protocol {
     // ---------- PRIVATE ----------
     
     private void registerMessages() {
-        registerMessage(ACLMessageWrapper.class);
+        registerMessage(AgreeMessage.class);
+        registerMessage(RefuseMessage.class);
+        registerMessage(FailureMessage.class);
     }
     
     /**

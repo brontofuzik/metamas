@@ -2,7 +2,9 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -162,11 +164,12 @@ public class Role_ActivateRoleResponder extends Party {
             ((Role)myAgent).logInfo("Sending activate reply.");
 
             // Create the 'Activate reply' JadeOrg message.
-            ACLMessageWrapper activateReplyMessage = ActivateRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.AGREE);
+            AgreeMessage activateReplyMessage = new AgreeMessage();
             activateReplyMessage.addReceiver(playerAID);
 
-            send(ACLMessageWrapper.class, activateReplyMessage);
+            // Send the message.
+            send(AgreeMessage.class, activateReplyMessage);
+            
             ((Role)myAgent).logInfo("Activate reply sent");
         }
 
@@ -198,12 +201,13 @@ public class Role_ActivateRoleResponder extends Party {
         public void action() {
             ((Role)myAgent).logInfo("Sending failure.");
 
-            // Create the 'Failure' JadeOrg message.
-            ACLMessageWrapper failureMessage = ActivateRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.FAILURE);
+            // Create the 'Failure' message.
+            FailureMessage failureMessage = new FailureMessage();
             failureMessage.addReceiver(playerAID);
 
-            send(ACLMessageWrapper.class, failureMessage);
+            // Send the message.
+            send(FailureMessage.class, failureMessage);
+            
             ((Role)myAgent).logInfo("Failure sent.");
         }
 

@@ -177,7 +177,7 @@ public abstract class Organization extends Agent {
      * @param player the player
      */
     private void enactRoleResponder(AID player) {
-        addBehaviour(new Organization_EnactRoleResponder(player));
+        addBehaviour(new Organization_EnactRoleResponder_New(player));
     }
 
     /**

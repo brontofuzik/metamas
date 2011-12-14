@@ -2,7 +2,9 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -225,12 +227,11 @@ class Player_EnactRoleInitiator extends Party {
             ((Player)myAgent).logInfo("Sending requirements reply.");
 
             // Create the 'Requirements reply' JadeOrg message.
-            ACLMessageWrapper requirementsReplyMessage = EnactRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.AGREE);
-            System.out.println(requirementsReplyMessage.getWrappedACLMessage().getProtocol());
+            AgreeMessage requirementsReplyMessage = new AgreeMessage();
             requirementsReplyMessage.addReceiver(organizationAID);
 
-            send(ACLMessageWrapper.class, requirementsReplyMessage);
+            // Send the message.
+            send(AgreeMessage.class, requirementsReplyMessage);
 
             ((Player)myAgent).logInfo("Requirements reply sent.");
         }
@@ -262,12 +263,12 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            // Create the 'Failure' JadeOrg message.
-            ACLMessageWrapper failureMessage = EnactRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.FAILURE);
+            // Create the 'Failure' message.
+            FailureMessage failureMessage = new FailureMessage();
             failureMessage.addReceiver(organizationAID);
 
-            send(ACLMessageWrapper.class, failureMessage);
+            // Send the message.
+            send(FailureMessage.class, failureMessage);
         }
 
         // </editor-fold>

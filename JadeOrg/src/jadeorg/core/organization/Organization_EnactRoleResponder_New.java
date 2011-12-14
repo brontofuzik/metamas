@@ -1,16 +1,23 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto_new.State;
 import jadeorg.proto_new.toplevel.MultiReceiverState;
 import jadeorg.proto_new.toplevel.MultiSenderState;
 import jadeorg.proto_new.toplevel.SimpleState;
 import jadeorg.proto_new.toplevel.SingleReceiverState;
 import jadeorg.proto_new.toplevel.SingleSenderState;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -116,9 +123,11 @@ class Organization_EnactRoleResponder_New extends Party {
         
         @Override
         protected void onReceiver() {
+            // Receive the 'Enact request' message.
             EnactRequestMessage enactRequestMessage = (EnactRequestMessage)
                 receive(EnactRequestMessage.class, playerAID);
             
+            // Process the message.
             if (enactRequestMessage != null) {
                 roleName = enactRequestMessage.getRoleName();
             }
@@ -211,7 +220,14 @@ class Organization_EnactRoleResponder_New extends Party {
             
             @Override
             public void action() {
-                throw new UnsupportedOperationException("Not supported yet.");
+                // Create the 'Requirements inform' message.
+                RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
+                requirementsInformMessage.setReceiverPlayer(playerAID);
+
+                requirementsInformMessage.setRequirements(((Organization)myAgent).requirements.get(roleName));
+
+                // Send the message.
+                send(RequirementsInformMessage.class, requirementsInformMessage);
             }
             
             // </editor-fold>
@@ -237,6 +253,10 @@ class Organization_EnactRoleResponder_New extends Party {
         
         ReceiveRequirementsReply() {
             super(NAME);
+            
+            addReceiver(AGREE, this.new ReceiveRequirementsReply_Receiver());
+            addReceiver(REFUSE, this.new ReceiveFailure());
+            buildFSM();
         }
         
         // </editor-fold>
@@ -245,12 +265,47 @@ class Organization_EnactRoleResponder_New extends Party {
         
         @Override
         protected void onEntry() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            ((Organization)myAgent).logInfo("Receiving requirements reply.");
         }
 
         @Override
         protected void onExit() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            ((Organization)myAgent).logInfo("Requirements reply received.");
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Classes">
+        
+        private class ReceiveRequirementsReply_Receiver extends BottomLevelReceiverState {
+
+            // <editor-fold defaultstate="collapsed" desc="Constant fields">
+            
+            private static final String NAME = "receiver";
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Constructors">
+            
+            ReceiveRequirementsReply_Receiver() {
+                super(NAME);
+            }
+            
+            // </editor-fold>
+            
+            // <editor-fold defaultstate="collapsed" desc="Methods">
+            
+            @Override
+            public void action() {
+                SimpleMessage requirementsReplyMessage = (SimpleMessage)
+                    receive(SimpleMessage.class, playerAID);
+                
+                if (requirementsReplyMessage != null) {
+                    setExitValue(RECEIVED);
+                }
+            }
+            
+            // </editor-fold>
         }
         
         // </editor-fold>
@@ -276,23 +331,89 @@ class Organization_EnactRoleResponder_New extends Party {
 
         @Override
         protected void onEntry() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            ((Organization)myAgent).logInfo("Sending role AID.");
         }
         
         @Override
         protected void onSender() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            ((Organization)myAgent).logInfo("Creating role agent.");
+
+            Role role = createRoleAgent(roleName, roleName);
+            role.setPlayerAID(playerAID);
+            startRoleAgent(role);
+            ((Organization)myAgent).knowledgeBase.updateRoleIsEnacted(role, playerAID);
+
+            ((Organization)myAgent).logInfo("Role agent created.");
+            
+            // Create the 'RoleAID' JadeOrg message.
+            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
+            roleAIDMessage.setReceiverPlayer(playerAID);
+            roleAIDMessage.setRoleAID(role.getAID());
+
+            // Send the 'RoleAID' JadeOrg message.
+            send(RoleAIDMessage.class, roleAIDMessage);        
         }
 
         @Override
         protected void onExit() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            ((Organization)myAgent).logInfo("Role AID sent.");
+        }
+        
+        // ---------- PRIVATE ----------
+
+        /**
+         * Create a role agent.
+         * @param roleClassName the name of the role agent class.
+         * @param roleName the name of the role agent instance.
+         * @return the role agent.
+         */
+        private Role createRoleAgent(String roleClassName, String roleName) {
+            Class roleClass = ((Organization)myAgent).roles.get(roleClassName);
+            //System.out.println("ROLE CLASS: " + roleClass);
+            Class organizationClass = myAgent.getClass();
+            //System.out.println("ORGANIZATION CLASS: " + organizationClass);
+
+            Constructor roleConstructor = null;
+            try {
+                roleConstructor = roleClass.getConstructor(organizationClass);
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+            }
+            //System.out.println("CTOR: " + roleConstructor.getParameterTypes());
+            Role role = null;
+            try {
+                role = (Role)roleConstructor.newInstance(myAgent);
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            } catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            }
+            //System.out.println("ROLE: " + role);
+            role.setRoleName(roleName);
+            role.setMyOrganization((Organization)myAgent);
+            return role;
+        }
+
+        private void startRoleAgent(Role role) {
+            AgentController agentController = null;
+            try {
+                agentController = myAgent.getContainerController().acceptNewAgent(roleName, role);
+                agentController.start();
+            } catch (StaleProxyException ex) {
+                ex.printStackTrace();
+            }
         }
         
         // </editor-fold>
     }
     
-        /**
+    /**
      * The 'Success end' state.
      */
     private class SuccessEnd extends SimpleState {

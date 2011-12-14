@@ -2,7 +2,9 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.RefuseMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -225,11 +227,10 @@ public class Role_ActivateRoleResponder_New extends Party {
 
             @Override
             public void action() {
-                ACLMessageWrapper agreeMessage = new ACLMessageWrapper(
-                    new ACLMessage(ACLMessage.AGREE));
+                AgreeMessage agreeMessage = new AgreeMessage();
                 agreeMessage.addReceiver(playerAID);
                 
-                send(ACLMessageWrapper.class, agreeMessage);
+                send(AgreeMessage.class, agreeMessage);
             }
             
             // </editor-fold>
@@ -255,11 +256,10 @@ public class Role_ActivateRoleResponder_New extends Party {
             
             @Override
             public void action() {
-                ACLMessageWrapper agreeMessage = new ACLMessageWrapper(
-                    new ACLMessage(ACLMessage.REFUSE));
-                agreeMessage.addReceiver(playerAID);
+                RefuseMessage refuseMessage = new RefuseMessage();
+                refuseMessage.addReceiver(playerAID);
                 
-                send(ACLMessageWrapper.class, agreeMessage);
+                send(RefuseMessage.class, refuseMessage);
             }
             
             // </editor-fold>

@@ -46,7 +46,7 @@ public abstract class Player extends Agent {
         AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
         if (organizationAID != null) {
             // The organization exists.
-            addBehaviour(new Player_EnactRoleInitiator(organizationAID, roleName));
+            addBehaviour(new Player_EnactRoleInitiator_New(organizationAID, roleName));
         } else {
             // The organization does not exist.
             String message = String.format("Error enacting a role. The organization '%1$s' does not exist.", organizationName);

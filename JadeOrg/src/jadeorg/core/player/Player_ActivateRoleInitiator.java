@@ -2,7 +2,7 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -146,17 +146,17 @@ public class Player_ActivateRoleInitiator extends Party {
         public void action() {
             ((Player)myAgent).logInfo("Receiving activate reply.");
 
-            ACLMessageWrapper activateReplyMessage = (ACLMessageWrapper)
-                receive(ACLMessageWrapper.class, roleAID);
+            SimpleMessage activateReplyMessage = (SimpleMessage)
+                receive(SimpleMessage.class, roleAID);
 
             if (activateReplyMessage != null) {
                 ((Player)myAgent).logInfo("Activate reply received.");
 
-                if (activateReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                if (activateReplyMessage.getPerformative() == ACLMessage.AGREE) {
                     // The 'Activate' request was agreed.
                     ((Player)myAgent).knowledgeBase.activateRole(roleAID.getName());
                     setExitValue(Event.SUCCESS);
-                } else if (activateReplyMessage.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                } else if (activateReplyMessage.getPerformative() == ACLMessage.REFUSE) {
                     // The 'Activate' request was refused.
                     setExitValue(Event.FAILURE);
                 } else {
