@@ -2,7 +2,9 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.RefuseMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -91,7 +93,7 @@ class Player_EnactRoleInitiator_New extends Party {
         // Register the transitions (NEW).
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
-        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.OK, sendRequirementsReply);
+        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.SUCCESS, sendRequirementsReply);
         receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.FAILURE, failureEnd);
         
         sendRequirementsReply.registerTransition(SendRequirementsReply.AGREE, receiveRoleAID);
@@ -133,10 +135,12 @@ class Player_EnactRoleInitiator_New extends Party {
         
         @Override
         protected void onSender() {
+            // Create the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             message.setReceiverOrganization(organizationAID);
             message.setRoleName(roleName);
 
+            // Send the message.
             send(EnactRequestMessage.class, message);
         }
         
@@ -157,7 +161,7 @@ class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
         // ----- Exit values -----
-        public static final int OK = 1;
+        public static final int SUCCESS = 1;
         public static final int FAILURE = 2;
         // -----------------------
         
@@ -170,7 +174,7 @@ class Player_EnactRoleInitiator_New extends Party {
         ReceiveRequirementsInform() {
             super(NAME);
             
-            addReceiver(OK, new ReceiveRequirementsInform_Receiver());
+            addReceiver(SUCCESS, new ReceiveRequirementsInform_Receiver());
             addReceiver(FAILURE, new ReceiveFailure());
             buildFSM();
         }
@@ -213,11 +217,14 @@ class Player_EnactRoleInitiator_New extends Party {
             
             @Override
             public void action() {
+                // Receive the 'Requirements inform' message.
                 RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)
                     receive(RequirementsInformMessage.class, organizationAID);
+                
+                // Process the message.
                 if (requirementsInformMessage != null) {
                     requirements = requirementsInformMessage.getRequirements();
-                    setExitValue(OK);
+                    setExitValue(SUCCESS);
                 }
             }
             
@@ -299,12 +306,12 @@ class Player_EnactRoleInitiator_New extends Party {
             
             @Override
             public void action() {
-                // Create the 'Agree' JadeOrg message.
-                ACLMessageWrapper agreeMessage = EnactRoleProtocol.getInstance()
-                .getACLMessageWrapper(ACLMessage.AGREE);
+                // Create the 'Agree' message.
+                AgreeMessage agreeMessage = new AgreeMessage();
                 agreeMessage.addReceiver(organizationAID);
                 
-                send(ACLMessageWrapper.class, agreeMessage);
+                // Send the message.
+                send(AgreeMessage.class, agreeMessage);
             }
             
             // </editor-fold>
@@ -330,12 +337,12 @@ class Player_EnactRoleInitiator_New extends Party {
             
             @Override
             public void action() {
-                // Create the 'Refuse' JadeOrg message.
-                ACLMessageWrapper refuseMessage = EnactRoleProtocol.getInstance()
-                    .getACLMessageWrapper(ACLMessage.AGREE);
+                // Create the 'Refuse' message.
+                RefuseMessage refuseMessage = new RefuseMessage();
                 refuseMessage.addReceiver(organizationAID);
                 
-                send(ACLMessageWrapper.class, refuseMessage);
+                // Send the message.
+                send(RefuseMessage.class, refuseMessage);
             }
             
             // </editor-fold>

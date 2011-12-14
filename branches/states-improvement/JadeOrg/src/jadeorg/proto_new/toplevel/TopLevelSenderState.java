@@ -1,7 +1,8 @@
 package jadeorg.proto_new.toplevel;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.FSMBehaviourSenderState;
 import jadeorg.proto_new.OneShotBehaviourState;
 
@@ -119,8 +120,11 @@ abstract class TopLevelSenderState extends FSMBehaviourSenderState {
 
         @Override
         public void action() {
-            ACLMessageWrapper aclMessage = new ACLMessageWrapper(new ACLMessage(ACLMessage.FAILURE));
-            send(ACLMessageWrapper.class, aclMessage);
+            // Create the 'Failure' message.
+            FailureMessage failureMessage = new FailureMessage();
+            
+            // Send the message.
+            send(FailureMessage.class, failureMessage);
         }
 
         // </editor-fold>

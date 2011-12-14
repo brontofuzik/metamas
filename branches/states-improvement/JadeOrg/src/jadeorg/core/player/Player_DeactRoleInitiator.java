@@ -2,7 +2,7 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ACLMessageWrapper;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -148,12 +148,12 @@ public class Player_DeactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ACLMessageWrapper aclMessageWrapper = (ACLMessageWrapper)receive(ACLMessageWrapper.class, organizationAID);            
+            SimpleMessage aclMessageWrapper = (SimpleMessage)receive(SimpleMessage.class, organizationAID);            
             if (aclMessageWrapper != null) {
-                if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.AGREE) {
+                if (aclMessageWrapper.getPerformative() == ACLMessage.AGREE) {
                     // The request was agreed.
                     ((Player)myAgent).knowledgeBase.deactRole(roleName);
-                } else if (aclMessageWrapper.getWrappedACLMessage().getPerformative() == ACLMessage.REFUSE) {
+                } else if (aclMessageWrapper.getPerformative() == ACLMessage.REFUSE) {
                     // The request was refused.
                 } else {
                     // TODO Send not understood.
