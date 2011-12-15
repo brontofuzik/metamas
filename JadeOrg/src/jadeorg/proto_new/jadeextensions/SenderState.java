@@ -1,4 +1,4 @@
-package jadeorg.proto_new;
+package jadeorg.proto_new.jadeextensions;
 
 import jadeorg.lang.Message;
 

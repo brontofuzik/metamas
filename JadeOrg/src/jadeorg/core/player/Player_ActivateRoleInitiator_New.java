@@ -7,9 +7,9 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import jadeorg.proto_new.toplevel.MultiReceiverState;
-import jadeorg.proto_new.toplevel.MultiSenderState;
-import jadeorg.proto_new.toplevel.SimpleState;
+import jadeorg.proto_new.MultiReceiverState;
+import jadeorg.proto_new.MultiSenderState;
+import jadeorg.proto_new.SimpleState;
 
 /**
  * An 'Activate role' protocol initiator party (new version).
@@ -59,10 +59,10 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        jadeorg.proto_new.State sendActivateRequest = new SendActivateRequest();
-        jadeorg.proto_new.State receiveActivateReply = new ReceiveActivateReply();
-        jadeorg.proto_new.State successEnd = new SuccessEnd();
-        jadeorg.proto_new.State failureEnd = new FailureEnd();
+        jadeorg.proto_new.jadeextensions.State sendActivateRequest = new SendActivateRequest();
+        jadeorg.proto_new.jadeextensions.State receiveActivateReply = new ReceiveActivateReply();
+        jadeorg.proto_new.jadeextensions.State successEnd = new SuccessEnd();
+        jadeorg.proto_new.jadeextensions.State failureEnd = new FailureEnd();
         // ------------------
 
         // Register the states.
@@ -128,7 +128,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Classes">
 
-        private class SendActivateRequest_Sender extends BottomLevelSenderState {
+        private class SendActivateRequest_Sender extends InnerSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -197,7 +197,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
         // <editor-fold defaultstate="collapsed" desc="Classes">     
 
-        private class ReceiveAgree extends BottomLevelReceiverState {
+        private class ReceiveAgree extends InnerReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -223,7 +223,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
             // </editor-fold>
         }
 
-        private class ReceiveRefuse extends BottomLevelReceiverState {
+        private class ReceiveRefuse extends InnerReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
