@@ -1,10 +1,6 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.RefuseMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -255,6 +251,10 @@ class Player_EnactRoleInitiator_New extends Party {
 
         SendRequirementsReply() {
             super(NAME);
+            
+            addSender(AGREE, this.new SendAgree());
+            addSender(REFUSE, this.new SendRefuse());
+            buildFSM();
         }
 
         // </editor-fold>
@@ -282,72 +282,6 @@ class Player_EnactRoleInitiator_New extends Party {
             ((Player)myAgent).logInfo("Requirements reply sent.");
         }
 
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class SendAgree extends InnerSenderState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "send-agree";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendAgree() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                // Create the 'Agree' message.
-                AgreeMessage agreeMessage = new AgreeMessage();
-                agreeMessage.addReceiver(organizationAID);
-                
-                // Send the message.
-                send(AgreeMessage.class, agreeMessage);
-            }
-            
-            // </editor-fold>
-        }
-        
-        private class SendRefuse extends InnerSenderState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "send-refuse";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendRefuse() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                // Create the 'Refuse' message.
-                RefuseMessage refuseMessage = new RefuseMessage();
-                refuseMessage.addReceiver(organizationAID);
-                
-                // Send the message.
-                send(RefuseMessage.class, refuseMessage);
-            }
-            
-            // </editor-fold>
-        }
-        
         // </editor-fold>
     }
     

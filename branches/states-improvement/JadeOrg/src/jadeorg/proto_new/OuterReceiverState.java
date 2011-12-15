@@ -1,5 +1,8 @@
 package jadeorg.proto_new;
 
+import jadeorg.lang.simplemessages.AgreeMessage;
+import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.RefuseMessage;
 import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourReceiverState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
@@ -143,7 +146,89 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     /**
-     * A 'Receive failure' (receiver) state.
+     * A 'Receive agree' inner receiver state.
+     * @author Lukáš Kúdela
+     * @since 2011-12-15
+     * @version %I% %G%
+     */
+    protected class ReceiveAgree extends InnerReceiverState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "receive-agree";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public ReceiveAgree() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Receive the 'Agree' message.
+            AgreeMessage agreeMessage = (AgreeMessage)
+                receive(AgreeMessage.class);
+            
+            // Process the message.
+            if (agreeMessage != null) {
+                setExitValue(RECEIVED);
+            } else {
+                setExitValue(NOT_RECEIVED);
+            }
+        }
+    
+        // </editor-fold>
+    }
+    
+    /**
+     * A 'Receive failure' inner receiver state.
+     * @author Lukáš Kúdela
+     * @since 2011-12-15
+     * @version %I% %G%
+     */
+    protected class ReceiveRefuse extends InnerReceiverState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "receive-refuse";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public ReceiveRefuse() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Receive the 'Refuse' message.
+            RefuseMessage refuseMessage = (RefuseMessage)
+                receive(RefuseMessage.class);
+            
+            // Process the message.
+            if (refuseMessage != null) {
+                setExitValue(RECEIVED);
+            } else {
+                setExitValue(NOT_RECEIVED);
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * A 'Receive failure' inner receiver state.
      * @author Lukáš Kúdela
      * @since 2011-12-09
      * @version %I% %G%
@@ -168,7 +253,16 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            receive(SimpleMessage.class);
+            // Receive the 'Failure' message.
+            FailureMessage failureMessage = (FailureMessage)
+                receive(FailureMessage.class);
+            
+            // Process the message.
+            if (failureMessage != null) {
+                setExitValue(RECEIVED);
+            } else {
+                setExitValue(NOT_RECEIVED);
+            }
         }
 
         // </editor-fold>

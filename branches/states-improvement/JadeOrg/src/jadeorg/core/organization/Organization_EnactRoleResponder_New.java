@@ -3,7 +3,6 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -254,8 +253,8 @@ class Organization_EnactRoleResponder_New extends Party {
         ReceiveRequirementsReply() {
             super(NAME);
             
-            addReceiver(AGREE, this.new ReceiveRequirementsReply_Receiver());
-            addReceiver(REFUSE, this.new ReceiveFailure());
+            addReceiver(AGREE, this.new ReceiveAgree());
+            addReceiver(REFUSE, this.new ReceiveRefuse());
             buildFSM();
         }
         
@@ -271,41 +270,6 @@ class Organization_EnactRoleResponder_New extends Party {
         @Override
         protected void onExit() {
             ((Organization)myAgent).logInfo("Requirements reply received.");
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class ReceiveRequirementsReply_Receiver extends InnerReceiverState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "receiver";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            ReceiveRequirementsReply_Receiver() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                SimpleMessage requirementsReplyMessage = (SimpleMessage)
-                    receive(SimpleMessage.class, playerAID);
-                
-                if (requirementsReplyMessage != null) {
-                    setExitValue(RECEIVED);
-                }
-            }
-            
-            // </editor-fold>
         }
         
         // </editor-fold>

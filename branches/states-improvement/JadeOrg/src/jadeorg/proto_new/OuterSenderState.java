@@ -1,6 +1,8 @@
 package jadeorg.proto_new;
 
+import jadeorg.lang.simplemessages.AgreeMessage;
 import jadeorg.lang.simplemessages.FailureMessage;
+import jadeorg.lang.simplemessages.RefuseMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourSenderState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 
@@ -93,7 +95,79 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
     }
     
     /**
-     * A 'Send failure' (sender) state.
+     * A 'Send agree' inner sender state.
+     * @author Lukáš Kúdela
+     * @since 2011-12-15
+     * @version %I% %G%
+     */
+    protected class SendAgree extends InnerSenderState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "send-agree";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public SendAgree() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Create the 'Agree' message.
+            AgreeMessage agreeMessage = new AgreeMessage();
+            
+            // Send the message.
+            send(AgreeMessage.class, agreeMessage);
+        }
+        
+        // </editor-fold>      
+    }
+    
+    /**
+     * A 'Send refuse' inner sender state.
+     * @author Lukáš Kúdela
+     * @since 2011-12-15
+     * @version %I% %G%
+     */
+    protected class SendRefuse extends InnerSenderState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "send-refuse";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public SendRefuse() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Create the 'Refuse' message.
+            RefuseMessage refuseMessage = new RefuseMessage();
+            
+            // Send the message.
+            send(RefuseMessage.class, refuseMessage);
+        }
+        
+        // </editor-fold>      
+    }
+    
+    /**
+     * A 'Send failure' inner sender state.
      * @author Lukáš Kúdela
      * @since 2011-12-09
      * @version %I% %G%
