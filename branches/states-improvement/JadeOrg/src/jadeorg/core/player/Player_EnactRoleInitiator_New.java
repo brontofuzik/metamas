@@ -11,12 +11,12 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import jadeorg.proto_new.State;
-import jadeorg.proto_new.toplevel.MultiReceiverState;
-import jadeorg.proto_new.toplevel.MultiSenderState;
-import jadeorg.proto_new.toplevel.SimpleState;
-import jadeorg.proto_new.toplevel.SingleReceiverState;
-import jadeorg.proto_new.toplevel.SingleSenderState;
+import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto_new.MultiReceiverState;
+import jadeorg.proto_new.MultiSenderState;
+import jadeorg.proto_new.SimpleState;
+import jadeorg.proto_new.SingleReceiverState;
+import jadeorg.proto_new.SingleSenderState;
 
 /**
  * An 'Enact role' protocol initiator party.
@@ -197,7 +197,7 @@ class Player_EnactRoleInitiator_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class ReceiveRequirementsInform_Receiver extends BottomLevelReceiverState {
+        private class ReceiveRequirementsInform_Receiver extends InnerReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Fields">
             
@@ -286,7 +286,7 @@ class Player_EnactRoleInitiator_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class SendAgree extends BottomLevelSenderState {
+        private class SendAgree extends InnerSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -317,7 +317,7 @@ class Player_EnactRoleInitiator_New extends Party {
             // </editor-fold>
         }
         
-        private class SendRefuse extends BottomLevelSenderState {
+        private class SendRefuse extends InnerSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             

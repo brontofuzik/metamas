@@ -1,4 +1,4 @@
-package jadeorg.proto_new;
+package jadeorg.proto_new.jadeextensions;
 
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;

@@ -110,7 +110,7 @@ public abstract class Party extends FSMBehaviour {
     }
     
     // TAG STATES-IMPROVEMENT
-    protected void registerState(jadeorg.proto_new.State state) {
+    protected void registerState(jadeorg.proto_new.jadeextensions.State state) {
     }
     
     protected void registerFirstState(State state) {
@@ -123,7 +123,7 @@ public abstract class Party extends FSMBehaviour {
     }
     
     // TAG STATES-IMPROVEMENT
-    protected void registerFirstState(jadeorg.proto_new.State state) {
+    protected void registerFirstState(jadeorg.proto_new.jadeextensions.State state) {
     }
     
     protected void registerLastState(State state) {
@@ -136,7 +136,7 @@ public abstract class Party extends FSMBehaviour {
     }
     
     // TAG STATES-IMPROVEMENT
-    protected void registerLastState(jadeorg.proto_new.State state) {
+    protected void registerLastState(jadeorg.proto_new.jadeextensions.State state) {
     }
     
     protected void registerTransition(State fromState, State toState, Event event) {
@@ -144,7 +144,7 @@ public abstract class Party extends FSMBehaviour {
     }
     
     // TAG STATES-IMPROVEMENT
-    protected void registerTransition(jadeorg.proto_new.State fromState, jadeorg.proto_new.State toState) {
+    protected void registerTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
         registerTransition(fromState.getName(), toState.getName(), toState.getCode());
     }
     
@@ -153,7 +153,7 @@ public abstract class Party extends FSMBehaviour {
     }
     
     // TAG STATES-IMPROVEMENT
-    protected void registerDefaultTransition(jadeorg.proto_new.State fromState, jadeorg.proto_new.State toState) {
+    protected void registerDefaultTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
         registerDefaultTransition(fromState.getName(), toState.getName());
     }
     

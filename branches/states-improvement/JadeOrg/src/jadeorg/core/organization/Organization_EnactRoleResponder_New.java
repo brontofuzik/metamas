@@ -10,12 +10,12 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import jadeorg.proto_new.State;
-import jadeorg.proto_new.toplevel.MultiReceiverState;
-import jadeorg.proto_new.toplevel.MultiSenderState;
-import jadeorg.proto_new.toplevel.SimpleState;
-import jadeorg.proto_new.toplevel.SingleReceiverState;
-import jadeorg.proto_new.toplevel.SingleSenderState;
+import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto_new.MultiReceiverState;
+import jadeorg.proto_new.MultiSenderState;
+import jadeorg.proto_new.SimpleState;
+import jadeorg.proto_new.SingleReceiverState;
+import jadeorg.proto_new.SingleSenderState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -200,7 +200,7 @@ class Organization_EnactRoleResponder_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class SendRequirementsInform_Sender extends BottomLevelSenderState {
+        private class SendRequirementsInform_Sender extends InnerSenderState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
@@ -277,7 +277,7 @@ class Organization_EnactRoleResponder_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Classes">
         
-        private class ReceiveRequirementsReply_Receiver extends BottomLevelReceiverState {
+        private class ReceiveRequirementsReply_Receiver extends InnerReceiverState {
 
             // <editor-fold defaultstate="collapsed" desc="Constant fields">
             
