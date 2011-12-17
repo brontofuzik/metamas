@@ -1,5 +1,6 @@
 package jadeorg.lang.simplemessages;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
@@ -12,7 +13,7 @@ import jadeorg.lang.MessageParser;
  * @since 2011-11-06
  * @version %I% %G%
  */
-public class SimpleMessage extends Message {
+public abstract class SimpleMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -61,11 +62,6 @@ public class SimpleMessage extends Message {
     protected MessageGenerator createGenerator() {
         return new SimpleMessageGenerator();
     }
-    
-    @Override
-    protected MessageParser createParser() {
-        return new SimpleMessageParser();
-    }
 
     // </editor-fold>
 
@@ -81,32 +77,25 @@ public class SimpleMessage extends Message {
      */
     private static class SimpleMessageGenerator extends MessageGenerator {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public ACLMessage generate(Message message) {
             SimpleMessage simpleMessage = (SimpleMessage)message;
             
+            // Generate the header.
             ACLMessage aclMessage = new ACLMessage(simpleMessage.getPerformative());
+            for (AID receiverAID : simpleMessage.getReceivers()) {
+                aclMessage.addReceiver(receiverAID);
+            }
+                  
+            // Generate the body.
             aclMessage.setContent(simpleMessage.getContent());
+            
             return aclMessage;
         }
-    }
-    
-    /**
-     * The simple message parser.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private static class SimpleMessageParser extends MessageParser {
-
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            SimpleMessage simpleMessage = new SimpleMessage(aclMessage.getPerformative());
-            simpleMessage.setContent(aclMessage.getContent());
-            return simpleMessage;
-        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

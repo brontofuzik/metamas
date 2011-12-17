@@ -1,11 +1,8 @@
 package jadeorg.proto_new;
 
-import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto_new.jadeextensions.State;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A multi-receiver state.
@@ -17,7 +14,7 @@ public abstract class MultiReceiverState extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Map<Integer, InnerReceiverState> receivers = new HashMap<Integer, InnerReceiverState>();
+    private List<InnerReceiverState> receivers = new ArrayList<InnerReceiverState>();
       
     // </editor-fold>
     
@@ -31,14 +28,14 @@ public abstract class MultiReceiverState extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected void addReceiver(int event, InnerReceiverState receiver) {
+    protected void addReceiver(InnerReceiverState receiver) {
         // ----- Preconditions -----
         if (receiver == null) {
             throw new IllegalArgumentException("receiver");
         }
         // -------------------------
         
-        receivers.put(event, receiver);
+        receivers.add(receiver);
     }
     
     protected void buildFSM() {
@@ -63,7 +60,7 @@ public abstract class MultiReceiverState extends OuterReceiverState {
         // Register the states.
         registerFirstState(entry);
         registerState(manager);
-        for(InnerReceiverState receiver : receivers.values()) {
+        for(InnerReceiverState receiver : receivers) {
             registerState(receiver);
         }
         registerState(blocker);
@@ -74,30 +71,21 @@ public abstract class MultiReceiverState extends OuterReceiverState {
         entry.registerDefaultTransition(manager);
         
         // manager ---[Default]---> receiver_0
-        List<InnerReceiverState> receiverList = getReceiverList();
-        manager.registerDefaultTransition(receiverList.get(0));
+        manager.registerDefaultTransition(receivers.get(0));
              
         for (int i = 0; i < receivers.size() - 1; i++) {
             // receiver_i ---[RECEIVED]---> exit
-            receiverList.get(i).registerTransition(InnerReceiverState.RECEIVED, exit);
+            receivers.get(i).registerTransition(InnerReceiverState.RECEIVED, exit);
             // receiver_i ---[NOT_RECEIVED]---> receiver_(i+1)
-            receiverList.get(i).registerTransition(InnerReceiverState.NOT_RECEIVED, receiverList.get(i + 1));
+            receivers.get(i).registerTransition(InnerReceiverState.NOT_RECEIVED, receivers.get(i + 1));
         }
         // receiver_(N-1) ---[RECEIVED]---> exit
-        receiverList.get(receiverList.size() - 1).registerTransition(InnerReceiverState.RECEIVED, exit);
+        receivers.get(receivers.size() - 1).registerTransition(InnerReceiverState.RECEIVED, exit);
         // receiver_(N-1) ---[NOT_RECEIVED]---> blocker
-        receiverList.get(receiverList.size() - 1).registerTransition(InnerReceiverState.NOT_RECEIVED, blocker);
+        receivers.get(receivers.size() - 1).registerTransition(InnerReceiverState.NOT_RECEIVED, blocker);
         
         // blocker ---[Default]---> manager
-        blocker.registerDefaultTransition(manager, new String[] { manager.getName() });
-    }
-    
-    private List<InnerReceiverState> getReceiverList() {
-        List<InnerReceiverState> receiverList = new ArrayList<InnerReceiverState>();
-        for (InnerReceiverState receiver : receivers.values()) {
-            receiverList.add(receiver);
-        }
-        return receiverList;
+        blocker.registerDefaultTransition(manager/*, new String[] { manager.getName() }*/);
     }
     
     // </editor-fold>

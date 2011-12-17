@@ -170,8 +170,8 @@ class Player_EnactRoleInitiator_New extends Party {
         ReceiveRequirementsInform() {
             super(NAME);
             
-            addReceiver(SUCCESS, new ReceiveRequirementsInform_Receiver());
-            addReceiver(FAILURE, new ReceiveFailure());
+            addReceiver(new ReceiveRequirementsInform_Receiver(SUCCESS));
+            addReceiver(new ReceiveFailure(FAILURE));
             buildFSM();
         }
 
@@ -203,8 +203,8 @@ class Player_EnactRoleInitiator_New extends Party {
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            ReceiveRequirementsInform_Receiver() {
-                super(NAME);
+            ReceiveRequirementsInform_Receiver(int outerReceiverStateExitValue) {
+                super(NAME, outerReceiverStateExitValue);
             }
             
             // </editor-fold>
@@ -220,7 +220,9 @@ class Player_EnactRoleInitiator_New extends Party {
                 // Process the message.
                 if (requirementsInformMessage != null) {
                     requirements = requirementsInformMessage.getRequirements();
-                    setExitValue(SUCCESS);
+                    setExitValue(RECEIVED);
+                } else {
+                    setExitValue(NOT_RECEIVED);
                 }
             }
             
@@ -252,8 +254,8 @@ class Player_EnactRoleInitiator_New extends Party {
         SendRequirementsReply() {
             super(NAME);
             
-            addSender(AGREE, this.new SendAgree());
-            addSender(REFUSE, this.new SendRefuse());
+            addSender(AGREE, this.new SendAgree(organizationAID));
+            addSender(REFUSE, this.new SendRefuse(organizationAID));
             buildFSM();
         }
 
@@ -313,13 +315,16 @@ class Player_EnactRoleInitiator_New extends Party {
         }
         
         @Override
-        protected void onReceiver() {
+        protected int onReceiver() {
             RoleAIDMessage roleAIDMessage = (RoleAIDMessage)
-                receive(RoleAIDMessage.class, organizationAID);
+                receive(RoleAIDMessage.class, organizationAID);      
             
             if (roleAIDMessage != null) {
                 AID roleAID = roleAIDMessage.getRoleAID();
                 ((Player)myAgent).knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
+                return InnerReceiverState.RECEIVED;
+            } else {
+                return InnerReceiverState.NOT_RECEIVED;
             }
         }
 

@@ -14,13 +14,14 @@ public abstract class SingleReceiverState extends OuterReceiverState {
     
     public SingleReceiverState(String name) {
         super(name);
+        registerStatesAndTransitions();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected abstract void onReceiver();
+    protected abstract int onReceiver();
     
     // ---------- PRIVATE ----------
     
@@ -40,11 +41,15 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         registerState(blocker);
         registerLastState(exit);
         
-        // TODO
         // Register the transitions.
-//        entry.registerDefaultTransition(sender);
-//        
-//        sender.registerDefaultTransition(exit);
+        entry.registerDefaultTransition(manager);
+        
+        manager.registerDefaultTransition(receiver);
+        
+        receiver.registerTransition(InnerReceiverState.RECEIVED, exit);
+        receiver.registerTransition(InnerReceiverState.NOT_RECEIVED, blocker);
+        
+        blocker.registerDefaultTransition(manager);
     }
     
     // </editor-fold>
@@ -55,14 +60,14 @@ public abstract class SingleReceiverState extends OuterReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "sender";
+        private static final String NAME = "receiver";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         Receiver() {
-            super(NAME);
+            super(NAME, 0);
         }
         
         // </editor-fold>
@@ -71,7 +76,7 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         
         @Override
         public void action() {
-            onReceiver();
+            setExitValue(onReceiver());
         }
         
         // </editor-fold>

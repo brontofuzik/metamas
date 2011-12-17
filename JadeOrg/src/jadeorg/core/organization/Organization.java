@@ -8,13 +8,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
-import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
-import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
-import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
-import jadeorg.util.ManagerBehaviour;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
@@ -118,7 +112,7 @@ public abstract class Organization extends Agent {
     // ---------- PRIVATE ----------
     
     private void addBehaviours() {
-        addBehaviour(new OrganizationManager());
+        addBehaviour(new Organization_Manager());
         logInfo("Behaviours addded.");
     }
 
@@ -176,7 +170,7 @@ public abstract class Organization extends Agent {
      * Enacts a role.
      * @param player the player
      */
-    private void enactRoleResponder(AID player) {
+    void enactRoleResponder(AID player) {
         addBehaviour(new Organization_EnactRoleResponder_New(player));
     }
 
@@ -185,60 +179,12 @@ public abstract class Organization extends Agent {
      * @param player the player
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    private void deactRoleResponder(AID player) {
-
+    void deactRoleResponder(AID player) {
     }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * An organization manager behaviour.
-     */
-    private class OrganizationManager extends ManagerBehaviour {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        OrganizationManager() {
-            addHandler(new EnactRoleHandler());
-            addHandler(new DeactRoleHandler());
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class EnactRoleHandler extends HandlerBehaviour {
-
-            @Override
-            public void action() {
-                MessageTemplate enactRequestTemplate = EnactRoleProtocol.getInstance()
-                    .getTemplate(EnactRequestMessage.class);
-                ACLMessage enactRequestMessage = receive(enactRequestTemplate);
-                if (enactRequestMessage != null) {
-                    putBack(enactRequestMessage);
-                    enactRoleResponder(enactRequestMessage.getSender());
-                }
-            }
-        }
-        
-        private class DeactRoleHandler extends HandlerBehaviour {
-
-            @Override
-            public void action() {
-                MessageTemplate deactRequestTemplate = DeactRoleProtocol.getInstance()
-                    .getTemplate(DeactRequestMessage.class);
-                ACLMessage deactRequestMessage = receive(deactRequestTemplate);
-                if (deactRequestMessage != null) {
-                    putBack(deactRequestMessage);
-                    deactRoleResponder(deactRequestMessage.getSender());
-                }
-            }
-        }
-       
-        // </editor-fold>
-    }
     
     // TAG YellowPages
     /**

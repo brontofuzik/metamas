@@ -46,6 +46,8 @@ public abstract class Party extends FSMBehaviour {
         ACLMessage aclMessage = getProtocol().generate(messageClass, message);
         
         System.out.println("SENDING MESSAGE: " + aclMessage.toString());
+       
+        // Send the ACL message.
         myAgent.send(aclMessage);
     }
     
@@ -100,6 +102,7 @@ public abstract class Party extends FSMBehaviour {
     
     // ---------- PROTECTED ----------
     
+    // TAG OBSOLETE
     protected void registerState(State state) {
         registerState((Behaviour)state, state.getName());
         
@@ -109,10 +112,11 @@ public abstract class Party extends FSMBehaviour {
         }
     }
     
-    // TAG STATES-IMPROVEMENT
     protected void registerState(jadeorg.proto_new.jadeextensions.State state) {
+        registerState((Behaviour)state, state.getName());
     }
     
+    // TAG OBSOLETE
     protected void registerFirstState(State state) {
         registerFirstState((Behaviour)state, state.getName());
         
@@ -122,10 +126,11 @@ public abstract class Party extends FSMBehaviour {
         }
     }
     
-    // TAG STATES-IMPROVEMENT
     protected void registerFirstState(jadeorg.proto_new.jadeextensions.State state) {
+        registerFirstState((Behaviour)state, state.getName());
     }
     
+    // TAG OBSOLETE
     protected void registerLastState(State state) {
         registerLastState((Behaviour)state, state.getName());
         
@@ -135,24 +140,24 @@ public abstract class Party extends FSMBehaviour {
         }
     }
     
-    // TAG STATES-IMPROVEMENT
     protected void registerLastState(jadeorg.proto_new.jadeextensions.State state) {
+        registerLastState((Behaviour)state, state.getName());
     }
     
+    // TAG OBSOLETE
     protected void registerTransition(State fromState, State toState, Event event) {
         registerTransition(fromState.getName(), toState.getName(), event.getCode());
     }
     
-    // TAG STATES-IMPROVEMENT
     protected void registerTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
         registerTransition(fromState.getName(), toState.getName(), toState.getCode());
     }
     
+    // TAG OBSOLETE
     protected void registerDefaultTransition(State fromState, State toState) {
         registerDefaultTransition(fromState.getName(), toState.getName());
     }
     
-    // TAG STATES-IMPROVEMENT
     protected void registerDefaultTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
         registerDefaultTransition(fromState.getName(), toState.getName());
     }

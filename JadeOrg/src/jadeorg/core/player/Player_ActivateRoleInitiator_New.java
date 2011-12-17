@@ -174,8 +174,8 @@ public class Player_ActivateRoleInitiator_New extends Party {
         ReceiveActivateReply() {
             super(NAME);
 
-            addReceiver(ACLMessage.AGREE, this.new ReceiveAgree());
-            addReceiver(ACLMessage.REFUSE, this.new ReceiveRefuse());
+            addReceiver(this.new ReceiveAgree(ACLMessage.AGREE));
+            addReceiver(this.new ReceiveRefuse(ACLMessage.REFUSE));
             buildFSM();
         }
 
@@ -207,8 +207,8 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
             // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-            ReceiveAgree() {
-                super(NAME);
+            ReceiveAgree(int outerReceiverStateExitValue) {
+                super(NAME, outerReceiverStateExitValue);
             }
 
             // </editor-fold>
@@ -233,8 +233,8 @@ public class Player_ActivateRoleInitiator_New extends Party {
 
             // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-            ReceiveRefuse() {
-                super(NAME);
+            ReceiveRefuse(int outerReceiverStateExitValue) {
+                super(NAME, outerReceiverStateExitValue);
             }
 
            // </editor-fold>
