@@ -48,7 +48,6 @@ public class DeactRoleProtocol extends Protocol {
     
     private void registerMessages() {
         registerMessage(DeactRequestMessage.class);
-        registerMessage(FailureMessage.class);
     }
     
     // </editor-fold>

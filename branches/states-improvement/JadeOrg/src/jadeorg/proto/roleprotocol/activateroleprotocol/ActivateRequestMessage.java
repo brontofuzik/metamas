@@ -60,7 +60,8 @@ public class ActivateRequestMessage extends RoleMessage {
 
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(ActivateRoleProtocol.getInstance().getName());
+            // TAG SETTING-PROTOCOL
+            //aclMessage.setProtocol(ActivateRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(activateRequestMessage.getReceiverRole());
 
             // Generate the content.

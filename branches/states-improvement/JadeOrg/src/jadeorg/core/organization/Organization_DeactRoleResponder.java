@@ -8,7 +8,6 @@ import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import jadeorg.proto.organizationprotocol.deactroleprotocol.FailureMessage;
 
 /**
  * A 'Deact role' protocol responder party.
@@ -195,11 +194,11 @@ public class Organization_DeactRoleResponder extends Party {
 
         @Override
         public void action() {
-            // Create the 'Failure' message.
-            FailureMessage failureMessage = new FailureMessage();
-            failureMessage.setReceiverPlayer(player);
-
-            send(FailureMessage.class, failureMessage);
+//            // Create the 'Failure' message.
+//            FailureMessage failureMessage = new FailureMessage();
+//            failureMessage.setReceiverPlayer(player);
+//
+//            send(FailureMessage.class, failureMessage);
         }
 
         // </editor-fold>

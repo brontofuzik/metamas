@@ -10,12 +10,20 @@ import jadeorg.lang.Message;
  */
 public abstract class FSMBehaviourSenderState extends FSMBehaviourState implements SenderState {
    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
     protected FSMBehaviourSenderState(String name) {
         super(name);
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
 
     @Override
     public void send(Class messageClass, Message message) {
         getParty().send(messageClass, message);
     }
+    
+    // </editor-fold>
 }

@@ -79,7 +79,9 @@ class Organization_EnactRoleResponder_New extends Party {
         registerFirstState(receiveEnactRequest);
         registerState(sendRequirementsInform);
         registerState(receiveRequirementsReply);
+        registerState(sendRoleAID);
         registerLastState(successEnd);
+        registerLastState(failureEnd);
         
         // Register the transitions.
         receiveEnactRequest.registerDefaultTransition(sendRequirementsInform);
@@ -121,7 +123,7 @@ class Organization_EnactRoleResponder_New extends Party {
         }
         
         @Override
-        protected void onReceiver() {
+        protected int onReceiver() {
             // Receive the 'Enact request' message.
             EnactRequestMessage enactRequestMessage = (EnactRequestMessage)
                 receive(EnactRequestMessage.class, playerAID);
@@ -129,6 +131,9 @@ class Organization_EnactRoleResponder_New extends Party {
             // Process the message.
             if (enactRequestMessage != null) {
                 roleName = enactRequestMessage.getRoleName();
+                return InnerReceiverState.RECEIVED;
+            } else {
+                return InnerReceiverState.NOT_RECEIVED;
             }
         }
 
@@ -160,7 +165,7 @@ class Organization_EnactRoleResponder_New extends Party {
             super(NAME);
             
             addSender(SUCCESS, this.new SendRequirementsInform_Sender());
-            addSender(FAILURE, this.new SendFailure());
+            addSender(FAILURE, this.new SendFailure(playerAID));
             buildFSM();
         }
         
@@ -253,8 +258,8 @@ class Organization_EnactRoleResponder_New extends Party {
         ReceiveRequirementsReply() {
             super(NAME);
             
-            addReceiver(AGREE, this.new ReceiveAgree());
-            addReceiver(REFUSE, this.new ReceiveRefuse());
+            addReceiver(this.new ReceiveAgree(AGREE));
+            addReceiver(this.new ReceiveRefuse(REFUSE));
             buildFSM();
         }
         
@@ -279,7 +284,7 @@ class Organization_EnactRoleResponder_New extends Party {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receive-requirements-reply";
+        private static final String NAME = "send-role-aid";
         
         // </editor-fold>
         

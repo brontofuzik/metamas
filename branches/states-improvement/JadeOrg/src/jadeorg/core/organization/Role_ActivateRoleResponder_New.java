@@ -99,7 +99,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         ReceiveActivateRequest() {
             super(NAME);
             
-            addReceiver(RECEIVER1, new ReceiveActivateRequest_Receiver());
+            addReceiver(new ReceiveActivateRequest_Receiver(0));
             buildFSM();
         }
 
@@ -131,8 +131,8 @@ public class Role_ActivateRoleResponder_New extends Party {
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            ReceiveActivateRequest_Receiver() {
-                super(NAME);
+            ReceiveActivateRequest_Receiver(int outerReceiverStateExitValue) {
+                super(NAME, outerReceiverStateExitValue);
             }
             
             // </editor-fold>
@@ -168,8 +168,8 @@ public class Role_ActivateRoleResponder_New extends Party {
         SendActivateReply() {
             super(NAME);
             
-            addSender(AGREE, new SendAgree());
-            addSender(REFUSE, new SendRefuse());
+            addSender(AGREE, this.new SendAgree(playerAID));
+            addSender(REFUSE, this.new SendRefuse(playerAID));
             buildFSM();
         }
 
@@ -201,68 +201,6 @@ public class Role_ActivateRoleResponder_New extends Party {
         
         private boolean isActivable() {
             return ((Role)myAgent).state == Role.RoleState.INACTIVE;
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class SendAgree extends InnerSenderState {
-            
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "send-agree";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendAgree() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-
-            @Override
-            public void action() {
-                AgreeMessage agreeMessage = new AgreeMessage();
-                agreeMessage.addReceiver(playerAID);
-                
-                send(AgreeMessage.class, agreeMessage);
-            }
-            
-            // </editor-fold>
-        }
-        
-        private class SendRefuse extends InnerSenderState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "send-refuse";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendRefuse() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                RefuseMessage refuseMessage = new RefuseMessage();
-                refuseMessage.addReceiver(playerAID);
-                
-                send(RefuseMessage.class, refuseMessage);
-            }
-            
-            // </editor-fold>
         }
         
         // </editor-fold>

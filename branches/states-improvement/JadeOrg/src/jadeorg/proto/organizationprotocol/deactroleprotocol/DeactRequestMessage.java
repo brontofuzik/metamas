@@ -129,7 +129,8 @@ public class DeactRequestMessage extends OrganizationMessage {
 
             // Generate the ACL message header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(DeactRoleProtocol.getInstance().getName());
+            // TAG SETTING-PROTOCOL
+            //aclMessage.setProtocol(DeactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(deactRequestMessage.getReceiverOrganization());
 
             // Generate the ACL message content.

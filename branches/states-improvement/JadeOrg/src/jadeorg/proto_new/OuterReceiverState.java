@@ -3,7 +3,6 @@ package jadeorg.proto_new;
 import jadeorg.lang.simplemessages.AgreeMessage;
 import jadeorg.lang.simplemessages.FailureMessage;
 import jadeorg.lang.simplemessages.RefuseMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourReceiverState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 
@@ -128,10 +127,19 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int exitValue;
+        
+        private int outerReceiverStateExitValue;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerReceiverState(String name) {
+        protected InnerReceiverState(String name, int outerReceiverStateExitValue) {
             super(name);
+            this.outerReceiverStateExitValue = outerReceiverStateExitValue;
         } 
         
         // </editor-fold>
@@ -139,7 +147,25 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         protected void setExitValue(int exitValue) {
-            ((MultiReceiverState)getParent()).setExitValue(exitValue);
+            this.exitValue = exitValue;
+            if (exitValue == RECEIVED) {
+                getOuterReceiverStateParent().setExitValue(outerReceiverStateExitValue);
+            }
+        }
+        
+        // ----- PRIVATE -----
+        
+        private OuterReceiverState getOuterReceiverStateParent() {
+            return (OuterReceiverState)getParent();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>
@@ -161,8 +187,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveAgree() {
-            super(NAME);
+        public ReceiveAgree(int outerReceiverStateExitValue) {
+            super(NAME, outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -202,8 +228,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveRefuse() {
-            super(NAME);
+        public ReceiveRefuse(int outerReceiverStateExitValue) {
+            super(NAME, outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -243,8 +269,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        public ReceiveFailure() {
-            super(NAME);
+        public ReceiveFailure(int outerReceiverStateExitValue) {
+            super(NAME, outerReceiverStateExitValue);
         }
 
         // </editor-fold>
@@ -258,7 +284,7 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
                 receive(FailureMessage.class);
             
             // Process the message.
-            if (failureMessage != null) {
+            if (failureMessage != null) {        
                 setExitValue(RECEIVED);
             } else {
                 setExitValue(NOT_RECEIVED);

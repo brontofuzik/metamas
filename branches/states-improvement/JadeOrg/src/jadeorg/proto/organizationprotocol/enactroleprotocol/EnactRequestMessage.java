@@ -86,7 +86,8 @@ public class EnactRequestMessage extends OrganizationMessage {
 
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
+            // TAG SETTING-PROTOCOL
+            //aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(enactRequestMessage.getReceiverOrganization());
 
             // Generate the content.

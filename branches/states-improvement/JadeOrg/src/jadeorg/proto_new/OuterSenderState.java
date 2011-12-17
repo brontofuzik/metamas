@@ -1,5 +1,6 @@
 package jadeorg.proto_new;
 
+import jade.core.AID;
 import jadeorg.lang.simplemessages.AgreeMessage;
 import jadeorg.lang.simplemessages.FailureMessage;
 import jadeorg.lang.simplemessages.RefuseMessage;
@@ -85,10 +86,29 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
     
     protected abstract class InnerSenderState extends OneShotBehaviourState {
        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private AID receiverAID;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        protected AID getReceiverAID() {
+            return receiverAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerSenderState(String name) {
+        protected InnerSenderState(String name, AID receiverAID) {
             super(name);
+            this.receiverAID = receiverAID;
+        }
+        
+        protected InnerSenderState(String name) {
+            this(name, null);
         }
         
         // </editor-fold>
@@ -110,8 +130,8 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public SendAgree() {
-            super(NAME);
+        public SendAgree(AID receiverAID) {
+            super(NAME, receiverAID);
         }
         
         // </editor-fold>
@@ -122,6 +142,7 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         public void action() {
             // Create the 'Agree' message.
             AgreeMessage agreeMessage = new AgreeMessage();
+            agreeMessage.addReceiver(getReceiverAID());
             
             // Send the message.
             send(AgreeMessage.class, agreeMessage);
@@ -146,8 +167,8 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public SendRefuse() {
-            super(NAME);
+        public SendRefuse(AID receiverAID) {
+            super(NAME, receiverAID);
         }
         
         // </editor-fold>
@@ -158,6 +179,7 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         public void action() {
             // Create the 'Refuse' message.
             RefuseMessage refuseMessage = new RefuseMessage();
+            refuseMessage.addReceiver(getReceiverAID());
             
             // Send the message.
             send(RefuseMessage.class, refuseMessage);
@@ -182,8 +204,8 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        public SendFailure() {
-            super(NAME);
+        public SendFailure(AID receiverAID) {
+            super(NAME, receiverAID);
         }
 
         // </editor-fold>
@@ -194,6 +216,7 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         public void action() {
             // Create the 'Failure' message.
             FailureMessage failureMessage = new FailureMessage();
+            failureMessage.addReceiver(getReceiverAID());
             
             // Send the message.
             send(FailureMessage.class, failureMessage);

@@ -70,7 +70,8 @@ public class RoleAIDMessage extends OrganizationMessage {
             
             // Generate the header.
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
+            // TAG SETTING-PROTOCOL
+            //aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
             aclMessage.addReceiver(roleAIDMessage.getReceiverPlayer());
             
             // Generate the content.

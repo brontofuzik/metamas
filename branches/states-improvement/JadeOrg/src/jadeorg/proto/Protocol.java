@@ -76,7 +76,9 @@ public abstract class Protocol {
     // Convenience method.
     // TODO Replace the messageClass parameter with generics.
     public ACLMessage generate(Class messageClass, Message message) {
-        return getGenerator(messageClass).generate(message);
+        ACLMessage aclMessage = getGenerator(messageClass).generate(message);
+        aclMessage.setProtocol(getName());
+        return aclMessage;
     }
     
     // ---------- PROTECTED ----------
