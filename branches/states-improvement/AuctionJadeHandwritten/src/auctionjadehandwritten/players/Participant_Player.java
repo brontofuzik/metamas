@@ -41,9 +41,9 @@ public class Participant_Player extends Player {
         super.setup();
         
         addBehaviour(new EnactRolesWakerBehaviour(this));
-        addBehaviour(new ActivateRoleWakerBehaviour(this));
-        addBehaviour(new DeactivateRoleWakerBehaviour(this));
-        addBehaviour(new DeactRolesWakerBehaviour(this));
+        //addBehaviour(new ActivateRoleWakerBehaviour(this));
+        //addBehaviour(new DeactivateRoleWakerBehaviour(this));
+        //addBehaviour(new DeactRolesWakerBehaviour(this));
     }
     
     /**
@@ -52,7 +52,7 @@ public class Participant_Player extends Player {
      * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise
      */
     @Override
-    protected boolean evaluateRequirements(String[] requirements) {
+    public boolean evaluateRequirements(String[] requirements) {
         return evaluateAllRequirements(requirements);
     }
   
