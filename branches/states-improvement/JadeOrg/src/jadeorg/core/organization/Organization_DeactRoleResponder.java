@@ -63,32 +63,32 @@ public class Organization_DeactRoleResponder extends Party {
      * Registers the transitions and transitions.
      */
     private void registerStatesAndTransitions() {
-        State receiveDeactRequest = new ReceiveDeactRequest();
-        State sendDeactInformation = new SendDeactInformation();
-        State sendDeactFailure = new SendDeactFailure();
-        State end = new End();
-
-        // Register the states.
-        registerFirstState(receiveDeactRequest);
-        registerState(sendDeactInformation);
-        registerState(sendDeactFailure);
-        registerLastState(end);
-
-        // Register the transisions (OLD).
-        registerTransition(receiveDeactRequest, sendDeactInformation, PassiveState.Event.SUCCESS);
-        registerTransition(receiveDeactRequest, sendDeactFailure, PassiveState.Event.FAILURE);
-
-        registerDefaultTransition(sendDeactInformation, end);
-
-        registerDefaultTransition(sendDeactFailure, end);
-
-//            // Register the transisions (NEW).
-//            receiveDeactRequest.registerTransition(PassiveState.Event.SUCCESS, sendDeactInformation);
-//            receiveDeactRequest.registerTransition(PassiveState.Event.FAILURE, sendDeactFailure);
-//            
-//            sendDeactInformation.registerDefaultTransition(end);
-//            
-//            sendDeactFailure.registerDefaultTransition(end);
+//        State receiveDeactRequest = new ReceiveDeactRequest();
+//        State sendDeactInformation = new SendDeactInformation();
+//        State sendDeactFailure = new SendDeactFailure();
+//        State end = new End();
+//
+//        // Register the states.
+//        registerFirstState(receiveDeactRequest);
+//        registerState(sendDeactInformation);
+//        registerState(sendDeactFailure);
+//        registerLastState(end);
+//
+//        // Register the transisions (OLD).
+//        registerTransition(receiveDeactRequest, sendDeactInformation, PassiveState.Event.SUCCESS);
+//        registerTransition(receiveDeactRequest, sendDeactFailure, PassiveState.Event.FAILURE);
+//
+//        registerDefaultTransition(sendDeactInformation, end);
+//
+//        registerDefaultTransition(sendDeactFailure, end);
+//
+////            // Register the transisions (NEW).
+////            receiveDeactRequest.registerTransition(PassiveState.Event.SUCCESS, sendDeactInformation);
+////            receiveDeactRequest.registerTransition(PassiveState.Event.FAILURE, sendDeactFailure);
+////            
+////            sendDeactInformation.registerDefaultTransition(end);
+////            
+////            sendDeactFailure.registerDefaultTransition(end);
     }
 
     // </editor-fold>

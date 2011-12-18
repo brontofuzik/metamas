@@ -2,7 +2,6 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.core.player.Player;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -147,9 +146,8 @@ public class Player_ActivateRoleInitiator_New extends Party {
             @Override
             public void action() {
                 ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-                activateRequestMessage.setReceiverRole(roleAID);
 
-                send(ActivateRequestMessage.class, activateRequestMessage);                  
+                send(activateRequestMessage, roleAID);                  
             }
         }
 
@@ -208,7 +206,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
             // <editor-fold defaultstate="collapsed" desc="Constructors">
 
             ReceiveAgree(int outerReceiverStateExitValue) {
-                super(NAME, outerReceiverStateExitValue);
+                super(NAME, outerReceiverStateExitValue, roleAID);
             }
 
             // </editor-fold>
@@ -234,7 +232,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
             // <editor-fold defaultstate="collapsed" desc="Constructors">
 
             ReceiveRefuse(int outerReceiverStateExitValue) {
-                super(NAME, outerReceiverStateExitValue);
+                super(NAME, outerReceiverStateExitValue, roleAID);
             }
 
            // </editor-fold>

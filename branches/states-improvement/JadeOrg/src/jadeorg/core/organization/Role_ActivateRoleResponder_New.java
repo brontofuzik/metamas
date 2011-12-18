@@ -1,10 +1,6 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.RefuseMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -132,15 +128,20 @@ public class Role_ActivateRoleResponder_New extends Party {
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
             ReceiveActivateRequest_Receiver(int outerReceiverStateExitValue) {
-                super(NAME, outerReceiverStateExitValue);
+                super(NAME, outerReceiverStateExitValue, playerAID);
             }
             
             // </editor-fold>
             
             @Override
             public void action() {
-                ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)
-                    receive(ActivateRequestMessage.class, playerAID);
+                boolean messageReceived = receive(new ActivateRequestMessage(), playerAID);
+                
+                if (messageReceived) {
+                    setExitValue(InnerReceiverState.RECEIVED);
+                } else {
+                    setExitValue(InnerReceiverState.NOT_RECEIVED);
+                }
             }
         } 
         

@@ -54,26 +54,26 @@ public class Player_DeactivateRolelInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndtransitions() {
-        // ----- States -----
-        State sendDeactivateRequest = new SendDeactivateRequest();
-        State receiveActivateReply = new ReceiveDeactivateReply();
-        State end = new End();
-        // ------------------
-
-        // Register the states.
-        registerFirstState(sendDeactivateRequest);
-        registerState(receiveActivateReply);
-        registerLastState(end);
-
-        // Register the transitions (OLD).
-        registerDefaultTransition(sendDeactivateRequest, receiveActivateReply);
-
-        registerDefaultTransition(receiveActivateReply, end);
-
-//            // Register the transitions (NEW).
-//            sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
-//            
-//            receiveDeactivateReply.registerDefaultTransition(successEnd);  
+//        // ----- States -----
+//        State sendDeactivateRequest = new SendDeactivateRequest();
+//        State receiveActivateReply = new ReceiveDeactivateReply();
+//        State end = new End();
+//        // ------------------
+//
+//        // Register the states.
+//        registerFirstState(sendDeactivateRequest);
+//        registerState(receiveActivateReply);
+//        registerLastState(end);
+//
+//        // Register the transitions (OLD).
+//        registerDefaultTransition(sendDeactivateRequest, receiveActivateReply);
+//
+//        registerDefaultTransition(receiveActivateReply, end);
+//
+////            // Register the transitions (NEW).
+////            sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
+////            
+////            receiveDeactivateReply.registerDefaultTransition(successEnd);  
     }
 
     // </editor-fold>
@@ -104,10 +104,10 @@ public class Player_DeactivateRolelInitiator extends Party {
 
         @Override
         public void action() {
-            DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
-            deactivateRequestMessage.setReceiverRole(roleAID);
-
-            send(DeactivateRequestMessage.class, deactivateRequestMessage);
+//            DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
+//            deactivateRequestMessage.setReceiverRole(roleAID);
+//
+//            send(DeactivateRequestMessage.class, deactivateRequestMessage);
         }
 
         // </editor-fold>

@@ -3,10 +3,6 @@ package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.roleprotocol.RoleMessage;
-
 /**
  * A 'Requirement request' message.
  * A 'Requirement request' message is a message sent from a role to a player
@@ -15,11 +11,19 @@ import jadeorg.proto.roleprotocol.RoleMessage;
  * @since
  * @version %I% %G%
  */
-public class RequirementRequestMessage extends RoleMessage {
+public class RequirementRequestMessage extends Message {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private String requirement;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    RequirementRequestMessage() {
+        super(0);
+    }
     
     // </editor-fold>
     
@@ -35,50 +39,17 @@ public class RequirementRequestMessage extends RoleMessage {
     }
     
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
+
     @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-    }
-    
-    @Override
-    protected MessageParser createParser() {
-        return new RequirementRequestMessageParser();
+    public String generateContent() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    protected MessageGenerator createGenerator() {
-        return new RequirementRequestMessageGenerator();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    private class RequirementRequestMessageParser extends MessageParser {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public Message parse(ACLMessage message) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        // </editor-fold>
-    }
-    
-    private class RequirementRequestMessageGenerator extends MessageGenerator {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public ACLMessage generate(Message message) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        // </editor-fold>
+    public void parseContent(String content) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     // </editor-fold>

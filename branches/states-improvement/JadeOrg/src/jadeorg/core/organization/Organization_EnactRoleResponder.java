@@ -4,7 +4,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.lang.simplemessages.FailureMessage;
 import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
@@ -70,49 +69,49 @@ class Organization_EnactRoleResponder extends Party {
      * Registers the states and transitions.
      */
     private void registerStatesAndTransitions() {
-        // ----- States -----
-        State receiveEnactRequest = new ReceiveEnactRequest();
-        State sendRequirementsInform = new SendRequirementsInform();
-        State sendFailure = new SendFailure();
-        State receiveRequirementsReply = new ReceiveRequirementsReply();
-        State sendRoleAID = new SendRoleAID();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
-        // ------------------
-
-        // Register the states.
-        registerFirstState(receiveEnactRequest);
-        registerState(sendRequirementsInform);
-        registerState(sendFailure);
-        registerState(receiveRequirementsReply);
-        registerState(sendRoleAID);
-        registerLastState(successEnd);
-
-        // Register the transitions (OLD).
-        registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
-        registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
-
-        registerDefaultTransition(sendRequirementsInform, receiveRequirementsReply);
-
-        registerTransition(receiveRequirementsReply, sendRoleAID, PassiveState.Event.SUCCESS);
-        registerTransition(receiveRequirementsReply, failureEnd, PassiveState.Event.FAILURE);
-
-        registerDefaultTransition(sendRoleAID, successEnd);
-
-        registerDefaultTransition(sendFailure, failureEnd);
-
-//            // Register the transitions (NEW).
-//            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
-//            receiveEnactRequest.registerTransition(1, sendFailure);
-//            
-//            sendRequirementsInform.registerDefaultTransition(receiveRequirementsInform);
-//            
-//            receiveRequirementsInform.registerTransition(0, sendRoleAID);
-//            receiveRequirementsInform.registerTransition(1, sendFailure);   
-//            
-//            sendRoleAID.registerDefaultTransition(end);
-//            
-//            sendFailure.registerDefaultTransition(end);
+//        // ----- States -----
+//        State receiveEnactRequest = new ReceiveEnactRequest();
+//        State sendRequirementsInform = new SendRequirementsInform();
+//        State sendFailure = new SendFailure();
+//        State receiveRequirementsReply = new ReceiveRequirementsReply();
+//        State sendRoleAID = new SendRoleAID();
+//        State successEnd = new SuccessEnd();
+//        State failureEnd = new FailureEnd();
+//        // ------------------
+//
+//        // Register the states.
+//        registerFirstState(receiveEnactRequest);
+//        registerState(sendRequirementsInform);
+//        registerState(sendFailure);
+//        registerState(receiveRequirementsReply);
+//        registerState(sendRoleAID);
+//        registerLastState(successEnd);
+//
+//        // Register the transitions (OLD).
+//        registerTransition(receiveEnactRequest, sendRequirementsInform, PassiveState.Event.SUCCESS);
+//        registerTransition(receiveEnactRequest, sendFailure, PassiveState.Event.FAILURE);
+//
+//        registerDefaultTransition(sendRequirementsInform, receiveRequirementsReply);
+//
+//        registerTransition(receiveRequirementsReply, sendRoleAID, PassiveState.Event.SUCCESS);
+//        registerTransition(receiveRequirementsReply, failureEnd, PassiveState.Event.FAILURE);
+//
+//        registerDefaultTransition(sendRoleAID, successEnd);
+//
+//        registerDefaultTransition(sendFailure, failureEnd);
+//
+////            // Register the transitions (NEW).
+////            receiveEnactRequest.registerTransition(0, sendRequirementsInform);
+////            receiveEnactRequest.registerTransition(1, sendFailure);
+////            
+////            sendRequirementsInform.registerDefaultTransition(receiveRequirementsInform);
+////            
+////            receiveRequirementsInform.registerTransition(0, sendRoleAID);
+////            receiveRequirementsInform.registerTransition(1, sendFailure);   
+////            
+////            sendRoleAID.registerDefaultTransition(end);
+////            
+////            sendFailure.registerDefaultTransition(end);
     }
 
     // </editor-fold>
@@ -195,18 +194,18 @@ class Organization_EnactRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Organization)myAgent).logInfo("Sending requirements inform.");
-
-            // Create the 'Requirements' message.
-            RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
-            requirementsInformMessage.setReceiverPlayer(playerAID);
-
-            requirementsInformMessage.setRequirements(((Organization)myAgent).requirements.get(roleName));
-
-            // Send the 'Requirements' message.
-            send(RequirementsInformMessage.class, requirementsInformMessage);
-
-            ((Organization)myAgent).logInfo("Requirements inform sent.");
+//            ((Organization)myAgent).logInfo("Sending requirements inform.");
+//
+//            // Create the 'Requirements' message.
+//            RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
+//            requirementsInformMessage.setReceiverPlayer(playerAID);
+//
+//            requirementsInformMessage.setRequirements(((Organization)myAgent).requirements.get(roleName));
+//
+//            // Send the 'Requirements' message.
+//            send(RequirementsInformMessage.class, requirementsInformMessage);
+//
+//            ((Organization)myAgent).logInfo("Requirements inform sent.");
         }
 
         // </editor-fold>
@@ -235,16 +234,16 @@ class Organization_EnactRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Organization)myAgent).logInfo("Sending failure.");
-
-            // Create the 'Failure' message.
-            FailureMessage failureMessage = new FailureMessage();
-            failureMessage.addReceiver(playerAID);
-
-            // Send the message.
-            send(FailureMessage.class, failureMessage);
-            
-            ((Organization)myAgent).logInfo("Failure sent");
+//            ((Organization)myAgent).logInfo("Sending failure.");
+//
+//            // Create the 'Failure' message.
+//            FailureMessage failureMessage = new FailureMessage();
+//            failureMessage.addReceiver(playerAID);
+//
+//            // Send the message.
+//            send(FailureMessage.class, failureMessage);
+//            
+//            ((Organization)myAgent).logInfo("Failure sent");
         }
 
         // </editor-fold>
@@ -316,28 +315,28 @@ class Organization_EnactRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Organization)myAgent).logInfo("Creating role agent.");
-
-            Role role = createRoleAgent(roleName, roleName);
-            role.setPlayerAID(playerAID);
-            startRoleAgent(role);
-
-            ((Organization)myAgent).knowledgeBase.updateRoleIsEnacted(role, playerAID);
-
-           ((Organization)myAgent).logInfo("Role agent created.");
-
-            // TODO Consider moving the following section to a separate state.
-
-            ((Organization)myAgent).logInfo("Sending role AID.");
-
-            // Create the 'RoleAID' message.
-            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
-            roleAIDMessage.setReceiverPlayer(playerAID);
-            roleAIDMessage.setRoleAID(role.getAID());
-
-            // Send the 'RoleAID' message.
-            send(RoleAIDMessage.class, roleAIDMessage);
-            ((Organization)myAgent).logInfo("Role AID sent.");
+//            ((Organization)myAgent).logInfo("Creating role agent.");
+//
+//            Role role = createRoleAgent(roleName, roleName);
+//            role.setPlayerAID(playerAID);
+//            startRoleAgent(role);
+//
+//            ((Organization)myAgent).knowledgeBase.updateRoleIsEnacted(role, playerAID);
+//
+//           ((Organization)myAgent).logInfo("Role agent created.");
+//
+//            // TODO Consider moving the following section to a separate state.
+//
+//            ((Organization)myAgent).logInfo("Sending role AID.");
+//
+//            // Create the 'RoleAID' message.
+//            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
+//            roleAIDMessage.setReceiverPlayer(playerAID);
+//            roleAIDMessage.setRoleAID(role.getAID());
+//
+//            // Send the 'RoleAID' message.
+//            send(RoleAIDMessage.class, roleAIDMessage);
+//            ((Organization)myAgent).logInfo("Role AID sent.");
         }
 
         // ---------- PRIVATE ----------

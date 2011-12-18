@@ -1,10 +1,6 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.FailureMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -68,48 +64,48 @@ class Player_EnactRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-        // ----- States -----
-        State sendEnactRequest = new SendEnactRequest();
-        State receiveRequirementsInform = new ReceiveRequirementsInform();
-        State sendRequirementsReply = new SendRequirementsReply();
-        State sendFailure = new SendFailure();
-        State receiveRoleAID = new ReceiveRoleAID();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
-        // ------------------
-
-        // Register the states.
-        registerFirstState(sendEnactRequest);
-        registerState(receiveRequirementsInform);
-        registerState(sendRequirementsReply);
-        registerState(sendFailure);
-        registerState(receiveRoleAID);
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
-
-        // Register the transitions (OLD).
-        registerDefaultTransition(sendEnactRequest, receiveRequirementsInform);
-
-        registerTransition(receiveRequirementsInform, sendRequirementsReply, PassiveState.Event.SUCCESS);
-        registerTransition(receiveRequirementsInform, sendFailure, PassiveState.Event.FAILURE);
-
-        registerDefaultTransition(sendRequirementsReply, receiveRoleAID);
-
-        registerDefaultTransition(sendFailure, failureEnd);
-
-        registerDefaultTransition(receiveRoleAID, successEnd);
-
-//            // Register the transitions (NEW).
-//            sendEnactRequest.registerDefaultTransition(receiveRequirementsInfo);
-//            
-//            receiveRequirementsInfo.registerTransition(PassiveState.Event.SUCCESS, sendAgree);
-//            receiveRequirementsInfo.registerTransition(PassiveState.Event.FAILURE, sendRefuse);
-//            
-//            sendAgree.registerDefaultTransition(receiveRoleAID);
-//            
-//            sendRefuse.registerDefaultTransition(failureEnd);
-//            
-//            receiveRoleAID.registerDefaultTransition(successEnd);
+//        // ----- States -----
+//        State sendEnactRequest = new SendEnactRequest();
+//        State receiveRequirementsInform = new ReceiveRequirementsInform();
+//        State sendRequirementsReply = new SendRequirementsReply();
+//        State sendFailure = new SendFailure();
+//        State receiveRoleAID = new ReceiveRoleAID();
+//        State successEnd = new SuccessEnd();
+//        State failureEnd = new FailureEnd();
+//        // ------------------
+//
+//        // Register the states.
+//        registerFirstState(sendEnactRequest);
+//        registerState(receiveRequirementsInform);
+//        registerState(sendRequirementsReply);
+//        registerState(sendFailure);
+//        registerState(receiveRoleAID);
+//        registerLastState(successEnd);
+//        registerLastState(failureEnd);
+//
+//        // Register the transitions (OLD).
+//        registerDefaultTransition(sendEnactRequest, receiveRequirementsInform);
+//
+//        registerTransition(receiveRequirementsInform, sendRequirementsReply, PassiveState.Event.SUCCESS);
+//        registerTransition(receiveRequirementsInform, sendFailure, PassiveState.Event.FAILURE);
+//
+//        registerDefaultTransition(sendRequirementsReply, receiveRoleAID);
+//
+//        registerDefaultTransition(sendFailure, failureEnd);
+//
+//        registerDefaultTransition(receiveRoleAID, successEnd);
+//
+////            // Register the transitions (NEW).
+////            sendEnactRequest.registerDefaultTransition(receiveRequirementsInfo);
+////            
+////            receiveRequirementsInfo.registerTransition(PassiveState.Event.SUCCESS, sendAgree);
+////            receiveRequirementsInfo.registerTransition(PassiveState.Event.FAILURE, sendRefuse);
+////            
+////            sendAgree.registerDefaultTransition(receiveRoleAID);
+////            
+////            sendRefuse.registerDefaultTransition(failureEnd);
+////            
+////            receiveRoleAID.registerDefaultTransition(successEnd);
     }
 
     // </editor-fold>
@@ -140,13 +136,13 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Sending enact request.");
-            EnactRequestMessage message = new EnactRequestMessage();
-            message.setReceiverOrganization(organizationAID);
-            message.setRoleName(roleName);
-
-            send(EnactRequestMessage.class, message);
-            ((Player)myAgent).logInfo("Enact request sent.");
+//            ((Player)myAgent).logInfo("Sending enact request.");
+//            EnactRequestMessage message = new EnactRequestMessage();
+//            message.setReceiverOrganization(organizationAID);
+//            message.setRoleName(roleName);
+//
+//            send(EnactRequestMessage.class, message);
+//            ((Player)myAgent).logInfo("Enact request sent.");
         }
 
         // </editor-fold>
@@ -224,16 +220,16 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Sending requirements reply.");
-
-            // Create the 'Requirements reply' JadeOrg message.
-            AgreeMessage requirementsReplyMessage = new AgreeMessage();
-            requirementsReplyMessage.addReceiver(organizationAID);
-
-            // Send the message.
-            send(AgreeMessage.class, requirementsReplyMessage);
-
-            ((Player)myAgent).logInfo("Requirements reply sent.");
+//            ((Player)myAgent).logInfo("Sending requirements reply.");
+//
+//            // Create the 'Requirements reply' JadeOrg message.
+//            AgreeMessage requirementsReplyMessage = new AgreeMessage();
+//            requirementsReplyMessage.addReceiver(organizationAID);
+//
+//            // Send the message.
+//            send(AgreeMessage.class, requirementsReplyMessage);
+//
+//            ((Player)myAgent).logInfo("Requirements reply sent.");
         }
 
         // </editor-fold>
@@ -263,12 +259,12 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            // Create the 'Failure' message.
-            FailureMessage failureMessage = new FailureMessage();
-            failureMessage.addReceiver(organizationAID);
-
-            // Send the message.
-            send(FailureMessage.class, failureMessage);
+//            // Create the 'Failure' message.
+//            FailureMessage failureMessage = new FailureMessage();
+//            failureMessage.addReceiver(organizationAID);
+//
+//            // Send the message.
+//            send(FailureMessage.class, failureMessage);
         }
 
         // </editor-fold>

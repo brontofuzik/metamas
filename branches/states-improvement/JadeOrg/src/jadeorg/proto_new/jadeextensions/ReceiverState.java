@@ -11,7 +11,5 @@ import jadeorg.lang.Message;
  */
 public interface ReceiverState {
     
-    Message receive(Class messageClass, AID senderAID);
-    
-    Message receive(Class messageClass);
+    boolean receive(Message message, AID senderAID);
 }

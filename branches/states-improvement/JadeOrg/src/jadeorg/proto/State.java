@@ -124,7 +124,7 @@ public abstract class State extends SimpleBehaviour {
      * @param targetState the target state
      */
     public void registerTransition(Event event, State targetState) {
-        getParty().registerTransition(this, targetState, event);
+        throw new UnsupportedOperationException();
     }
     
     /**
@@ -134,7 +134,7 @@ public abstract class State extends SimpleBehaviour {
      * @param targetState the target state.
      */
     public void registerDefaultTransition(State targetState) {
-        getParty().registerDefaultTransition(this, targetState);
+        throw new UnsupportedOperationException();
     }
     
     @Override

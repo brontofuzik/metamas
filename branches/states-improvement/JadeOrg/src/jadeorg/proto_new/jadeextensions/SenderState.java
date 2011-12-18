@@ -1,5 +1,6 @@
 package jadeorg.proto_new.jadeextensions;
 
+import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
@@ -10,5 +11,5 @@ import jadeorg.lang.Message;
  */
 public interface SenderState extends State {
    
-    void send(Class messageClass, Message message);
+    void send(Message message, AID receiverAID);
 }

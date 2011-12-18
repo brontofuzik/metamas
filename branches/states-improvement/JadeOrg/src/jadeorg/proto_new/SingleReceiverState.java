@@ -1,5 +1,6 @@
 package jadeorg.proto_new;
 
+import jade.core.AID;
 import jadeorg.proto_new.jadeextensions.State;
 
 /**
@@ -10,10 +11,13 @@ import jadeorg.proto_new.jadeextensions.State;
  */
 public abstract class SingleReceiverState extends OuterReceiverState {
     
+    private AID senderAID;
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SingleReceiverState(String name) {
+    public SingleReceiverState(String name, AID senderAID) {
         super(name);
+        this.senderAID = senderAID;
         registerStatesAndTransitions();
     }
     
@@ -29,7 +33,7 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         // ----- States -----
         State entry = new EntryState();
         State manager = new ManagerState();
-        State receiver = new Receiver();
+        State receiver = new Receiver(senderAID);
         State blocker = new BlockerState();
         State exit = new ExitState();
         // ------------------
@@ -66,8 +70,8 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        Receiver() {
-            super(NAME, 0);
+        Receiver(AID senderAID) {
+            super(NAME, 0, senderAID);
         }
         
         // </editor-fold>

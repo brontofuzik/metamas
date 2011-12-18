@@ -110,7 +110,7 @@ class Organization_EnactRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveEnactRequest() {
-            super(NAME);
+            super(NAME, playerAID);
         }
         
         // </editor-fold>
@@ -125,12 +125,12 @@ class Organization_EnactRoleResponder_New extends Party {
         @Override
         protected int onReceiver() {
             // Receive the 'Enact request' message.
-            EnactRequestMessage enactRequestMessage = (EnactRequestMessage)
-                receive(EnactRequestMessage.class, playerAID);
+            EnactRequestMessage message = new EnactRequestMessage();
+            boolean messageReceived = receive(message, playerAID);
             
             // Process the message.
-            if (enactRequestMessage != null) {
-                roleName = enactRequestMessage.getRoleName();
+            if (messageReceived) {
+                roleName = message.getRoleName();
                 return InnerReceiverState.RECEIVED;
             } else {
                 return InnerReceiverState.NOT_RECEIVED;
@@ -226,12 +226,10 @@ class Organization_EnactRoleResponder_New extends Party {
             public void action() {
                 // Create the 'Requirements inform' message.
                 RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
-                requirementsInformMessage.setReceiverPlayer(playerAID);
-
                 requirementsInformMessage.setRequirements(((Organization)myAgent).requirements.get(roleName));
 
                 // Send the message.
-                send(RequirementsInformMessage.class, requirementsInformMessage);
+                send(requirementsInformMessage, playerAID);
             }
             
             // </editor-fold>
@@ -258,8 +256,8 @@ class Organization_EnactRoleResponder_New extends Party {
         ReceiveRequirementsReply() {
             super(NAME);
             
-            addReceiver(this.new ReceiveAgree(AGREE));
-            addReceiver(this.new ReceiveRefuse(REFUSE));
+            addReceiver(this.new ReceiveAgree(AGREE, playerAID));
+            addReceiver(this.new ReceiveRefuse(REFUSE, playerAID));
             buildFSM();
         }
         
@@ -316,11 +314,10 @@ class Organization_EnactRoleResponder_New extends Party {
             
             // Create the 'RoleAID' JadeOrg message.
             RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
-            roleAIDMessage.setReceiverPlayer(playerAID);
             roleAIDMessage.setRoleAID(role.getAID());
 
             // Send the 'RoleAID' JadeOrg message.
-            send(RoleAIDMessage.class, roleAIDMessage);        
+            send(roleAIDMessage, playerAID);        
         }
 
         @Override

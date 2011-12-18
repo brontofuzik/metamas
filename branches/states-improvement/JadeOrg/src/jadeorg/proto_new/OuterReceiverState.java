@@ -1,8 +1,8 @@
 package jadeorg.proto_new;
 
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.FailureMessage;
-import jadeorg.lang.simplemessages.RefuseMessage;
+import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourReceiverState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 
@@ -133,13 +133,16 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         private int outerReceiverStateExitValue;
         
+        private AID senderAID;
+        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerReceiverState(String name, int outerReceiverStateExitValue) {
+        protected InnerReceiverState(String name, int outerReceiverStateExitValue, AID senderAID) {
             super(name);
             this.outerReceiverStateExitValue = outerReceiverStateExitValue;
+            this.senderAID = senderAID;
         } 
         
         // </editor-fold>
@@ -151,6 +154,10 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             if (exitValue == RECEIVED) {
                 getOuterReceiverStateParent().setExitValue(outerReceiverStateExitValue);
             }
+        }
+        
+        protected AID getSenderAID() {
+            return senderAID;
         }
         
         // ----- PRIVATE -----
@@ -187,8 +194,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveAgree(int outerReceiverStateExitValue) {
-            super(NAME, outerReceiverStateExitValue);
+        public ReceiveAgree(int outerReceiverStateExitValue, AID senderAID) {
+            super(NAME, outerReceiverStateExitValue, senderAID);
         }
         
         // </editor-fold>
@@ -198,11 +205,11 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         @Override
         public void action() {
             // Receive the 'Agree' message.
-            AgreeMessage agreeMessage = (AgreeMessage)
-                receive(AgreeMessage.class);
+            boolean messageReceived = receive(new SimpleMessage(ACLMessage.AGREE),
+                getSenderAID());
             
             // Process the message.
-            if (agreeMessage != null) {
+            if (messageReceived) {
                 setExitValue(RECEIVED);
             } else {
                 setExitValue(NOT_RECEIVED);
@@ -228,8 +235,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveRefuse(int outerReceiverStateExitValue) {
-            super(NAME, outerReceiverStateExitValue);
+        public ReceiveRefuse(int outerReceiverStateExitValue, AID senderAID) {
+            super(NAME, outerReceiverStateExitValue, senderAID);
         }
         
         // </editor-fold>
@@ -239,11 +246,11 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         @Override
         public void action() {
             // Receive the 'Refuse' message.
-            RefuseMessage refuseMessage = (RefuseMessage)
-                receive(RefuseMessage.class);
+            boolean messageReceived = receive(new SimpleMessage(ACLMessage.REFUSE),
+                getSenderAID());
             
             // Process the message.
-            if (refuseMessage != null) {
+            if (messageReceived) {
                 setExitValue(RECEIVED);
             } else {
                 setExitValue(NOT_RECEIVED);
@@ -269,8 +276,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        public ReceiveFailure(int outerReceiverStateExitValue) {
-            super(NAME, outerReceiverStateExitValue);
+        public ReceiveFailure(int outerReceiverStateExitValue, AID senderAID) {
+            super(NAME, outerReceiverStateExitValue, senderAID);
         }
 
         // </editor-fold>
@@ -279,12 +286,12 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            // Receive the 'Failure' message.
-            FailureMessage failureMessage = (FailureMessage)
-                receive(FailureMessage.class);
+            // Receive the 'Agree' message.
+            boolean messageReceived = receive(new SimpleMessage(ACLMessage.FAILURE),
+                getSenderAID());
             
             // Process the message.
-            if (failureMessage != null) {        
+            if (messageReceived) {       
                 setExitValue(RECEIVED);
             } else {
                 setExitValue(NOT_RECEIVED);

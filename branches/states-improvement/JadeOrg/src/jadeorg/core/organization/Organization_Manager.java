@@ -2,9 +2,7 @@ package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.util.ManagerBehaviour;
 
@@ -35,36 +33,50 @@ public class Organization_Manager extends ManagerBehaviour {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
+    /**
+     * 
+     */
     private class EnactRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
-            MessageTemplate enactRequestTemplate = EnactRoleProtocol.getInstance()
-                .getTemplate(EnactRequestMessage.class);
-            
-            ACLMessage enactRequestMessage = getMyOrganization().receive(enactRequestTemplate);
-            
+            MessageTemplate template = MessageTemplate.and(
+                EnactRoleProtocol.getInstance().getTemplate(),
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+                 
+            ACLMessage enactRequestMessage = getMyOrganization().receive(template);          
             if (enactRequestMessage != null) {
                 getMyOrganization().putBack(enactRequestMessage);
                 getMyOrganization().enactRoleResponder(enactRequestMessage.getSender());
             }
         }
+        
+            // </editor-fold>
     }
 
+    /**
+     * 
+     */
     private class DeactRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
-            MessageTemplate deactRequestTemplate = DeactRoleProtocol.getInstance()
-                .getTemplate(DeactRequestMessage.class);
-            
-            ACLMessage deactRequestMessage = getMyOrganization().receive(deactRequestTemplate);
-            
+            MessageTemplate template = MessageTemplate.and(
+                DeactRoleProtocol.getInstance().getTemplate(),
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+
+            ACLMessage deactRequestMessage = getMyOrganization().receive(template);          
             if (deactRequestMessage != null) {
                 getMyOrganization().putBack(deactRequestMessage);
                 getMyOrganization().deactRoleResponder(deactRequestMessage.getSender());
             }
         }
+        
+        // </editor-fold>
     }
 
     // </editor-fold>

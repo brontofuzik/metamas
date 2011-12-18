@@ -2,8 +2,8 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jadeorg.proto.ActiveState;
+import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @since 2011-11-12
  * @version %I% %G%
  */
-public class Role_InvokePowerResponder extends ResponderParty {
+public class Role_InvokePowerResponder extends  Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 

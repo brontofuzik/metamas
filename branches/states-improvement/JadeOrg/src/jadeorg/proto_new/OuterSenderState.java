@@ -1,9 +1,8 @@
 package jadeorg.proto_new;
 
 import jade.core.AID;
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.FailureMessage;
-import jadeorg.lang.simplemessages.RefuseMessage;
+import jade.lang.acl.ACLMessage;
+import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourSenderState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 
@@ -141,11 +140,10 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         @Override
         public void action() {
             // Create the 'Agree' message.
-            AgreeMessage agreeMessage = new AgreeMessage();
-            agreeMessage.addReceiver(getReceiverAID());
+            SimpleMessage agreeMessage = new SimpleMessage(ACLMessage.AGREE);
             
             // Send the message.
-            send(AgreeMessage.class, agreeMessage);
+            send(agreeMessage, getReceiverAID());
         }
         
         // </editor-fold>      
@@ -178,11 +176,10 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         @Override
         public void action() {
             // Create the 'Refuse' message.
-            RefuseMessage refuseMessage = new RefuseMessage();
-            refuseMessage.addReceiver(getReceiverAID());
+            SimpleMessage refuseMessage = new SimpleMessage(ACLMessage.REFUSE);
             
             // Send the message.
-            send(RefuseMessage.class, refuseMessage);
+            send(refuseMessage, getReceiverAID());
         }
         
         // </editor-fold>      
@@ -215,11 +212,10 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         @Override
         public void action() {
             // Create the 'Failure' message.
-            FailureMessage failureMessage = new FailureMessage();
-            failureMessage.addReceiver(getReceiverAID());
+            SimpleMessage failureMessage = new SimpleMessage(ACLMessage.FAILURE);
             
             // Send the message.
-            send(FailureMessage.class, failureMessage);
+            send(failureMessage, getReceiverAID());
         }
 
         // </editor-fold>

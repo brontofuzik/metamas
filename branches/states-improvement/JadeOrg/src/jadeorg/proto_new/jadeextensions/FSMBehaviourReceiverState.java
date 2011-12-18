@@ -11,15 +11,20 @@ import jadeorg.lang.Message;
  */
 public abstract class FSMBehaviourReceiverState extends FSMBehaviourState implements ReceiverState {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
     protected FSMBehaviourReceiverState(String name) {
         super(name);
     }
     
-    public Message receive(Class messageClass, AID senderAID) {
-        return getParty().receive(messageClass, senderAID);
-    } 
+    // </editor-fold>
     
-    public Message receive(Class messageClass) {
-        return getParty().receive(messageClass, null);
-    } 
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    public boolean receive(Message message, AID senderAID) {
+        return getParty().receive(message, senderAID);
+    }
+    
+    // </editor-fold>
 }

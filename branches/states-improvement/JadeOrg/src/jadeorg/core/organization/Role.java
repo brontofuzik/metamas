@@ -148,7 +148,7 @@ public class Role extends Agent {
     // ----- Initialization -----
 
     private void addBehaviours() {
-        addBehaviour(new RoleManager());
+        addBehaviour(new Role_Manager());
         logInfo("Behaviours added.");
     }
     
@@ -181,7 +181,7 @@ public class Role extends Agent {
     
     // ----- Role activation/deactivation -----
     
-    private void activateRoleResponder(AID playerAID) {
+    void activateRoleResponder(AID playerAID) {
         logInfo("Responding to the 'Activate role' protocol.");
         
         if (playerAID.equals(this.playerAID)) {
@@ -191,7 +191,7 @@ public class Role extends Agent {
         }
     }
 
-    private void deactivateRoleResponder(AID playerAID) {
+    void deactivateRoleResponder(AID playerAID) {
         logInfo("Responding to the 'Deactivate role' protocol.");
         
         if (playerAID.equals(this.playerAID)) {
@@ -222,76 +222,12 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    /**
-     * A role manager behaviour.
-     */
-    private class RoleManager extends ManagerBehaviour {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        RoleManager() {
-            addHandler(new ActivateRoleHandler());
-            addHandler(new DeactivateRoleHandler());
-            addHandler(new InvokePowerHandler());
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        /**
-         * The 'Activate role' protocol handler.
-         */
-        private class ActivateRoleHandler extends HandlerBehaviour {
-
-            @Override
-            public void action() {
-                MessageTemplate activateRequestTemplate = ActivateRoleProtocol.getInstance()
-                    .getTemplate(ActivateRequestMessage.class);
-                ACLMessage activateRequestMessage = receive(activateRequestTemplate);
-                if (activateRequestMessage != null) {
-                    putBack(activateRequestMessage);
-                    activateRoleResponder(activateRequestMessage.getSender());
-                }
-            }
-        }
-        
-        /**
-         * The 'Deactivate role' protocol handler.
-         */
-        private class DeactivateRoleHandler extends HandlerBehaviour {
-
-            @Override
-            public void action() {
-                MessageTemplate deactivateRequestTemplate = DeactivateRoleProtocol.getInstance()
-                    .getTemplate(DeactivateRequestMessage.class);
-                ACLMessage deactivateRequestMessage = receive(deactivateRequestTemplate);
-                if (deactivateRequestMessage != null) {
-                    putBack(deactivateRequestMessage);
-                    deactivateRoleResponder(deactivateRequestMessage.getSender());
-                }
-            }
-        }
-        
-        /**
-         * The 'Invoke power' protocol handler.
-         */
-        private class InvokePowerHandler extends HandlerBehaviour {
-
-            @Override
-            public void action() {
-                MessageTemplate invokeRequestTemplate = InvokePowerProtocol.getInstance()
-                    .getTemplate(InvokeRequestMessage.class);
-                ACLMessage invokeRequestMessage = receive(invokeRequestTemplate);
-                if (invokeRequestMessage != null) {
-                    putBack(invokeRequestMessage);
- //                   invokePower(invokeRequestMessage.getSender());
-                }
-            }
-        }
-        
-        // </editor-fold>
-    }
+//    /**
+//     * A role manager behaviour.
+//     */
+//    private class RoleManager extends ManagerBehaviour {
+//
+//    }
     
 //    /**
 //     * An 'Activate' protocol responder behaviour.

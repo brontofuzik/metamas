@@ -59,24 +59,24 @@ public class Player_ActivateRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndtransitions() {
-        // ----- States -----
-        State sendActivateRequest = new SendActivateRequest();
-        State receiveActivateReply = new ReceiveActivateReply();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
-        // ------------------
-
-        // Register the states.
-        registerFirstState(sendActivateRequest);
-        registerState(receiveActivateReply);
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
-
-        // Register the transitions (NEW).
-        sendActivateRequest.registerDefaultTransition(receiveActivateReply);
-
-        receiveActivateReply.registerTransition(Event.SUCCESS, successEnd); 
-        receiveActivateReply.registerTransition(Event.FAILURE, failureEnd);
+//        // ----- States -----
+//        State sendActivateRequest = new SendActivateRequest();
+//        State receiveActivateReply = new ReceiveActivateReply();
+//        State successEnd = new SuccessEnd();
+//        State failureEnd = new FailureEnd();
+//        // ------------------
+//
+//        // Register the states.
+//        registerFirstState(sendActivateRequest);
+//        registerState(receiveActivateReply);
+//        registerLastState(successEnd);
+//        registerLastState(failureEnd);
+//
+//        // Register the transitions (NEW).
+//        sendActivateRequest.registerDefaultTransition(receiveActivateReply);
+//
+//        receiveActivateReply.registerTransition(Event.SUCCESS, successEnd); 
+//        receiveActivateReply.registerTransition(Event.FAILURE, failureEnd);
     }
 
     // </editor-fold>
@@ -107,14 +107,14 @@ public class Player_ActivateRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Sending activate request.");
-
-            ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-            activateRequestMessage.setReceiverRole(roleAID);
-
-            send(ActivateRequestMessage.class, activateRequestMessage);
-
-           ((Player)myAgent).logInfo("Activate request sent.");
+//            ((Player)myAgent).logInfo("Sending activate request.");
+//
+//            ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
+//            activateRequestMessage.setReceiverRole(roleAID);
+//
+//            send(ActivateRequestMessage.class, activateRequestMessage);
+//
+//           ((Player)myAgent).logInfo("Activate request sent.");
         }
 
         // </editor-fold>

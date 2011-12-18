@@ -1,5 +1,6 @@
 package jadeorg.proto_new.jadeextensions;
 
+import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
@@ -21,8 +22,8 @@ public abstract class OneShotBehaviourSenderState extends OneShotBehaviourState 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    public void send(Class messageClass, Message message) {
-        getParty().send(messageClass, message);
+    public void send(Message message, AID receiverAID) {
+        getParty().send(message, receiverAID);
     }
     
     // </editor-fold>

@@ -2,11 +2,7 @@ package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,11 +14,19 @@ import java.util.regex.Pattern;
  * @since 2011-10-23
  * @version %I% %G%
  */
-public class RoleAIDMessage extends OrganizationMessage {
+public class RoleAIDMessage extends Message {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private AID roleAID;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public RoleAIDMessage() {
+        super(ACLMessage.INFORM);
+    }
     
     // </editor-fold>
     
@@ -40,88 +44,21 @@ public class RoleAIDMessage extends OrganizationMessage {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-    }
 
     @Override
-    protected MessageGenerator createGenerator() {
-        return new RoleAIDMessageGenerator();
+    public String generateContent() {
+        return String.format("role-aid(%1$s)", roleAID.getName());
     }
-    
+
     @Override
-    protected MessageParser createParser() {
-        return new RoleAIDMessageParser();
+    public void parseContent(String content) {
+        final Pattern contentPattern = Pattern.compile("role-aid\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+
+        String roleAID = matcher.group(1);
+        this.roleAID = new AID(roleAID, true);
     }
     
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    static class RoleAIDMessageGenerator extends MessageGenerator {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public ACLMessage generate(Message message) {
-            RoleAIDMessage roleAIDMessage = (RoleAIDMessage)message;
-            
-            // Generate the header.
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            // TAG SETTING-PROTOCOL
-            //aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
-            aclMessage.addReceiver(roleAIDMessage.getReceiverPlayer());
-            
-            // Generate the content.
-            aclMessage.setContent(generateContent(roleAIDMessage));
-            
-            return aclMessage;
-        }
-        
-        // ---------- PRIVATE ----------
-
-        private String generateContent(RoleAIDMessage roleAIDMessage) {
-            return String.format("role-aid(%1$s)", roleAIDMessage.getRoleAID().getName());
-        }
-        
-        // </editor-fold>
-    }
-    
-    static class RoleAIDMessageParser extends MessageParser {
-
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private static final Pattern contentPattern = Pattern.compile("role-aid\\((.*)\\)");
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            // TODO
-            RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
-            
-            // Parse the content.
-            parseContent(roleAIDMessage, aclMessage.getContent());
-            
-            return roleAIDMessage;
-        }
-        
-        // ---------- PRIVATE ----------
-        
-        private void parseContent(RoleAIDMessage roleAIDMessage, String content) {
-            Matcher matcher = contentPattern.matcher(content);
-            matcher.matches();
-            
-            String roleAID = matcher.group(1);
-            roleAIDMessage.setRoleAID(new AID(roleAID, true));
-        }
-        
-        // </editor-fold> 
-    }
-        
     // </editor-fold>
 }
