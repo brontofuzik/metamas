@@ -41,7 +41,7 @@ public class Participant_Player extends Player {
         super.setup();
         
         addBehaviour(new EnactRolesWakerBehaviour(this));
-        //addBehaviour(new ActivateRoleWakerBehaviour(this));
+        addBehaviour(new ActivateRoleWakerBehaviour(this));
         //addBehaviour(new DeactivateRoleWakerBehaviour(this));
         //addBehaviour(new DeactRolesWakerBehaviour(this));
     }
