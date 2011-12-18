@@ -6,7 +6,6 @@ import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateReplyMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 
 /**
@@ -52,20 +51,20 @@ public class Role_DeactivateRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-        // ----- States -----
-        State receiveDeactivateRequest = new ReceiveDeactivateRequest();
-        State sendDeactivateReply = new SendDeactivateReply();
-        State end = new End();
-        // ------------------
-
-        // Register states.
-        registerFirstState(receiveDeactivateRequest);
-        registerState(sendDeactivateReply);
-        registerLastState(end);
-
-        // Register transitions.
-        receiveDeactivateRequest.registerDefaultTransition(sendDeactivateReply);
-        sendDeactivateReply.registerDefaultTransition(end);
+//        // ----- States -----
+//        State receiveDeactivateRequest = new ReceiveDeactivateRequest();
+//        State sendDeactivateReply = new SendDeactivateReply();
+//        State end = new End();
+//        // ------------------
+//
+//        // Register states.
+//        registerFirstState(receiveDeactivateRequest);
+//        registerState(sendDeactivateReply);
+//        registerLastState(end);
+//
+//        // Register transitions.
+//        receiveDeactivateRequest.registerDefaultTransition(sendDeactivateReply);
+//        sendDeactivateReply.registerDefaultTransition(end);
     }
 
     // </editor-fold>
@@ -123,16 +122,16 @@ public class Role_DeactivateRoleResponder extends Party {
 
         @Override
         public void action() {
-            DeactivateReplyMessage deactivateReplyMessage = new DeactivateReplyMessage();      
-            if (isDeactivable()) {
-                deactivateReplyMessage.setAgree(true);
-                ((Role)myAgent).state = Role.RoleState.INACTIVE;
-            } else {
-                deactivateReplyMessage.setAgree(false);
-            }
-            deactivateReplyMessage.addReceiver(playerAID);
-
-            send(DeactivateReplyMessage.class, deactivateReplyMessage);
+//            DeactivateReplyMessage deactivateReplyMessage = new DeactivateReplyMessage();      
+//            if (isDeactivable()) {
+//                deactivateReplyMessage.setAgree(true);
+//                ((Role)myAgent).state = Role.RoleState.INACTIVE;
+//            } else {
+//                deactivateReplyMessage.setAgree(false);
+//            }
+//            deactivateReplyMessage.addReceiver(playerAID);
+//
+//            send(DeactivateReplyMessage.class, deactivateReplyMessage);
         }
 
         private boolean isDeactivable() {

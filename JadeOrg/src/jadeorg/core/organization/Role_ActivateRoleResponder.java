@@ -1,10 +1,6 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.simplemessages.AgreeMessage;
-import jadeorg.lang.simplemessages.FailureMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
 import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
@@ -57,30 +53,30 @@ public class Role_ActivateRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-        // ----- States -----
-        State receiveActivateRequest = new ReceiveActivateRequest();
-        State sendActivateReply = new SendActivateReply();
-        State sendFailure = new SendFailure();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
-        // ------------------
-
-        // Register states.
-        registerFirstState(receiveActivateRequest);
-        registerState(sendActivateReply);
-        registerState(sendFailure);
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
-
-        // Register transitions.
-        receiveActivateRequest.registerTransition(Event.SUCCESS ,sendActivateReply);
-        receiveActivateRequest.registerTransition(Event.FAILURE, sendFailure);
-
-        sendActivateReply.registerDefaultTransition(successEnd);
-
-        sendActivateReply.registerDefaultTransition(successEnd);
-
-        sendFailure.registerDefaultTransition(failureEnd);
+//        // ----- States -----
+//        State receiveActivateRequest = new ReceiveActivateRequest();
+//        State sendActivateReply = new SendActivateReply();
+//        State sendFailure = new SendFailure();
+//        State successEnd = new SuccessEnd();
+//        State failureEnd = new FailureEnd();
+//        // ------------------
+//
+//        // Register states.
+//        registerFirstState(receiveActivateRequest);
+//        registerState(sendActivateReply);
+//        registerState(sendFailure);
+//        registerLastState(successEnd);
+//        registerLastState(failureEnd);
+//
+//        // Register transitions.
+//        receiveActivateRequest.registerTransition(Event.SUCCESS ,sendActivateReply);
+//        receiveActivateRequest.registerTransition(Event.FAILURE, sendFailure);
+//
+//        sendActivateReply.registerDefaultTransition(successEnd);
+//
+//        sendActivateReply.registerDefaultTransition(successEnd);
+//
+//        sendFailure.registerDefaultTransition(failureEnd);
     }
 
     // </editor-fold>
@@ -161,16 +157,16 @@ public class Role_ActivateRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Role)myAgent).logInfo("Sending activate reply.");
-
-            // Create the 'Activate reply' JadeOrg message.
-            AgreeMessage activateReplyMessage = new AgreeMessage();
-            activateReplyMessage.addReceiver(playerAID);
-
-            // Send the message.
-            send(AgreeMessage.class, activateReplyMessage);
-            
-            ((Role)myAgent).logInfo("Activate reply sent");
+//            ((Role)myAgent).logInfo("Sending activate reply.");
+//
+//            // Create the 'Activate reply' JadeOrg message.
+//            AgreeMessage activateReplyMessage = new AgreeMessage();
+//            activateReplyMessage.addReceiver(playerAID);
+//
+//            // Send the message.
+//            send(AgreeMessage.class, activateReplyMessage);
+//            
+//            ((Role)myAgent).logInfo("Activate reply sent");
         }
 
         // </editor-fold>
@@ -199,16 +195,16 @@ public class Role_ActivateRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Role)myAgent).logInfo("Sending failure.");
-
-            // Create the 'Failure' message.
-            FailureMessage failureMessage = new FailureMessage();
-            failureMessage.addReceiver(playerAID);
-
-            // Send the message.
-            send(FailureMessage.class, failureMessage);
-            
-            ((Role)myAgent).logInfo("Failure sent.");
+//            ((Role)myAgent).logInfo("Sending failure.");
+//
+//            // Create the 'Failure' message.
+//            FailureMessage failureMessage = new FailureMessage();
+//            failureMessage.addReceiver(playerAID);
+//
+//            // Send the message.
+//            send(FailureMessage.class, failureMessage);
+//            
+//            ((Role)myAgent).logInfo("Failure sent.");
         }
 
         // </editor-fold>

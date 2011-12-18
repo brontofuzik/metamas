@@ -31,12 +31,12 @@ public abstract class ActiveState extends State {
      * @param message the message
      */
     public void send(Class messageClass, Message message) {
-        getParty().send(messageClass, message);
+        throw new UnsupportedOperationException();
     }
     
     // TAG DEBUGGING
     public void sendACLMessage(ACLMessage aclMessage) {
-        getParty().sendACLMessage(aclMessage);
+        throw new UnsupportedOperationException();
     }
     
     // </editor-fold>

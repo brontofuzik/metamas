@@ -19,11 +19,12 @@ public abstract class OneShotBehaviourReceiverState extends OneShotBehaviourStat
     
     // </editor-fold>
     
-    public Message receive(Class messageClass, AID senderAID) {
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    @Override
+    public boolean receive(Message message, AID senderAID) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public Message receive(Class messageClass) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // </editor-fold>
 }

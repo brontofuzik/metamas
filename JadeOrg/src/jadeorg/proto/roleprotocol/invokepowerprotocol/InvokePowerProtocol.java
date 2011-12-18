@@ -34,7 +34,6 @@ public class InvokePowerProtocol extends Protocol {
      */
     private InvokePowerProtocol() {
         super(NAME);
-        registerMessages();
     }
     
     // </editor-fold>
@@ -50,17 +49,6 @@ public class InvokePowerProtocol extends Protocol {
             singleton = new InvokePowerProtocol();
         }
         return singleton;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    /**
-     * Registers the messages.
-     */
-    private void registerMessages() {
-        registerMessage(InvokeRequestMessage.class);
     }
     
     // </editor-fold>

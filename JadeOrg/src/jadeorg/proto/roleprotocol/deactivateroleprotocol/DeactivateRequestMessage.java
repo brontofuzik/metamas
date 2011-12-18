@@ -1,11 +1,6 @@
 package jadeorg.proto.roleprotocol.deactivateroleprotocol;
 
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.roleprotocol.RoleMessage;
 
 /**
  * A 'Deactivate request' message.
@@ -16,75 +11,26 @@ import jadeorg.proto.roleprotocol.RoleMessage;
  * @since 2011-11-06
  * @version %I% %G%
  */
-public class DeactivateRequestMessage extends RoleMessage {
+public class DeactivateRequestMessage extends Message {
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-
-    @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-    }
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    /**
-     * Creates the 'Deactivate request' message parser.
-     * @return the 'Deactivate request' message parser
-     */
-    @Override
-    protected MessageParser createParser() {
-        return new DeactivateRequestMessageParser();
-    }
-
-    /**
-     * Creates the 'Deactivate request' message generator.
-     * @return the 'Deactivate request' message generator
-     */
-    @Override
-    protected MessageGenerator createGenerator() {
-        return new DeactivateRequestMessageGenerator();
+    DeactivateRequestMessage() {
+        super(0);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Deactivate request' message parser.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private static class DeactivateRequestMessageParser extends MessageParser {
+    // <editor-fold defaultstate="collapsed" desc="Methods">
 
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public Message parse(ACLMessage message) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        // </editor-fold>
+    @Override
+    public String generateContent() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    /**
-     * The 'Deactivate request' message generator.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private static class DeactivateRequestMessageGenerator extends MessageGenerator {
 
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public ACLMessage generate(Message message) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
-        // </editor-fold>
+    @Override
+    public void parseContent(String content) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     // </editor-fold>

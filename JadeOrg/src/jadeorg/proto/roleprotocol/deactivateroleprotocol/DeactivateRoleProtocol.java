@@ -27,7 +27,6 @@ public class DeactivateRoleProtocol extends Protocol {
     
     private DeactivateRoleProtocol() {
         super(NAME);
-        registerMessages();
     }
     
     // </editor-fold>
@@ -39,14 +38,6 @@ public class DeactivateRoleProtocol extends Protocol {
             singleton = new DeactivateRoleProtocol();
         }
         return singleton;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    private void registerMessages() {
-        registerMessage(DeactivateRequestMessage.class);
     }
     
     // </editor-fold>

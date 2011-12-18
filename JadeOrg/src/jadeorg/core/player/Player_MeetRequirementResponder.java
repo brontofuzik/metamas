@@ -4,9 +4,9 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.ActiveState;
+import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
 import jadeorg.util.MessageTemplateBuilder;
 import java.io.Serializable;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @since 2011-11-11
  * @version %I% %G%
  */
-public class Player_MeetRequirementResponder extends ResponderParty {
+public class Player_MeetRequirementResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     

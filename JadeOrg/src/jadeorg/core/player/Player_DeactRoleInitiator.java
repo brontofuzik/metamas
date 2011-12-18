@@ -64,22 +64,22 @@ public class Player_DeactRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-        // ----- States -----
-        State sendDeactRequest = new SendDeactRequest();
-        State receiveDeactReply = new ReceiveDeactReply();
-        State end = new End();
-        // ------------------
-
-        // Register the states.
-        registerFirstState(sendDeactRequest);
-        registerState(receiveDeactReply);
-        registerLastState(end);
-
-        // Register the transitions (OLD).
-        registerDefaultTransition(sendDeactRequest, receiveDeactReply);
-
-        registerDefaultTransition(receiveDeactReply, end);
-
+//        // ----- States -----
+//        State sendDeactRequest = new SendDeactRequest();
+//        State receiveDeactReply = new ReceiveDeactReply();
+//        State end = new End();
+//        // ------------------
+//
+//        // Register the states.
+//        registerFirstState(sendDeactRequest);
+//        registerState(receiveDeactReply);
+//        registerLastState(end);
+//
+//        // Register the transitions (OLD).
+//        registerDefaultTransition(sendDeactRequest, receiveDeactReply);
+//
+//        registerDefaultTransition(receiveDeactReply, end);
+//
 //            // Register the transitions (NEW).
 //            sendDeactRequest.registerDefaultTransition(receiveDeactReply);
 //            
@@ -114,11 +114,11 @@ public class Player_DeactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            DeactRequestMessage message = new DeactRequestMessage();
-            message.setReceiverOrganization(organizationAID);
-            message.setRoleName(roleName);
-
-            send(DeactRequestMessage.class, message);
+//            DeactRequestMessage message = new DeactRequestMessage();
+//            message.setReceiverOrganization(organizationAID);
+//            message.setRoleName(roleName);
+//
+//            send(DeactRequestMessage.class, message);
         }
 
         // </editor-fold>

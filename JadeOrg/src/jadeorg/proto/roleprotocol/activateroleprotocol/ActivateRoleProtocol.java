@@ -26,7 +26,6 @@ public class ActivateRoleProtocol extends Protocol {
     
     private ActivateRoleProtocol() {
         super(NAME);
-        registerMessages();
     }
     
     // </editor-fold>
@@ -38,14 +37,6 @@ public class ActivateRoleProtocol extends Protocol {
             singleton = new ActivateRoleProtocol();
         }
         return singleton;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    private void registerMessages() {
-        registerMessage(ActivateRequestMessage.class);
     }
     
     // </editor-fold>

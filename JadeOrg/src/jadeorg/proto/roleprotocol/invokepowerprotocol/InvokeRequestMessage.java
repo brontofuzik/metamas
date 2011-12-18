@@ -1,10 +1,7 @@
 package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.roleprotocol.RoleMessage;
+import jadeorg.lang.Message;
+
 
 /**
  * TODO
@@ -12,8 +9,16 @@ import jadeorg.proto.roleprotocol.RoleMessage;
  * @since 2011-11-09
  * @version %I% %G%
  */
-public class InvokeRequestMessage extends RoleMessage {
+public class InvokeRequestMessage extends Message {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    InvokeRequestMessage() {
+        super(0);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     public String getPower() {
@@ -25,20 +30,18 @@ public class InvokeRequestMessage extends RoleMessage {
     }
     
     // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-    }
-
-    @Override
-    protected MessageParser createParser() {
+    public String generateContent() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    protected MessageGenerator createGenerator() {
+    public void parseContent(String content) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+     
+    // </editor-fold>
 }
