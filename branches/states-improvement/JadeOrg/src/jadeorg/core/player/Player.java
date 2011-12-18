@@ -74,7 +74,7 @@ public abstract class Player extends Agent {
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
             AID roleAID = knowledgeBase.getEnactedRole(roleName).getRoleAID();
-            addBehaviour(new Player_ActivateRoleInitiator(roleAID));
+            addBehaviour(new Player_ActivateRoleInitiator_New(roleAID));
         } else {
             // The role can not be activated.
             String message = String.format("Error activating the role '%1$s'. It is not enacted.", roleName);

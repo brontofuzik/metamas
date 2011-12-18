@@ -7,15 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
-import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
-import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokeRequestMessage;
-import jadeorg.util.ManagerBehaviour;
 import java.util.logging.Level;
 
 /**
@@ -185,7 +177,7 @@ public class Role extends Agent {
         logInfo("Responding to the 'Activate role' protocol.");
         
         if (playerAID.equals(this.playerAID)) {
-            addBehaviour(new Role_ActivateRoleResponder(playerAID));
+            addBehaviour(new Role_ActivateRoleResponder_New(playerAID));
         } else {
             // You are not enacting this role.
         }

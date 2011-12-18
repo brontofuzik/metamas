@@ -157,20 +157,12 @@ public abstract class Organization extends Agent {
     }
 
     /**
-     * Sends a NOT_UNDERSTOOD message.
-     * @param receiver the receiver.
-     */
-    private void sendNotUnderstood(AID receiver) {
-        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
-        message.addReceiver(receiver);
-        send(message);
-    }
-
-    /**
      * Enacts a role.
      * @param player the player
      */
     void enactRoleResponder(AID player) {
+        logInfo("Responding to the 'Enact role' protocol.");
+        
         addBehaviour(new Organization_EnactRoleResponder_New(player));
     }
 
@@ -180,6 +172,19 @@ public abstract class Organization extends Agent {
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
     void deactRoleResponder(AID player) {
+        logInfo("Responding to the 'Enact role' protocol.");
+    }
+    
+    // ---------- PRIVATE ----------
+    
+    /**
+     * Sends a NOT_UNDERSTOOD message.
+     * @param receiver the receiver.
+     */
+    private void sendNotUnderstood(AID receiver) {
+        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
+        message.addReceiver(receiver);
+        send(message);
     }
 
     // </editor-fold>
