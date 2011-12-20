@@ -15,6 +15,7 @@ import jadeorg.proto_new.MultiSenderState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;
 import jadeorg.proto_new.SingleSenderState;
+import jadeorg.proto_new.jadeorgextensions.ReceiveAgreeOrRefuse;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -238,14 +239,9 @@ class Organization_EnactRoleResponder_New extends Party {
         // </editor-fold>
     }
     
-    private class ReceiveRequirementsReply extends MultiReceiverState {
+    private class ReceiveRequirementsReply extends ReceiveAgreeOrRefuse {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int AGREE = 1;
-        public static final int REFUSE = 2;
-        // -----------------------
         
         private static final String NAME = "receive-requirements-reply";
         
@@ -254,11 +250,7 @@ class Organization_EnactRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementsReply() {
-            super(NAME);
-            
-            addReceiver(this.new ReceiveAgree(AGREE, playerAID));
-            addReceiver(this.new ReceiveRefuse(REFUSE, playerAID));
-            buildFSM();
+            super(NAME, playerAID);
         }
         
         // </editor-fold>

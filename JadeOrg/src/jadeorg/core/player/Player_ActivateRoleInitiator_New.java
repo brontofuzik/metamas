@@ -152,14 +152,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
         
         @Override
         protected void onAgree() {
-            System.out.println("----- " + getBehaviourName() + " AGREE -----");
             ((Player)myAgent).knowledgeBase.activateRole(roleAID.getName());
-        }
-
-        @Override
-        protected void onRefuse() {
-            System.out.println("----- " + getBehaviourName() + " REFUSE -----");
-            // Do nothing.
         }
 
         @Override

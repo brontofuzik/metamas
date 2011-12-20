@@ -13,6 +13,7 @@ import jadeorg.proto_new.MultiSenderState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;
 import jadeorg.proto_new.SingleSenderState;
+import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
 
 /**
  * An 'Enact role' protocol initiator party.
@@ -235,17 +236,12 @@ class Player_EnactRoleInitiator_New extends Party {
     }
     
     /**
-     * The 'Send agree' active state.
-     * A state in which the 'Agree' requirementsInformMessage is send.
+     * The 'Send requirements reply' (multi sender) state.
+     * A state in which the 'Agree' or 'Refuse' message is sent.
      */
-    private class SendRequirementsReply extends MultiSenderState {
+    private class SendRequirementsReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int AGREE = 1;
-        public static final int REFUSE = 2;
-        // -----------------------
 
         private static final String NAME = "send-requirements-reply";
 
@@ -254,11 +250,7 @@ class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementsReply() {
-            super(NAME);
-            
-            addSender(AGREE, this.new SendAgree(organizationAID));
-            addSender(REFUSE, this.new SendRefuse(organizationAID));
-            buildFSM();
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>

@@ -34,9 +34,13 @@ public abstract class ReceiveAgreeOrRefuse extends MultiReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected abstract void onAgree();
+    protected void onAgree() {
+        // Do nothing.
+    }
     
-    protected abstract void onRefuse();
+    protected void onRefuse() {
+        // Do nothing.
+    }
     
     // </editor-fold>
     
