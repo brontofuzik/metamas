@@ -106,6 +106,64 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    public void activateRoleResponder(AID playerAID) {
+        logInfo("Responding to the 'Activate role' protocol.");
+        
+        if (playerAID.equals(this.playerAID)) {
+            addBehaviour(new Role_ActivateRoleResponder_New(playerAID));
+        } else {
+            // You are not enacting this role.
+        }
+    }
+
+    public void deactivateRoleResponder(AID playerAID) {
+        logInfo("Responding to the 'Deactivate role' protocol.");
+        
+        if (playerAID.equals(this.playerAID)) {
+            addBehaviour(new Role_DeactivateRoleResponder_New(playerAID));
+        } else {
+            // You are not enacting this role.
+        }
+    }
+    
+    public void invokePower(AID player, String power, String[] arguments) {
+        logInfo("Responding to the 'Invoke power' protocol.");
+        
+    }
+    
+    // ----- Logging -----
+    
+    /**
+     * Logs a message.
+     * @param level the level
+     * @param message the message
+     */
+    public void log(Level level, String message) {
+        if (logger.isLoggable(level)) {
+            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        }
+    }
+    
+    /**
+     * Logs an INFO-level message.
+     * @param message the INFO-level message
+     */
+    public void logInfo(String message) {
+        log(Level.INFO, message);
+    }
+    
+    // ----- PACKAGE -----
+    
+    boolean isActivable() {
+        return state == RoleState.INACTIVE;
+    }
+    
+    boolean isDeactivable() {
+        return state == RoleState.ACTIVE;
+    }
+    
+    // ----- PROTECTED -----
+    
     @Override
     protected void setup() {
         addBehaviours();
@@ -116,25 +174,6 @@ public class Role extends Agent {
     
     protected void addPower(Power power) {
         invokePowerResponder.addPower(power);
-    }
-    
-    /**
-     * Logs a message.
-     * @param level the level
-     * @param message the message
-     */
-    protected void log(Level level, String message) {
-        if (logger.isLoggable(level)) {
-            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
-        }
-    }
-    
-    /**
-     * Logs an INFO-level message.
-     * @param message the INFO-level message
-     */
-    protected void logInfo(String message) {
-        log(Level.INFO, message);
     }
     
     // ----- Initialization -----
@@ -169,45 +208,6 @@ public class Role extends Agent {
         agentDescription.addServices(serviceDescription);
         
         return agentDescription;
-    }
-    
-    // ----- Role activation/deactivation -----
-    
-    void activateRoleResponder(AID playerAID) {
-        logInfo("Responding to the 'Activate role' protocol.");
-        
-        if (playerAID.equals(this.playerAID)) {
-            addBehaviour(new Role_ActivateRoleResponder_New(playerAID));
-        } else {
-            // You are not enacting this role.
-        }
-    }
-
-    void deactivateRoleResponder(AID playerAID) {
-        logInfo("Responding to the 'Deactivate role' protocol.");
-        
-        if (playerAID.equals(this.playerAID)) {
-            addBehaviour(new Role_DeactivateRoleResponder(playerAID));
-        } else {
-            // You are not enacting this role.
-        }
-    }
-    
-    // ----- Power invocation -----
-    
-    private void invokePower(AID player, String power, String[] arguments) {
-    }
-    
-    // ----- Error handling -----
-    
-    /**
-     * Sends a 'Not understood' message.
-     * @param receiver the receiver.
-     */
-    private void sendNotUnderstood(AID receiver) {
-        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
-        message.addReceiver(receiver);
-        send(message);
     }
     
     // </editor-fold>

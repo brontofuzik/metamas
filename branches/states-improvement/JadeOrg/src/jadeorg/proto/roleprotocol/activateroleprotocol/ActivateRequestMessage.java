@@ -5,7 +5,6 @@
 package jadeorg.proto.roleprotocol.activateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
 
 /**

@@ -1,5 +1,6 @@
 package jadeorg.proto.roleprotocol.deactivateroleprotocol;
 
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 
 /**
@@ -15,8 +16,8 @@ public class DeactivateRequestMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    DeactivateRequestMessage() {
-        super(0);
+    public DeactivateRequestMessage() {
+        super(ACLMessage.REQUEST);
     }
     
     // </editor-fold>
@@ -25,12 +26,12 @@ public class DeactivateRequestMessage extends Message {
 
     @Override
     public String generateContent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "deactivate";
     }
 
     @Override
     public void parseContent(String content) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // Do nothing.
     }
     
     // </editor-fold>

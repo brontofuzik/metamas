@@ -5,8 +5,6 @@ import jadeorg.proto.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.State;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 
 /**
@@ -15,7 +13,7 @@ import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
  * @since 2011-12-09
  * @version %I% %G%
  */
-public class Player_DeactivateRolelInitiator extends Party {
+public class Player_DeactivateRoleInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -31,7 +29,7 @@ public class Player_DeactivateRolelInitiator extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player_DeactivateRolelInitiator(AID roleAID) {
+    public Player_DeactivateRoleInitiator(AID roleAID) {
         super(NAME);
         // ----- Preconditions -----
         assert roleAID != null;
