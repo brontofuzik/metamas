@@ -170,11 +170,6 @@ public class Role_ActivateRoleResponder_New extends Party {
         }
 
         @Override
-        protected void onRefuse() {
-            // Do nothing.
-        }
-
-        @Override
         protected void onExit() {
             ((Role)myAgent).logInfo("Activate reply sent");
         }
