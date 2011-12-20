@@ -9,6 +9,7 @@ import jadeorg.proto_new.jadeextensions.State;
 import jadeorg.proto_new.MultiSenderState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;
+import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
 
 /**
  * An 'Activate role' protocol responder party.
@@ -131,14 +132,9 @@ public class Role_ActivateRoleResponder_New extends Party {
      * The 'Send activate reply' (multi sender) state.
      * A state in which the 'Activate reply' message is sent.
      */
-    private class SendActivateReply extends MultiSenderState {
+    private class SendActivateReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        // ----- Exit values -----
-        static final int AGREE = 1;
-        static final int REFUSE = 2;
-        // -----------------------
         
         private static final String NAME = "send-activate-reply";
 
@@ -147,11 +143,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendActivateReply() {
-            super(NAME);
-            
-            addSender(AGREE, this.new SendAgree(playerAID));
-            addSender(REFUSE, this.new SendRefuse(playerAID));
-            buildFSM();
+            super(NAME, playerAID);
         }
 
         // </editor-fold>
@@ -165,12 +157,21 @@ public class Role_ActivateRoleResponder_New extends Party {
 
         @Override
         protected int onManager() {
-            if (isActivable()) {
-                ((Role)myAgent).state = Role.RoleState.ACTIVE;
-                return AGREE;
+            if (isActivable()) {            
+                return SendAgreeOrRefuse.AGREE;
             } else {
-                return REFUSE;
+                return SendAgreeOrRefuse.REFUSE;
             }
+        }
+        
+        @Override
+        protected void onAgree() {
+            ((Role)myAgent).state = Role.RoleState.ACTIVE;
+        }
+
+        @Override
+        protected void onRefuse() {
+            // Do nothing.
         }
 
         @Override

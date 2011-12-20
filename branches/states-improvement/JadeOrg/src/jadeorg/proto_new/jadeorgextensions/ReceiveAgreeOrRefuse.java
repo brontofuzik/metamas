@@ -14,15 +14,15 @@ public abstract class ReceiveAgreeOrRefuse extends MultiReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     // ----- Exit values -----
-    static final int AGREE = 1;
-    static final int REFUSE = 2;
+    public static final int AGREE = 1;
+    public static final int REFUSE = 2;
     // -----------------------
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    ReceiveAgreeOrRefuse(String name, AID senderAID) {
+    protected ReceiveAgreeOrRefuse(String name, AID senderAID) {
         super(name);
 
         addReceiver(this.new MyReceiveAgree(senderAID));
