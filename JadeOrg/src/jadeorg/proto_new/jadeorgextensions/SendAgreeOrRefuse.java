@@ -14,15 +14,15 @@ public abstract class SendAgreeOrRefuse extends MultiSenderState {
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     // ----- Exit values -----
-    static final int AGREE = 1;
-    static final int REFUSE = 2;
+    public static final int AGREE = 1;
+    public static final int REFUSE = 2;
     // -----------------------
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    SendAgreeOrRefuse(String name, AID receiverAID) {
+    protected SendAgreeOrRefuse(String name, AID receiverAID) {
         super(name);
             
         addSender(AGREE, this.new MySendAgree(receiverAID));

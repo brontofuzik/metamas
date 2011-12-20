@@ -9,6 +9,7 @@ import jadeorg.proto_new.MultiReceiverState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleSenderState;
 import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto_new.jadeorgextensions.ReceiveAgreeOrRefuse;
 
 /**
  * An 'Activate role' protocol initiator party (new version).
@@ -126,27 +127,18 @@ public class Player_ActivateRoleInitiator_New extends Party {
      * The 'Receive activate reply' (multi sender) state.
      * A state in which the 'Activate reply' message is received.
      */
-    private class ReceiveActivateReply extends MultiReceiverState {
+    private class ReceiveActivateReply extends ReceiveAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        // ----- Exit values -----
-        static final int AGREE = 1;
-        static final int REFUSE = 2;
-        // -----------------------
         
-        private static final String NAME = "receive-activate-request";
+        private static final String NAME = "receive-activate-reply";
 
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveActivateReply() {
-            super(NAME);
-
-            addReceiver(this.new ReceiveAgree(AGREE, roleAID));
-            addReceiver(this.new ReceiveRefuse(REFUSE, roleAID));
-            buildFSM();
+            super(NAME, roleAID);
         }
 
         // </editor-fold>
@@ -156,6 +148,18 @@ public class Player_ActivateRoleInitiator_New extends Party {
         @Override
         protected void onEntry() {
             ((Player)myAgent).logInfo("Receiving activate reply.");
+        }
+        
+        @Override
+        protected void onAgree() {
+            System.out.println("----- " + getBehaviourName() + " AGREE -----");
+            ((Player)myAgent).knowledgeBase.activateRole(roleAID.getName());
+        }
+
+        @Override
+        protected void onRefuse() {
+            System.out.println("----- " + getBehaviourName() + " REFUSE -----");
+            // Do nothing.
         }
 
         @Override
