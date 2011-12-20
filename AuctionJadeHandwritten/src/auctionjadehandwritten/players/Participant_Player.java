@@ -42,7 +42,7 @@ public class Participant_Player extends Player {
         
         addBehaviour(new EnactRolesWakerBehaviour(this));
         addBehaviour(new ActivateRoleWakerBehaviour(this));
-        //addBehaviour(new DeactivateRoleWakerBehaviour(this));
+        addBehaviour(new DeactivateRoleWakerBehaviour(this));
         //addBehaviour(new DeactRolesWakerBehaviour(this));
     }
     
@@ -159,7 +159,7 @@ public class Participant_Player extends Player {
         // </editor-fold>
         
         @Override
-        protected void handleElapsedTimeout() {
+        protected void handleElapsedTimeout() {            
             RoleDescription roleToDeactivate = ((Player)myAgent).knowledgeBase.getActiveRole();
             try {
                 ((Player)myAgent).deactivateRoleInitiator(roleToDeactivate.getRoleName());
