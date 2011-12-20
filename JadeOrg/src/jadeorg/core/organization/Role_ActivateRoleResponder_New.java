@@ -6,7 +6,6 @@ import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.MultiReceiverState;
 import jadeorg.proto_new.MultiSenderState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;

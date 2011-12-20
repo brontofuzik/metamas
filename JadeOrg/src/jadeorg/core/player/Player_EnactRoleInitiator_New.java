@@ -156,8 +156,8 @@ class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
         // ----- Exit values -----
-        public static final int SUCCESS = 1;
-        public static final int FAILURE = 2;
+        static final int SUCCESS = 1;
+        static final int FAILURE = 2;
         // -----------------------
         
         private static final String NAME = "receive-requirements-inform";
@@ -169,7 +169,7 @@ class Player_EnactRoleInitiator_New extends Party {
         ReceiveRequirementsInform() {
             super(NAME);
             
-            addReceiver(new ReceiveRequirementsInform_Receiver(SUCCESS));
+            addReceiver(new ReceiveRequirementsInform_Receiver());
             addReceiver(new ReceiveFailure(FAILURE, organizationAID));
             buildFSM();
         }
@@ -202,8 +202,8 @@ class Player_EnactRoleInitiator_New extends Party {
             
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
-            ReceiveRequirementsInform_Receiver(int outerReceiverStateExitValue) {
-                super(NAME, outerReceiverStateExitValue, organizationAID);
+            ReceiveRequirementsInform_Receiver() {
+                super(NAME, SUCCESS, organizationAID);
             }
             
             // </editor-fold>
@@ -212,15 +212,18 @@ class Player_EnactRoleInitiator_New extends Party {
             
             @Override
             public void action() {
+                //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVER -----");
                 // Receive the 'Requirements inform' message.
                 RequirementsInformMessage message = new RequirementsInformMessage();
                 boolean messageReceived = receive(message, organizationAID);
                 
                 // Process the message.
                 if (messageReceived) {
+                    //System.out.println("----- RECEIVED -----");
                     requirements = message.getRequirements();
                     setExitValue(RECEIVED);
                 } else {
+                    //System.out.println("----- NOT-RECEIVED -----");
                     setExitValue(NOT_RECEIVED);
                 }
             }

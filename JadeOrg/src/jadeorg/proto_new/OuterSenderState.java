@@ -139,11 +139,19 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         @Override
         public void action() {
+            onSent();
+            
             // Create the 'Agree' message.
             SimpleMessage agreeMessage = new SimpleMessage(ACLMessage.AGREE);
             
             // Send the message.
             send(agreeMessage, getReceiverAID());
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected void onSent() {
+            // Do nothing.
         }
         
         // </editor-fold>      
@@ -175,11 +183,19 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         @Override
         public void action() {
+            onSent();
+            
             // Create the 'Refuse' message.
             SimpleMessage refuseMessage = new SimpleMessage(ACLMessage.REFUSE);
             
             // Send the message.
             send(refuseMessage, getReceiverAID());
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected void onSent() {
+            // Do nothing.
         }
         
         // </editor-fold>      
@@ -217,7 +233,13 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
             // Send the message.
             send(failureMessage, getReceiverAID());
         }
-
+        
+        // ----- PROTCTED -----
+        
+        protected void onSent() {
+            // Do nothing.
+        }
+        
         // </editor-fold>
     }
     
