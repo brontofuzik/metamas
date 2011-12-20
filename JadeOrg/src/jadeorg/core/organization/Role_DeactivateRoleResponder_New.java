@@ -3,25 +3,24 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
-import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.MultiSenderState;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;
+import jadeorg.proto_new.jadeextensions.State;
 import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
 
 /**
- * An 'Activate role' protocol responder party.
+ * A 'Deactivate role' protocol responder (new version).
  * @author Lukáš Kúdela
- * @since 2011-12-10
+ * @since 2011-12-20
  * @version %I% %G%
  */
-public class Role_ActivateRoleResponder_New extends Party {
+public class Role_DeactivateRoleResponder_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-    private static final String NAME = "activate-role-responder-new";
+    private static final String NAME = "deactivate-role-responder-new";
 
     // </editor-fold>
     
@@ -33,13 +32,14 @@ public class Role_ActivateRoleResponder_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_ActivateRoleResponder_New(AID playerAID) {
+    Role_DeactivateRoleResponder_New(AID playerAID) {
         super(NAME);
         // ----- Preconditions -----
         assert playerAID != null;
         // -------------------------
         
         this.playerAID = playerAID;
+
         registerStatesAndTransitions();
     }
 
@@ -49,8 +49,10 @@ public class Role_ActivateRoleResponder_New extends Party {
 
     @Override
     protected Protocol getProtocol() {
-        return ActivateRoleProtocol.getInstance();
+        return DeactivateRoleProtocol.getInstance();
     }
+    
+    // ----- PRIVATE -----
     
     private Role getMyRole() {
         return (Role)myAgent;
@@ -62,8 +64,8 @@ public class Role_ActivateRoleResponder_New extends Party {
 
     private void registerStatesAndTransitions() {
         // ----- States -----
-        State receiveActivateRequest = new ReceiveActivateRequest();
-        State sendActivateReply = new SendActivateReply();
+        State receiveActivateRequest = new ReceiveDeactivateRequest();
+        State sendActivateReply = new SendDeactivateReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -77,44 +79,43 @@ public class Role_ActivateRoleResponder_New extends Party {
         // Register transitions.
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
-        sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
-        sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
+        sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
+        sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Classes">
-
+    
     /**
-     * The 'Receive activate request' (single receiver) state.
-     * A state in which the 'Activate request' message is received.
+     * The 'Receive deactivate request' (single receiver) state.
      */
-    private class ReceiveActivateRequest extends SingleReceiverState {
-
+    private class ReceiveDeactivateRequest extends SingleReceiverState {
+        
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-        private static final String NAME = "receive-activate-request";
-        
-        // </editor-fold>
+        private static final String NAME = "recive-deactivate-request";
 
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        ReceiveActivateRequest() {
+        ReceiveDeactivateRequest() {
             super(NAME, playerAID);
         }
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving activate request.");
+            getMyRole().logInfo("Receiving deactivate request.");
         }
         
         @Override
         protected int onReceiver() {
-            ActivateRequestMessage message = new ActivateRequestMessage();
+            DeactivateRequestMessage message = new DeactivateRequestMessage();
             boolean messageReceived = receive(message, playerAID);
                 
             if (messageReceived) {
@@ -128,62 +129,56 @@ public class Role_ActivateRoleResponder_New extends Party {
         protected void onExit() {
             getMyRole().logInfo("Activate request received.");
         }
-
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Send activate reply' (multi sender) state.
-     * A state in which the 'Activate reply' message is sent.
+     * The 'Send deactivate reply' (multi sender) state.
      */
-    private class SendActivateReply extends SendAgreeOrRefuse {
+    private class SendDeactivateReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-activate-reply";
+
+        private static final String NAME = "send-deactivate-reply";
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        SendActivateReply() {
+        SendDeactivateReply() {
             super(NAME, playerAID);
         }
 
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending activate reply.");
+            getMyRole().logInfo("Sending deactivate reply.");
         }
-
+        
         @Override
         protected int onManager() {
-            if (getMyRole().isActivable()) {            
+            if (getMyRole().isDeactivable()) {            
                 return SendAgreeOrRefuse.AGREE;
             } else {
                 return SendAgreeOrRefuse.REFUSE;
             }
         }
-        
-        @Override
-        protected void onAgree() {
-            getMyRole().state = Role.RoleState.ACTIVE;
-        }
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Activate reply sent.");
+            getMyRole().logInfo("Deactivate reply sent.");
         }
         
         // </editor-fold>
     }
-
+    
     /**
      * The 'Success end' (simple) state.
-     * A state in which the 'Activate role' protocol responder party secceeds.
+     * A state in which the 'Deactivate role' protocol responder party succeeds.
      */
     private class SuccessEnd extends SimpleState {
 
@@ -205,15 +200,15 @@ public class Role_ActivateRoleResponder_New extends Party {
 
         @Override
         public void action() {
-            getMyRole().logInfo("Activate role responder party succeeded.");
+            getMyRole().logInfo("Deactivate role responder party succeeded.");
         }
 
         // </editor-fold>
     }
-
+        
     /**
      * The 'Failure end' (simple) state.
-     * A state in which the 'Activate role' protocol responder party fails.
+     * A state in which the 'Deactivate role' protocol responder party fails.
      */
     private class FailureEnd extends SimpleState {
 
@@ -235,11 +230,11 @@ public class Role_ActivateRoleResponder_New extends Party {
 
         @Override
         public void action() {
-            getMyRole().logInfo("Activate role responder party failed.");
+            getMyRole().logInfo("Deactivate role responder party failed.");
         }
 
         // </editor-fold>
     }
-
+    
     // </editor-fold>
 }

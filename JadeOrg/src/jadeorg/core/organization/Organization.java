@@ -7,7 +7,6 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import java.util.Hashtable;
 import java.util.Map;
@@ -49,6 +48,48 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Enacts a role.
+     * @param player the player
+     */
+    public void enactRoleResponder(AID player) {
+        logInfo("Responding to the 'Enact role' protocol.");
+        
+        addBehaviour(new Organization_EnactRoleResponder_New(player));
+    }
+
+    /**
+     * Deacts a role.
+     * @param player the player
+     */
+    // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
+    public void deactRoleResponder(AID player) {
+        logInfo("Responding to the 'Enact role' protocol.");
+    }
+    
+    // ----- Logging -----
+    
+    /**
+     * Logs a message.
+     * @param level the level
+     * @param message the message
+     */
+    public void log(Level level, String message) {
+        if (logger.isLoggable(level)) {
+            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
+        }
+    }
+    
+    /**
+     * Logs an INFO-level message.
+     * @param message the INFO-level message
+     */
+    public void logInfo(String message) {
+        log(Level.INFO, message);
+    }
+    
+    // ----- PROTECTED -----
+    
     @Override
     protected void setup() {
         addBehaviours();
@@ -88,25 +129,6 @@ public abstract class Organization extends Agent {
      */
     protected void addRole(Class roleClass) {        
         addRole(roleClass, new String[0]);
-    }
-    
-    /**
-     * Logs a message.
-     * @param level the level
-     * @param message the message
-     */
-    public void log(Level level, String message) {
-        if (logger.isLoggable(level)) {
-            logger.log(level, String.format("%1$s: %2$s", getLocalName(), message));
-        }
-    }
-    
-    /**
-     * Logs an INFO-level message.
-     * @param message the INFO-level message
-     */
-    public void logInfo(String message) {
-        log(Level.INFO, message);
     }
 
     // ---------- PRIVATE ----------
@@ -154,38 +176,7 @@ public abstract class Organization extends Agent {
     // TAG YellowPages
     private RoleServiceDescription createRoleDescription(String roleName) {
         return new RoleServiceDescription(roleName);
-    }
-
-    /**
-     * Enacts a role.
-     * @param player the player
-     */
-    void enactRoleResponder(AID player) {
-        logInfo("Responding to the 'Enact role' protocol.");
-        
-        addBehaviour(new Organization_EnactRoleResponder_New(player));
-    }
-
-    /**
-     * Deacts a role.
-     * @param player the player
-     */
-    // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    void deactRoleResponder(AID player) {
-        logInfo("Responding to the 'Enact role' protocol.");
-    }
-    
-    // ---------- PRIVATE ----------
-    
-    /**
-     * Sends a NOT_UNDERSTOOD message.
-     * @param receiver the receiver.
-     */
-    private void sendNotUnderstood(AID receiver) {
-        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
-        message.addReceiver(receiver);
-        send(message);
-    }
+    } 
 
     // </editor-fold>
     

@@ -74,7 +74,7 @@ public abstract class Player extends Agent {
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
             AID roleAID = knowledgeBase.getEnactedRole(roleName).getRoleAID();
-            addBehaviour(new Player_ActivateRoleInitiator_New(roleAID));
+            addBehaviour(new Player_ActivateRoleInitiator_New(roleName, roleAID));
         } else {
             // The role can not be activated.
             String message = String.format("Error activating the role '%1$s'. It is not enacted.", roleName);
@@ -87,15 +87,17 @@ public abstract class Player extends Agent {
         
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
-            addBehaviour(new Player_DeactivateRolelInitiator(knowledgeBase.getEnactedRole(roleName).getRoleAID()));
+            addBehaviour(new Player_DeactivateRoleInitiator_New(roleName, knowledgeBase.getEnactedRole(roleName).getRoleAID()));
         } else {
             // The role can not be deactivated.
-            String message = String.format("I cannot deactivate the role '%1$' because I do not play it.", roleName);
+            String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.", roleName);
             throw new PlayerException(this, message);
         }
     }
     
     public abstract boolean evaluateRequirements(String[] requirements);
+    
+    // ----- Logging -----
     
     /**
      * Logs a requirementsInformMessage.
@@ -128,12 +130,6 @@ public abstract class Player extends Agent {
     private void addBehaviours() {
         addBehaviour(new PlayerManagerBehaviour());
         logInfo("Behaviours added.");
-    }
-    
-    private void sendNotUnderstood(AID receiver) {
-        ACLMessage message = new ACLMessage(ACLMessage.NOT_UNDERSTOOD);
-        message.addReceiver(receiver);
-        send(message);
     }
     
     // </editor-fold>

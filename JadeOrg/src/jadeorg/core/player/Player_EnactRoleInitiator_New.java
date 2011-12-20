@@ -65,6 +65,10 @@ class Player_EnactRoleInitiator_New extends Party {
         return EnactRoleProtocol.getInstance();
     }
     
+    private Player getMyPlayer() {
+        return (Player)myAgent;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -127,7 +131,7 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         protected void onEntry() {
-            ((Player)myAgent).logInfo("Sending enact request.");
+            getMyPlayer().logInfo("Sending enact request.");
         }
         
         @Override
@@ -142,7 +146,7 @@ class Player_EnactRoleInitiator_New extends Party {
         
         @Override
         protected void onExit() {
-            ((Player)myAgent).logInfo("Enact request sent.");
+            getMyPlayer().logInfo("Enact request sent.");
         }
 
         // </editor-fold>
@@ -181,12 +185,12 @@ class Player_EnactRoleInitiator_New extends Party {
         
         @Override
         protected void onEntry() {
-            ((Player)myAgent).logInfo("Receiving requirements info.");
+            getMyPlayer().logInfo("Receiving requirements info.");
         }
 
         @Override
         protected void onExit() {
-            ((Player)myAgent).logInfo("Requirements info received.");
+            getMyPlayer().logInfo("Requirements info received.");
         }
 
         // </editor-fold>
@@ -259,12 +263,12 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         protected void onEntry() {
-            ((Player)myAgent).logInfo("Sending requirements reply.");
+            getMyPlayer().logInfo("Sending requirements reply.");
         }
         
         @Override
         protected int onManager() {
-            if (((Player)myAgent).evaluateRequirements(requirements)) {
+            if (getMyPlayer().evaluateRequirements(requirements)) {
                 // The player meets the requirements.
                 return AGREE;
             } else {
@@ -275,7 +279,7 @@ class Player_EnactRoleInitiator_New extends Party {
         
         @Override
         protected void onExit() {
-            ((Player)myAgent).logInfo("Requirements reply sent.");
+            getMyPlayer().logInfo("Requirements reply sent.");
         }
 
         // </editor-fold>
@@ -305,7 +309,7 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         protected void onEntry() {
-            ((Player)myAgent).logInfo("Receiving role AID.");
+            getMyPlayer().logInfo("Receiving role AID.");
         }
         
         @Override
@@ -315,7 +319,7 @@ class Player_EnactRoleInitiator_New extends Party {
             
             if (messageReceived) {
                 AID roleAID = message.getRoleAID();
-                ((Player)myAgent).knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
+                getMyPlayer().knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
                 return InnerReceiverState.RECEIVED;
             } else {
                 return InnerReceiverState.NOT_RECEIVED;
@@ -324,7 +328,7 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         protected void onExit() {
-            ((Player)myAgent).logInfo("Role AID received.");
+            getMyPlayer().logInfo("Role AID received.");
         }
 
         // </editor-fold>
@@ -354,7 +358,7 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Enact role initiator party succeeded.");
+            getMyPlayer().logInfo("Enact role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -384,7 +388,7 @@ class Player_EnactRoleInitiator_New extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Enact role initiator party failed.");
+            getMyPlayer().logInfo("Enact role initiator party failed.");
         }
 
         // </editor-fold>
