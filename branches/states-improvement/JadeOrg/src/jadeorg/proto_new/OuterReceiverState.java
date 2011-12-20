@@ -107,12 +107,8 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
+            //System.out.println("----- " + getParent().getBehaviourName() + " MANAGER -----");
             onManager();
-        }
-        
-        @Override
-        public int onEnd() {
-            return getExitValue();
         }
         
         // </editor-fold>
@@ -204,16 +200,26 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         @Override
         public void action() {
+            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-AGREE -----");
             // Receive the 'Agree' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.AGREE),
                 getSenderAID());
             
             // Process the message.
             if (messageReceived) {
+                //System.out.println("----- RECEIVED -----");
+                onReceived();
                 setExitValue(RECEIVED);
             } else {
+                //System.out.println("----- NOT-RECEIVED -----");
                 setExitValue(NOT_RECEIVED);
             }
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected void onReceived() {
+            // Do nothing.
         }
     
         // </editor-fold>
@@ -245,16 +251,26 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         @Override
         public void action() {
+            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-REFUSE -----");
             // Receive the 'Refuse' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.REFUSE),
                 getSenderAID());
             
             // Process the message.
             if (messageReceived) {
+                //System.out.println("----- RECEIVED -----");
+                onReceived();
                 setExitValue(RECEIVED);
             } else {
+                //System.out.println("----- NOT-RECEIVED -----");
                 setExitValue(NOT_RECEIVED);
             }
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected void onReceived() {
+            // Do nothing.
         }
         
         // </editor-fold>
@@ -286,16 +302,26 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
+            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-FAILURE -----");
             // Receive the 'Agree' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.FAILURE),
                 getSenderAID());
             
             // Process the message.
-            if (messageReceived) {       
+            if (messageReceived) {
+                //System.out.println("----- RECEIVED -----");
+                onReceived();
                 setExitValue(RECEIVED);
             } else {
+                //System.out.println("----- NOT-RECEIVED -----");
                 setExitValue(NOT_RECEIVED);
             }
+        }
+    
+        // ----- PROTECTED -----
+    
+        protected void onReceived() {
+            // Do nothing.
         }
 
         // </editor-fold>
@@ -321,7 +347,10 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            getParent().block();
+            //System.out.println("----- " + getParent().getBehaviourName() + " BLOCKER -----");
+            if (myAgent.getCurQueueSize() == 0) {
+                getParent().block();
+            }
         }
         
         // </editor-fold>
