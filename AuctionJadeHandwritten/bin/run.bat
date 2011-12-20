@@ -1,10 +1,10 @@
 @ECHO OFF
 
 REM Solution directory for HP
-SET SOLUTION_DIR=C:\DATA\projects\MAS\MetaMAS
+REM SET SOLUTION_DIR=C:\DATA\projects\MAS\MetaMAS
 
 REM Solution directory for Prestigio
-REM SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
+SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
 
 SET PROJECT_NAME=AuctionJadeHandwritten
 SET PROJECT_DIR=%SOLUTION_DIR%\%PROJECT_NAME%
