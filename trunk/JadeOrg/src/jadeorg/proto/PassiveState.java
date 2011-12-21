@@ -52,12 +52,12 @@ public abstract class PassiveState extends State {
      * @return the received message
      */
     public Message receive(Class messageClass, AID senderAID) {
-        return getParty().receive(messageClass, senderAID);
+        throw new UnsupportedOperationException();
     }
     
     // TAG DEBUGGING
     public ACLMessage receiveACLMessage() {
-        return getParty().receiveACLMessage();
+        throw new UnsupportedOperationException();
     }
     
     protected void loop() {

@@ -5,11 +5,7 @@
 package jadeorg.proto.roleprotocol.activateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.roleprotocol.RoleMessage;
 
 /**
  * An 'Activate request' message.
@@ -19,97 +15,26 @@ import jadeorg.proto.roleprotocol.RoleMessage;
  * @since 2011-11-06
  * @verison %I% %G%
  */
-public class ActivateRequestMessage extends RoleMessage {
+public class ActivateRequestMessage extends Message {
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-      
-    @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-    }
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    @Override
-    protected MessageGenerator createGenerator() {
-        return new ActivateRequestMessageGenerator();
-    }
-    
-    @Override
-    protected MessageParser createParser() {
-        return new ActivateRequestMessageParser();
+    public ActivateRequestMessage() {
+        super(ACLMessage.REQUEST);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Activate request' message generator.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private static class ActivateRequestMessageGenerator extends MessageGenerator {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public ACLMessage generate(Message message) {
-            ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)message;
+    // <editor-fold defaultstate="collapsed" desc="Methods">
 
-            // Generate the header.
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol(ActivateRoleProtocol.getInstance().getName());
-            aclMessage.addReceiver(activateRequestMessage.getReceiverRole());
-
-            // Generate the content.
-            aclMessage.setContent(generateContent(activateRequestMessage));
-
-            return aclMessage;
-        }
-      
-        // ---------- PRIVATE ----------
-        
-        private String generateContent(ActivateRequestMessage activateRequestMessage) {
-            return "activate";
-        }
-                
-        // </editor-fold>
+    @Override
+    public String generateContent() {
+        return "activate";
     }
-    
-    /**
-     * The 'Activate request' message parser.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela
-     * @since 2011-11-06
-     * @version %I% %G%
-     */
-    private static class ActivateRequestMessageParser extends MessageParser {
 
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-
-            // Parse the header.
-            activateRequestMessage.setSenderPlayer(aclMessage.getSender());
-
-            // Parse the content.
-            parseContent(activateRequestMessage, aclMessage.getContent());
-
-            return activateRequestMessage;
-        }
-        
-        // ---------- PRIVATE ----------
-        
-        private void parseContent(ActivateRequestMessage activateRequestMessage, String content) {
-            // Do nothing.
-        }
-        
-        // </editor-fold>
+    @Override
+    public void parseContent(String content) {
+        // Do nothing.
     }
     
     // </editor-fold>

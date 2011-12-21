@@ -28,7 +28,6 @@ public class DeactRoleProtocol extends Protocol {
     
     private DeactRoleProtocol() {
         super(NAME);
-        registerMessages();
     }
     
     // </editor-fold>
@@ -42,14 +41,5 @@ public class DeactRoleProtocol extends Protocol {
         return singleton;              
     }
         
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    private void registerMessages() {
-        registerMessage(DeactRequestMessage.class);
-        registerMessage(FailureMessage.class);
-    }
-    
     // </editor-fold>
 }

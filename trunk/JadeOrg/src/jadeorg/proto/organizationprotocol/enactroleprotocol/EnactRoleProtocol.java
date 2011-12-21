@@ -28,7 +28,6 @@ public class EnactRoleProtocol extends Protocol {
     
     private EnactRoleProtocol() {
         super(NAME);
-        registerMessages();
     }
     
     // </editor-fold>
@@ -40,16 +39,6 @@ public class EnactRoleProtocol extends Protocol {
             singleton = new EnactRoleProtocol();
         }
         return singleton;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    private void registerMessages() {
-        registerMessage(EnactRequestMessage.class);
-        registerMessage(RequirementsInformMessage.class);
-        registerMessage(RoleAIDMessage.class);
     }
     
     // </editor-fold>

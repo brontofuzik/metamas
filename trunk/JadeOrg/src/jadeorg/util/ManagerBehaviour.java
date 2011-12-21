@@ -1,6 +1,5 @@
 package jadeorg.util;
 
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ParallelBehaviour;
@@ -27,15 +26,6 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
         registerStatesAndTransitions();
     }
     
-    private void registerStatesAndTransitions() {
-        registerFirstState(new ParallelBehaviour(), PARALLEL_BEHAVIOUR_NAME);
-        registerState(new BlockerBehaviour(), BLOCKER_BEHAVIOUR_NAME);
-        
-        registerDefaultTransition(PARALLEL_BEHAVIOUR_NAME, BLOCKER_BEHAVIOUR_NAME);
-        registerDefaultTransition(BLOCKER_BEHAVIOUR_NAME, PARALLEL_BEHAVIOUR_NAME,
-            new String[] { PARALLEL_BEHAVIOUR_NAME });
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -43,12 +33,21 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
     protected void addHandler(HandlerBehaviour handler) {
         // ----- Preconditions -----
         if (handler == null) {
-            throw new IllegalArgumentException("handlerBehaviour");
+            throw new IllegalArgumentException("handler");
         }
         // -------------------------
         
         ParallelBehaviour parallelBehaviour = ((ParallelBehaviour)getState(PARALLEL_BEHAVIOUR_NAME));
         parallelBehaviour.addSubBehaviour(handler);
+    }
+    
+    private void registerStatesAndTransitions() {
+        registerFirstState(new ParallelBehaviour(), PARALLEL_BEHAVIOUR_NAME);
+        registerState(new BlockerBehaviour(), BLOCKER_BEHAVIOUR_NAME);
+        
+        registerDefaultTransition(PARALLEL_BEHAVIOUR_NAME, BLOCKER_BEHAVIOUR_NAME);
+        registerDefaultTransition(BLOCKER_BEHAVIOUR_NAME, PARALLEL_BEHAVIOUR_NAME,
+            new String[] { PARALLEL_BEHAVIOUR_NAME });
     }
     
     // </editor-fold>
