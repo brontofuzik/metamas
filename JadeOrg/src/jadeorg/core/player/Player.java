@@ -5,7 +5,6 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import jadeorg.core.organization.YellowPages;
 import java.util.logging.Level;
@@ -37,7 +36,7 @@ public abstract class Player extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public void enactRoleInitiator(String organizationName, String roleName) throws PlayerException {
-        logInfo(String.format("Initiating the 'Enact role' (%1$s: %2$s) protocol.", organizationName, roleName));
+        logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.", organizationName, roleName));
         
         // TAG YELLOW-PAGES
         //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
@@ -56,13 +55,18 @@ public abstract class Player extends Agent {
     
     // TODO Check if the role is enacted.
     public void deactRoleInitiator(String organizationName, String roleName) throws PlayerException {        
-        logInfo(String.format("Initiating the 'Deact role' (%1$s: %2$s) protocol.", organizationName, roleName));
+        logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.", organizationName, roleName));
         
-        DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-        if (organization != null) {
-            addBehaviour(new Player_DeactRoleInitiator(organization.getName(), roleName));
+        // TAG YellowPages
+        //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+        
+        AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
+        if (organizationAID != null) {
+            // The organizaiton exists.
+            addBehaviour(new Player_DeactRoleInitiator_New(organizationAID, roleName));
         } else {
-            String message = "I cannot deact the role '%1$' because it does not exist.";
+            // The organization does not exist.
+            String message = String.format("Error deacting a role. The organization '%1$s' does not exist.", organizationName);
             throw new PlayerException(this, message);
         }
     }

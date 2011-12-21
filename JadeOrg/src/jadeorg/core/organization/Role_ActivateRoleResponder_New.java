@@ -170,7 +170,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         
         @Override
         protected void onAgree() {
-            getMyRole().state = Role.RoleState.ACTIVE;
+            getMyRole().activate();
         }
 
         @Override

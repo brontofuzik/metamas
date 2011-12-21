@@ -58,9 +58,8 @@ public class EnactRequestMessage extends Message {
         final Pattern contentPattern = Pattern.compile("enact\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
-
-        String roleName = matcher.group(1);
-        this.roleName = roleName;
+ 
+        this.roleName = matcher.group(1);;
     }
     
     // </editor-fold>
