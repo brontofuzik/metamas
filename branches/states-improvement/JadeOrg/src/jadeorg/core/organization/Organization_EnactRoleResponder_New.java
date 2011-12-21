@@ -303,7 +303,7 @@ class Organization_EnactRoleResponder_New extends Party {
             Role role = createRoleAgent(roleName, roleName);
             role.setPlayerAID(playerAID);
             startRoleAgent(role);
-            getMyOrganization().knowledgeBase.updateRoleIsEnacted(role, playerAID);
+            getMyOrganization().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
 
             getMyOrganization().logInfo("Role agent created.");
             

@@ -154,6 +154,14 @@ public class Role extends Agent {
     
     // ----- PACKAGE -----
     
+    void activate() {
+        state = RoleState.ACTIVE;
+    }
+    
+    void deactivate() {
+        state = RoleState.INACTIVE;
+    }
+    
     boolean isActivable() {
         return state == RoleState.INACTIVE;
     }

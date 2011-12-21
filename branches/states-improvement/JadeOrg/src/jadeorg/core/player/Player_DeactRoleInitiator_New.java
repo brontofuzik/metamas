@@ -1,107 +1,114 @@
-package jadeorg.core.organization;
+package jadeorg.core.player;
 
 import jade.core.AID;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto_new.SimpleState;
-import jadeorg.proto_new.SingleReceiverState;
+import jadeorg.proto_new.SingleSenderState;
 import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
+import jadeorg.proto_new.jadeorgextensions.ReceiveAgreeOrRefuse;
 
 /**
- * A 'Deactivate role' protocol responder (new version).
+ * A 'Deact role' protocol initiator party (new version).
  * @author Lukáš Kúdela
- * @since 2011-12-20
+ * @since 2011-12-21
  * @version %I% %G%
  */
-public class Role_DeactivateRoleResponder_New extends Party {
+public class Player_DeactRoleInitiator_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-    private static final String NAME = "deactivate-role-responder-new";
+    private static final String NAME = "deact-protocol-initiator-new";
 
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    private AID playerAID;
+    /** The organization AID */
+    private AID organizationAID;
+
+    /** The role name */
+    private String roleName;
 
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_DeactivateRoleResponder_New(AID playerAID) {
+    public Player_DeactRoleInitiator_New(AID organization, String roleName) {
         super(NAME);
         // ----- Preconditions -----
-        assert playerAID != null;
+        assert organization != null;
+        assert roleName != null && !roleName.isEmpty();
         // -------------------------
-        
-        this.playerAID = playerAID;
+
+        this.organizationAID = organization;
+        this.roleName = roleName;
 
         registerStatesAndTransitions();
     }
 
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
     @Override
     protected Protocol getProtocol() {
-        return DeactivateRoleProtocol.getInstance();
+        return DeactRoleProtocol.getInstance();
     }
     
     // ----- PRIVATE -----
     
-    private Role getMyRole() {
-        return (Role)myAgent;
+    private Player getMyPlayer() {
+        return (Player)myAgent;
     }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
+    
     private void registerStatesAndTransitions() {
         // ----- States -----
-        State receiveActivateRequest = new ReceiveDeactivateRequest();
-        State sendActivateReply = new SendDeactivateReply();
+        State sendDeactRequest = new SendDeactRequest();
+        State receiveDeactReply = new ReceiveDeactReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
 
-        // Register states.
-        registerFirstState(receiveActivateRequest);
-        registerState(sendActivateReply);
+        // Register the states.
+        registerFirstState(sendDeactRequest);
+        registerState(receiveDeactReply);
         registerLastState(successEnd);
         registerLastState(failureEnd);
-
-        // Register transitions.
-        receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
-        sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
-        sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
+        // Register the transitions (NEW).
+        sendDeactRequest.registerDefaultTransition(receiveDeactReply);
+            
+        receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, successEnd);
+        receiveDeactReply.registerTransition(ReceiveDeactReply.REFUSE, failureEnd);
     }
-
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Receive deactivate request' (single receiver) state.
+     * The 'Send deact request' (single sender) state.
+     * A state in which the 'Deact request' message is sent.
      */
-    private class ReceiveDeactivateRequest extends SingleReceiverState {
-        
+    private class SendDeactRequest extends SingleSenderState {
+
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
-        private static final String NAME = "recive-deactivate-request";
+        private static final String NAME = "send-deact-request";
 
         // </editor-fold>
-        
+
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        ReceiveDeactivateRequest() {
-            super(NAME, playerAID);
+        SendDeactRequest() {
+            super(NAME);
         }
 
         // </editor-fold>
@@ -110,44 +117,41 @@ public class Role_DeactivateRoleResponder_New extends Party {
 
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving deactivate request.");
+            getMyPlayer().logInfo("Sending deact request.");
         }
         
         @Override
-        protected int onReceiver() {
-            DeactivateRequestMessage message = new DeactivateRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-                
-            if (messageReceived) {
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected void onSender() {
+            DeactRequestMessage message = new DeactRequestMessage();
+            message.setRoleName(roleName);
+
+            send(message, organizationAID);
         }
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Activate request received.");
+            getMyPlayer().logInfo("Deact request sent.");
         }
         
         // </editor-fold>
     }
     
     /**
-     * The 'Send deactivate reply' (multi sender) state.
+     * The 'Receive deact reply' (multi receiver) state.
+     * A state in which the 'Deact reply' message is received.
      */
-    private class SendDeactivateReply extends SendAgreeOrRefuse {
+    private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        // <editor-fold defaultstate="collapsed" desc="Fields">
 
-        private static final String NAME = "send-deactivate-reply";
+        private static final String NAME = "receive-deact-reply";
 
         // </editor-fold>
-        
+
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        SendDeactivateReply() {
-            super(NAME, playerAID);
+        ReceiveDeactReply() {
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>
@@ -156,26 +160,17 @@ public class Role_DeactivateRoleResponder_New extends Party {
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending deactivate reply.");
-        }
-        
-        @Override
-        protected int onManager() {
-            if (getMyRole().isDeactivable()) {            
-                return SendAgreeOrRefuse.AGREE;
-            } else {
-                return SendAgreeOrRefuse.REFUSE;
-            }
+            getMyPlayer().logInfo("Receiving deact reply.");
         }
         
         @Override
         protected void onAgree() {
-            getMyRole().deactivate();
+            getMyPlayer().knowledgeBase.deactRole(roleName);
         }
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Deactivate reply sent.");
+            getMyPlayer().logInfo("Deact reply received.");
         }
         
         // </editor-fold>
@@ -183,61 +178,61 @@ public class Role_DeactivateRoleResponder_New extends Party {
     
     /**
      * The 'Success end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party succeeds.
+     * A state in which the 'Deact role' initiator party succeedes.
      */
     private class SuccessEnd extends SimpleState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
+        
         private static final String NAME = "success-end";
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
+        
         SuccessEnd() {
             super(NAME);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         public void action() {
-            getMyRole().logInfo("Deactivate role responder party succeeded.");
+            getMyPlayer().logInfo("Deact role initiator party succeeded.");
         }
-
+        
         // </editor-fold>
     }
-        
+    
     /**
      * The 'Failure end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party fails.
+     * A state in which the 'Deact role' initiator party fails.
      */
     private class FailureEnd extends SimpleState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
+        
         private static final String NAME = "failure-end";
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
+        
         FailureEnd() {
             super(NAME);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         public void action() {
-            getMyRole().logInfo("Deactivate role responder party failed.");
+            getMyPlayer().logInfo("Deact role initiator party failed.");
         }
-
+        
         // </editor-fold>
     }
     

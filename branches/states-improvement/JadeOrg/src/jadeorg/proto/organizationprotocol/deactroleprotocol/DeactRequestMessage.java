@@ -4,10 +4,10 @@
  */
 package jadeorg.proto.organizationprotocol.deactroleprotocol;
 
-import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A 'Deact request' message.
@@ -27,7 +27,7 @@ public class DeactRequestMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    DeactRequestMessage() {
+    public DeactRequestMessage() {
         super(ACLMessage.REQUEST);
     }
     
@@ -54,12 +54,16 @@ public class DeactRequestMessage extends Message {
 
     @Override
     public String generateContent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return String.format("deact(%1$s)", roleName);
     }
 
     @Override
     public void parseContent(String content) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Pattern contentPattern = Pattern.compile("deact\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+ 
+        this.roleName = matcher.group(1);
     }
     
     // </editor-fold>

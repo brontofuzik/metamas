@@ -23,16 +23,18 @@ public abstract class Organization extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /** The organization roles. */
-    public Map<String, Class> roles = new Hashtable<String, Class>();
+    Map<String, Class> roles = new Hashtable<String, Class>();
     
     /** The requirements. */
-    public Map<String, String[]> requirements = new Hashtable<String, String[]>();
+    Map<String, String[]> requirements = new Hashtable<String, String[]>();
+    
+    /** The knowledge base. */
+    OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
+    
+    // ----- PRIVATE -----
     
     /** The DF agent description. */
     private DFAgentDescription agentDescription;
-    
-    /** The knowledge base. */
-    public OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
 
     private Logger logger;
     
@@ -52,10 +54,10 @@ public abstract class Organization extends Agent {
      * Enacts a role.
      * @param player the player
      */
-    public void enactRoleResponder(AID player) {
+    public void enactRoleResponder(AID playerAID) {
         logInfo("Responding to the 'Enact role' protocol.");
         
-        addBehaviour(new Organization_EnactRoleResponder_New(player));
+        addBehaviour(new Organization_EnactRoleResponder_New(playerAID));
     }
 
     /**
@@ -63,8 +65,10 @@ public abstract class Organization extends Agent {
      * @param player the player
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    public void deactRoleResponder(AID player) {
-        logInfo("Responding to the 'Enact role' protocol.");
+    public void deactRoleResponder(AID playerAID) {
+        logInfo("Responding to the 'Deact role' protocol.");
+        
+        addBehaviour(new Organization_DeactRoleResponder_New(playerAID));
     }
     
     // ----- Logging -----
