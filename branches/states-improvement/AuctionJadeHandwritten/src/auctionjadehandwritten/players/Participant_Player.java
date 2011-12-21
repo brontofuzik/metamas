@@ -43,7 +43,7 @@ public class Participant_Player extends Player {
         addBehaviour(new EnactRolesWakerBehaviour(this));
         addBehaviour(new ActivateRoleWakerBehaviour(this));
         addBehaviour(new DeactivateRoleWakerBehaviour(this));
-        //addBehaviour(new DeactRolesWakerBehaviour(this));
+        addBehaviour(new DeactRolesWakerBehaviour(this));
     }
     
     /**
@@ -182,15 +182,14 @@ public class Participant_Player extends Player {
         
         @Override
         protected void handleElapsedTimeout() {
-                for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
+            for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
                 try {
                     ((Player)myAgent).deactRoleInitiator(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
                 } catch (PlayerException ex) {
                     ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
             }
-        }
-        
+        }     
     }
     
     private static class RoleFullName {
