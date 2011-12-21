@@ -1,4 +1,4 @@
-package jadeorg.lang.simplemessages;
+package jadeorg.lang;
 
 import jadeorg.lang.Message;
 

@@ -2,7 +2,7 @@ package jadeorg.proto_new;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.simplemessages.SimpleMessage;
+import jadeorg.lang.SimpleMessage;
 import jadeorg.proto_new.jadeextensions.FSMBehaviourSenderState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 

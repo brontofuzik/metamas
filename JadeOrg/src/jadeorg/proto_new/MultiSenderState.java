@@ -1,8 +1,5 @@
 package jadeorg.proto_new;
 
-import jade.core.behaviours.OneShotBehaviour;
-import jadeorg.proto_new.jadeextensions.FSMBehaviourSenderState;
-import jadeorg.proto_new.jadeextensions.OneShotBehaviourSenderState;
 import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
 import java.util.HashMap;
 import java.util.Map;
