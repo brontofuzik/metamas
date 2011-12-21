@@ -1,9 +1,7 @@
 package jadeorg.core.player.kb;
 
-import jadeorg.core.player.kb.RoleDescription;
 import jade.core.AID;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 /**
  * A player knowledge base.
@@ -29,7 +27,7 @@ public class PlayerKnowledgeBase {
         return enactedRoles.values();
     }
     
-    public RoleDescription getEnactedRole(String roleName) {
+    public RoleDescription getEnactedRole(String roleName) {       
         return enactedRoles.get(roleName);
     }
     
@@ -57,7 +55,7 @@ public class PlayerKnowledgeBase {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
         
-        return roleName.equals(activeRole);
+        return activeRole != null ? roleName.equals(activeRole.getRoleName()) : false;
     }
     
     public boolean canActivateRole(String roleName) {
@@ -72,7 +70,7 @@ public class PlayerKnowledgeBase {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
         // -------------------------   
-    
+
         return doesEnactRole(roleName) && doesPlayRole(roleName);
     }
     
@@ -89,7 +87,7 @@ public class PlayerKnowledgeBase {
     
     public void activateRole(String roleName) {
         // ----- Preconditions -----
-        assert enactedRoles.contains(roleName);
+        assert enactedRoles.containsKey(roleName);
         // -------------------------
         
         activeRole = getEnactedRole(roleName);

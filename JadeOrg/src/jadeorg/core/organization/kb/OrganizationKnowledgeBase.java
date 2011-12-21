@@ -15,14 +15,11 @@ public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The role classes. */
-    private Map<String, Class> roleClasses = new Hashtable<String, Class>();
-    
     /** The enacted roles. */
-    private Map<String, Role> enactedRoles = new Hashtable<String, Role>();
+    private Map<String, AID> enactedRoles = new Hashtable<String, AID>();
     
     /** The players enacting roles. */
-    public Hashtable <AID, PlayerDescription> players = new Hashtable <AID, PlayerDescription>();
+    private Map<AID, PlayerDescription> enactingPlayers = new Hashtable <AID, PlayerDescription>();
     
     // </editor-fold>
     
@@ -34,11 +31,12 @@ public class OrganizationKnowledgeBase {
      * Queries this organization knowledge base to determine whether
      * a particular role is enacted by a particular player.
      * @param roleName the role name
-     * @param player the player AID
+     * @param playerAID the player AID
      * @return <c>true</c> if the specified role is enacted by the specified player;
      *         <c>false</c> otherwise.
      */
-    public boolean isRoleEnactedByPlayer(String roleName, AID player) {
+    public boolean isRoleEnactedByPlayer(String roleName, AID playerAID) {
+        // TODO Implement.
         return true;
     }
     
@@ -50,18 +48,23 @@ public class OrganizationKnowledgeBase {
      *         <c>false</c> otherwise.
      */
     public boolean isRoleEnacted(String roleName) {
-        return false;
+        return enactedRoles.containsKey(roleName);
     }
     
     /**
      * Queries this organization knowledge base whether
      * a particular player enacts any role.
-     * @param player the player AID
+     * @param playerAID the player AID
      * @return <c>true</c> if the specified player enacts any role;
      *         <c>false</c> otherwise.
      */
-    public boolean doesPlayerEnact(AID player) {
-        return false;
+    public boolean doesPlayerEnact(AID playerAID) {
+        return enactingPlayers.get(playerAID).isEmployed();
+    }
+    
+    public AID getRole(String roleName) {
+        System.out.println("----- " + enactedRoles.keySet().iterator().next() + " -----");
+        return enactedRoles.get(roleName);
     }
     
     // ----- UPDATE -----
@@ -69,41 +72,42 @@ public class OrganizationKnowledgeBase {
     /**
      * Updates this organization knowledge base to contain information about
      * a particular role being enacted by a particular player.
-     * @param role the role
-     * @param player 
+     * @param roleName the role name
+     * @param roleAID the role AID
+     * @param playerAID  the player AID
      */
-    public void updateRoleIsEnacted(Role role, AID player) {
+    public void updateRoleIsEnacted(String roleName, AID roleAID, AID playerAID) {
         // ----- Preconditions -----
-        assert role != null;
-        assert player != null;
-        assert !enactedRoles.containsKey(role);
+        assert roleAID != null;
+        assert playerAID != null;
+        assert !enactedRoles.containsKey(roleName);
         // -------------------------
         
-        enactedRoles.put(role.getName(), role);
-        updatePlayerEnactsRole(player, role.getName());
+        enactedRoles.put(roleName, roleAID);
+        updatePlayerEnactsRole(playerAID, roleName);
     }
     
     /**
      * Updates this organization knowledge base to contain information about
-     * a partuclar role being deacted by a particular player.
-     * @param role the role 
-     * @param player
+     * a particular role being deacted by a particular player.
+     * @param roleName the role name
+     * @param playerAID the player AID
      */
-    public void roleIsDeactedByPlayer(Role role, AID player) {
+    public void updateRoleIsDeacted(String roleName, AID playerAID) {
         // ----- Preconditions -----
-        assert role != null;
-        assert player != null;
-        assert enactedRoles.containsKey(role);
+        assert roleName != null;
+        assert playerAID != null;
+        assert enactedRoles.containsKey(roleName);
         // -------------------------
         
-        enactedRoles.remove(role.getName());
-        updatePlayerDeactsRole(player, role.getName());
+        enactedRoles.remove(roleName);
+        updatePlayerDeactsRole(playerAID, roleName);
     }
     
     // ---------- PRIVATE ----------
 
     private void updatePlayerEnactsRole(AID playerAID, String roleName) {
-        // ----- Prconditions -----
+        // ----- Preconditions -----
         assert playerAID != null;
         assert roleName != null && !roleName.isEmpty();
         // ------------------------
@@ -113,7 +117,7 @@ public class OrganizationKnowledgeBase {
         
         // Create the player info if the player is unemployed.
         if (!playerDescription.isEmployed()) {
-            players.put(playerAID, playerDescription);
+            enactingPlayers.put(playerAID, playerDescription);
         }
         
         // Enact the role.
@@ -121,7 +125,7 @@ public class OrganizationKnowledgeBase {
     }
 
     private void updatePlayerDeactsRole(AID playerAID, String roleName) {
-       // ----- Prconditions -----
+       // ----- Preconditions -----
         assert playerAID != null;
         assert roleName != null && !roleName.isEmpty();
         // ------------------------
@@ -134,12 +138,12 @@ public class OrganizationKnowledgeBase {
         
         // Delete the player info if the player is unemployed.
         if (!playerDescription.isEmployed()) {
-            players.remove(playerAID);
+            enactingPlayers.remove(playerAID);
         }
     }
     
     private PlayerDescription getPlayerDescription(AID playerAID) {
-        PlayerDescription playerDescription = players.get(playerAID);
+        PlayerDescription playerDescription = enactingPlayers.get(playerAID);
         if (playerDescription == null) {
             playerDescription = new PlayerDescription(playerAID);
         }

@@ -1,9 +1,9 @@
-package jadeorg.core.organization.behaviours;
+package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.ActiveState;
-import jadeorg.proto.InitiatorParty;
+import jadeorg.proto.Party;
 import jadeorg.proto.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.State;
@@ -14,12 +14,12 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * A 'Meet requirement initiator' (FSM) behaviour.
+ * A 'Meet requirement' protocol initiator.
  * @author Lukáš Kúdela
  * @since 2011-11-13
  * @version %I% %G%
  */
-public class MeetRequirementInitiator extends InitiatorParty {
+public class Role_MeetRequirementInitiator extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -37,29 +37,29 @@ public class MeetRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    MeetRequirementInitiator(String requirement) {
+    Role_MeetRequirementInitiator(String requirement) {
         super(NAME);
         initializeFSM();
     }
     
     private void initializeFSM() {
-        // ----- States -----
-        State sendRequirementRequest = new SendRequirementRequest();
-        State receiveArgumentRequest = new ReceiveArgumentRequest();
-        State receiveResult = new ReceiveResult();
-        State end = new End();
-        // ------------------
-        
-        // Register states.
-        registerFirstState(sendRequirementRequest);
-        registerState(receiveArgumentRequest);
-        registerState(receiveResult);
-        registerLastState(end);
-        
-        // Regster transitions.
-        sendRequirementRequest.registerDefaultTransition(receiveArgumentRequest);
-        receiveArgumentRequest.registerDefaultTransition(receiveResult);
-        receiveResult.registerDefaultTransition(end);
+//        // ----- States -----
+//        State sendRequirementRequest = new SendRequirementRequest();
+//        State receiveArgumentRequest = new ReceiveArgumentRequest();
+//        State receiveResult = new ReceiveResult();
+//        State end = new End();
+//        // ------------------
+//        
+//        // Register states.
+//        registerFirstState(sendRequirementRequest);
+//        registerState(receiveArgumentRequest);
+//        registerState(receiveResult);
+//        registerLastState(end);
+//        
+//        // Regster transitions.
+//        sendRequirementRequest.registerDefaultTransition(receiveArgumentRequest);
+//        receiveArgumentRequest.registerDefaultTransition(receiveResult);
+//        receiveResult.registerDefaultTransition(end);
     }
     
     // </editor-fold>
@@ -112,11 +112,11 @@ public class MeetRequirementInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            RequirementRequestMessage requirementRequestMessage = new RequirementRequestMessage();
-            requirementRequestMessage.setReceiverPlayer(getMyPower().getPlayerAID());
-            requirementRequestMessage.setRequirement(getParent().getBehaviourName());
-
-            send(RequirementRequestMessage.class, requirementRequestMessage);
+//            RequirementRequestMessage requirementRequestMessage = new RequirementRequestMessage();
+//            requirementRequestMessage.setReceiverPlayer(getMyPower().getPlayerAID());
+//            requirementRequestMessage.setRequirement(getParent().getBehaviourName());
+//
+//            send(RequirementRequestMessage.class, requirementRequestMessage);
         }
         
         // </editor-fold>

@@ -1,11 +1,7 @@
 package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
-import jadeorg.lang.MessageGenerator;
-import jadeorg.lang.MessageParser;
-import jadeorg.proto.organizationprotocol.OrganizationMessage;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,12 +14,20 @@ import java.util.regex.Pattern;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public class RequirementsInformMessage extends OrganizationMessage {
+public class RequirementsInformMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private String[] requirements;
 
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public RequirementsInformMessage() {
+        super(ACLMessage.INFORM);
+    }
+    
     // </editor-fold>
         
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -48,123 +52,25 @@ public class RequirementsInformMessage extends OrganizationMessage {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-    // ---------- PROTECTED ----------
-    
+
     @Override
-    protected MessageTemplate createPerformativeTemplate() {
-        return MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+    public String generateContent() {
+        return String.format("requirements(%1$s)",
+            jadeorg.util.StringUtil.join(requirements, ","));
     }
-    
+
     @Override
-    protected MessageGenerator createGenerator() {
-        return new RequirementsMessageGenerator();
+    public void parseContent(String content) {
+        final Pattern contentPattern = Pattern.compile("requirements\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+
+        String requirementsString = matcher.group(1);
+        String[] requirements = !requirementsString.isEmpty() ?
+            requirementsString.split(",") :
+            new String[0];
+        this.requirements = requirements;
     }
     
-    @Override
-    protected MessageParser createParser() {
-        return new RequirementsMessageParser();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Requirements' message generator.
-     * DP: Singleton - Singleton
-     * DP: Abstract factory - Concrete product
-     * @author Lukáš Kúdela (2011-10-21)
-     * @version %I% %G%
-     */
-    static class RequirementsMessageGenerator extends MessageGenerator {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        /**
-         * Generates an ACL message from a 'Requirements inform' message.
-         * @param message the 'Requirements' message.
-         * @return the ACL message.
-         */
-        @Override
-        public ACLMessage generate(Message message) {           
-            RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)message;
-
-            // Generate the header.
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.setProtocol(EnactRoleProtocol.getInstance().getName());
-            aclMessage.addReceiver(requirementsInformMessage.getReceiverPlayer());
-
-            // Generate the content.
-            aclMessage.setContent(generateContent(requirementsInformMessage));
-
-            return aclMessage;
-        }
-
-        /**
-         * Generates the ACL message content.
-         * @param requirementsInformMessage the 'Requirements inform' message.
-         * @return the ACL message content.
-         */
-        private String generateContent(RequirementsInformMessage requirementsInformMessage) {
-            return String.format("requirements(%1$s)",
-                jadeorg.util.StringUtil.join(requirementsInformMessage.getRequirements(), ","));
-        }
-
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Requirements' message parser.
-     * DP: This class plays the role of 'Singleton' in the Singleton design pattern.
-     * DP: This class plays the role of 'Concrete product' in the Abstract factory design pattern.
-     * @author Lukáš Kúdela (2011-10-21)
-     * @version %I% %G%
-     */
-    static class RequirementsMessageParser extends MessageParser {
-
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private static final Pattern contentPattern = Pattern.compile("requirements\\((.*)\\)");
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        /**
-         * Parses the ACL message for a 'Requirements inform' message.
-         * @param aclMessage the ACL message.
-         * @return the 'Requirements inform' message
-         */
-        @Override
-        public Message parse(ACLMessage aclMessage) {
-            RequirementsInformMessage requirementsMessage = new RequirementsInformMessage();
-
-            // Parse the header.
-            requirementsMessage.setSenderOrganization(aclMessage.getSender());
-
-            // Parse the content.
-            parseContent(requirementsMessage, aclMessage.getContent());
-
-            return requirementsMessage;
-        }
-
-        /**
-         * Parses the ACL message content.
-         */
-        private void parseContent(RequirementsInformMessage requirementsInformMessage, String content) {
-            Matcher matcher = contentPattern.matcher(content);
-            matcher.matches();
-            
-            String requirementsString = matcher.group(1);
-            String[] requirements = !requirementsString.isEmpty() ?
-                requirementsString.split(",") :
-                new String[0];
-            requirementsInformMessage.setRequirements(requirements);
-        }
-
-        // </editor-fold>   
-    }
-
     // </editor-fold>
 }

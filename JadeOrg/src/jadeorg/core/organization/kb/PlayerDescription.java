@@ -10,7 +10,7 @@ import java.util.Set;
  * @since 2011-10-18
  * @version %I% %G%
  */
-class PlayerDescription {
+public class PlayerDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

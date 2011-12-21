@@ -1,21 +1,20 @@
-package jadeorg.core.organization.behaviours;
+package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.core.organization.Role;
 import jadeorg.proto.ActiveState;
+import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
 import jadeorg.proto.State;
 import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * An 'Invoke power responder' (FSM) behaviour.
+ * An 'Invoke power' protocol responder party.
  * @author Lukáš Kúdela
  * @since 2011-11-12
  * @version %I% %G%
  */
-public class InvokePowerResponder extends ResponderParty {
+public class Role_InvokePowerResponder extends  Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -37,7 +36,7 @@ public class InvokePowerResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
    
-    public InvokePowerResponder() {
+    public Role_InvokePowerResponder() {
         super(NAME);
         initializeFSM();
     }

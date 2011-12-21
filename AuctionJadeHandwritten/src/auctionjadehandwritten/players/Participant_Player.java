@@ -52,7 +52,7 @@ public class Participant_Player extends Player {
      * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise
      */
     @Override
-    protected boolean evaluateRequirements(String[] requirements) {
+    public boolean evaluateRequirements(String[] requirements) {
         return evaluateAllRequirements(requirements);
     }
   
@@ -159,7 +159,7 @@ public class Participant_Player extends Player {
         // </editor-fold>
         
         @Override
-        protected void handleElapsedTimeout() {
+        protected void handleElapsedTimeout() {            
             RoleDescription roleToDeactivate = ((Player)myAgent).knowledgeBase.getActiveRole();
             try {
                 ((Player)myAgent).deactivateRoleInitiator(roleToDeactivate.getRoleName());
@@ -182,15 +182,14 @@ public class Participant_Player extends Player {
         
         @Override
         protected void handleElapsedTimeout() {
-                for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
+            for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
                 try {
                     ((Player)myAgent).deactRoleInitiator(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
                 } catch (PlayerException ex) {
                     ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
             }
-        }
-        
+        }     
     }
     
     private static class RoleFullName {
