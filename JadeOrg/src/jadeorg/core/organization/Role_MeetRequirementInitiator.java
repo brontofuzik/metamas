@@ -2,11 +2,11 @@ package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jadeorg.proto.ActiveState;
-import jadeorg.proto.Party;
-import jadeorg.proto.PassiveState;
-import jadeorg.proto.Protocol;
-import jadeorg.proto.State;
+import jadeorg.proto_old.ActiveState;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_old.PassiveState;
+import jadeorg.proto_new.Protocol;
+import jadeorg.proto_old.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementRequestMessage;
 import jadeorg.util.MessageTemplateBuilder;
@@ -83,7 +83,7 @@ public class Role_MeetRequirementInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         // TODO Implement.
         throw new UnsupportedOperationException("Not supported yet.");
     }

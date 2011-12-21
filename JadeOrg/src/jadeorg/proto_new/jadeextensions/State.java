@@ -1,6 +1,6 @@
 package jadeorg.proto_new.jadeextensions;
 
-import jadeorg.proto.Party;
+import jadeorg.proto_new.Party;
 
 /**
  * A state.

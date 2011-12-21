@@ -3,8 +3,8 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.proto.Party;
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_new.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
@@ -57,7 +57,7 @@ class Organization_EnactRoleResponder_New extends Party {
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         return EnactRoleProtocol.getInstance();
     }
     

@@ -1,7 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.State;
+import jadeorg.proto_old.State;
 
 /**
  * A requirement (FSM) behaviour.

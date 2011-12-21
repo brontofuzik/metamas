@@ -1,4 +1,4 @@
-package jadeorg.proto;
+package jadeorg.proto_new;
 
 import jade.lang.acl.MessageTemplate;
 

@@ -3,10 +3,10 @@ package jadeorg.core.player;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
-import jadeorg.proto.ActiveState;
-import jadeorg.proto.Party;
-import jadeorg.proto.PassiveState;
-import jadeorg.proto.Protocol;
+import jadeorg.proto_old.ActiveState;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_old.PassiveState;
+import jadeorg.proto_new.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 
 /**
@@ -53,7 +53,7 @@ public class Player_DeactRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         return DeactRoleProtocol.getInstance();
     }
 

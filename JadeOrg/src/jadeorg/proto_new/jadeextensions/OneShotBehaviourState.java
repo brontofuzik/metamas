@@ -2,7 +2,7 @@ package jadeorg.proto_new.jadeextensions;
 
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jadeorg.proto.Party;
+import jadeorg.proto_new.Party;
 
 /**
  * A one-shot behaviour extension.
