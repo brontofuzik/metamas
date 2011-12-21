@@ -4,7 +4,7 @@
  */
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Protocol;
 
 /**
  * @author Lukáš Kúdela

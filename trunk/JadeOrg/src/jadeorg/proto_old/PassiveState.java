@@ -1,4 +1,4 @@
-package jadeorg.proto;
+package jadeorg.proto_old;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;

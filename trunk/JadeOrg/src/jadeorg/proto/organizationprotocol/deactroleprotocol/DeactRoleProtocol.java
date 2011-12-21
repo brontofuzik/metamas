@@ -1,6 +1,6 @@
 package jadeorg.proto.organizationprotocol.deactroleprotocol;
 
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Protocol;
 
 /**
  * The 'Deact' protocol.

@@ -1,4 +1,4 @@
-package jadeorg.proto;
+package jadeorg.proto_old;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;

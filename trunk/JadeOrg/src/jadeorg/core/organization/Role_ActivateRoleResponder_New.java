@@ -1,12 +1,11 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto.Party;
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_new.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.MultiSenderState;
 import jadeorg.proto_new.SimpleState;
 import jadeorg.proto_new.SingleReceiverState;
 import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
@@ -48,7 +47,7 @@ public class Role_ActivateRoleResponder_New extends Party {
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         return ActivateRoleProtocol.getInstance();
     }
     

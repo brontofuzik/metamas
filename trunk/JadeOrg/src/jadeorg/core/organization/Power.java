@@ -2,8 +2,8 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.core.behaviours.FSMBehaviour;
-import jadeorg.proto.ActiveState;
-import jadeorg.proto.State;
+import jadeorg.proto_old.ActiveState;
+import jadeorg.proto_old.State;
 import java.util.LinkedList;
 import java.util.List;
 

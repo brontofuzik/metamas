@@ -1,8 +1,8 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.Party;
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_new.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto_new.SimpleState;
@@ -50,7 +50,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         return ActivateRoleProtocol.getInstance();
     }
     

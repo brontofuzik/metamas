@@ -2,7 +2,7 @@ package jadeorg.proto_new.jadeextensions;
 
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
-import jadeorg.proto.Party;
+import jadeorg.proto_new.Party;
 
 /**
  * A FSM behaviour extension.

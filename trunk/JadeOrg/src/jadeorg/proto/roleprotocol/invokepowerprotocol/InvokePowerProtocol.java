@@ -4,7 +4,7 @@
  */
 package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
-import jadeorg.proto.Protocol;
+import jadeorg.proto_new.Protocol;
 
 /**
  * @author Lukáš Kúdela

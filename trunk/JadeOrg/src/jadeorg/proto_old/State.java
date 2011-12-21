@@ -1,5 +1,7 @@
-package jadeorg.proto;
+package jadeorg.proto_old;
 
+import jadeorg.proto_new.Party;
+import jadeorg.proto_new.Protocol;
 import jade.core.behaviours.SimpleBehaviour;
 
 /**

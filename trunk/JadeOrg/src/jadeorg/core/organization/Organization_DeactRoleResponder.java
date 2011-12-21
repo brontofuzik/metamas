@@ -1,11 +1,10 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto.ActiveState;
-import jadeorg.proto.Party;
-import jadeorg.proto.PassiveState;
-import jadeorg.proto.Protocol;
-import jadeorg.proto.State;
+import jadeorg.proto_old.ActiveState;
+import jadeorg.proto_new.Party;
+import jadeorg.proto_old.PassiveState;
+import jadeorg.proto_new.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 
@@ -51,7 +50,7 @@ public class Organization_DeactRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 
     @Override
-    protected Protocol getProtocol() {
+    public Protocol getProtocol() {
         return DeactRoleProtocol.getInstance();
     }
 

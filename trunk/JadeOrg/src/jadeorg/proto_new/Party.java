@@ -1,5 +1,6 @@
-package jadeorg.proto;
+package jadeorg.proto_new;
 
+import jadeorg.proto_new.Protocol;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -29,7 +30,8 @@ public abstract class Party extends FSMBehaviour {
         return getBehaviourName();
     }
     
-    protected abstract Protocol getProtocol();
+    // TODO Change the access modified to protected.
+    public abstract Protocol getProtocol();
     
     // </editor-fold>
     

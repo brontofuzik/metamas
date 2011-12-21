@@ -1,6 +1,6 @@
 package jadeorg.core.organization;
 
-import jadeorg.proto.State;
+import jadeorg.proto_old.State;
 
 /**
  * An 'Error handler' state.
