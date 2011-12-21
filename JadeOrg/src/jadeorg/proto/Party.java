@@ -1,6 +1,6 @@
-package jadeorg.proto_new;
+package jadeorg.proto;
 
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;
@@ -86,23 +86,23 @@ public abstract class Party extends FSMBehaviour {
     
     // ---------- PROTECTED ----------
     
-    protected void registerState(jadeorg.proto_new.jadeextensions.State state) {
+    protected void registerState(jadeorg.proto.jadeextensions.State state) {
         registerState((Behaviour)state, state.getName());
     }
     
-    protected void registerFirstState(jadeorg.proto_new.jadeextensions.State state) {
+    protected void registerFirstState(jadeorg.proto.jadeextensions.State state) {
         registerFirstState((Behaviour)state, state.getName());
     }
     
-    protected void registerLastState(jadeorg.proto_new.jadeextensions.State state) {
+    protected void registerLastState(jadeorg.proto.jadeextensions.State state) {
         registerLastState((Behaviour)state, state.getName());
     }
     
-    protected void registerTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
+    protected void registerTransition(jadeorg.proto.jadeextensions.State fromState, jadeorg.proto.jadeextensions.State toState) {
         registerTransition(fromState.getName(), toState.getName(), toState.getCode());
     }
     
-    protected void registerDefaultTransition(jadeorg.proto_new.jadeextensions.State fromState, jadeorg.proto_new.jadeextensions.State toState) {
+    protected void registerDefaultTransition(jadeorg.proto.jadeextensions.State fromState, jadeorg.proto.jadeextensions.State toState) {
         registerDefaultTransition(fromState.getName(), toState.getName());
     }
     

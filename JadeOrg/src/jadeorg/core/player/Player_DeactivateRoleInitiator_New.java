@@ -1,14 +1,14 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto_new.Party;
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Party;
+import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import jadeorg.proto_new.SimpleState;
-import jadeorg.proto_new.SingleSenderState;
-import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.jadeorgextensions.ReceiveAgreeOrRefuse;
+import jadeorg.proto.SimpleState;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.ReceiveAgreeOrRefuse;
 
 /**
  * A 'Deactivate role' protocol initiator (new version).

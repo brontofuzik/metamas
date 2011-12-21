@@ -1,6 +1,6 @@
 package jadeorg.proto.roleprotocol.deactivateroleprotocol;
 
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 
 /**
  * The 'Deactivate' protocol.

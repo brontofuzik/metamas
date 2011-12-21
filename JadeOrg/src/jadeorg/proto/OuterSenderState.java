@@ -1,10 +1,10 @@
-package jadeorg.proto_new;
+package jadeorg.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
-import jadeorg.proto_new.jadeextensions.FSMBehaviourSenderState;
-import jadeorg.proto_new.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.FSMBehaviourSenderState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * A top-level sender state.

@@ -1,6 +1,6 @@
 package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 
 /**
  * The 'Enact' protocol.
