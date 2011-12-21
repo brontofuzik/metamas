@@ -4,9 +4,9 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
 import jadeorg.proto_old.ActiveState;
-import jadeorg.proto_new.Party;
+import jadeorg.proto.Party;
 import jadeorg.proto_old.PassiveState;
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 
 /**

@@ -2,8 +2,8 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jadeorg.proto_old.ActiveState;
-import jadeorg.proto_new.Party;
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Party;
+import jadeorg.proto.Protocol;
 import jadeorg.proto_old.State;
 import java.util.Hashtable;
 import java.util.Map;

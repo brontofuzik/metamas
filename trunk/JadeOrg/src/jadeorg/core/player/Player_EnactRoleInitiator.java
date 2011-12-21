@@ -2,9 +2,9 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jadeorg.proto_old.ActiveState;
-import jadeorg.proto_new.Party;
+import jadeorg.proto.Party;
 import jadeorg.proto_old.PassiveState;
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 import jadeorg.proto_old.State;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;

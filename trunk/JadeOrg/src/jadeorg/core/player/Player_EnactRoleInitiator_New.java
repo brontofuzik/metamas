@@ -1,19 +1,19 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto_new.Party;
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Party;
+import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import jadeorg.proto_new.jadeextensions.State;
-import jadeorg.proto_new.MultiReceiverState;
-import jadeorg.proto_new.MultiSenderState;
-import jadeorg.proto_new.SimpleState;
-import jadeorg.proto_new.SingleReceiverState;
-import jadeorg.proto_new.SingleSenderState;
-import jadeorg.proto_new.jadeorgextensions.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.MultiReceiverState;
+import jadeorg.proto.MultiSenderState;
+import jadeorg.proto.SimpleState;
+import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.SendAgreeOrRefuse;
 
 /**
  * An 'Enact role' protocol initiator party.

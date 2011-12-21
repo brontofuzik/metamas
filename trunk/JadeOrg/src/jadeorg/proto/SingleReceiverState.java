@@ -1,7 +1,7 @@
-package jadeorg.proto_new;
+package jadeorg.proto;
 
 import jade.core.AID;
-import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto.jadeextensions.State;
 
 /**
  * A single receiver state.

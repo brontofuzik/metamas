@@ -1,7 +1,7 @@
-package jadeorg.proto_new;
+package jadeorg.proto;
 
-import jadeorg.proto_new.jadeextensions.OneShotBehaviourSenderState;
-import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto.jadeextensions.OneShotBehaviourSenderState;
+import jadeorg.proto.jadeextensions.State;
 
 /**
  * A single sender state.

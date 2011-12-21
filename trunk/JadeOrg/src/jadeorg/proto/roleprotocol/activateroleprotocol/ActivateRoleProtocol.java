@@ -1,6 +1,6 @@
 package jadeorg.proto.roleprotocol.activateroleprotocol;
 
-import jadeorg.proto_new.Protocol;
+import jadeorg.proto.Protocol;
 
 /**
  * The 'Activate' protocol.

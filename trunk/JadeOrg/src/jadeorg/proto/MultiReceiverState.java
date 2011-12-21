@@ -1,6 +1,6 @@
-package jadeorg.proto_new;
+package jadeorg.proto;
 
-import jadeorg.proto_new.jadeextensions.State;
+import jadeorg.proto.jadeextensions.State;
 import java.util.ArrayList;
 import java.util.List;
 
