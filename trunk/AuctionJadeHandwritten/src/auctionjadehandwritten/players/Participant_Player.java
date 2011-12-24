@@ -117,7 +117,7 @@ public class Participant_Player extends Player {
             for (Object argument : myAgent.getArguments()) {            
                 RoleFullName roleToEnact = new RoleFullName((String)argument);
                 try {
-                    ((Player)myAgent).enactRoleInitiator(roleToEnact.getOrganizationName(), roleToEnact.getRoleName());
+                    ((Player)myAgent).initiateEnactRole(roleToEnact.getOrganizationName(), roleToEnact.getRoleName());
                 } catch (PlayerException ex) {
                     ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
@@ -140,7 +140,7 @@ public class Participant_Player extends Player {
         protected void handleElapsedTimeout() {
             RoleDescription roleToActivate = ((Player)myAgent).knowledgeBase.getEnactedRoles().iterator().next();
             try {
-                ((Player)myAgent).activateRoleInitiator(roleToActivate.getRoleName());
+                ((Player)myAgent).initiateActivateRole(roleToActivate.getRoleName());
             } catch (PlayerException ex) {
                 ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
             }
@@ -162,7 +162,7 @@ public class Participant_Player extends Player {
         protected void handleElapsedTimeout() {            
             RoleDescription roleToDeactivate = ((Player)myAgent).knowledgeBase.getActiveRole();
             try {
-                ((Player)myAgent).deactivateRoleInitiator(roleToDeactivate.getRoleName());
+                ((Player)myAgent).initiateDeactivateRole(roleToDeactivate.getRoleName());
             } catch (PlayerException ex) {
                 ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
             }
@@ -184,7 +184,7 @@ public class Participant_Player extends Player {
         protected void handleElapsedTimeout() {
             for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
                 try {
-                    ((Player)myAgent).deactRoleInitiator(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
+                    ((Player)myAgent).initiateDeactRole(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
                 } catch (PlayerException ex) {
                     ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
