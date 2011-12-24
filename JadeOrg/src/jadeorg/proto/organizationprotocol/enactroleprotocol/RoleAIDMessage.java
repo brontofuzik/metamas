@@ -2,7 +2,7 @@ package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.Message;
+import jadeorg.lang.StringMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * @since 2011-10-23
  * @version %I% %G%
  */
-public class RoleAIDMessage extends Message {
+public class RoleAIDMessage extends StringMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

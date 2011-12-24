@@ -49,11 +49,11 @@ public class Organization_Manager extends ManagerBehaviour {
             ACLMessage enactRequestMessage = getMyOrganization().receive(template);          
             if (enactRequestMessage != null) {
                 getMyOrganization().putBack(enactRequestMessage);
-                getMyOrganization().enactRoleResponder(enactRequestMessage.getSender());
+                getMyOrganization().respondToEnactRole(enactRequestMessage.getSender());
             }
         }
         
-            // </editor-fold>
+        // </editor-fold>
     }
 
     /**
@@ -72,7 +72,7 @@ public class Organization_Manager extends ManagerBehaviour {
             ACLMessage deactRequestMessage = getMyOrganization().receive(template);          
             if (deactRequestMessage != null) {
                 getMyOrganization().putBack(deactRequestMessage);
-                getMyOrganization().deactRoleResponder(deactRequestMessage.getSender());
+                getMyOrganization().respondToDeactRole(deactRequestMessage.getSender());
             }
         }
         

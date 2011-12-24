@@ -1,14 +1,12 @@
 package jadeorg.lang;
 
-import jadeorg.lang.Message;
-
 /**
  * A simple message.
  * @author Lukáš Kúdela
  * @since 2011-11-06
  * @version %I% %G%
  */
-public class SimpleMessage extends Message {
+public class SimpleMessage extends StringMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

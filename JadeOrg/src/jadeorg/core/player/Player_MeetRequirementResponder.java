@@ -26,9 +26,6 @@ public class Player_MeetRequirementResponder extends Party {
     private static final String NAME = "meet-requirement-responder";
     
     // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    // </editor-fold>
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -36,7 +33,7 @@ public class Player_MeetRequirementResponder extends Party {
     
     private Requirement currentRequirement;
     
-    private State sendArgumentRequest;
+    private State receiveParam;
     
     private State sendRequirementResult;
     
@@ -46,13 +43,13 @@ public class Player_MeetRequirementResponder extends Party {
     
     public Player_MeetRequirementResponder() {
         super(NAME);
-        initializeFSM();
+        registerStatesAndTransitions();
     }
     
-    private void initializeFSM() {
+    private void registerStatesAndTransitions() {
         // ----- States -----
-        sendArgumentRequest = new SendArgumentRequest();
-        State receiveParam = new ReceiveParam();
+        State sendArgumentRequest = new SendArgumentRequest();
+        receiveParam = new ReceiveParam();
         sendRequirementResult = new SendRequirementResult();
         State end = new End();
         // ------------------
@@ -71,29 +68,27 @@ public class Player_MeetRequirementResponder extends Party {
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public boolean containsRequirement(String requirementName) {
-        return requirements.containsKey(requirementName);
+    @Override
+    public Protocol getProtocol() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public void addRequirement(Requirement requirement) {
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    protected void addRequirement(Requirement requirement) {
         requirements.put(requirement.getName(), requirement);
         
         // Register the state.
         registerState(requirement, requirement.getName());
         
         // Register the transitions.
-        registerTransition(sendArgumentRequest.getName(), requirement.getName(), requirement.hashCode());
+        registerTransition(receiveParam.getName(), requirement.getName(), requirement.hashCode());
         registerDefaultTransition(requirement.getName(), sendRequirementResult.getName());
-    }
-    
-    // ----------- PROTECTED ----------
-    
-    @Override
-    public Protocol getProtocol() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     protected void invokeRequirement(String requirementName, AID roleAID) {
@@ -105,6 +100,10 @@ public class Player_MeetRequirementResponder extends Party {
     }
     
     // ---------- PRIVATE ----------
+    
+    private boolean containsRequirement(String requirementName) {
+        return requirements.containsKey(requirementName);
+    }
     
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);
@@ -163,6 +162,8 @@ public class Player_MeetRequirementResponder extends Party {
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
             MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
@@ -192,6 +193,8 @@ public class Player_MeetRequirementResponder extends Party {
                 block();
             }
         }
+        
+        // </editor-fold>
     }
     
     class SendRequirementResult extends ActiveState {
@@ -210,6 +213,8 @@ public class Player_MeetRequirementResponder extends Party {
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
             // TODO Rework.    
@@ -227,8 +232,10 @@ public class Player_MeetRequirementResponder extends Party {
             myAgent.send(aclMessage);
 
             currentRequirement.reset();
-            getParent().reset();
+            getParent().reset();      
         }
+        
+        // </editor-fold>
     }
     
     class End extends ActiveState {

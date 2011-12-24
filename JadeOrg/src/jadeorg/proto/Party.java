@@ -44,10 +44,9 @@ public abstract class Party extends FSMBehaviour {
      */
     public void send(Message message, AID receiverAID) {
         // Generate the ACL message.
-        ACLMessage aclMessage = new ACLMessage(message.getPerformative());      
+        ACLMessage aclMessage = message.generateACLMessage();      
         aclMessage.setProtocol(getProtocol().getName());
         aclMessage.addReceiver(receiverAID);
-        aclMessage.setContent(message.generateContent());
         
         System.out.println("SENDING MESSAGE: " + aclMessage.toString());
        
@@ -73,7 +72,7 @@ public abstract class Party extends FSMBehaviour {
             System.out.println("RECEIVED MESSAGE: " + aclMessage.toString());
             
             // Parse the ACL message.
-            message.parseContent(aclMessage.getContent());
+            message.parseACLMessage(aclMessage);
             return true;
         } else {
             return false;

@@ -8,7 +8,6 @@ import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto_old.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementRequestMessage;
 import jadeorg.util.MessageTemplateBuilder;
 import java.io.IOException;
 import java.io.Serializable;
@@ -39,10 +38,10 @@ public class Role_MeetRequirementInitiator extends Party {
     
     Role_MeetRequirementInitiator(String requirement) {
         super(NAME);
-        initializeFSM();
+        registerStatesAndtransitions();
     }
     
-    private void initializeFSM() {
+    private void registerStatesAndtransitions() {
 //        // ----- States -----
 //        State sendRequirementRequest = new SendRequirementRequest();
 //        State receiveArgumentRequest = new ReceiveArgumentRequest();
@@ -66,6 +65,14 @@ public class Role_MeetRequirementInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    @Override
+    public Protocol getProtocol() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    // ----- PACKAGE -----
+    
     Power getMyPower() {
         return (Power)getParent();
     }
@@ -76,16 +83,6 @@ public class Role_MeetRequirementInitiator extends Party {
     
     Object getResult() {
         return result;
-    }
-    
-    // </editor-fold>   
-
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    public Protocol getProtocol() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     // </editor-fold>

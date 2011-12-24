@@ -1,19 +1,17 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto_old.State;
+import jadeorg.proto.SimpleState;
 
 /**
- * A requirement (FSM) behaviour.
+ * A requirement (simple) state.
  * @author Lukáš Kúdela
  * @since 2011-11-11
  * @version %I% %G%
  */
-class Requirement extends State {
+abstract class Requirement extends SimpleState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private Player myPlayer;
     
     private AID roleAID;
     
@@ -25,22 +23,13 @@ class Requirement extends State {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Requirement(String name) {
+    protected Requirement(String name) {
         super(name);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    Player getMyPlayer() {
-        return myPlayer;
-    }
-    
-    Requirement setMyPlayer(Player player) {
-        this.myPlayer = player;
-        return this;
-    }
     
     AID getRoleAID() {
         return roleAID;
@@ -64,24 +53,9 @@ class Requirement extends State {
         return result;
     }
     
-    Requirement setResult() {
+    Requirement setResult(Object result) {
         this.result = result;
         return this;
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    public void action() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    public boolean done() {
-        // Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     // </editor-fold>

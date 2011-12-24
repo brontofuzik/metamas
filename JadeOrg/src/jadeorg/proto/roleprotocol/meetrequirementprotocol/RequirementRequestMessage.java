@@ -1,8 +1,8 @@
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jadeorg.lang.Message;
+import jadeorg.lang.StringMessage;
+
 /**
  * A 'Requirement request' message.
  * A 'Requirement request' message is a message sent from a role to a player
@@ -11,7 +11,7 @@ import jadeorg.lang.Message;
  * @since
  * @version %I% %G%
  */
-public class RequirementRequestMessage extends Message {
+public class RequirementRequestMessage extends StringMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -21,8 +21,8 @@ public class RequirementRequestMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    RequirementRequestMessage() {
-        super(0);
+    public RequirementRequestMessage() {
+        super(ACLMessage.REQUEST);
     }
     
     // </editor-fold>
