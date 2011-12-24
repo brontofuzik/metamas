@@ -1,6 +1,6 @@
 package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
-import jadeorg.lang.Message;
+import jadeorg.lang.StringMessage;
 
 
 /**
@@ -9,7 +9,7 @@ import jadeorg.lang.Message;
  * @since 2011-11-09
  * @version %I% %G%
  */
-public class InvokeRequestMessage extends Message {
+public class InvokeRequestMessage extends StringMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

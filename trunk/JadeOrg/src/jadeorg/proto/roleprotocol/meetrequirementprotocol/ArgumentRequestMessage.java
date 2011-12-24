@@ -1,37 +1,34 @@
-package jadeorg.proto.roleprotocol.deactivateroleprotocol;
+package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.StringMessage;
 
 /**
- * A 'Deactivate request' message.
- * A 'Deactivate request' message is a message sent from a player to a role
- * containing a request to deactivate a partcular role.
- * DP: Abstract factory - Concrete factory
+ * 
  * @author Lukáš Kúdela
- * @since 2011-11-06
+ * @since 2011-12-22
  * @version %I% %G%
  */
-public class DeactivateRequestMessage extends StringMessage {
-    
+public class ArgumentRequestMessage extends StringMessage {
+
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public DeactivateRequestMessage() {
+    public ArgumentRequestMessage() {
         super(ACLMessage.REQUEST);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
+    
     @Override
     public String generateContent() {
-        return "deactivate";
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void parseContent(String content) {
-        // Do nothing.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     // </editor-fold>

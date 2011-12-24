@@ -51,7 +51,7 @@ public class Role_Manager extends ManagerBehaviour {
             ACLMessage activateRequestMessage = getMyRole().receive(template);
             if (activateRequestMessage != null) {
                 getMyRole().putBack(activateRequestMessage);
-                getMyRole().activateRoleResponder(activateRequestMessage.getSender());
+                getMyRole().respondToActivateRole(activateRequestMessage.getSender());
             }
         }
         
@@ -74,7 +74,7 @@ public class Role_Manager extends ManagerBehaviour {
             ACLMessage deactivateRequestMessage = getMyRole().receive(template);
             if (deactivateRequestMessage != null) {
                 getMyRole().putBack(deactivateRequestMessage);
-                getMyRole().deactivateRoleResponder(deactivateRequestMessage.getSender());
+                getMyRole().respondToDeactivateRole(deactivateRequestMessage.getSender());
             }
         }
         
@@ -97,7 +97,7 @@ public class Role_Manager extends ManagerBehaviour {
             ACLMessage invokeRequestMessage = getMyRole().receive(template);
             if (invokeRequestMessage != null) {
                 getMyRole().putBack(invokeRequestMessage);
-//                getMyRole().invokePower(invokeRequestMessage.getSender());
+                getMyRole().respondToinvokePower(invokeRequestMessage.getSender());
             }
         }
         

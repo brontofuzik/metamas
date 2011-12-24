@@ -4,6 +4,7 @@ import jade.core.AID;
 import jadeorg.proto_old.ActiveState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import jadeorg.proto_old.State;
 import java.util.Hashtable;
 import java.util.Map;
@@ -59,23 +60,26 @@ public class Role_InvokePowerResponder extends  Party {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public Role getMyRole() {
-        return (Role)myAgent;
+    @Override
+    public Protocol getProtocol() {
+        return InvokePowerProtocol.getInstance();
     }
     
-    public Map<String, Power> getPowers() {
-        return powers;
+    // ----- PRIVATE -----
+    
+    private Role getMyRole() {
+        return (Role)myAgent;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public boolean containsPower(String powerName) {
+    boolean containsPower(String powerName) {
         return powers.containsKey(powerName);
     }
     
-    public void addPower(Power power) {    
+    void addPower(Power power) {    
         power.buildFSM();
         
         powers.put(power.getName(), power);
@@ -89,13 +93,6 @@ public class Role_InvokePowerResponder extends  Party {
     }
     
     // ---------- PROTECTED ----------
-    
-    // TODO Change the access modified to protected.
-    @Override
-    public Protocol getProtocol() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
     protected void invokePower(String powerName, AID playerAID, String arguments) {
         if (containsPower(powerName)) {
