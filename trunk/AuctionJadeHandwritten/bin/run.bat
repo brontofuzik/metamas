@@ -8,7 +8,7 @@ SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
 
 SET PROJECT_NAME=AuctionJadeHandwritten
 SET PROJECT_DIR=%SOLUTION_DIR%\%PROJECT_NAME%
-SET JADE_VERSION=4.1
+SET JADE_VERSION=4.1.1
 
 REM ----- CLASSPATH -----
 SET JADE_JAR=%SOLUTION_DIR%\lib\Jade\%JADE_VERSION%\jade.jar
@@ -31,11 +31,14 @@ SET PARTICIPANT2_PLAYER=participant2_Player:%PLAYER_PACKAGE%.Participant_Player(
 SET PARTICIPANT3_PLAYER=participant3_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.BIdder_Role)
 SET PLAYERS=%PARTICIPANT1_PLAYER%
 
+Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET OPTIONS=-gui
+SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JADE_OPTIONS=-gui
+
 SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
 SET AGENTS=%SNIFFER%;%ORGANIZATIONS%;%PLAYERS%
 
 @ECHO ON
 
-java -classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE% jade.Boot %OPTIONS% %AGENTS%
+java %JAVA_OPTIONS% jade.Boot %JADE_OPTIONS% %AGENTS%
