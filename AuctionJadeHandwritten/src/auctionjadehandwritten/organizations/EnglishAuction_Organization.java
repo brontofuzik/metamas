@@ -17,10 +17,10 @@ public class EnglishAuction_Organization extends Organization {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected void setup() {
-        addRoles();
-        
+    protected void setup() {        
         super.setup();
+        
+        addRoles();
     }
     
     private void addRoles() {
