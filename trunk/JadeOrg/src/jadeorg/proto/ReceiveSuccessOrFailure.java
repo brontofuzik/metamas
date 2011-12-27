@@ -8,7 +8,7 @@ import jade.core.AID;
  * @since 2011-12-27
  * @version %I% %G%
  */
-public abstract class ReceiveSuccessOrFailure extends MultiReceiverState {
+public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     

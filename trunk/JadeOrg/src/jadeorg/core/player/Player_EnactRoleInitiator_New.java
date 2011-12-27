@@ -1,15 +1,15 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.OuterReceiverState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.MultiReceiverState;
-import jadeorg.proto.MultiSenderState;
 import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -135,7 +135,7 @@ class Player_EnactRoleInitiator_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             // Create the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             message.setRoleName(roleName);
@@ -153,17 +153,12 @@ class Player_EnactRoleInitiator_New extends Party {
     }
     
     /**
-     * The 'Receive requirements info' passive state.
+     * The 'Receive requirements info' (multi receiver) state.
      * A state in which the 'Requirements' info is received.
      */
-    private class ReceiveRequirementsInform extends MultiReceiverState {
+    private class ReceiveRequirementsInform extends ReceiveSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        // ----- Exit values -----
-        static final int SUCCESS = 1;
-        static final int FAILURE = 2;
-        // -----------------------
         
         private static final String NAME = "receive-requirements-inform";
 
@@ -172,11 +167,7 @@ class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveRequirementsInform() {
-            super(NAME);
-            
-            addReceiver(new ReceiveRequirementsInform_Receiver());
-            addReceiver(new ReceiveFailure(FAILURE, organizationAID));
-            buildFSM();
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>
@@ -187,54 +178,29 @@ class Player_EnactRoleInitiator_New extends Party {
         protected void onEntry() {
             getMyPlayer().logInfo("Receiving requirements info.");
         }
+        
+        @Override
+        protected int onSuccessReceiver() {
+            // Receive the 'Requirements inform' message.
+            RequirementsInformMessage message = new RequirementsInformMessage();
+            boolean messageReceived = receive(message, organizationAID);
+
+            // Process the message.
+            if (messageReceived) {
+                System.out.println("----- RECEIVED -----");
+                requirements = message.getRequirements();
+                return InnerReceiverState.RECEIVED;
+            } else {
+                System.out.println("----- NOT-RECEIVED -----");
+                return InnerReceiverState.NOT_RECEIVED;
+            }
+        }
 
         @Override
         protected void onExit() {
             getMyPlayer().logInfo("Requirements info received.");
         }
 
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class ReceiveRequirementsInform_Receiver extends InnerReceiverState {
-
-            // <editor-fold defaultstate="collapsed" desc="Fields">
-            
-            private static final String NAME = "receiver";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            ReceiveRequirementsInform_Receiver() {
-                super(NAME, SUCCESS, organizationAID);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                // Receive the 'Requirements inform' message.
-                RequirementsInformMessage message = new RequirementsInformMessage();
-                boolean messageReceived = receive(message, organizationAID);
-                
-                // Process the message.
-                if (messageReceived) {
-                    System.out.println("----- RECEIVED -----");
-                    requirements = message.getRequirements();
-                    setExitValue(RECEIVED);
-                } else {
-                    System.out.println("----- NOT-RECEIVED -----");
-                    setExitValue(NOT_RECEIVED);
-                }
-            }
-            
-            // </editor-fold>
-        }
-        
         // </editor-fold>
     }
     
@@ -299,7 +265,7 @@ class Player_EnactRoleInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveRoleAID() {
-            super(NAME, organizationAID);
+            super(NAME);
         }
 
         // </editor-fold>
@@ -312,7 +278,7 @@ class Player_EnactRoleInitiator_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             RoleAIDMessage message = new RoleAIDMessage();
             boolean messageReceived = receive(message, organizationAID);      
             

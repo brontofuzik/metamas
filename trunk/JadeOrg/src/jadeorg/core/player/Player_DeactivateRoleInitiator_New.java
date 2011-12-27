@@ -116,7 +116,7 @@ public class Player_DeactivateRoleInitiator_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
 
             send(deactivateRequestMessage, roleAID);   

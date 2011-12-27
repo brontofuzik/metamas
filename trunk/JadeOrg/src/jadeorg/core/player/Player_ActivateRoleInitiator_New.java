@@ -115,7 +115,7 @@ public class Player_ActivateRoleInitiator_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
 
             send(activateRequestMessage, roleAID);            

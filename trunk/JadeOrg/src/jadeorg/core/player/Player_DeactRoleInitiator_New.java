@@ -121,7 +121,7 @@ public class Player_DeactRoleInitiator_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             DeactRequestMessage message = new DeactRequestMessage();
             message.setRoleName(roleName);
 

@@ -1,8 +1,5 @@
 package jadeorg.proto;
 
-import jade.core.AID;
-import jadeorg.proto.jadeextensions.State;
-
 /**
  * A single receiver state.
  * @author Lukáš Kúdela
@@ -11,67 +8,45 @@ import jadeorg.proto.jadeextensions.State;
  */
 public abstract class SingleReceiverState extends OuterReceiverState {
     
-    private AID senderAID;
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    // ----- Exit values -----
+    static final int SINGLE_RECEIVER = 0;
+    // -----------------------
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SingleReceiverState(String name, AID senderAID) {
+    public SingleReceiverState(String name) {
         super(name);
-        this.senderAID = senderAID;
-        registerStatesAndTransitions();
+        
+        addReceiver(new SingleReceiver());
+        buildFSM();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected abstract int onReceiver();
-    
-    // ---------- PRIVATE ----------
-    
-    private void registerStatesAndTransitions() {
-        // ----- States -----
-        State entry = new EntryState();
-        State manager = new ManagerState();
-        State receiver = new Receiver(senderAID);
-        State blocker = new BlockerState();
-        State exit = new ExitState();
-        // ------------------
-        
-        // Register the states.
-        registerFirstState(entry);
-        registerState(manager);
-        registerState(receiver);
-        registerState(blocker);
-        registerLastState(exit);
-        
-        // Register the transitions.
-        entry.registerDefaultTransition(manager);
-        
-        manager.registerDefaultTransition(receiver);
-        
-        receiver.registerTransition(InnerReceiverState.RECEIVED, exit);
-        receiver.registerTransition(InnerReceiverState.NOT_RECEIVED, blocker);
-        
-        blocker.registerDefaultTransition(manager);
-    }
+    protected abstract int onSingleReceiver();   
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Receiver extends InnerReceiverState {
+    private class SingleReceiver extends InnerReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receiver";
+        private static final String NAME = "single-receiver";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        Receiver(AID senderAID) {
-            super(NAME, 0, senderAID);
+        SingleReceiver() {
+            super(NAME, RECEIVED, null);
         }
         
         // </editor-fold>
@@ -80,7 +55,7 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         
         @Override
         public void action() {
-            setExitValue(onReceiver());
+            setExitValue(onSingleReceiver());
         }
         
         // </editor-fold>

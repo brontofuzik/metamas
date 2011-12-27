@@ -1,7 +1,6 @@
 package jadeorg.proto;
 
 import jade.core.AID;
-import jadeorg.proto.MultiReceiverState;
 
 /**
  * Receive an 'Agree' or 'Refuse' message.
@@ -9,7 +8,7 @@ import jadeorg.proto.MultiReceiverState;
  * @since 2011-12-20
  * @version %I% %G%
  */
-public abstract class ReceiveAgreeOrRefuse extends MultiReceiverState {
+public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
  
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -46,7 +45,7 @@ public abstract class ReceiveAgreeOrRefuse extends MultiReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyReceiveAgree extends MultiReceiverState.ReceiveAgree {
+    private class MyReceiveAgree extends OuterReceiverState.ReceiveAgree {
         
         MyReceiveAgree(AID senderAID) {
             super(AGREE, senderAID);
@@ -58,7 +57,7 @@ public abstract class ReceiveAgreeOrRefuse extends MultiReceiverState {
         }
     }
     
-    private class MyReceiveRefuse extends MultiReceiverState.ReceiveRefuse {
+    private class MyReceiveRefuse extends OuterReceiverState.ReceiveRefuse {
         
         MyReceiveRefuse(AID senderAID) {
             super(REFUSE, senderAID);
