@@ -106,7 +106,7 @@ public class Organization_DeactRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveDeactRequest() {
-            super(NAME, playerAID);
+            super(NAME);
         }
 
         // </editor-fold>
@@ -119,7 +119,7 @@ public class Organization_DeactRoleResponder_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             DeactRequestMessage message = new DeactRequestMessage();
             boolean messageReceived = receive(message, playerAID);
             

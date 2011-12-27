@@ -1,9 +1,11 @@
 package jadeorg.core.organization;
 
-import jadeorg.proto.MultiReceiverState;
-import jadeorg.proto.MultiSenderState;
+import jadeorg.proto.OuterReceiverState;
+import jadeorg.proto.OuterSenderState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ReceiveSuccessOrFailure;
+import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -121,7 +123,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             RequirementRequestMessage message = new RequirementRequestMessage();
             message.setRequirement(getParent().getBehaviourName());
             
@@ -147,7 +149,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveArgumentRequest() {
-            super(NAME, null); // TODO playerAID
+            super(NAME);
         }
         
         // </editor-fold>
@@ -160,7 +162,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
             boolean messageReceived = receive(message, getMyPower().getPlayerAID());
             
@@ -179,14 +181,9 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // </editor-fold>
     }
     
-    private class SendRequirementArgument extends MultiSenderState {
+    private class SendRequirementArgument extends SendSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        static final int SUCCESS = 1;
-        static final int FAILURE = 2;
-        // -----------------------
         
         private static final String NAME = "send-requirement-argument";
         
@@ -195,11 +192,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementArgument() {
-            super(NAME);
-            
-            addSender(SUCCESS, new SendRequirementArgument_Sender());
-            addSender(FAILURE, new SendFailure(getMyPower().getPlayerAID()));
-            buildFSM();
+            super(NAME, getMyPower().getPlayerAID());
         }
         
         // </editor-fold>
@@ -219,6 +212,14 @@ public class Role_MeetRequirementInitiator_New extends Party {
                 return FAILURE;
             }
         }
+        
+        @Override
+        protected void onSuccessSender() {
+            ArgumentInformMessage message = new ArgumentInformMessage();
+            message.setArgument(argument);
+
+            send(message, getMyPower().getPlayerAID());
+        }
 
         @Override
         protected void onExit() {
@@ -226,49 +227,11 @@ public class Role_MeetRequirementInitiator_New extends Party {
         }
         
         // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class SendRequirementArgument_Sender extends InnerSenderState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "sender";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendRequirementArgument_Sender() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                ArgumentInformMessage message = new ArgumentInformMessage();
-                message.setArgument(argument);
-                
-                send(message, getMyPower().getPlayerAID());
-            }
-        
-            // </editor-fold>
-        }
-        
-        // </editor-fold>
     }
     
-    private class ReceiveRequirementResult extends MultiReceiverState {
+    private class ReceiveRequirementResult extends ReceiveSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        static final int SUCCESS = 1;
-        static final int FAILURE = 2;
-        // -----------------------
         
         private static final String NAME = "receive-requirement-result";
         
@@ -277,11 +240,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementResult() {
-            super(NAME);
-            
-            addReceiver(new ReceiveRequirementResult_Receiver());
-            addReceiver(new ReceiveFailure(FAILURE, getMyPower().getPlayerAID()));
-            buildFSM();
+            super(NAME, getMyPower().getPlayerAID());
         }
         
         // </editor-fold>
@@ -292,51 +251,26 @@ public class Role_MeetRequirementInitiator_New extends Party {
         protected void onEntry() {
             getMyPower().getMyRole().logInfo("Receiving requirement result.");
         }
+        
+        @Override
+        protected int onSuccessReceiver() {
+            ResultInformMessage message = new ResultInformMessage();
+            boolean messageReceived = receive(message, getMyPower().getPlayerAID());
+
+            if (messageReceived) {
+                result = message.getResult();
+                return InnerReceiverState.RECEIVED;
+            } else {
+                result = null;
+                return InnerReceiverState.NOT_RECEIVED;
+            }
+        }
 
         @Override
         protected void onExit() {
             getMyPower().getMyRole().logInfo("Requirement result received.");
         }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class ReceiveRequirementResult_Receiver extends InnerReceiverState {
 
-            // <editor-fold defaultstate="collapsed" desc="Fields">
-            
-            private static final String NAME = "receiver";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            ReceiveRequirementResult_Receiver() {
-                super(NAME, SUCCESS, getMyPower().getPlayerAID());
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                ResultInformMessage message = new ResultInformMessage();
-                boolean messageReceived = receive(message, getMyPower().getPlayerAID());
-                
-                if (messageReceived) {
-                    result = message.getResult();
-                    setExitValue(RECEIVED);
-                } else {
-                    result = null;
-                    setExitValue(NOT_RECEIVED);
-                }
-            }
-            
-            // </editor-fold>
-        }
-        
         // </editor-fold>
     }
     

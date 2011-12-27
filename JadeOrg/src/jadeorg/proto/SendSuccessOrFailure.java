@@ -8,7 +8,7 @@ import jade.core.AID;
  * @since 2011-12-24
  * @version %I% %G%
  */
-public abstract class SendSuccessOrFailure extends MultiSenderState {
+public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     

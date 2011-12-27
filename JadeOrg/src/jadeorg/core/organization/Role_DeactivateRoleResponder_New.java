@@ -101,7 +101,7 @@ public class Role_DeactivateRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveDeactivateRequest() {
-            super(NAME, playerAID);
+            super(NAME);
         }
 
         // </editor-fold>
@@ -114,7 +114,7 @@ public class Role_DeactivateRoleResponder_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             DeactivateRequestMessage message = new DeactivateRequestMessage();
             boolean messageReceived = receive(message, playerAID);
                 

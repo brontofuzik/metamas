@@ -99,7 +99,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveActivateRequest() {
-            super(NAME, playerAID);
+            super(NAME);
         }
 
         // </editor-fold>
@@ -112,7 +112,7 @@ public class Role_ActivateRoleResponder_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             ActivateRequestMessage message = new ActivateRequestMessage();
             boolean messageReceived = receive(message, playerAID);
                 

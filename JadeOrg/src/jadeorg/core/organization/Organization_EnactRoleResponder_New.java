@@ -3,6 +3,7 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import jadeorg.proto.OuterSenderState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -10,11 +11,11 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.MultiSenderState;
 import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.ReceiveAgreeOrRefuse;
+import jadeorg.proto.SendSuccessOrFailure;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -114,7 +115,7 @@ class Organization_EnactRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveEnactRequest() {
-            super(NAME, playerAID);
+            super(NAME);
         }
         
         // </editor-fold>
@@ -127,7 +128,7 @@ class Organization_EnactRoleResponder_New extends Party {
         }
         
         @Override
-        protected int onReceiver() {
+        protected int onSingleReceiver() {
             // Receive the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             boolean messageReceived = receive(message, playerAID);
@@ -150,14 +151,9 @@ class Organization_EnactRoleResponder_New extends Party {
         
     }
     
-    private class SendRequirementsInform extends MultiSenderState {
+    private class SendRequirementsInform extends SendSuccessOrFailure {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit value -----
-        public static final int SUCCESS = 1;
-        public static final int FAILURE = 2;
-        // ----------------------
         
         private static final String NAME = "send-requirements-inform";
         
@@ -166,11 +162,7 @@ class Organization_EnactRoleResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendRequirementsInform() {
-            super(NAME);
-            
-            addSender(SUCCESS, this.new SendRequirementsInform_Sender());
-            addSender(FAILURE, this.new SendFailure(playerAID));
-            buildFSM();
+            super(NAME, playerAID);
         }
         
         // </editor-fold>
@@ -198,47 +190,22 @@ class Organization_EnactRoleResponder_New extends Party {
                 return FAILURE;
             }
         }
+        
+        @Override
+        protected void onSuccessSender() {
+            // Create the 'Requirements inform' message.
+            RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
+            requirementsInformMessage.setRequirements(getMyOrganization().requirements.get(roleName));
+
+            // Send the message.
+            send(requirementsInformMessage, playerAID);
+        }
 
         @Override
         protected void onExit() {
             getMyOrganization().logInfo("Requirements inform sent.");
         }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Classes">
-        
-        private class SendRequirementsInform_Sender extends InnerSenderState {
-
-            // <editor-fold defaultstate="collapsed" desc="Constant fields">
-            
-            private static final String NAME = "sener";
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Constructors">
-            
-            SendRequirementsInform_Sender() {
-                super(NAME);
-            }
-            
-            // </editor-fold>
-            
-            // <editor-fold defaultstate="collapsed" desc="Methods">
-            
-            @Override
-            public void action() {
-                // Create the 'Requirements inform' message.
-                RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
-                requirementsInformMessage.setRequirements(getMyOrganization().requirements.get(roleName));
-
-                // Send the message.
-                send(requirementsInformMessage, playerAID);
-            }
-            
-            // </editor-fold>
-        }
-        
+      
         // </editor-fold>
     }
     
@@ -297,7 +264,7 @@ class Organization_EnactRoleResponder_New extends Party {
         }
         
         @Override
-        protected void onSender() {
+        protected void onSingleSender() {
             getMyOrganization().logInfo("Creating role agent.");
 
             Role role = createRoleAgent(roleName, roleName);

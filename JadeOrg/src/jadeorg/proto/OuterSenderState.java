@@ -5,6 +5,8 @@ import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.jadeextensions.FSMBehaviourSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A top-level sender state.
@@ -12,9 +14,11 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since
  * @version %I% %G%
  */
-abstract class OuterSenderState extends FSMBehaviourSenderState {
+public abstract class OuterSenderState extends FSMBehaviourSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private Map<Integer, InnerSenderState> senders = new HashMap<Integer, InnerSenderState>();
     
     private int exitValue;
     
@@ -22,7 +26,7 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    OuterSenderState(String name) {
+    protected OuterSenderState(String name) {
         super(name);
     }
     
@@ -49,9 +53,57 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
     
     // ---------- PROTECTED ----------
     
+    protected void addSender(int event, InnerSenderState sender) {
+        // ----- Preconditions -----
+        if (sender == null) {
+            throw new IllegalArgumentException("sender");
+        }
+        // -------------------------
+        
+        senders.put(event, sender);
+    }
+    
+    protected void buildFSM() {
+        registerStatesAndTransitions();
+    }
+    
     protected abstract void onEntry();
     
+    protected abstract int onManager();
+    
     protected abstract void onExit();
+    
+    // ---------- PRIVATE ----------
+    
+    private void registerStatesAndTransitions() {
+        // ----- States -----
+        EntryState entry = new EntryState();
+        ManagerState manager = new ManagerState();
+        ExitState exit = new ExitState();
+        // ------------------
+        
+        // Register the states.
+        registerFirstState(entry);
+        registerState(manager);
+        for(InnerSenderState sender : senders.values()) {
+            registerState(sender);
+        }
+        registerLastState(exit);
+        
+        // Register the transitions.
+        // entry ---[Default]---> manager
+        entry.registerDefaultTransition(manager);
+             
+        for (Map.Entry<Integer, InnerSenderState> eventSenderPair : senders.entrySet()) {
+            // manager ---[<Performative>]---> sender
+            manager.registerTransition(eventSenderPair.getKey(), eventSenderPair.getValue());
+        }
+        
+        for (InnerSenderState sender : senders.values()) {
+            // sender ---[Default]---> exit
+            sender.registerDefaultTransition(exit);
+        }
+    }
     
     // </editor-fold>
     
@@ -78,6 +130,37 @@ abstract class OuterSenderState extends FSMBehaviourSenderState {
         @Override
         public void action() {
             onEntry();
+        }
+        
+        // </editor-fold>
+    }
+    
+    protected class ManagerState extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "manager";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        protected ManagerState() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            setExitValue(onManager());
+        }
+        
+        @Override
+        public int onEnd() {
+            return getExitValue();
         }
         
         // </editor-fold>

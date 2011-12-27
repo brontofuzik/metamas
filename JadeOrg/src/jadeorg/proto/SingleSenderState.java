@@ -1,7 +1,6 @@
 package jadeorg.proto;
 
-import jadeorg.proto.jadeextensions.OneShotBehaviourSenderState;
-import jadeorg.proto.jadeextensions.State;
+import jade.core.AID;
 
 /**
  * A single sender state.
@@ -11,64 +10,62 @@ import jadeorg.proto.jadeextensions.State;
  */
 public abstract class SingleSenderState extends OuterSenderState {
     
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    // ----- Exit values -----
+    static final int SINGLE_SENDER = 0;
+    // -----------------------
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected SingleSenderState(String name) {
         super(name);
         
-        registerStatesAndTransitions();
+        addSender(SINGLE_SENDER, new SingleSender());
+        buildFSM();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected abstract void onSender();
-    
-    // ---------- PRIVATE ----------
-    
-    private void registerStatesAndTransitions() {
-        // ----- States -----
-        State entry = new EntryState();
-        State sender = new Sender();
-        State exit = new ExitState();
-        // ------------------
-        
-        // Register the states.
-        registerFirstState(entry);
-        registerState(sender);
-        registerLastState(exit);
-        
-        // Register the transitions.
-        entry.registerDefaultTransition(sender);
-        
-        sender.registerDefaultTransition(exit);
+    @Override
+    protected int onManager() {
+        return SINGLE_SENDER;
     }
+    
+    protected abstract void onSingleSender();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Sender extends InnerSenderState {
+    private class SingleSender extends InnerSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "sender";
+        private static final String NAME = "single-sender";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        Sender() {
+        SingleSender() {
             super(NAME);
         }
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
-            onSender();
+            onSingleSender();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
