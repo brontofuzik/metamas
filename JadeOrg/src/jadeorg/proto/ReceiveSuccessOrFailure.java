@@ -3,13 +3,13 @@ package jadeorg.proto;
 import jade.core.AID;
 
 /**
- * A 'Send success or failure' multi sender state.
+ * A 'Receive success or failure' (multi receiver) state.
  * @author Lukáš Kúdela
- * @since 2011-12-24
+ * @since 2011-12-27
  * @version %I% %G%
  */
-public abstract class SendSuccessOrFailure extends MultiSenderState {
-    
+public abstract class ReceiveSuccessOrFailure extends MultiReceiverState {
+
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     // ----- Exit values -----
@@ -21,11 +21,11 @@ public abstract class SendSuccessOrFailure extends MultiSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SendSuccessOrFailure(String name, AID receiverAID) {
+    protected ReceiveSuccessOrFailure(String name, AID senderAID) {
         super(name);
         
-        addSender(SUCCESS, new SendSuccess(receiverAID));
-        addSender(FAILURE, new SendFailure(receiverAID));
+        addReceiver(new ReceiveSuccess(senderAID));
+        addReceiver(new ReceiveFailure(FAILURE, senderAID));
         buildFSM();
     }
     
@@ -33,24 +33,24 @@ public abstract class SendSuccessOrFailure extends MultiSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected abstract void onSuccessSender();
+    protected abstract int onSuccessReceiver();
     
-    // </editor-fold>  
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SendSuccess extends InnerSenderState {
-
+    private class ReceiveSuccess extends InnerReceiverState {
+        
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "send-success";
+        private static final String NAME = "receive-success";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SendSuccess(AID receiverAID) {
-            super(NAME, receiverAID);
+        ReceiveSuccess(AID senderAID) {
+            super(NAME, SUCCESS, senderAID);
         }
         
         // </editor-fold>
@@ -59,11 +59,11 @@ public abstract class SendSuccessOrFailure extends MultiSenderState {
         
         @Override
         public void action() {
-            onSuccessSender();
+            setExitValue(onSuccessReceiver());
         }
-    
+        
         // </editor-fold>
     }
     
-    // </editor-fold> 
+    // </editor-fold>
 }

@@ -217,18 +217,17 @@ class Player_EnactRoleInitiator_New extends Party {
             
             @Override
             public void action() {
-                //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVER -----");
                 // Receive the 'Requirements inform' message.
                 RequirementsInformMessage message = new RequirementsInformMessage();
                 boolean messageReceived = receive(message, organizationAID);
                 
                 // Process the message.
                 if (messageReceived) {
-                    //System.out.println("----- RECEIVED -----");
+                    System.out.println("----- RECEIVED -----");
                     requirements = message.getRequirements();
                     setExitValue(RECEIVED);
                 } else {
-                    //System.out.println("----- NOT-RECEIVED -----");
+                    System.out.println("----- NOT-RECEIVED -----");
                     setExitValue(NOT_RECEIVED);
                 }
             }

@@ -49,9 +49,9 @@ public class Player_MeetRequirementResponder_New extends Party {
         registerStatesAndTransitions();
     }
     
-    private void registerStatesAndTransitions() {
+    private void registerStatesAndTransitions() {        
         // ----- States -----
-        State sendArgumentRequest = new SendArgumentRequest();
+        State sendArgumentRequest = new SendArgumentRequest();       
         receiveRequirementArgument = new ReceiveRequirementArgument();
         sendRequirementResult = new SendRequirementResult();
         State end = new End();
@@ -63,12 +63,12 @@ public class Player_MeetRequirementResponder_New extends Party {
         registerState(sendRequirementResult);
         registerLastState(end);
         
-        // Register the transitions.
+        // Register the transitions.     
         sendArgumentRequest.registerDefaultTransition(receiveRequirementArgument);
         
         receiveRequirementArgument.registerTransition(1, end);
         
-        sendRequirementResult.registerDefaultTransition(end);
+        sendRequirementResult.registerDefaultTransition(end);      
     }
     
     // </editor-fold>
@@ -84,6 +84,10 @@ public class Player_MeetRequirementResponder_New extends Party {
     
     private Player getMyPlayer() {
         return (Player)myAgent;
+    }
+    
+    private AID getRoleAID() {
+        return currentRequirement != null ? currentRequirement.getRoleAID() : null;
     }
     
     // </editor-fold>
@@ -152,7 +156,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         protected void onSender() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
 
-            send(message, currentRequirement.getRoleAID());
+            send(message, getRoleAID());
         }
 
         @Override
@@ -183,7 +187,7 @@ public class Player_MeetRequirementResponder_New extends Party {
             super(NAME);
             
             addReceiver(new ReceiveRequirementArgument_Receiver());
-            addReceiver(new ReceiveFailure(FAILURE, currentRequirement.getRoleAID()));
+            addReceiver(new ReceiveFailure(FAILURE, getRoleAID()));
             buildFSM();
         }
         
@@ -216,7 +220,7 @@ public class Player_MeetRequirementResponder_New extends Party {
             // <editor-fold defaultstate="collapsed" desc="Constructors">
             
             ReceiveRequirementArgument_Receiver() {
-                super(NAME, SUCCESS, currentRequirement.getRoleAID());
+                super(NAME, SUCCESS, getRoleAID());
             }
             
             // </editor-fold>
@@ -226,7 +230,7 @@ public class Player_MeetRequirementResponder_New extends Party {
             @Override
             public void action() {
                 ArgumentInformMessage message = new ArgumentInformMessage();
-                boolean messageReceived = receive(message, currentRequirement.getRoleAID());
+                boolean messageReceived = receive(message, getRoleAID());
                 
                 if (messageReceived) {
                     currentRequirement.setArgument(message.getArgument());
@@ -261,7 +265,7 @@ public class Player_MeetRequirementResponder_New extends Party {
             super(NAME);
             
             addSender(SUCCESS, new SendRequirementResult_Sender());
-            addSender(FAILURE, new SendFailure(currentRequirement.getRoleAID()));
+            addSender(FAILURE, new SendFailure(getRoleAID()));
             buildFSM();
         }
         
@@ -315,7 +319,7 @@ public class Player_MeetRequirementResponder_New extends Party {
                 message.setResult(currentRequirement.getResult());
                 
                 // Send the message.
-                send(message, currentRequirement.getRoleAID());
+                send(message, getRoleAID());
 
                 currentRequirement.reset();
                 getParent().reset();  
