@@ -347,7 +347,6 @@ abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            //System.out.println("----- " + getParent().getBehaviourName() + " BLOCKER -----");
             if (myAgent.getCurQueueSize() == 0) {
                 getParent().block();
             }

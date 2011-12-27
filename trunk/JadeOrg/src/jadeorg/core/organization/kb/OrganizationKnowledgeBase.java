@@ -63,7 +63,6 @@ public class OrganizationKnowledgeBase {
     }
     
     public AID getRole(String roleName) {
-        System.out.println("----- " + enactedRoles.keySet().iterator().next() + " -----");
         return enactedRoles.get(roleName);
     }
     

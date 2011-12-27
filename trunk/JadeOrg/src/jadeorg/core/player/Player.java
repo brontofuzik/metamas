@@ -160,6 +160,4 @@ public abstract class Player extends Agent {
     }
     
     // </editor-fold>
-
-
 }
