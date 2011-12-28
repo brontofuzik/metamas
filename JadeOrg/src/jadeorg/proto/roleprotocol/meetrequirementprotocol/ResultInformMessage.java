@@ -1,7 +1,7 @@
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.ObjectMessage;
+import jadeorg.lang.BinaryMessage;
 import java.io.Serializable;
 
 /**
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class ResultInformMessage extends ObjectMessage {
+public class ResultInformMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

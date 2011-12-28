@@ -1,7 +1,7 @@
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.StringMessage;
+import jadeorg.lang.TextMessage;
 
 /**
  * 
@@ -9,7 +9,7 @@ import jadeorg.lang.StringMessage;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class ArgumentRequestMessage extends StringMessage {
+public class ArgumentRequestMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

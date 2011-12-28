@@ -6,16 +6,16 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * An object message.
+ * An binary message.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
  */
-public abstract class ObjectMessage extends Message {
+public abstract class BinaryMessage extends Message {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ObjectMessage(int performative) {
+    protected BinaryMessage(int performative) {
         super(performative);
     }
     

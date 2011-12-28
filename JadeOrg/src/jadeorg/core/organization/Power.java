@@ -19,7 +19,7 @@ public class Power extends FSMBehaviour {
     
     private AID playerAID;
     
-    private String arguments;
+    private Object argument;
     
     private Object result;
     
@@ -41,18 +41,22 @@ public class Power extends FSMBehaviour {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("name");
         }
+        // -------------------------
         
         setBehaviourName(name);        
-        initializeFSM();
+        registerStatesAndTransitions();
     }
     
-    private void initializeFSM() {
+    private void registerStatesAndTransitions() {
         // ----- States -----
         finalState = new End();
         // ------------------
         
-        // Register states.
+        // Register the states.
         registerLastState(finalState, finalState.getName());
+        
+        // register the transitions.
+        // No transitions.
     }
     
     // </editor-fold>
@@ -78,11 +82,8 @@ public class Power extends FSMBehaviour {
         this.playerAID = playerAID;
     }
     
-    public void setArguments(String arguments) {
-        // ----- Preconditions -----
-        assert arguments != null && !arguments.isEmpty();
-        
-        this.arguments = arguments;
+    public void setArgument(Object argument) {        
+        this.argument = argument;
     }
     
     public Object getResult() {
@@ -166,12 +167,12 @@ public class Power extends FSMBehaviour {
     }
     
     public void setRequirementArgument(String requirementName, Object argument) {
-        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
+        Role_MeetRequirementInitiator_New requirementState = (Role_MeetRequirementInitiator_New)getState(requirementName);
         requirementState.setArgument(argument);
     }
     
     public Object getRequirementResult(String requirementName) {
-        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
+        Role_MeetRequirementInitiator_New requirementState = (Role_MeetRequirementInitiator_New)getState(requirementName);
         return requirementState.getResult();
     }
     
@@ -206,6 +207,4 @@ public class Power extends FSMBehaviour {
     }
     
     // </editor-fold>
-
-
 }

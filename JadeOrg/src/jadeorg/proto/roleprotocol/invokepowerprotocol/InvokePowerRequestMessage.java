@@ -1,36 +1,44 @@
 package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
-import jadeorg.lang.StringMessage;
+import jade.lang.acl.ACLMessage;
+import jadeorg.lang.TextMessage;
 
 
 /**
- * TODO
+ * A 'Invoke power request' message.
  * @author Lukáš Kúdela
  * @since 2011-11-09
  * @version %I% %G%
  */
-public class InvokeRequestMessage extends StringMessage {
+public class InvokePowerRequestMessage extends TextMessage {
 
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private String powerName;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    InvokeRequestMessage() {
-        super(0);
+    public InvokePowerRequestMessage() {
+        super(ACLMessage.REQUEST);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     public String getPower() {
-        return "";
+        return powerName;
     }
     
-    public String[] getArgs() {
-        return new String[0];
+    public InvokePowerRequestMessage setPower(String powerName) {
+        this.powerName = powerName;
+        return this;
     }
     
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override

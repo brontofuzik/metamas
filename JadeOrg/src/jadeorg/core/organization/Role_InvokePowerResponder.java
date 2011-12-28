@@ -98,7 +98,7 @@ public class Role_InvokePowerResponder extends  Party {
         if (containsPower(powerName)) {
             currentPower = getPower(powerName);
             currentPower.setPlayerAID(playerAID);
-            currentPower.setArguments(arguments);
+            currentPower.setArgument(arguments);
         }
     }
     

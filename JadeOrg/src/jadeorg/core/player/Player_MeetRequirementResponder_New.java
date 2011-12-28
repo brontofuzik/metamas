@@ -34,6 +34,8 @@ public class Player_MeetRequirementResponder_New extends Party {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private AID roleAID;
+    
     private Map<String, Requirement> requirements = new Hashtable<String, Requirement>();
     
     private Requirement currentRequirement;
@@ -82,14 +84,16 @@ public class Player_MeetRequirementResponder_New extends Party {
         return MeetRequirementProtocol.getInstance();
     }
     
+    // ----- PACKAGE -----
+    
+    void setRoleAID(AID roleAID) {
+        this.roleAID = roleAID;
+    }  
+    
     // ----- PRIVATE -----
     
     private Player getMyPlayer() {
         return (Player)myAgent;
-    }
-    
-    private AID getRoleAID() {
-        return currentRequirement != null ? currentRequirement.getRoleAID() : null;
     }
     
     // </editor-fold>
@@ -158,7 +162,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         protected void onSingleSender() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
 
-            send(message, getRoleAID());
+            send(message, roleAID);
         }
 
         @Override
@@ -180,8 +184,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
        
         ReceiveRequirementArgument() {
-            // TODO
-            super(NAME, getRoleAID());
+            super(NAME, roleAID);
         }
         
         // </editor-fold>
@@ -196,7 +199,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         @Override
         protected int onSuccessReceiver() {
             ArgumentInformMessage message = new ArgumentInformMessage();
-            boolean messageReceived = receive(message, getRoleAID());
+            boolean messageReceived = receive(message, roleAID);
 
             if (messageReceived) {
                 currentRequirement.setArgument(message.getArgument());
@@ -225,7 +228,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendRequirementResult() {
-            super(NAME, getRoleAID());
+            super(NAME, roleAID);
         }
         
         // </editor-fold>
@@ -251,7 +254,7 @@ public class Player_MeetRequirementResponder_New extends Party {
             message.setResult(currentRequirement.getResult());
 
             // Send the message.
-            send(message, getRoleAID());
+            send(message, roleAID);
 
             currentRequirement.reset();
             getParent().reset();  

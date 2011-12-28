@@ -6,7 +6,7 @@ package jadeorg.lang;
  * @since 2011-11-06
  * @version %I% %G%
  */
-public class SimpleMessage extends StringMessage {
+public class SimpleMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

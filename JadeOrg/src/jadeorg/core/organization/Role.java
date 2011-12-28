@@ -23,7 +23,7 @@ public class Role extends Agent {
     
     Organization myOrganization;
     
-    Role_InvokePowerResponder invokePowerResponder = new Role_InvokePowerResponder();
+    Role_InvokePowerResponder_New invokePowerResponder = new Role_InvokePowerResponder_New();
     
     RoleState state = RoleState.INACTIVE;
     
@@ -128,12 +128,13 @@ public class Role extends Agent {
         }
     }
     
-    public void respondToinvokePower(AID playerAID) {
+    public void respondToInvokePower(AID playerAID) {
         logInfo("Responding to the 'Invoke power' protocol.");
             
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
-            addBehaviour(new Role_InvokePowerResponder_New(playerAID));
+            invokePowerResponder.setPlayerAID(playerAID);
+            addBehaviour(invokePowerResponder);
         } else {
             // The sender player is not enacting this role.
             // TODO
