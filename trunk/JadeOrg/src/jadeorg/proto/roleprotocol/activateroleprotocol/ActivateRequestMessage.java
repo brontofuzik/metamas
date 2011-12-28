@@ -5,7 +5,7 @@
 package jadeorg.proto.roleprotocol.activateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.StringMessage;
+import jadeorg.lang.TextMessage;
 
 /**
  * An 'Activate request' message.
@@ -15,7 +15,7 @@ import jadeorg.lang.StringMessage;
  * @since 2011-11-06
  * @verison %I% %G%
  */
-public class ActivateRequestMessage extends StringMessage {
+public class ActivateRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

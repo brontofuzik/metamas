@@ -1,6 +1,8 @@
 package jadeorg.core.player.kb;
 
 import jade.core.AID;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * A role description.
@@ -12,17 +14,19 @@ public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The name of the role */
+    /** The name of the role. */
     private String roleName;
     
     /** The role AID. */
     private AID roleAID;
     
-    /** The name of the organization */
+    /** The name of the organization. */
     private String organizationName;
     
     /** The organization AID. */
     private AID organizationAID;
+    
+    private Map<String, Object> powerResults = new Hashtable<String, Object>();
 
     // </editor-fold>
     
@@ -54,6 +58,18 @@ public class RoleDescription {
 
     public String getRoleName() {
         return roleName;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    public void savePowerResult(String powerName, Object powerResult) {
+        powerResults.put(powerName, powerResult);
+    }
+
+    public Object loadPowerResult(String powerName) {
+        return powerResults.get(powerName);
     }
     
     // </editor-fold>

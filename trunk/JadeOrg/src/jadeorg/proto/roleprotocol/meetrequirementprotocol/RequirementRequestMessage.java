@@ -1,7 +1,7 @@
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.StringMessage;
+import jadeorg.lang.TextMessage;
 
 /**
  * A 'Requirement request' message.
@@ -11,7 +11,7 @@ import jadeorg.lang.StringMessage;
  * @since
  * @version %I% %G%
  */
-public class RequirementRequestMessage extends StringMessage {
+public class RequirementRequestMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

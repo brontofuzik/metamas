@@ -106,6 +106,7 @@ public abstract class Player extends Agent {
         
         if (roleAID.equals(knowledgeBase.getActiveRole().getRoleAID())) {
             // The sender role is the active role.
+            meetRequirementResponder.setRoleAID(roleAID);
             addBehaviour(meetRequirementResponder);
         } else {
             // The sender role is not the active role.

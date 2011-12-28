@@ -1,7 +1,7 @@
 package jadeorg.proto.roleprotocol.deactivateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.StringMessage;
+import jadeorg.lang.TextMessage;
 
 /**
  * A 'Deactivate request' message.
@@ -12,7 +12,7 @@ import jadeorg.lang.StringMessage;
  * @since 2011-11-06
  * @version %I% %G%
  */
-public class DeactivateRequestMessage extends StringMessage {
+public class DeactivateRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

@@ -1,7 +1,7 @@
 package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.StringMessage;
+import jadeorg.lang.TextMessage;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public class RequirementsInformMessage extends StringMessage {
+public class RequirementsInformMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

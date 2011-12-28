@@ -1,26 +1,26 @@
-package jadeorg.proto.roleprotocol.meetrequirementprotocol;
+package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.BinaryMessage;
 import java.io.Serializable;
 
 /**
- * A 'Argument inform' message.
+ * A 'Power result' (binary) message.
  * @author Lukáš Kúdela
- * @since 2011-12-22
+ * @since 2011-12-28
  * @version %I% %G%
  */
-public class ArgumentInformMessage extends BinaryMessage {
-    
+public class PowerResultMessage extends BinaryMessage {
+
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object argument;
+    private Object result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ArgumentInformMessage() {
+    public PowerResultMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -28,28 +28,28 @@ public class ArgumentInformMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public Object getArgument() {
-        return argument;
+    public Object getResult() {
+        return result;
     }
     
-    public ArgumentInformMessage setArgument(Object argument) {
-        this.argument = argument;
-        return this; 
+    public PowerResultMessage setResult(Object result) {
+        this.result = result;
+        return this;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-     @Override
+    @Override
     protected Serializable getContentObject() {
-        return (Serializable)argument;
+        return (Serializable)result;
     }
 
     @Override
     protected void setContentObject(Serializable contentObject) {
-        argument = contentObject;
+        result = contentObject;
     }
     
-    // </editor-fold>
+    // </editor-fold> 
 }

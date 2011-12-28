@@ -3,16 +3,16 @@ package jadeorg.lang;
 import jade.lang.acl.ACLMessage;
 
 /**
- * A string message.
+ * A text message.
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
  */
-public abstract class StringMessage extends Message {
+public abstract class TextMessage extends Message {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected StringMessage(int performative) {
+    protected TextMessage(int performative) {
         super(performative);
     }
     

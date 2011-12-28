@@ -1,17 +1,17 @@
-package jadeorg.proto.roleprotocol.meetrequirementprotocol;
+package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.BinaryMessage;
 import java.io.Serializable;
 
 /**
- * A 'Argument inform' message.
+ * A 'Power argument' (binary) message.
  * @author Lukáš Kúdela
- * @since 2011-12-22
+ * @since
  * @version %I% %G%
  */
-public class ArgumentInformMessage extends BinaryMessage {
-    
+public class PowerArgumentMessage extends BinaryMessage {
+
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private Object argument;
@@ -20,7 +20,7 @@ public class ArgumentInformMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ArgumentInformMessage() {
+    public PowerArgumentMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -32,16 +32,16 @@ public class ArgumentInformMessage extends BinaryMessage {
         return argument;
     }
     
-    public ArgumentInformMessage setArgument(Object argument) {
+    public PowerArgumentMessage setArgument(Object argument) {
         this.argument = argument;
-        return this; 
+        return this;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-     @Override
+    @Override
     protected Serializable getContentObject() {
         return (Serializable)argument;
     }
@@ -51,5 +51,5 @@ public class ArgumentInformMessage extends BinaryMessage {
         argument = contentObject;
     }
     
-    // </editor-fold>
+    // </editor-fold>    
 }

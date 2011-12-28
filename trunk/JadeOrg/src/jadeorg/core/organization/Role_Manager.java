@@ -97,7 +97,7 @@ public class Role_Manager extends ManagerBehaviour {
             ACLMessage invokeRequestMessage = getMyRole().receive(template);
             if (invokeRequestMessage != null) {
                 getMyRole().putBack(invokeRequestMessage);
-                getMyRole().respondToinvokePower(invokeRequestMessage.getSender());
+                getMyRole().respondToInvokePower(invokeRequestMessage.getSender());
             }
         }
         
