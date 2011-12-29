@@ -10,10 +10,10 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Enact role' protocol initiator party.
@@ -303,7 +303,7 @@ class Player_EnactRoleInitiator_New extends Party {
      * The 'SuccessEnd successEnd' state.
      * A state in which the 'Enact' protocol initiator party ends.
      */
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -333,7 +333,7 @@ class Player_EnactRoleInitiator_New extends Party {
      * The 'Fail successEnd' state.
      * A state in which the 'Enact' protocol initiator party ends.
      */
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 

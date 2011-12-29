@@ -6,9 +6,9 @@ import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Activate role' protocol responder party.
@@ -184,7 +184,7 @@ public class Role_ActivateRoleResponder_New extends Party {
      * The 'Success end' (simple) state.
      * A state in which the 'Activate role' protocol responder party secceeds.
      */
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -214,7 +214,7 @@ public class Role_ActivateRoleResponder_New extends Party {
      * The 'Failure end' (simple) state.
      * A state in which the 'Activate role' protocol responder party fails.
      */
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 

@@ -1,6 +1,5 @@
 package jadeorg.core.player;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.proto_old.ActiveState;
@@ -91,10 +90,9 @@ public class Player_MeetRequirementResponder extends Party {
         registerDefaultTransition(requirement.getName(), sendRequirementResult.getName());
     }
     
-    protected void invokeRequirement(String requirementName, AID roleAID) {
+    protected void invokeRequirement(String requirementName) {
         if (containsRequirement(requirementName)) {
             currentRequirement = getRequirement(requirementName);
-            currentRequirement.setRoleAID(roleAID);
             reset();
         }
     }
@@ -137,7 +135,7 @@ public class Player_MeetRequirementResponder extends Party {
             ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setProtocol("requirement-protcol");
             aclMessage.setContent("param");
-            aclMessage.addReceiver(currentRequirement.getRoleAID());
+            aclMessage.addReceiver(null);
             
             // Send the ACL message.
             myAgent.send(aclMessage);
@@ -169,7 +167,7 @@ public class Player_MeetRequirementResponder extends Party {
             MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
                     "requirement-protocol",
                     new int[] { ACLMessage.INFORM, ACLMessage.FAILURE },
-                    currentRequirement.getRoleAID());
+                    null);
 
             // Receive the ACL message.
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
@@ -220,7 +218,7 @@ public class Player_MeetRequirementResponder extends Party {
             // TODO Rework.    
             ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
             aclMessage.setProtocol("requirement-protocol");
-            aclMessage.addReceiver(currentRequirement.getRoleAID());
+            aclMessage.addReceiver(null);
             try {
                 aclMessage.setContentObject((Serializable)currentRequirement.getResult());
             } catch (Exception ex) {

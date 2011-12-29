@@ -5,10 +5,10 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deactivate role' protocol responder (new version).
@@ -185,7 +185,7 @@ public class Role_DeactivateRoleResponder_New extends Party {
      * The 'Success end' (simple) state.
      * A state in which the 'Deactivate role' protocol responder party succeeds.
      */
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -215,7 +215,7 @@ public class Role_DeactivateRoleResponder_New extends Party {
      * The 'Failure end' (simple) state.
      * A state in which the 'Deactivate role' protocol responder party fails.
      */
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
