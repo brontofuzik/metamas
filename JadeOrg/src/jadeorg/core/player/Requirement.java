@@ -1,7 +1,6 @@
 package jadeorg.core.player;
 
-import jade.core.AID;
-import jadeorg.proto.SimpleState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * A requirement (simple) state.
@@ -9,11 +8,9 @@ import jadeorg.proto.SimpleState;
  * @since 2011-11-11
  * @version %I% %G%
  */
-abstract class Requirement extends SimpleState {
+abstract class Requirement extends OneShotBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private AID roleAID;
     
     private Object argument;
     
@@ -30,15 +27,6 @@ abstract class Requirement extends SimpleState {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    AID getRoleAID() {
-        return roleAID;
-    }
-    
-    Requirement setRoleAID(AID roleAID) {
-        this.roleAID = roleAID;
-        return this;
-    }
     
     Object getArgument() {
         return argument;

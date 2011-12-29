@@ -11,11 +11,11 @@ import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.ReceiveAgreeOrRefuse;
 import jadeorg.proto.SendSuccessOrFailure;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -344,7 +344,7 @@ class Organization_EnactRoleResponder_New extends Party {
     /**
      * The 'Success end' state.
      */
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -373,7 +373,7 @@ class Organization_EnactRoleResponder_New extends Party {
     /**
      * The 'Failure end' state.
      */
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 

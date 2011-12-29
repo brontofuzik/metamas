@@ -4,8 +4,8 @@ import jade.core.AID;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
@@ -267,7 +267,7 @@ public class Player_InvokePowerInitiator_New extends Party {
         // </editor-fold>
     }
     
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -293,7 +293,7 @@ public class Player_InvokePowerInitiator_New extends Party {
         // </editor-fold>
     }
     
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         

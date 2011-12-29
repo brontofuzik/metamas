@@ -5,10 +5,10 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.ReceiveAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deact role' protocol initiator party (new version).
@@ -180,7 +180,7 @@ public class Player_DeactRoleInitiator_New extends Party {
      * The 'Success end' (simple) state.
      * A state in which the 'Deact role' initiator party succeedes.
      */
-    private class SuccessEnd extends SimpleState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -210,7 +210,7 @@ public class Player_DeactRoleInitiator_New extends Party {
      * The 'Failure end' (simple) state.
      * A state in which the 'Deact role' initiator party fails.
      */
-    private class FailureEnd extends SimpleState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         

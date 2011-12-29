@@ -1,14 +1,12 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.OuterReceiverState;
-import jadeorg.proto.OuterSenderState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
-import jadeorg.proto.SimpleState;
 import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentInformMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
@@ -104,10 +102,9 @@ public class Player_MeetRequirementResponder_New extends Party {
         return requirements.containsKey(requirementName);
     }
     
-    void selectRequirement(String requirementName, AID roleAID) {
+    void selectRequirement(String requirementName) {
         if (containsRequirement(requirementName)) {
             currentRequirement = getRequirement(requirementName);
-            currentRequirement.setRoleAID(roleAID);
             reset();
         }
     }
@@ -268,7 +265,7 @@ public class Player_MeetRequirementResponder_New extends Party {
         // </editor-fold>
     } 
     
-    private class End extends SimpleState {
+    private class End extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
