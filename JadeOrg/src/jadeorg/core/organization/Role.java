@@ -104,31 +104,31 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void respondToActivateRole(AID playerAID) {
+    public void respondToActivateRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Activate role' protocol.");
         
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
-            addBehaviour(new Role_ActivateRoleResponder_New(playerAID));
+            addBehaviour(new Role_ActivateRoleResponder_New(protocolId, playerAID));
         } else {
             // The sender player is not enacting this role.
             // TODO
         }
     }
 
-    public void respondToDeactivateRole(AID playerAID) {
+    public void respondToDeactivateRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Deactivate role' protocol.");
         
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
-            addBehaviour(new Role_DeactivateRoleResponder_New(playerAID));
+            addBehaviour(new Role_DeactivateRoleResponder_New(protocolId, playerAID));
         } else {
             // The sender player is not enacting this role.
             // TODO
         }
     }
     
-    public void respondToInvokePower(AID playerAID) {
+    public void respondToInvokePower(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Invoke power' protocol.");
             
         if (playerAID.equals(this.playerAID)) {

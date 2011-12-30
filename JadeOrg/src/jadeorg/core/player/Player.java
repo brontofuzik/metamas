@@ -101,7 +101,7 @@ public abstract class Player extends Agent {
         }
     }
     
-    public void respondToMeetRequirement(AID roleAID) {
+    public void respondToMeetRequirement(String protocolId, AID roleAID) {
         logInfo("Responding to the 'Meet requirement' protocol.");
         
         if (roleAID.equals(knowledgeBase.getActiveRole().getRoleAID())) {
@@ -112,11 +112,6 @@ public abstract class Player extends Agent {
             // The sender role is not the active role.
             // TODO
         }
-    }
-    
-    public void respondToFulfillRFesponsibility(AID roleAID) {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not yet implemented");
     }
     
     public abstract boolean evaluateRequirements(String[] requirements);

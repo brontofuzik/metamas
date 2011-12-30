@@ -44,29 +44,8 @@ public class Player_Manager extends ManagerBehaviour {
             ACLMessage message = getMyPlayer().receive(template);          
             if (message != null) {
                 getMyPlayer().putBack(message);
-                getMyPlayer().respondToMeetRequirement(message.getSender());
+                getMyPlayer().respondToMeetRequirement(message.getConversationId(), message.getSender());
             }
-        }
-        
-        // </editor-fold>
-    }
-    
-    private class FulfillResponsibilityHandler extends HandlerBehaviour {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                // TODO Use the 'Fulfill responsibility' protocol.
-                null, 
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-            
-            ACLMessage message = getMyPlayer().receive(template);
-            if (message != null) {
-                getMyPlayer().putBack(message);
-                getMyPlayer().respondToFulfillRFesponsibility(message.getSender());
-            } 
         }
         
         // </editor-fold>

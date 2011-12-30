@@ -32,13 +32,16 @@ public class Role_ActivateRoleResponder_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_ActivateRoleResponder_New(AID playerAID) {
+    Role_ActivateRoleResponder_New(String protocolId, AID playerAID) {
         super(NAME);
         // ----- Preconditions -----
+        assert protocolId != null && !protocolId.isEmpty();
         assert playerAID != null;
         // -------------------------
         
+        setProtocolId(protocolId);
         this.playerAID = playerAID;
+        
         registerStatesAndTransitions();
     }
 

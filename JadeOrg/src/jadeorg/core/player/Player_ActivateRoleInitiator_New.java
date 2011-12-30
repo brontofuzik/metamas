@@ -40,8 +40,10 @@ public class Player_ActivateRoleInitiator_New extends Party {
         assert roleAID != null;
         // -------------------------
 
+        setProtocolId(new Integer(hashCode()).toString());
         this.roleName = roleName;
         this.roleAID = roleAID;
+        
         registerStatesAndtransitions();
     }
 

@@ -15,6 +15,12 @@ import jadeorg.lang.Message;
  */
 public abstract class Party extends FSMBehaviour {
     
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private String protocolId;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected Party(String name) {
@@ -32,6 +38,13 @@ public abstract class Party extends FSMBehaviour {
     // TODO Change the access modified to protected.
     public abstract Protocol getProtocol();
     
+    // ----- PROTECTED -----
+    
+    // TODO Replace with a constructor.
+    protected void setProtocolId(String protocolId) {
+        this.protocolId = protocolId;
+    } 
+   
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -45,6 +58,7 @@ public abstract class Party extends FSMBehaviour {
         // Generate the ACL message.
         ACLMessage aclMessage = message.generateACLMessage();      
         aclMessage.setProtocol(getProtocol().getName());
+        aclMessage.setConversationId(protocolId);
         aclMessage.addReceiver(receiverAID);
         
         System.out.println("SENDING MESSAGE: " + aclMessage.toString());
@@ -59,11 +73,14 @@ public abstract class Party extends FSMBehaviour {
      * @return the received message
      */
     public boolean receive(Message message, AID senderAID) {
-        MessageTemplate messageTemplate = MessageTemplate.and(
-            MessageTemplate.MatchPerformative(message.getPerformative()),
+        MessageTemplate messageTemplate =
             MessageTemplate.and(
-                MessageTemplate.MatchProtocol(getProtocol().getName()),
-                MessageTemplate.MatchSender(senderAID)));
+                MessageTemplate.MatchPerformative(message.getPerformative()),
+                MessageTemplate.and(
+                    MessageTemplate.MatchProtocol(getProtocol().getName()),
+                    MessageTemplate.and(
+                        MessageTemplate.MatchConversationId(protocolId),
+                        MessageTemplate.MatchSender(senderAID))));
          
         // Receive the ACL message.
         ACLMessage aclMessage = myAgent.receive(messageTemplate);      

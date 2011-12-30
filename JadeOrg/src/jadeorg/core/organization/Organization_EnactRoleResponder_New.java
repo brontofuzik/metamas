@@ -43,13 +43,16 @@ class Organization_EnactRoleResponder_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Organization_EnactRoleResponder_New(AID playerAID) {
+    Organization_EnactRoleResponder_New(String protocolId, AID playerAID) {
         super(NAME);
         // ----- Preconditions -----
+        assert protocolId != null && !protocolId.isEmpty();
         assert playerAID != null;
         // -------------------------
         
+        setProtocolId(protocolId);
         this.playerAID = playerAID;
+        
         registerStatesAndTransitions();
     }
     

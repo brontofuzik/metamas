@@ -34,13 +34,14 @@ public class Organization_DeactRoleResponder_New extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Organization_DeactRoleResponder_New(AID playerAID) {
+    public Organization_DeactRoleResponder_New(String protocolId, AID playerAID) {
         super(NAME);
         // ----- Preconditions -----
-        assert !roleName.isEmpty();
+        assert protocolId != null && !protocolId.isEmpty();
         assert playerAID != null;
         // -------------------------
 
+        setProtocolId(protocolId);
         this.playerAID = playerAID;
 
         registerStatesAndTransitions();

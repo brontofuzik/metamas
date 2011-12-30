@@ -46,6 +46,9 @@ public class Role_MeetRequirementInitiator_New extends Party {
     
     Role_MeetRequirementInitiator_New() {
         super(NAME);
+        
+        setProtocolId(new Integer(hashCode()).toString());
+        
         registerStatesAndtransitions();
     }
     

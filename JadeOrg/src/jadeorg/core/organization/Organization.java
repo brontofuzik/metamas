@@ -54,10 +54,10 @@ public abstract class Organization extends Agent {
      * Enacts a role.
      * @param player the player
      */
-    public void respondToEnactRole(AID playerAID) {
+    public void respondToEnactRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Enact role' protocol.");
         
-        addBehaviour(new Organization_EnactRoleResponder_New(playerAID));
+        addBehaviour(new Organization_EnactRoleResponder_New(protocolId, playerAID));
     }
 
     /**
@@ -65,10 +65,10 @@ public abstract class Organization extends Agent {
      * @param player the player
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    public void respondToDeactRole(AID playerAID) {
+    public void respondToDeactRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Deact role' protocol.");
         
-        addBehaviour(new Organization_DeactRoleResponder_New(playerAID));
+        addBehaviour(new Organization_DeactRoleResponder_New(protocolId, playerAID));
     }
     
     // ----- Logging -----
