@@ -26,10 +26,10 @@ SET ORGANIZATIONS=%ENGLISH_AUCTION1_ORGANIZATION%
 
 REM ----- Players -----
 SET PLAYER_PACKAGE=%ROOT_NAMESPACE%.players
-SET PARTICIPANT1_PLAYER=participant1_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.Auctioneer_Role)
-SET PARTICIPANT2_PLAYER=participant2_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.Bidder_Role)
-SET PARTICIPANT3_PLAYER=participant3_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.BIdder_Role)
-SET PLAYERS=%PARTICIPANT1_PLAYER%
+SET PARTICIPANT1_PLAYER=participant1_Player:%PLAYER_PACKAGE%.Participant_Player(5000,englishAuction1_Organization.Auctioneer_Role)
+SET PARTICIPANT2_PLAYER=participant2_Player:%PLAYER_PACKAGE%.Participant_Player(10000,englishAuction1_Organization.Bidder_Role)
+SET PARTICIPANT3_PLAYER=participant3_Player:%PLAYER_PACKAGE%.Participant_Player(englishAuction1_Organization.Bidder_Role)
+SET PLAYERS=%PARTICIPANT1_PLAYER%;%PARTICIPANT2_PLAYER%
 
 Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
