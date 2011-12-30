@@ -1,6 +1,6 @@
 package jadeorg.core.organization;
 
-import jadeorg.proto_old.State;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Error handler' state.
@@ -8,7 +8,7 @@ import jadeorg.proto_old.State;
  * @since 2011-11-13
  * @version %I% %G%
  */
-class ErrorHandler extends State {
+class ErrorHandler extends OneShotBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -30,12 +30,9 @@ class ErrorHandler extends State {
     
     @Override
     public void action() {
-        setExitValue(Event.FAILURE);
-    }
-    
-    public boolean done() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
+//        final int FAILURE = 2;
+//        
+//        setExitValue(FAILURE);
     }
     
     // </editor-fold>

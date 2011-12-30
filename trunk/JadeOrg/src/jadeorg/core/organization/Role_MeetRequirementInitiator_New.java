@@ -1,5 +1,6 @@
 package jadeorg.core.organization;
 
+import jade.core.AID;
 import jadeorg.proto.OuterReceiverState;
 import jadeorg.proto.OuterSenderState;
 import jadeorg.proto.Party;
@@ -32,6 +33,8 @@ public class Role_MeetRequirementInitiator_New extends Party {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private AID playerAID;
     
     private Object argument;
     
@@ -127,7 +130,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
             RequirementRequestMessage message = new RequirementRequestMessage();
             message.setRequirement(getParent().getBehaviourName());
             
-            send(message, getMyPower().getPlayerAID());
+            send(message, playerAID);
         }
 
         @Override
@@ -164,7 +167,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         @Override
         protected int onSingleReceiver() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
-            boolean messageReceived = receive(message, getMyPower().getPlayerAID());
+            boolean messageReceived = receive(message, playerAID);
             
             if (messageReceived) {
                 return InnerReceiverState.RECEIVED;
@@ -192,7 +195,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementArgument() {
-            super(NAME, getMyPower().getPlayerAID());
+            super(NAME, playerAID);
         }
         
         // </editor-fold>
@@ -218,7 +221,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
             ArgumentInformMessage message = new ArgumentInformMessage();
             message.setArgument(argument);
 
-            send(message, getMyPower().getPlayerAID());
+            send(message, playerAID);
         }
 
         @Override
@@ -240,7 +243,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementResult() {
-            super(NAME, getMyPower().getPlayerAID());
+            super(NAME, playerAID);
         }
         
         // </editor-fold>
@@ -255,7 +258,7 @@ public class Role_MeetRequirementInitiator_New extends Party {
         @Override
         protected int onSuccessReceiver() {
             ResultInformMessage message = new ResultInformMessage();
-            boolean messageReceived = receive(message, getMyPower().getPlayerAID());
+            boolean messageReceived = receive(message, playerAID);
 
             if (messageReceived) {
                 result = message.getResult();

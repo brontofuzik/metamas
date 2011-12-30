@@ -1,7 +1,6 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.OuterReceiverState;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;

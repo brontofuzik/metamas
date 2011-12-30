@@ -1,6 +1,5 @@
 package jadeorg.proto;
 
-import jadeorg.proto.Protocol;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.FSMBehaviour;

@@ -8,7 +8,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-11-11
  * @version %I% %G%
  */
-abstract class Requirement extends OneShotBehaviourState {
+public abstract class Requirement extends OneShotBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -28,7 +28,7 @@ abstract class Requirement extends OneShotBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    Object getArgument() {
+    protected Object getArgument() {
         return argument;
     }
     
@@ -41,9 +41,15 @@ abstract class Requirement extends OneShotBehaviourState {
         return result;
     }
     
-    Requirement setResult(Object result) {
+    protected Requirement setResult(Object result) {
         this.result = result;
         return this;
+    }
+    
+    // ----- PROTECTED -----
+    
+    protected Player getMyPlayer() {
+        return (Player)myAgent;
     }
     
     // </editor-fold>

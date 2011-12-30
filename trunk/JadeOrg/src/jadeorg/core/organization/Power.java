@@ -1,23 +1,22 @@
 package jadeorg.core.organization;
 
-import jade.core.AID;
-import jade.core.behaviours.FSMBehaviour;
-import jadeorg.proto_old.ActiveState;
-import jadeorg.proto_old.State;
+import jadeorg.proto.jadeextensions.FSMBehaviourState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.State;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A power (FSM) behaviour.
+ * A power (FSM) state.
  * @author Lukáš Kúdela
  * @since 2011-10-20
  * @version %I% %G%
  */
-public class Power extends FSMBehaviour {
+public class Power extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    //private AID playerAID;
     
     private Object argument;
     
@@ -34,6 +33,7 @@ public class Power extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Power(String name) {
+        super(name);
         // ----- Preconditions -----
         if (name == null) {
             throw new NullPointerException("name");
@@ -42,8 +42,7 @@ public class Power extends FSMBehaviour {
             throw new IllegalArgumentException("name");
         }
         // -------------------------
-        
-        setBehaviourName(name);        
+               
         registerStatesAndTransitions();
     }
     
@@ -53,7 +52,7 @@ public class Power extends FSMBehaviour {
         // ------------------
         
         // Register the states.
-        registerLastState(finalState, finalState.getName());
+        registerLastState(finalState);
         
         // register the transitions.
         // No transitions.
@@ -63,31 +62,40 @@ public class Power extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public String getName() {
-        return getBehaviourName();
+//    public AID getPlayerAID() {
+//        return playerAID;
+//    }
+//    
+//    public void setPlayerAID(AID playerAID) {
+//        // ----- Preconditions -----
+//        assert playerAID != null;
+//        // -------------------------
+//        
+//        this.playerAID = playerAID;
+//    }
+    
+    Object getArgument() {
+        return argument;
     }
     
-    public Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
-    public AID getPlayerAID() {
-        return playerAID;
-    }
-    
-    public void setPlayerAID(AID playerAID) {
-        // ----- Preconditions -----
-        assert playerAID != null;
-        
-        this.playerAID = playerAID;
-    }
-    
-    public void setArgument(Object argument) {        
+    Power setArgument(Object argument) {        
         this.argument = argument;
+        return this;
     }
     
-    public Object getResult() {
+    Object getResult() {
         return result;
+    }
+    
+    Power setResult(Object result) {
+        this.result = result;
+        return this;
+    }
+    
+    // ----- PROTECTED -----
+    
+    protected Role getMyRole() {
+        return (Role)myAgent;
     }
     
     // </editor-fold>
@@ -102,62 +110,61 @@ public class Power extends FSMBehaviour {
     }
     
     public void buildFSM() {
-        while (!states.isEmpty()) {
-            State state = states.remove(0);     
-            if (state == initialState) {
-                registerFirstState(state, state.getName());
-            } else {
-                registerState(state, state.getName());
-            }
-            // state ---[FAILURE]---> finalState
-            registerTransition(state.getName(), finalState.getName(), State.Event.FAILURE.getCode());
-            // state ---[FAILURE_LOOP]---> state
-            registerTransition(state.getName(), state.getName(), State.Event.LOOP.getCode());
-
-            if (!states.isEmpty()) {
-                // There is a next state.
-                State nextState = states.get(0);
-                
-                // REQUIREMENT
-                String requirement = state.getRequirement();                    
-                if (requirement != null) {
-                    // There is a requirement.
-                    Role_MeetRequirementInitiator requestRequirementState = new Role_MeetRequirementInitiator(requirement);  
-                    
-                    // Register the state.
-                    registerState(requestRequirementState, requestRequirementState.getName());
-                    
-                    // Register the transitions.
-                    // state ---[SUCCESS]---> requestRequirementState
-                    registerTransition(state.getName(), requestRequirementState.getName(), State.Event.SUCCESS.getCode());
-                    // requestRequirementState ---[SUCCES]---> nextState
-                    registerTransition(requestRequirementState.getName(), nextState.getName(), State.Event.SUCCESS.getCode());                 
-                    
-                    // EXCEPTION
-                    String exception = state.getException();
-                    if (exception != null) {
-                        ErrorHandler errorHandler = new ErrorHandler(requirement + "error-handler");
-                        
-                        // Register the state.     
-                        registerState(errorHandler, errorHandler.getName());
-                        
-                        // Register the transitions.
-                        // requestRequirementState ---[FAILURE]---> errorHandler
-                        registerTransition(requestRequirementState.getName(), errorHandler.getName(), State.Event.FAILURE.getCode());
-                        // errorHandler ---[SUCCESS]---> nextState
-                        registerTransition(errorHandler.getName(), nextState.getBehaviourName(), State.Event.SUCCESS.getCode());
-                        // errorHandler ---[FAILURE]---> finalState
-                        registerTransition(errorHandler.getName(), finalState.getName(), State.Event.FAILURE.getCode());  
-                    }
-                } else {
-                    // There is no requirement.
-                    registerTransition(state.getName(), nextState.getName(), State.Event.SUCCESS.getCode());    
-                }
-            } else {
-                // There is no next state. Therefore, this is the last state before the final state.
-                registerTransition(state.getName(), finalState.getName(), State.Event.SUCCESS.getCode());
-            }
-        } // while (!states.isEmpty())
+//        
+//        final int SUCCESS = 1;
+//        final int FAILURE = 2;
+//        
+//        while (!states.isEmpty()) {
+//            State state = states.remove(0);     
+//            if (state == initialState) {
+//                registerFirstState(state);
+//            } else {
+//                registerState(state);
+//            }
+//            
+//            state.registerTransition(FAILURE, finalState);
+//
+//            if (!states.isEmpty()) {
+//                // There is a next state.
+//                State nextState = states.get(0);
+//                
+//                // REQUIREMENT
+//                String requirement = state.getRequirement();                    
+//                if (requirement != null) {
+//                    // There is a requirement.
+//                    Role_MeetRequirementInitiator meetRequirementInitiator = new Role_MeetRequirementInitiator(requirement);  
+//                    
+//                    // Register the state.
+//                    registerState(meetRequirementInitiator);
+//                    
+//                    // Register the transitions.
+//                    state.registerTransition(SUCCESS, meetRequirementInitiator);
+//                    meetRequirementInitiator.registerTransition(SUCCESS, nextState);                 
+//                    
+//                    // EXCEPTION
+//                    String exception = state.getException();
+//                    if (exception != null) {
+//                        ErrorHandler errorHandler = new ErrorHandler(requirement + "error-handler");
+//                        
+//                        // Register the state.     
+//                        registerState(errorHandler);
+//                        
+//                        // Register the transitions.
+//                        meetRequirementInitiator.registerTransition(FAILURE, errorHandler.getName());
+//                        // errorHandler ---[SUCCESS]---> nextState
+//                        errorHandler.registerTransition(SUCCESS, nextState);
+//                        // errorHandler ---[FAILURE]---> finalState
+//                        errorHandler.registerTransition(FAILURE, finalState);  
+//                    }
+//                } else {
+//                    // There is no requirement.
+//                    state.registerTransition(SUCCESS, nextState);    
+//                }
+//            } else {
+//                // There is no next state. Therefore, this is the last state before the final state.
+//                state.registerTransition(SUCCESS, finalState);
+//            }
+//        } // while (!states.isEmpty())
     }
     
     @Override
@@ -180,7 +187,7 @@ public class Power extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class End extends ActiveState {
+    private class End extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         

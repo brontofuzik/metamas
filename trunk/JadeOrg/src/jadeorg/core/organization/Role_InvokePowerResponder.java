@@ -97,8 +97,7 @@ public class Role_InvokePowerResponder extends  Party {
     protected void invokePower(String powerName, AID playerAID, String arguments) {
         if (containsPower(powerName)) {
             currentPower = getPower(powerName);
-            currentPower.setPlayerAID(playerAID);
-            currentPower.setArgument(arguments);
+            reset();
         }
     }
     
