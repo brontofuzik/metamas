@@ -143,12 +143,12 @@ public class Role_MeetRequirementInitiator extends Party {
             MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
                     MeetRequirementProtocol.getInstance().getName(),
                     new int[] { ACLMessage.REQUEST },
-                    getMyPower().getPlayerAID());           
+                    null);           
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
             if (aclMessage != null) {
                 ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                 msg.setProtocol(MeetRequirementProtocol.getInstance().getName());
-                msg.addReceiver(getMyPower().getPlayerAID());
+                msg.addReceiver(null);
                 if (argument != null) {
                     try {
                         msg.setContentObject((Serializable)argument);
@@ -191,7 +191,7 @@ public class Role_MeetRequirementInitiator extends Party {
             MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
                     MeetRequirementProtocol.getInstance().getName(),
                     new int[] { ACLMessage.INFORM, ACLMessage.FAILURE },
-                    getMyPower().getPlayerAID());
+                    null);
             
             ACLMessage aclMessage = myAgent.receive(messageTemplate);
             if (aclMessage != null) {
