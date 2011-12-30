@@ -1,11 +1,14 @@
 package auctionjadehandwritten.players;
 
+import auctionjadehandwritten.players.requirements.ComputeFactorial_Requirement;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import jadeorg.core.player.PlayerException;
 import jadeorg.core.player.kb.RoleDescription;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -34,16 +37,38 @@ public class Participant_Player extends Player {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+    
+    int getTimeout() {
+        return new Integer((String)getArguments()[0]).intValue();
+    }
+    
+    List<RoleFullName> getRoles() {
+        List<RoleFullName> roles = new LinkedList<RoleFullName>();
+        for (int i = 1; i < getArguments().length; i++) {
+            roles.add(new RoleFullName((String)getArguments()[i]));
+        }
+        return roles;
+    }
+            
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
     protected void setup() {
         super.setup();
         
-        addBehaviour(new EnactRolesWakerBehaviour(this));
-        addBehaviour(new ActivateRoleWakerBehaviour(this));
-        addBehaviour(new DeactivateRoleWakerBehaviour(this));
-        addBehaviour(new DeactRolesWakerBehaviour(this));
+        // Add the requirements.
+        addRequirement(new ComputeFactorial_Requirement());
+        
+        int timeout = getTimeout();
+        
+        // Add the behaviours.        
+        addBehaviour(new EnactRolesWakerBehaviour(this, timeout));
+        addBehaviour(new ActivateRoleWakerBehaviour(this, timeout + 1000));
+        //addBehaviour(new DeactivateRoleWakerBehaviour(this));
+        //addBehaviour(new DeactRolesWakerBehaviour(this));
     }
     
     /**
@@ -106,46 +131,67 @@ public class Participant_Player extends Player {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        EnactRolesWakerBehaviour(Agent agent) {
-            super(agent, 2000);
+        EnactRolesWakerBehaviour(Agent agent, int timeout) {
+            super(agent, timeout);
         }
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        private Participant_Player getMyPlayer() {
+            return (Participant_Player)myAgent;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected void handleElapsedTimeout() {
-            for (Object argument : myAgent.getArguments()) {            
-                RoleFullName roleToEnact = new RoleFullName((String)argument);
+            for (RoleFullName role : getMyPlayer().getRoles()) {            
                 try {
-                    ((Player)myAgent).initiateEnactRole(roleToEnact.getOrganizationName(), roleToEnact.getRoleName());
+                    getMyPlayer().initiateEnactRole(role.getOrganizationName(), role.getRoleName());
                 } catch (PlayerException ex) {
-                    ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                    getMyPlayer().log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
             }
         }
         
+        // </editor-fold>
     }
     
     private static class ActivateRoleWakerBehaviour extends WakerBehaviour {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ActivateRoleWakerBehaviour(Agent agent) {
-            super(agent, 4000);
+        ActivateRoleWakerBehaviour(Agent agent, int timeout) {
+            super(agent, timeout);
         }
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        private Participant_Player getMyPlayer() {
+            return (Participant_Player)myAgent;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected void handleElapsedTimeout() {
-            RoleDescription roleToActivate = ((Player)myAgent).knowledgeBase.getEnactedRoles().iterator().next();
+            RoleDescription roleToActivate = getMyPlayer().knowledgeBase.getEnactedRoles().iterator().next();
             try {
-                ((Player)myAgent).initiateActivateRole(roleToActivate.getRoleName());
+                getMyPlayer().initiateActivateRole(roleToActivate.getRoleName());
             } catch (PlayerException ex) {
-                ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                getMyPlayer().log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
             }
         }
         
+        // </editor-fold>
     }
         
     private static class DeactivateRoleWakerBehaviour extends WakerBehaviour {
@@ -158,16 +204,27 @@ public class Participant_Player extends Player {
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        private Participant_Player getMyPlayer() {
+            return (Participant_Player)myAgent;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected void handleElapsedTimeout() {            
-            RoleDescription roleToDeactivate = ((Player)myAgent).knowledgeBase.getActiveRole();
+            RoleDescription roleToDeactivate = getMyPlayer().knowledgeBase.getActiveRole();
             try {
-                ((Player)myAgent).initiateDeactivateRole(roleToDeactivate.getRoleName());
+                getMyPlayer().initiateDeactivateRole(roleToDeactivate.getRoleName());
             } catch (PlayerException ex) {
-                ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                getMyPlayer().log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
             }
         }
         
+        // </editor-fold>
     }
             
     private static class DeactRolesWakerBehaviour extends WakerBehaviour {
@@ -180,18 +237,31 @@ public class Participant_Player extends Player {
         
         // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        private Participant_Player getMyPlayer() {
+            return (Participant_Player)myAgent;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected void handleElapsedTimeout() {
-            for (RoleDescription roleToDeact : ((Player)myAgent).knowledgeBase.getEnactedRoles()) {
+            for (RoleDescription roleToDeact : getMyPlayer().knowledgeBase.getEnactedRoles()) {
                 try {
-                    ((Player)myAgent).initiateDeactRole(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
+                    getMyPlayer().initiateDeactRole(roleToDeact.getOrganizationName(), roleToDeact.getRoleName());
                 } catch (PlayerException ex) {
-                    ((Player)myAgent).log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
+                    getMyPlayer().log(Level.SEVERE, String.format("Error: %1$s", ex.getMessage()));
                 }
             }
         }     
+        
+        // </editor-fold>
     }
     
+    // TODO Move this class to the JadeOrg project.
     private static class RoleFullName {
         
         /** The name of organization instance. */
