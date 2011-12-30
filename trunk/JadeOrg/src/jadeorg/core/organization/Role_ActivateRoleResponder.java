@@ -1,13 +1,14 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto_old.ActiveState;
 import jadeorg.proto.Party;
-import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
-import jadeorg.proto_old.State.Event;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Activate role' protocol responder party.
@@ -22,60 +23,64 @@ public class Role_ActivateRoleResponder extends Party {
     private static final String NAME = "activate-role-responder";
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     private AID playerAID;
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_ActivateRoleResponder(AID playerAID) {
+    Role_ActivateRoleResponder(String protocolId, AID playerAID) {
         super(NAME);
+        // ----- Preconditions -----
+        assert protocolId != null && !protocolId.isEmpty();
+        assert playerAID != null;
+        // -------------------------
+        
+        setProtocolId(protocolId);
         this.playerAID = playerAID;
-
+        
         registerStatesAndTransitions();
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 
     @Override
     public Protocol getProtocol() {
         return ActivateRoleProtocol.getInstance();
     }
+    
+    private Role getMyRole() {
+        return (Role)myAgent;
+    }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-//        // ----- States -----
-//        State receiveActivateRequest = new ReceiveActivateRequest();
-//        State sendActivateReply = new SendActivateReply();
-//        State sendFailure = new SendFailure();
-//        State successEnd = new SuccessEnd();
-//        State failureEnd = new FailureEnd();
-//        // ------------------
-//
-//        // Register states.
-//        registerFirstState(receiveActivateRequest);
-//        registerState(sendActivateReply);
-//        registerState(sendFailure);
-//        registerLastState(successEnd);
-//        registerLastState(failureEnd);
-//
-//        // Register transitions.
-//        receiveActivateRequest.registerTransition(Event.SUCCESS ,sendActivateReply);
-//        receiveActivateRequest.registerTransition(Event.FAILURE, sendFailure);
-//
-//        sendActivateReply.registerDefaultTransition(successEnd);
-//
-//        sendActivateReply.registerDefaultTransition(successEnd);
-//
-//        sendFailure.registerDefaultTransition(failureEnd);
+        // ----- States -----
+        State receiveActivateRequest = new ReceiveActivateRequest();
+        State sendActivateReply = new SendActivateReply();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
+        // ------------------
+
+        // Register states.
+        registerFirstState(receiveActivateRequest);
+        registerState(sendActivateReply);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
+
+        // Register transitions.
+        receiveActivateRequest.registerDefaultTransition(sendActivateReply);
+        
+        sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
+        sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
     }
 
     // </editor-fold>
@@ -83,14 +88,15 @@ public class Role_ActivateRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
     /**
-     * The 'Receive activate request' (passive) state.
+     * The 'Receive activate request' (single receiver) state.
+     * A state in which the 'Activate request' message is received.
      */
-    private class ReceiveActivateRequest extends PassiveState {
+    private class ReceiveActivateRequest extends SingleReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
         private static final String NAME = "receive-activate-request";
-
+        
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -104,42 +110,38 @@ public class Role_ActivateRoleResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-            ((Role)myAgent).logInfo("Receiving activate request.");
-
-            ActivateRequestMessage activateRequestMessage = (ActivateRequestMessage)
-                receive(ActivateRequestMessage.class, playerAID);
-
-            if (activateRequestMessage != null) {
-                ((Role)myAgent).logInfo("Activate request received.");
-
-                if (isActivable()) {
-                    ((Role)myAgent).state = Role.RoleState.ACTIVE;
-                    setExitValue(Event.SUCCESS);
-                } else {
-                    setExitValue(Event.FAILURE);
-                }
+        protected void onEntry() {
+            getMyRole().logInfo("Receiving activate request.");
+        }
+        
+        @Override
+        protected int onSingleReceiver() {
+            ActivateRequestMessage message = new ActivateRequestMessage();
+            boolean messageReceived = receive(message, playerAID);
+                
+            if (messageReceived) {
+                return InnerReceiverState.RECEIVED;
             } else {
-                loop();
+                return InnerReceiverState.NOT_RECEIVED;
             }
         }
 
-        // ---------- PRIVATE ----------
-
-        private boolean isActivable() {
-            return ((Role)myAgent).state == Role.RoleState.INACTIVE;
+        @Override
+        protected void onExit() {
+            getMyRole().logInfo("Activate request received.");
         }
 
         // </editor-fold>
     }
 
     /**
-     * The 'Send activate reply' (active) state.
+     * The 'Send activate reply' (multi sender) state.
+     * A state in which the 'Activate reply' message is sent.
      */
-    private class SendActivateReply extends ActiveState {
+    private class SendActivateReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
+        
         private static final String NAME = "send-activate-reply";
 
         // </editor-fold>
@@ -147,72 +149,45 @@ public class Role_ActivateRoleResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendActivateReply() {
-            super(NAME);
+            super(NAME, playerAID);
         }
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-//            ((Role)myAgent).logInfo("Sending activate reply.");
-//
-//            // Create the 'Activate reply' JadeOrg message.
-//            AgreeMessage activateReplyMessage = new AgreeMessage();
-//            activateReplyMessage.addReceiver(playerAID);
-//
-//            // Send the message.
-//            send(AgreeMessage.class, activateReplyMessage);
-//            
-//            ((Role)myAgent).logInfo("Activate reply sent");
+        protected void onEntry() {
+            getMyRole().logInfo("Sending activate reply.");
         }
 
+        @Override
+        protected int onManager() {
+            if (getMyRole().isActivable()) {            
+                return SendAgreeOrRefuse.AGREE;
+            } else {
+                return SendAgreeOrRefuse.REFUSE;
+            }
+        }
+        
+        @Override
+        protected void onAgree() {
+            getMyRole().activate();
+        }
+
+        @Override
+        protected void onExit() {
+            getMyRole().logInfo("Activate reply sent.");
+        }
+        
         // </editor-fold>
     }
 
     /**
-     * The 'Send failure' (active) state.
+     * The 'Success end' (simple) state.
+     * A state in which the 'Activate role' protocol responder party secceeds.
      */
-    private class SendFailure extends ActiveState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-failure";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendFailure() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        public void action() {
-//            ((Role)myAgent).logInfo("Sending failure.");
-//
-//            // Create the 'Failure' message.
-//            FailureMessage failureMessage = new FailureMessage();
-//            failureMessage.addReceiver(playerAID);
-//
-//            // Send the message.
-//            send(FailureMessage.class, failureMessage);
-//            
-//            ((Role)myAgent).logInfo("Failure sent.");
-        }
-
-        // </editor-fold>
-    }
-
-    /**
-     * The 'Success end' (active) state.
-     */
-    private class SuccessEnd extends ActiveState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -232,16 +207,17 @@ public class Role_ActivateRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Role)myAgent).logInfo("Activate role initiator protocol succeeded.");
+            getMyRole().logInfo("Activate role responder party succeeded.");
         }
 
         // </editor-fold>
     }
 
     /**
-     * The 'Failure end' (active) state.
+     * The 'Failure end' (simple) state.
+     * A state in which the 'Activate role' protocol responder party fails.
      */
-    private class FailureEnd extends ActiveState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -261,7 +237,7 @@ public class Role_ActivateRoleResponder extends Party {
 
         @Override
         public void action() {
-            ((Role)myAgent).logInfo("Activate role initiator protocol failed.");
+            getMyRole().logInfo("Activate role responder party failed.");
         }
 
         // </editor-fold>

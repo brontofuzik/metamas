@@ -57,7 +57,7 @@ public abstract class Organization extends Agent {
     public void respondToEnactRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Enact role' protocol.");
         
-        addBehaviour(new Organization_EnactRoleResponder_New(protocolId, playerAID));
+        addBehaviour(new Organization_EnactRoleResponder(protocolId, playerAID));
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class Organization extends Agent {
     public void respondToDeactRole(String protocolId, AID playerAID) {
         logInfo("Responding to the 'Deact role' protocol.");
         
-        addBehaviour(new Organization_DeactRoleResponder_New(protocolId, playerAID));
+        addBehaviour(new Organization_DeactRoleResponder(protocolId, playerAID));
     }
     
     // ----- Logging -----

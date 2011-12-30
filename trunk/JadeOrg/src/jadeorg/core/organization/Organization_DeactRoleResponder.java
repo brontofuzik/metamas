@@ -1,17 +1,19 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto_old.ActiveState;
 import jadeorg.proto.Party;
-import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
+import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * A 'Deact role' protocol responder party.
+ * A 'Deact role' protocol responder party (new version).
  * @author Lukáš Kúdela
- * @since 2011-12-09
+ * @since 2011-12-21
  * @version %I% %G%
  */
 public class Organization_DeactRoleResponder extends Party {
@@ -26,25 +28,25 @@ public class Organization_DeactRoleResponder extends Party {
 
     private String roleName;
 
-    private AID player;
+    private AID playerAID;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Organization_DeactRoleResponder(String roleName, AID player) {
+    public Organization_DeactRoleResponder(String protocolId, AID playerAID) {
         super(NAME);
         // ----- Preconditions -----
-        assert !roleName.isEmpty();
-        assert player != null;
+        assert protocolId != null && !protocolId.isEmpty();
+        assert playerAID != null;
         // -------------------------
 
-        this.roleName = roleName;
-        this.player = player;
+        setProtocolId(protocolId);
+        this.playerAID = playerAID;
 
         registerStatesAndTransitions();
     }
-
+    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -53,50 +55,48 @@ public class Organization_DeactRoleResponder extends Party {
     public Protocol getProtocol() {
         return DeactRoleProtocol.getInstance();
     }
+    
+    // ----- PRIVATE -----
+    
+    private Organization getMyOrganization() {
+        return (Organization)myAgent;
+    }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
      * Registers the transitions and transitions.
      */
     private void registerStatesAndTransitions() {
-//        State receiveDeactRequest = new ReceiveDeactRequest();
-//        State sendDeactInformation = new SendDeactInformation();
-//        State sendDeactFailure = new SendDeactFailure();
-//        State end = new End();
-//
-//        // Register the states.
-//        registerFirstState(receiveDeactRequest);
-//        registerState(sendDeactInformation);
-//        registerState(sendDeactFailure);
-//        registerLastState(end);
-//
-//        // Register the transisions (OLD).
-//        registerTransition(receiveDeactRequest, sendDeactInformation, PassiveState.Event.SUCCESS);
-//        registerTransition(receiveDeactRequest, sendDeactFailure, PassiveState.Event.FAILURE);
-//
-//        registerDefaultTransition(sendDeactInformation, end);
-//
-//        registerDefaultTransition(sendDeactFailure, end);
-//
-////            // Register the transisions (NEW).
-////            receiveDeactRequest.registerTransition(PassiveState.Event.SUCCESS, sendDeactInformation);
-////            receiveDeactRequest.registerTransition(PassiveState.Event.FAILURE, sendDeactFailure);
-////            
-////            sendDeactInformation.registerDefaultTransition(end);
-////            
-////            sendDeactFailure.registerDefaultTransition(end);
+        State receiveDeactRequest = new ReceiveDeactRequest();
+        State sendDeactReply = new SendDeactReply();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
+
+        // Register the states.
+        registerFirstState(receiveDeactRequest);
+        registerState(sendDeactReply);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
+        
+        // Register the transisions.
+        receiveDeactRequest.registerDefaultTransition(sendDeactReply);
+
+        sendDeactReply.registerTransition(SendAgreeOrRefuse.AGREE, successEnd);
+        sendDeactReply.registerTransition(SendAgreeOrRefuse.REFUSE, failureEnd);
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
     /**
-     * The 'Receive deact request' active state.
+     * The 'Receive deact request' (single receiver) state.
+     * A state in which the 'Deact request' message is received.
      */
-    class ReceiveDeactRequest extends PassiveState {
+    private class ReceiveDeactRequest extends SingleReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -111,125 +111,151 @@ public class Organization_DeactRoleResponder extends Party {
         }
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
-        public void action() {
-            ((Organization)myAgent).logInfo("Receiving deact request.");
-
-            DeactRequestMessage deactRequestMessage = (DeactRequestMessage)
-                receive(DeactRequestMessage.class, null);
-            if (deactRequestMessage != null) {
-                roleName = deactRequestMessage.getRoleName();
-
-                if (((Organization)myAgent).roles.containsKey(roleName)) {
-                    // The role is defined for this organization.
-                    if (((Organization)myAgent).knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
-                        // The is enacted by the player.
-                    } else {
-                        // The role is not enacted by the player.
-                    }
-                } else {
-                    // The role is not defined for this organization.
-                }
+        protected void onEntry() {
+            getMyOrganization().logInfo("Receiving deact request.");
+        }
+        
+        @Override
+        protected int onSingleReceiver() {
+            DeactRequestMessage message = new DeactRequestMessage();
+            boolean messageReceived = receive(message, playerAID);
+            
+            if (messageReceived) {
+                roleName = message.getRoleName();
+                return InnerReceiverState.RECEIVED;
             } else {
-                loop();
+                return InnerReceiverState.NOT_RECEIVED;
             }
         }
-
+        
+        @Override
+        protected void onExit() {
+            getMyOrganization().logInfo("Deact request received.");
+        }
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Send deact information' active state.
+     * The 'Send deact reply' (multi sender) state.
+     * A state in which the 'Enact reply' message is sent.
      */
-    class SendDeactInformation extends ActiveState {
+    private class SendDeactReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-deact-information";
-
+        
+        private static final String NAME = "send-deact-reply";
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendDeactInformation() {
-            super(NAME);
+        
+        SendDeactReply() {
+            super(NAME, playerAID);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyOrganization().logInfo("Sending deact reply.");
+        }
+        
+        @Override
+        protected int onManager() {
+            if (getMyOrganization().roles.containsKey(roleName)) {
+                // The role is defined for this organization.
+                if (getMyOrganization().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
+                    // The is enacted by the player.
+                    return SendAgreeOrRefuse.AGREE;
+                } else {
+                    // The role is not enacted by the player.
+                    return SendAgreeOrRefuse.REFUSE;
+                }
+            } else {
+                // The role is not defined for this organization.
+                return SendAgreeOrRefuse.REFUSE;
+            }
+        }
+        
+        @Override
+        protected void onAgree() {
+            getMyOrganization().knowledgeBase.updateRoleIsDeacted(roleName, playerAID);
+        }
 
         @Override
-        public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+        protected void onExit() {
+            getMyOrganization().logInfo("Deact reply sent.");
         }
-
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Send deact failure' active state.
+     * The 'Success end' (simple) state.
+     * A state in which the 'Deact role' responder party succeedes.
      */
-    class SendDeactFailure extends ActiveState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-deact-failure";
-
+        
+        private static final String NAME = "success-end";
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendDeactFailure() {
+        
+        SuccessEnd() {
             super(NAME);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         public void action() {
-//            // Create the 'Failure' message.
-//            FailureMessage failureMessage = new FailureMessage();
-//            failureMessage.setReceiverPlayer(player);
-//
-//            send(FailureMessage.class, failureMessage);
+            getMyOrganization().logInfo("Deact role responder party succeeded.");
         }
-
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'End' active state.
+     * The 'Failure end' (simple) state.
+     * A state in which the 'Deact role' responder party fails.
      */
-    class End extends ActiveState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "end";
-
+        
+        private static final String NAME = "failure-end";
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        End() {
+        
+        FailureEnd() {
             super(NAME);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         public void action() {
+            getMyOrganization().logInfo("Deact role responder party failed.");
         }
-
+        
         // </editor-fold>
     }
-
-    // </editor-fold>    
+    
+    // </editor-fold>
 }

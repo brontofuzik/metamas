@@ -1,18 +1,19 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-import jadeorg.lang.SimpleMessage;
-import jadeorg.proto_old.ActiveState;
 import jadeorg.proto.Party;
-import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.ReceiveAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * A 'Deact role' protocol initiator party.
+ * A 'Deact role' protocol initiator party (new version).
  * @author Lukáš Kúdela
- * @since 2011-12-09
+ * @since 2011-12-21
  * @version %I% %G%
  */
 public class Player_DeactRoleInitiator extends Party {
@@ -42,6 +43,7 @@ public class Player_DeactRoleInitiator extends Party {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
+        setProtocolId(new Integer(hashCode()).toString());
         this.organizationAID = organization;
         this.roleName = roleName;
 
@@ -49,50 +51,54 @@ public class Player_DeactRoleInitiator extends Party {
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
     @Override
     public Protocol getProtocol() {
         return DeactRoleProtocol.getInstance();
     }
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-
-    private void registerStatesAndTransitions() {
-//        // ----- States -----
-//        State sendDeactRequest = new SendDeactRequest();
-//        State receiveDeactReply = new ReceiveDeactReply();
-//        State end = new End();
-//        // ------------------
-//
-//        // Register the states.
-//        registerFirstState(sendDeactRequest);
-//        registerState(receiveDeactReply);
-//        registerLastState(end);
-//
-//        // Register the transitions (OLD).
-//        registerDefaultTransition(sendDeactRequest, receiveDeactReply);
-//
-//        registerDefaultTransition(receiveDeactReply, end);
-//
-//            // Register the transitions (NEW).
-//            sendDeactRequest.registerDefaultTransition(receiveDeactReply);
-//            
-//            receiveDeactReply.registerDefaultTransition(successEnd);
+    
+    // ----- PRIVATE -----
+    
+    private Player getMyPlayer() {
+        return (Player)myAgent;
     }
 
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    private void registerStatesAndTransitions() {
+        // ----- States -----
+        State sendDeactRequest = new SendDeactRequest();
+        State receiveDeactReply = new ReceiveDeactReply();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
+        // ------------------
 
+        // Register the states.
+        registerFirstState(sendDeactRequest);
+        registerState(receiveDeactReply);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
+        
+        // Register the transitions (NEW).
+        sendDeactRequest.registerDefaultTransition(receiveDeactReply);
+            
+        receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, successEnd);
+        receiveDeactReply.registerTransition(ReceiveDeactReply.REFUSE, failureEnd);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Classes">
-
+    
     /**
-     * The 'Send deact request' active state.
-     * A state in which the 'Deact request' requirementsInformMessage is send.
+     * The 'Send deact request' (single sender) state.
+     * A state in which the 'Deact request' message is sent.
      */
-    private class SendDeactRequest extends ActiveState {
+    private class SendDeactRequest extends SingleSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -107,26 +113,35 @@ public class Player_DeactRoleInitiator extends Party {
         }
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-//            DeactRequestMessage message = new DeactRequestMessage();
-//            message.setReceiverOrganization(organizationAID);
-//            message.setRoleName(roleName);
-//
-//            send(DeactRequestMessage.class, message);
+        protected void onEntry() {
+            getMyPlayer().logInfo("Sending deact request.");
+        }
+        
+        @Override
+        protected void onSingleSender() {
+            DeactRequestMessage message = new DeactRequestMessage();
+            message.setRoleName(roleName);
+
+            send(message, organizationAID);
         }
 
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Deact request sent.");
+        }
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Receive deact reply' passive state.
-     * A state in which the 'Deact reply' requirementsInformMessage is send.
+     * The 'Receive deact reply' (multi receiver) state.
+     * A state in which the 'Deact reply' message is received.
      */
-    private class ReceiveDeactReply extends PassiveState {
+    private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -137,64 +152,90 @@ public class Player_DeactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveDeactReply() {
-            super(NAME);
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyPlayer().logInfo("Receiving deact reply.");
+        }
+        
+        @Override
+        protected void onAgree() {
+            getMyPlayer().knowledgeBase.deactRole(roleName);
+        }
 
         @Override
-        public void action() {
-            SimpleMessage aclMessageWrapper = (SimpleMessage)receive(SimpleMessage.class, organizationAID);            
-            if (aclMessageWrapper != null) {
-                if (aclMessageWrapper.getPerformative() == ACLMessage.AGREE) {
-                    // The request was agreed.
-                    ((Player)myAgent).knowledgeBase.deactRole(roleName);
-                } else if (aclMessageWrapper.getPerformative() == ACLMessage.REFUSE) {
-                    // The request was refused.
-                } else {
-                    // TODO Send not understood.
-                    assert false;
-                }
-            } else {
-                block();
-            }
+        protected void onExit() {
+            getMyPlayer().logInfo("Deact reply received.");
         }
-
+        
         // </editor-fold>
     }
-
+    
     /**
-     * The 'SuccessEnd' active state.
-     * A state in which the 'Deact' initiator party ends.
+     * The 'Success end' (simple) state.
+     * A state in which the 'Deact role' initiator party succeedes.
      */
-    private class End extends ActiveState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "end";
-
+        
+        private static final String NAME = "success-end";
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        End() {
+        
+        SuccessEnd() {
             super(NAME);
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         public void action() {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyPlayer().logInfo("Deact role initiator party succeeded.");
         }
-
+        
         // </editor-fold>
     }
+    
+    /**
+     * The 'Failure end' (simple) state.
+     * A state in which the 'Deact role' initiator party fails.
+     */
+    private class FailureEnd extends OneShotBehaviourState {
 
-    // </editor-fold>    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "failure-end";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        FailureEnd() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            getMyPlayer().logInfo("Deact role initiator party failed.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    // </editor-fold>
 }
