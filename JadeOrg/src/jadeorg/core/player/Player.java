@@ -20,7 +20,7 @@ public abstract class Player extends Agent {
     public PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     /** The 'Meet requirement' responder party behaviour. */
-    private Player_MeetRequirementResponder_New meetRequirementResponder = new Player_MeetRequirementResponder_New();
+    private Player_MeetRequirementResponder meetRequirementResponder = new Player_MeetRequirementResponder();
     
     /** The logger. */
     private Logger logger;
@@ -47,7 +47,7 @@ public abstract class Player extends Agent {
         AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
         if (organizationAID != null) {
             // The organization exists.
-            addBehaviour(new Player_EnactRoleInitiator_New(organizationAID, roleName));
+            addBehaviour(new Player_EnactRoleInitiator(organizationAID, roleName));
         } else {
             // The organization does not exist.
             String message = String.format("Error enacting a role. The organization '%1$s' does not exist.", organizationName);
@@ -65,7 +65,7 @@ public abstract class Player extends Agent {
         AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
         if (organizationAID != null) {
             // The organizaiton exists.
-            addBehaviour(new Player_DeactRoleInitiator_New(organizationAID, roleName));
+            addBehaviour(new Player_DeactRoleInitiator(organizationAID, roleName));
         } else {
             // The organization does not exist.
             String message = String.format("Error deacting a role. The organization '%1$s' does not exist.", organizationName);
@@ -80,7 +80,7 @@ public abstract class Player extends Agent {
         if (knowledgeBase.canActivateRole(roleName)) {
             // The role can be activated.
             AID roleAID = knowledgeBase.getEnactedRole(roleName).getRoleAID();
-            addBehaviour(new Player_ActivateRoleInitiator_New(roleName, roleAID));
+            addBehaviour(new Player_ActivateRoleInitiator(roleName, roleAID));
         } else {
             // The role can not be activated.
             String message = String.format("Error activating the role '%1$s'. It is not enacted.", roleName);
@@ -93,7 +93,7 @@ public abstract class Player extends Agent {
         
         if (knowledgeBase.canDeactivateRole(roleName)) {
             // The role can be deactivated.
-            addBehaviour(new Player_DeactivateRoleInitiator_New(roleName, knowledgeBase.getEnactedRole(roleName).getRoleAID()));
+            addBehaviour(new Player_DeactivateRoleInitiator(roleName, knowledgeBase.getEnactedRole(roleName).getRoleAID()));
         } else {
             // The role can not be deactivated.
             String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.", roleName);

@@ -8,11 +8,11 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-11-13
  * @version %I% %G%
  */
-class ErrorHandler extends OneShotBehaviourState {
+class zzzErrorHandler extends OneShotBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-    ErrorHandler(String name) {
+    zzzErrorHandler(String name) {
         super(name);
     }
     

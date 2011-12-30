@@ -19,11 +19,11 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokePowerInitiator_New extends Party {
+public class Player_InvokePowerInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "invoke-power-initiator-new";
+    private static final String NAME = "invoke-power-initiator";
     
     // </editor-fold>
     
@@ -39,7 +39,7 @@ public class Player_InvokePowerInitiator_New extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_InvokePowerInitiator_New(String powerName, Object powerArgument) {
+    Player_InvokePowerInitiator(String powerName, Object powerArgument) {
         super(NAME);
         
         setProtocolId(new Integer(hashCode()).toString());

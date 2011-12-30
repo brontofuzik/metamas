@@ -174,12 +174,12 @@ public class Power extends FSMBehaviourState {
     }
     
     public void setRequirementArgument(String requirementName, Object argument) {
-        Role_MeetRequirementInitiator_New requirementState = (Role_MeetRequirementInitiator_New)getState(requirementName);
+        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
         requirementState.setArgument(argument);
     }
     
     public Object getRequirementResult(String requirementName) {
-        Role_MeetRequirementInitiator_New requirementState = (Role_MeetRequirementInitiator_New)getState(requirementName);
+        Role_MeetRequirementInitiator requirementState = (Role_MeetRequirementInitiator)getState(requirementName);
         return requirementState.getResult();
     }
     

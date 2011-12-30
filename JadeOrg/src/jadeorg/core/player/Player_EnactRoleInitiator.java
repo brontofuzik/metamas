@@ -1,42 +1,47 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto_old.ActiveState;
 import jadeorg.proto.Party;
-import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
-import jadeorg.proto_old.State;
+import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.SendAgreeOrRefuse;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * An 'Enact role' protocol initiator party. 
+ * An 'Enact role' protocol initiator party.
  * @author Lukáš Kúdela
- * @since 2011-12-09
+ * @since 2011-12-11
  * @version %I% %G%
  */
 class Player_EnactRoleInitiator extends Party {
-    
+
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-    private static final String NAME = "enact-protocol-initiator";
-
+    
+    private static final String NAME = "enact-role-initiator";
+    
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
-
+    
     /** The organization AID. */
     private AID organizationAID;
 
     /** The role name */
     private String roleName;
+    
+    private String[] requirements;
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
+    
     Player_EnactRoleInitiator(AID organization, String roleName) {
         super(NAME);
         // ----- Preconditions -----
@@ -44,79 +49,69 @@ class Player_EnactRoleInitiator extends Party {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
+        setProtocolId(new Integer(hashCode()).toString());
         this.organizationAID = organization;
         this.roleName = roleName;
 
         registerStatesAndTransitions();
     }
-
+    
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-
+    
     @Override
     public Protocol getProtocol() {
         return EnactRoleProtocol.getInstance();
     }
-
+    
+    private Player getMyPlayer() {
+        return (Player)myAgent;
+    }
+    
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndTransitions() {
-//        // ----- States -----
-//        State sendEnactRequest = new SendEnactRequest();
-//        State receiveRequirementsInform = new ReceiveRequirementsInform();
-//        State sendRequirementsReply = new SendRequirementsReply();
-//        State sendFailure = new SendFailure();
-//        State receiveRoleAID = new ReceiveRoleAID();
-//        State successEnd = new SuccessEnd();
-//        State failureEnd = new FailureEnd();
-//        // ------------------
-//
-//        // Register the states.
-//        registerFirstState(sendEnactRequest);
-//        registerState(receiveRequirementsInform);
-//        registerState(sendRequirementsReply);
-//        registerState(sendFailure);
-//        registerState(receiveRoleAID);
-//        registerLastState(successEnd);
-//        registerLastState(failureEnd);
-//
-//        // Register the transitions (OLD).
-//        registerDefaultTransition(sendEnactRequest, receiveRequirementsInform);
-//
-//        registerTransition(receiveRequirementsInform, sendRequirementsReply, PassiveState.Event.SUCCESS);
-//        registerTransition(receiveRequirementsInform, sendFailure, PassiveState.Event.FAILURE);
-//
-//        registerDefaultTransition(sendRequirementsReply, receiveRoleAID);
-//
-//        registerDefaultTransition(sendFailure, failureEnd);
-//
-//        registerDefaultTransition(receiveRoleAID, successEnd);
-//
-////            // Register the transitions (NEW).
-////            sendEnactRequest.registerDefaultTransition(receiveRequirementsInfo);
-////            
-////            receiveRequirementsInfo.registerTransition(PassiveState.Event.SUCCESS, sendAgree);
-////            receiveRequirementsInfo.registerTransition(PassiveState.Event.FAILURE, sendRefuse);
-////            
-////            sendAgree.registerDefaultTransition(receiveRoleAID);
-////            
-////            sendRefuse.registerDefaultTransition(failureEnd);
-////            
-////            receiveRoleAID.registerDefaultTransition(successEnd);
+        // ----- States -----
+        State sendEnactRequest = new SendEnactRequest();
+        State receiveRequirementsInform = new ReceiveRequirementsInform();
+        State sendRequirementsReply = new SendRequirementsReply();
+        State receiveRoleAID = new ReceiveRoleAID();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
+        // ------------------
+
+        // Register the states.
+        registerFirstState(sendEnactRequest);
+        registerState(receiveRequirementsInform);
+        registerState(sendRequirementsReply);
+        registerState(receiveRoleAID);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
+
+        // Register the transitions (NEW).
+        sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
+
+        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.SUCCESS, sendRequirementsReply);
+        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.FAILURE, failureEnd);
+        
+        sendRequirementsReply.registerTransition(SendRequirementsReply.AGREE, receiveRoleAID);
+        sendRequirementsReply.registerTransition(SendRequirementsReply.REFUSE, failureEnd);
+
+        receiveRoleAID.registerDefaultTransition(successEnd);
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Classes">
-
+    
     /**
      * The 'Send enact request' active state.
      * A state in which the 'Enact' request is sent.
      */
-    private class SendEnactRequest extends ActiveState {
+    private class SendEnactRequest extends SingleSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -135,27 +130,36 @@ class Player_EnactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-//            ((Player)myAgent).logInfo("Sending enact request.");
-//            EnactRequestMessage message = new EnactRequestMessage();
-//            message.setReceiverOrganization(organizationAID);
-//            message.setRoleName(roleName);
-//
-//            send(EnactRequestMessage.class, message);
-//            ((Player)myAgent).logInfo("Enact request sent.");
+        protected void onEntry() {
+            getMyPlayer().logInfo("Sending enact request.");
+        }
+        
+        @Override
+        protected void onSingleSender() {
+            // Create the 'Enact request' message.
+            EnactRequestMessage message = new EnactRequestMessage();
+            message.setRoleName(roleName);
+
+            // Send the message.
+            send(message, organizationAID);
+        }
+        
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Enact request sent.");
         }
 
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Receive requirements info' passive state.
+     * The 'Receive requirements info' (multi receiver) state.
      * A state in which the 'Requirements' info is received.
      */
-    private class ReceiveRequirementsInform extends PassiveState {
+    private class ReceiveRequirementsInform extends ReceiveSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
+        
         private static final String NAME = "receive-requirements-inform";
 
         // </editor-fold>
@@ -163,44 +167,48 @@ class Player_EnactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveRequirementsInform() {
-            super(NAME);
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyPlayer().logInfo("Receiving requirements info.");
+        }
+        
+        @Override
+        protected int onSuccessReceiver() {
+            // Receive the 'Requirements inform' message.
+            RequirementsInformMessage message = new RequirementsInformMessage();
+            boolean messageReceived = receive(message, organizationAID);
+
+            // Process the message.
+            if (messageReceived) {
+                System.out.println("----- RECEIVED -----");
+                requirements = message.getRequirements();
+                return InnerReceiverState.RECEIVED;
+            } else {
+                System.out.println("----- NOT-RECEIVED -----");
+                return InnerReceiverState.NOT_RECEIVED;
+            }
+        }
 
         @Override
-        public void action() {
-            ((Player)myAgent).logInfo("Receiving requirements info.");
-
-            // TODO A 'Refuse' (ACL) message can be received as well.
-            RequirementsInformMessage requirementsInformMessage = (RequirementsInformMessage)
-                receive(RequirementsInformMessage.class, organizationAID);
-
-            if (requirementsInformMessage != null) {
-                ((Player)myAgent).logInfo("Requirements info received.");
-
-                if (((Player)myAgent).evaluateRequirements(requirementsInformMessage.getRequirements())) {
-                    // The player meets the requirements.
-                    setExitValue(Event.SUCCESS);
-                } else {
-                    // The player does not meet the requirements.
-                    setExitValue(Event.FAILURE);
-                }
-            } else {
-                loop();
-            }
+        protected void onExit() {
+            getMyPlayer().logInfo("Requirements info received.");
         }
 
         // </editor-fold>
     }
-
+    
     /**
-     * The 'Send agree' active state.
-     * A state in which the 'Agree' requirementsInformMessage is send.
+     * The 'Send requirements reply' (multi sender) state.
+     * A state in which the 'Agree' or 'Refuse' message is sent.
      */
-    private class SendRequirementsReply extends ActiveState {
+    private class SendRequirementsReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -211,7 +219,7 @@ class Player_EnactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementsReply() {
-            super(NAME);
+            super(NAME, organizationAID);
         }
 
         // </editor-fold>
@@ -219,62 +227,34 @@ class Player_EnactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-//            ((Player)myAgent).logInfo("Sending requirements reply.");
-//
-//            // Create the 'Requirements reply' JadeOrg message.
-//            AgreeMessage requirementsReplyMessage = new AgreeMessage();
-//            requirementsReplyMessage.addReceiver(organizationAID);
-//
-//            // Send the message.
-//            send(AgreeMessage.class, requirementsReplyMessage);
-//
-//            ((Player)myAgent).logInfo("Requirements reply sent.");
+        protected void onEntry() {
+            getMyPlayer().logInfo("Sending requirements reply.");
         }
-
-        // </editor-fold>
-    }
-
-    /**
-     * The 'Send failure' active state,
-     * A state in which the 'Refuse' requirementsInformMessage is send.
-     */
-    private class SendFailure extends ActiveState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-failure";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendFailure() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
-        public void action() {
-//            // Create the 'Failure' message.
-//            FailureMessage failureMessage = new FailureMessage();
-//            failureMessage.addReceiver(organizationAID);
-//
-//            // Send the message.
-//            send(FailureMessage.class, failureMessage);
+        protected int onManager() {
+            if (getMyPlayer().evaluateRequirements(requirements)) {
+                // The player meets the requirements.
+                return AGREE;
+            } else {
+                // The player does not meet the requirements.
+                return REFUSE;
+            }
+        }
+        
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Requirements reply sent.");
         }
 
         // </editor-fold>
     }
-
+    
     /**
      * The 'Receive role AID' passive state.
      * A state in which the 'Role AID' requirementsInformMessage is received.
      */
-    private class ReceiveRoleAID extends PassiveState {
+    private class ReceiveRoleAID extends SingleReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -293,31 +273,37 @@ class Player_EnactRoleInitiator extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-            ((Player)myAgent).logInfo("Receiving role AID.");
-
-            RoleAIDMessage roleAIDMessage = (RoleAIDMessage)
-                receive(RoleAIDMessage.class, organizationAID);
-
-            if (roleAIDMessage != null) {
-                ((Player)myAgent).logInfo("Role AID received.");
-
-                AID roleAID = roleAIDMessage.getRoleAID();
-                ((Player)myAgent).knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
-                setExitValue(Event.SUCCESS);
+        protected void onEntry() {
+            getMyPlayer().logInfo("Receiving role AID.");
+        }
+        
+        @Override
+        protected int onSingleReceiver() {
+            RoleAIDMessage message = new RoleAIDMessage();
+            boolean messageReceived = receive(message, organizationAID);      
+            
+            if (messageReceived) {
+                AID roleAID = message.getRoleAID();
+                getMyPlayer().knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
+                return InnerReceiverState.RECEIVED;
             } else {
-                block();
+                return InnerReceiverState.NOT_RECEIVED;
             }
+        }
+
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Role AID received.");
         }
 
         // </editor-fold>
     }
-
+    
     /**
      * The 'SuccessEnd successEnd' state.
      * A state in which the 'Enact' protocol initiator party ends.
      */
-    private class SuccessEnd extends ActiveState {
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -337,7 +323,7 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Enact role initiator party succeeded.");
+            getMyPlayer().logInfo("Enact role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -347,7 +333,7 @@ class Player_EnactRoleInitiator extends Party {
      * The 'Fail successEnd' state.
      * A state in which the 'Enact' protocol initiator party ends.
      */
-    private class FailureEnd extends ActiveState {
+    private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -367,11 +353,11 @@ class Player_EnactRoleInitiator extends Party {
 
         @Override
         public void action() {
-            ((Player)myAgent).logInfo("Enact role initiator party failed.");
+            getMyPlayer().logInfo("Enact role initiator party failed.");
         }
 
         // </editor-fold>
     }
-
+    
     // </editor-fold>
 }

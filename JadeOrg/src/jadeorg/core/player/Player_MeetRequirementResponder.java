@@ -1,21 +1,25 @@
 package jadeorg.core.player;
 
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import jadeorg.proto_old.ActiveState;
+import jade.core.AID;
 import jadeorg.proto.Party;
-import jadeorg.proto_old.PassiveState;
 import jadeorg.proto.Protocol;
-import jadeorg.proto_old.State;
-import jadeorg.util.MessageTemplateBuilder;
+import jadeorg.proto.ReceiveSuccessOrFailure;
+import jadeorg.proto.SendSuccessOrFailure;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.State;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentInformMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.ResultInformMessage;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * A 'Meet requirement responder' (FSM) behaviour.
+ * A 'Meet requirement' protocol responder party (new version).
  * @author Lukáš Kúdela
- * @since 2011-11-11
+ * @since 2011-12-21
  * @version %I% %G%
  */
 public class Player_MeetRequirementResponder extends Party {
@@ -28,11 +32,13 @@ public class Player_MeetRequirementResponder extends Party {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private AID roleAID;
+    
     private Map<String, Requirement> requirements = new Hashtable<String, Requirement>();
     
     private Requirement currentRequirement;
     
-    private State receiveParam;
+    private State receiveRequirementArgument;
     
     private State sendRequirementResult;
     
@@ -45,24 +51,26 @@ public class Player_MeetRequirementResponder extends Party {
         registerStatesAndTransitions();
     }
     
-    private void registerStatesAndTransitions() {
+    private void registerStatesAndTransitions() {        
         // ----- States -----
-        State sendArgumentRequest = new SendArgumentRequest();
-        receiveParam = new ReceiveParam();
+        State sendArgumentRequest = new SendArgumentRequest();       
+        receiveRequirementArgument = new ReceiveRequirementArgument();
         sendRequirementResult = new SendRequirementResult();
         State end = new End();
         // ------------------
         
         // Register the states.
-        registerFirstState(sendArgumentRequest, sendArgumentRequest.getName());
-        registerState(receiveParam, receiveParam.getName());
-        registerLastState(sendRequirementResult, sendRequirementResult.getName());
-        registerLastState(end, end.getName());
+        registerFirstState(sendArgumentRequest);
+        registerState(receiveRequirementArgument);
+        registerState(sendRequirementResult);
+        registerLastState(end);
         
-        // Register the transitions.
-        registerDefaultTransition(sendArgumentRequest.getName(), receiveParam.getName());
-        registerTransition(receiveParam.getName(), end.getName(), 1);
-        registerDefaultTransition(sendRequirementResult.getName(), end.getName());
+        // Register the transitions.     
+        sendArgumentRequest.registerDefaultTransition(receiveRequirementArgument);
+        
+        receiveRequirementArgument.registerTransition(1, end);
+        
+        sendRequirementResult.registerDefaultTransition(end);      
     }
     
     // </editor-fold>
@@ -71,48 +79,61 @@ public class Player_MeetRequirementResponder extends Party {
     
     @Override
     public Protocol getProtocol() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
+        return MeetRequirementProtocol.getInstance();
+    }
+    
+    // ----- PACKAGE -----
+    
+    void setRoleAID(AID roleAID) {
+        this.roleAID = roleAID;
+    }  
+    
+    // ----- PRIVATE -----
+    
+    private Player getMyPlayer() {
+        return (Player)myAgent;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected void addRequirement(Requirement requirement) {
-        requirements.put(requirement.getName(), requirement);
-        
-        // Register the state.
-        registerState(requirement, requirement.getName());
-        
-        // Register the transitions.
-        registerTransition(receiveParam.getName(), requirement.getName(), requirement.hashCode());
-        registerDefaultTransition(requirement.getName(), sendRequirementResult.getName());
+    boolean containsRequirement(String requirementName) {
+        return requirements.containsKey(requirementName);
     }
     
-    protected void invokeRequirement(String requirementName) {
+    void selectRequirement(String requirementName) {
         if (containsRequirement(requirementName)) {
             currentRequirement = getRequirement(requirementName);
             reset();
         }
     }
     
-    // ---------- PRIVATE ----------
+    // ----- PROTECTED -----
     
-    private boolean containsRequirement(String requirementName) {
-        return requirements.containsKey(requirementName);
+    protected void addRequirement(Requirement requirement) {
+        requirements.put(requirement.getName(), requirement);
+        
+        // Register the state.
+        registerState(requirement);
+        
+        // Register the transitions.
+        receiveRequirementArgument.registerTransition(requirement.hashCode(), requirement);
+        requirement.registerDefaultTransition(sendRequirementResult);
     }
+    
+    // ---------- PRIVATE ----------
     
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);
     }
     
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    class SendArgumentRequest extends ActiveState {
-
+    private class SendArgumentRequest extends SingleSenderState {
+    
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         private static final String NAME = "send-argument-request";
@@ -126,36 +147,41 @@ public class Player_MeetRequirementResponder extends Party {
         }
         
         // </editor-fold>
-        
+
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            // TODO Rework.
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-            aclMessage.setProtocol("requirement-protcol");
-            aclMessage.setContent("param");
-            aclMessage.addReceiver(null);
-            
-            // Send the ACL message.
-            myAgent.send(aclMessage);
+        protected void onEntry() {
+            getMyPlayer().logInfo("Sending argument request.");
+        }
+        
+        @Override
+        protected void onSingleSender() {
+            ArgumentRequestMessage message = new ArgumentRequestMessage();
+
+            send(message, roleAID);
+        }
+
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Argument request sent.");
         }
         
         // </editor-fold>
     }
     
-    class ReceiveParam extends PassiveState {
+    private class ReceiveRequirementArgument extends ReceiveSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receive-param";
+        private static final String NAME = "receive-requirement-argument";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        ReceiveParam() {
-            super(NAME);
+       
+        ReceiveRequirementArgument() {
+            super(NAME, roleAID);
         }
         
         // </editor-fold>
@@ -163,39 +189,32 @@ public class Player_MeetRequirementResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate messageTemplate = MessageTemplateBuilder.createMessageTemplate(
-                    "requirement-protocol",
-                    new int[] { ACLMessage.INFORM, ACLMessage.FAILURE },
-                    null);
+        protected void onEntry() {
+            getMyPlayer().logInfo("Receiving argument.");
+        }
+        
+        @Override
+        protected int onSuccessReceiver() {
+            ArgumentInformMessage message = new ArgumentInformMessage();
+            boolean messageReceived = receive(message, roleAID);
 
-            // Receive the ACL message.
-            ACLMessage aclMessage = myAgent.receive(messageTemplate);
-            if (aclMessage != null) {
-                switch (aclMessage.getPerformative()) {
-                    case ACLMessage.INFORM:
-                        try {
-                            currentRequirement.setArgument(aclMessage.getContentObject());
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
-                        // TODO Rework.
-                        //setExitValue(currentRequirement.hashCode());
-                        break;
-                    case ACLMessage.FAILURE:
-                        // TODO Rework.
-                        //setExitValue(currentRequirement.hashCode());
-                        break;
-                }
+            if (messageReceived) {
+                currentRequirement.setArgument(message.getArgument());
+                return InnerReceiverState.RECEIVED;
             } else {
-                block();
+                return InnerReceiverState.NOT_RECEIVED;
             }
+        }
+
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Argument received.");
         }
         
         // </editor-fold>
     }
     
-    class SendRequirementResult extends ActiveState {
+    private class SendRequirementResult extends SendSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -206,7 +225,7 @@ public class Player_MeetRequirementResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendRequirementResult() {
-            super(NAME);
+            super(NAME, roleAID);
         }
         
         // </editor-fold>
@@ -214,29 +233,39 @@ public class Player_MeetRequirementResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            // TODO Rework.    
-            ACLMessage aclMessage = new ACLMessage(ACLMessage.INFORM);
-            aclMessage.setProtocol("requirement-protocol");
-            aclMessage.addReceiver(null);
-            try {
-                aclMessage.setContentObject((Serializable)currentRequirement.getResult());
-            } catch (Exception ex) {
-                aclMessage.setPerformative(ACLMessage.FAILURE);
-                aclMessage.setContent(ex.toString());
-            }
-            
-            // Send the ACL message.
-            myAgent.send(aclMessage);
-
-            currentRequirement.reset();
-            getParent().reset();      
+        protected void onEntry() {
+            getMyPlayer().logInfo("Sending requirement result.");
         }
         
+        @Override
+        protected int onManager() {
+            return currentRequirement.getResult() instanceof Serializable ?
+                SUCCESS :
+                FAILURE;
+        }
+        
+        @Override
+        protected void onSuccessSender() {
+            // Create the 'Result inform' message.
+            ResultInformMessage message = new ResultInformMessage();
+            message.setResult(currentRequirement.getResult());
+
+            // Send the message.
+            send(message, roleAID);
+
+            currentRequirement.reset();
+            getParent().reset();  
+        }
+
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Requirement result sent.");
+        }
+   
         // </editor-fold>
-    }
+    } 
     
-    class End extends ActiveState {
+    private class End extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
