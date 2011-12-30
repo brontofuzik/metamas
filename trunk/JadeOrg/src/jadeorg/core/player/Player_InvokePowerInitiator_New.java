@@ -42,6 +42,7 @@ public class Player_InvokePowerInitiator_New extends Party {
     Player_InvokePowerInitiator_New(String powerName, Object powerArgument) {
         super(NAME);
         
+        setProtocolId(new Integer(hashCode()).toString());
         this.powerName = powerName;
         this.powerArgument = powerArgument;
         

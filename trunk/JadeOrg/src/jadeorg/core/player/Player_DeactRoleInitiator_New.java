@@ -43,6 +43,7 @@ public class Player_DeactRoleInitiator_New extends Party {
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
+        setProtocolId(new Integer(hashCode()).toString());
         this.organizationAID = organization;
         this.roleName = roleName;
 

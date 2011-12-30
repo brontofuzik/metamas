@@ -42,14 +42,15 @@ public class Organization_Manager extends ManagerBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                EnactRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+            MessageTemplate template =
+                MessageTemplate.and(
+                    EnactRoleProtocol.getInstance().getTemplate(),
+                    MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                  
-            ACLMessage enactRequestMessage = getMyOrganization().receive(template);          
-            if (enactRequestMessage != null) {
-                getMyOrganization().putBack(enactRequestMessage);
-                getMyOrganization().respondToEnactRole(enactRequestMessage.getSender());
+            ACLMessage message = getMyOrganization().receive(template);          
+            if (message != null) {
+                getMyOrganization().putBack(message);
+                getMyOrganization().respondToEnactRole(message.getConversationId(), message.getSender());
             }
         }
         
@@ -69,10 +70,10 @@ public class Organization_Manager extends ManagerBehaviour {
                 DeactRoleProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
-            ACLMessage deactRequestMessage = getMyOrganization().receive(template);          
-            if (deactRequestMessage != null) {
-                getMyOrganization().putBack(deactRequestMessage);
-                getMyOrganization().respondToDeactRole(deactRequestMessage.getSender());
+            ACLMessage message = getMyOrganization().receive(template);          
+            if (message != null) {
+                getMyOrganization().putBack(message);
+                getMyOrganization().respondToDeactRole(message.getConversationId(), message.getSender());
             }
         }
         

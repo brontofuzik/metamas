@@ -48,10 +48,10 @@ public class Role_Manager extends ManagerBehaviour {
                 ActivateRoleProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                     
-            ACLMessage activateRequestMessage = getMyRole().receive(template);
-            if (activateRequestMessage != null) {
-                getMyRole().putBack(activateRequestMessage);
-                getMyRole().respondToActivateRole(activateRequestMessage.getSender());
+            ACLMessage message = getMyRole().receive(template);
+            if (message != null) {
+                getMyRole().putBack(message);
+                getMyRole().respondToActivateRole(message.getConversationId(), message.getSender());
             }
         }
         
@@ -71,10 +71,10 @@ public class Role_Manager extends ManagerBehaviour {
                 DeactivateRoleProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));         
             
-            ACLMessage deactivateRequestMessage = getMyRole().receive(template);
-            if (deactivateRequestMessage != null) {
-                getMyRole().putBack(deactivateRequestMessage);
-                getMyRole().respondToDeactivateRole(deactivateRequestMessage.getSender());
+            ACLMessage message = getMyRole().receive(template);
+            if (message != null) {
+                getMyRole().putBack(message);
+                getMyRole().respondToDeactivateRole(message.getConversationId(), message.getSender());
             }
         }
         
@@ -94,10 +94,10 @@ public class Role_Manager extends ManagerBehaviour {
                 InvokePowerProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));      
             
-            ACLMessage invokeRequestMessage = getMyRole().receive(template);
-            if (invokeRequestMessage != null) {
-                getMyRole().putBack(invokeRequestMessage);
-                getMyRole().respondToInvokePower(invokeRequestMessage.getSender());
+            ACLMessage message = getMyRole().receive(template);
+            if (message != null) {
+                getMyRole().putBack(message);
+                getMyRole().respondToInvokePower(message.getConversationId(), message.getSender());
             }
         }
         
