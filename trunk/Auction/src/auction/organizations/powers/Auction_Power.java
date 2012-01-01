@@ -1,4 +1,4 @@
-package auctionjadehandwritten.organizations.powers;
+package auction.organizations.powers;
 
 import jadeorg.core.organization.Power;
 
