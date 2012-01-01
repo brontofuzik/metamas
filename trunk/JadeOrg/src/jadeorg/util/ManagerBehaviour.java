@@ -61,7 +61,9 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
 
         @Override
         public void action() {
-            getParent().block();
+            if (myAgent.getCurQueueSize() == 0) {
+                getParent().block();
+            }
         }
     }
     

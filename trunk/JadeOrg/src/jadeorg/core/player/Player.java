@@ -101,6 +101,19 @@ public abstract class Player extends Agent {
         }
     }
     
+    public void initiateInvokePower(String powerName, Object argument) throws PlayerException {
+        logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.", powerName));
+        
+        if (knowledgeBase.canInvokePower(powerName)) {
+            // The player can invoke the power.
+            addBehaviour(new Player_InvokePowerInitiator(powerName, argument));
+        } else {
+            // The player can not invoke the power.
+            String message = String.format("I cannot invoke the power '%1$s'.", powerName);
+            throw new PlayerException(this, message);
+        }
+    }
+    
     public void respondToMeetRequirement(String protocolId, AID roleAID) {
         logInfo("Responding to the 'Meet requirement' protocol.");
         
@@ -137,6 +150,10 @@ public abstract class Player extends Agent {
         log(Level.INFO, message);
     }
     
+    public void logSevere(String message) {
+        log(Level.SEVERE, message);
+    }
+    
     // ---------- PROTECTED ----------
     
     @Override
@@ -153,6 +170,95 @@ public abstract class Player extends Agent {
     private void addBehaviours() {
         addBehaviour(new Player_Manager());
         logInfo("Behaviours added.");
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    protected static class RoleFullName {
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        /** The name of organization instance. */
+        private String organizationName;
+        
+        /** The name of roleToDeact class. */
+        private String roleName;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public RoleFullName(String organizationName, String roleName) {
+            this.organizationName = organizationName;
+            this.roleName = roleName;
+        }
+            
+        public RoleFullName(String roleFullName) {
+            String[] nameParts = roleFullName.split("\\.");
+            organizationName = nameParts[0];
+            roleName = nameParts[1];
+        }
+        
+        // </editor-fold>  
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        public String getOrganizationName() {
+            return organizationName;
+        }
+        
+        public String getRoleName() {
+            return roleName;
+        }
+        
+        // </editor-fold>
+    }
+    
+    protected static class PowerFullName {
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private RoleFullName roleFullName;
+        
+        private String powerName;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public PowerFullName(String organizationName, String roleName, String powerName) {
+            roleFullName = new RoleFullName(organizationName, roleName);
+        }
+        
+        public PowerFullName(String powerFullName) {
+            String[] nameParts = powerFullName.split("\\.");
+            roleFullName = new RoleFullName(nameParts[0], nameParts[1]);
+            powerName = nameParts[2];
+        }
+                
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        public RoleFullName getRoleFullName() {
+            return roleFullName;
+        }
+        
+        public String getOrganizationName() {
+            return roleFullName.getOrganizationName();
+        }
+        
+        public String getRoleName() {
+            return roleFullName.getRoleName();
+        }
+        
+        public String getPowerName() {
+            return powerName;
+        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

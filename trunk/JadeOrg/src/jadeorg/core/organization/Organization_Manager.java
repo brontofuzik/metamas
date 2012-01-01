@@ -66,9 +66,10 @@ public class Organization_Manager extends ManagerBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                DeactRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+            MessageTemplate template =
+                MessageTemplate.and(
+                    DeactRoleProtocol.getInstance().getTemplate(),
+                    MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
             ACLMessage message = getMyOrganization().receive(template);          
             if (message != null) {
