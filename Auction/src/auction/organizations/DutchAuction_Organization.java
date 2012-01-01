@@ -1,4 +1,4 @@
-package auctionjadehandwritten.organizations;
+package auction.organizations;
 
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;

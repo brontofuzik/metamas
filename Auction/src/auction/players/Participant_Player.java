@@ -1,4 +1,4 @@
-package auctionjadehandwritten.players;
+package auction.players;
 
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
