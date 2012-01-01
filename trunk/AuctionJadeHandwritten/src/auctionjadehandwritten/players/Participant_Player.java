@@ -1,6 +1,5 @@
 package auctionjadehandwritten.players;
 
-import auctionjadehandwritten.players.requirements.ComputeFactorial_Requirement;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
@@ -22,7 +21,7 @@ public class Participant_Player extends Player {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final Set<String> abilities = new HashSet<String>();
+    protected static final Set<String> abilities = new HashSet<String>();
     
     // </editor-fold>
     
@@ -60,15 +59,15 @@ public class Participant_Player extends Player {
         super.setup();
         
         // Add the requirements.
-        addRequirement(new ComputeFactorial_Requirement());
         
         int timeout = getTimeout();
         
         // Add the behaviours.        
         addBehaviour(new EnactRolesWakerBehaviour(this, timeout));
-        addBehaviour(new ActivateRoleWakerBehaviour(this, timeout + 1000));
-        //addBehaviour(new DeactivateRoleWakerBehaviour(this));
-        //addBehaviour(new DeactRolesWakerBehaviour(this));
+        addBehaviour(new ActivateRoleWakerBehaviour(this, timeout += 1000));
+        addBehaviour(new InvokePowerWakerBehaviour(this, timeout += 1000));
+        addBehaviour(new DeactivateRoleWakerBehaviour(this, timeout += 1000));
+        addBehaviour(new DeactRolesWakerBehaviour(this, timeout += 1000));
     }
     
     /**
@@ -127,6 +126,9 @@ public class Participant_Player extends Player {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Enact roles' (waker) behaviour.
+     */
     private static class EnactRolesWakerBehaviour extends WakerBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -161,6 +163,9 @@ public class Participant_Player extends Player {
         // </editor-fold>
     }
     
+    /**
+     * The 'Activate role' (waker) behaviour.
+     */
     private static class ActivateRoleWakerBehaviour extends WakerBehaviour {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -193,13 +198,48 @@ public class Participant_Player extends Player {
         
         // </editor-fold>
     }
+    
+    /**
+     * The 'Invoke power' (waker) behaviour.
+     */
+    private static class InvokePowerWakerBehaviour extends WakerBehaviour {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        InvokePowerWakerBehaviour(Agent agent, int timeout) {
+            super(agent, timeout);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
+        
+        private Participant_Player getMyPlayer() {
+            return (Participant_Player)myAgent;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void handleElapsedTimeout() {
+            for (String powerName : getMyPlayer().knowledgeBase.getActiveRole().getPowers()) {
+            }
+        }     
+        
+        // </editor-fold>        
+    }
+    
+    /**
+     * The 'Deactivate role' (waker) behaviour.
+     */
     private static class DeactivateRoleWakerBehaviour extends WakerBehaviour {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        DeactivateRoleWakerBehaviour(Agent agent) {
-            super(agent, 6000);
+        DeactivateRoleWakerBehaviour(Agent agent, int timeout) {
+            super(agent, timeout);
         }
         
         // </editor-fold>
@@ -227,12 +267,15 @@ public class Participant_Player extends Player {
         // </editor-fold>
     }
             
+    /**
+     * The 'Deact role' (waker) behaviour.
+     */
     private static class DeactRolesWakerBehaviour extends WakerBehaviour {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        DeactRolesWakerBehaviour(Agent agent) {
-            super(agent, 8000);
+        DeactRolesWakerBehaviour(Agent agent, int timeout) {
+            super(agent, timeout);
         }
         
         // </editor-fold>
@@ -260,30 +303,6 @@ public class Participant_Player extends Player {
         
         // </editor-fold>
     }
-    
-    // TODO Move this class to the JadeOrg project.
-    private static class RoleFullName {
-        
-        /** The name of organization instance. */
-        private String organizationName;
-        
-        /** The name of roleToDeact class. */
-        private String roleName;
-        
-        RoleFullName(String roleFullName) {
-            String[] organizationNameAndRoleName = roleFullName.split("\\.");
-            organizationName = organizationNameAndRoleName[0];
-            roleName = organizationNameAndRoleName[1];
-        }
-        
-        String getOrganizationName() {
-            return organizationName;
-        }
-        
-        String getRoleName() {
-            return roleName;
-        }
-    }
-    
+   
     // </editor-fold>
 }
