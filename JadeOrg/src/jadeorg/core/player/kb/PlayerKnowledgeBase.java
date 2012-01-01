@@ -74,6 +74,15 @@ public class PlayerKnowledgeBase {
         return doesEnactRole(roleName) && doesPlayRole(roleName);
     }
     
+    public boolean canInvokePower(String powerName) {
+        // ----- Preconditions -----
+        assert powerName != null && !powerName.isEmpty();
+        // -------------------------
+        
+        // TODO Implement.
+        return true;
+    }
+    
     // ----- UPDATE -----
     
     public void enactRole(String roleName, AID roleAID, String organizationName, AID organizationAID) {

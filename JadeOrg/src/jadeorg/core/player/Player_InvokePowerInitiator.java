@@ -41,6 +41,9 @@ public class Player_InvokePowerInitiator extends Party {
     
     Player_InvokePowerInitiator(String powerName, Object powerArgument) {
         super(NAME);
+        // ----- Preconditions -----
+        assert powerName != null && !powerName.isEmpty();
+        // -------------------------
         
         setProtocolId(new Integer(hashCode()).toString());
         this.powerName = powerName;

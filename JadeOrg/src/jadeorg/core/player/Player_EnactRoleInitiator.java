@@ -187,11 +187,9 @@ class Player_EnactRoleInitiator extends Party {
 
             // Process the message.
             if (messageReceived) {
-                System.out.println("----- RECEIVED -----");
                 requirements = message.getRequirements();
                 return InnerReceiverState.RECEIVED;
             } else {
-                System.out.println("----- NOT-RECEIVED -----");
                 return InnerReceiverState.NOT_RECEIVED;
             }
         }

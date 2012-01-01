@@ -64,6 +64,11 @@ public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    public Iterable<String> getPowers() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
     public void savePowerResult(String powerName, Object powerResult) {
         powerResults.put(powerName, powerResult);
     }
