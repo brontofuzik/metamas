@@ -1,1 +1,1 @@
-cd AuctionJadeGenerated\bin
+cd Auction\bin
