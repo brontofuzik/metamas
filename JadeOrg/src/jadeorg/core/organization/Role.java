@@ -129,10 +129,11 @@ public class Role extends Agent {
     }
     
     public void respondToInvokePower(String protocolId, AID playerAID) {
-        logInfo("Responding to the 'Invoke power' protocol.");
-            
+        logInfo(String.format("Responding to the 'Invoke power' (protocolId=%1$s) protocol.", protocolId));
+        
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
+            invokePowerResponder.setProtocolId(protocolId);
             invokePowerResponder.setPlayerAID(playerAID);
             addBehaviour(invokePowerResponder);
         } else {

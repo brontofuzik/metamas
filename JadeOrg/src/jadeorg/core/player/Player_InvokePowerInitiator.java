@@ -71,8 +71,10 @@ public class Player_InvokePowerInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    // TODO Rework all registerStatesAndTransitions() methods.
     private void registerStatesAndTransitions() {
         // ----- States -----
+        State initialize = new Initialize();
         State sendInvokePowerRequest = new SendInvokePowerRequest();
         State receivePowerArgumentRequest = new ReceivePowerArgumentRequest();
         State sendPowerArgument = new SendPowerArgument();
@@ -82,14 +84,19 @@ public class Player_InvokePowerInitiator extends Party {
         // ------------------
         
         // Register the states.
-        registerFirstState(sendInvokePowerRequest);
+        registerFirstState(initialize);
+        
+        registerState(sendInvokePowerRequest);
         registerState(receivePowerArgumentRequest);
         registerState(sendPowerArgument);
         registerState(receivePowerResult);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
+        initialize.registerDefaultTransition(sendInvokePowerRequest);
+        
         sendInvokePowerRequest.registerDefaultTransition(receivePowerArgumentRequest);
         
         receivePowerArgumentRequest.registerTransition(ReceivePowerArgumentRequest.SUCCESS, sendPowerArgument);
@@ -104,6 +111,32 @@ public class Player_InvokePowerInitiator extends Party {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class Initialize extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private static final String NAME = "initialize";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        Initialize() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            roleAID = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
+        }
+        
+        // </editor-fold>
+    }
     
     private class SendInvokePowerRequest extends SingleSenderState {
 
@@ -207,7 +240,7 @@ public class Player_InvokePowerInitiator extends Party {
        
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending power argument inform.");
+            getMyPlayer().logInfo("Sending power argument.");
         }
         
         @Override
@@ -220,7 +253,7 @@ public class Player_InvokePowerInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Power argument inform sent.");
+            getMyPlayer().logInfo("Power argument sent.");
         }
         
         // </editor-fold>

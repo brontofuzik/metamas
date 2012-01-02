@@ -38,10 +38,7 @@ public abstract class Party extends FSMBehaviour {
     // TODO Change the access modified to protected.
     public abstract Protocol getProtocol();
     
-    // ----- PROTECTED -----
-    
-    // TODO Replace with a constructor.
-    protected void setProtocolId(String protocolId) {
+    public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
     } 
    
@@ -61,7 +58,7 @@ public abstract class Party extends FSMBehaviour {
         aclMessage.setConversationId(protocolId);
         aclMessage.addReceiver(receiverAID);
         
-        System.out.println("SENDING MESSAGE: " + aclMessage.toString());
+        //System.out.println("SENDING MESSAGE: " + aclMessage.toString());
        
         // Send the ACL message.
         myAgent.send(aclMessage);
@@ -85,7 +82,7 @@ public abstract class Party extends FSMBehaviour {
         // Receive the ACL message.
         ACLMessage aclMessage = myAgent.receive(messageTemplate);      
         if (aclMessage != null) {
-            System.out.println("RECEIVED MESSAGE: " + aclMessage.toString());
+            //System.out.println("RECEIVED MESSAGE: " + aclMessage.toString());
             
             // Parse the ACL message.
             message.parseACLMessage(aclMessage);

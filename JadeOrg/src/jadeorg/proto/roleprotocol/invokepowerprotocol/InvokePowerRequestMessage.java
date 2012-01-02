@@ -2,6 +2,8 @@ package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.TextMessage;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -43,12 +45,16 @@ public class InvokePowerRequestMessage extends TextMessage {
     
     @Override
     public String generateContent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return String.format("invoke-power(%1$s)", powerName);
     }
 
     @Override
     public void parseContent(String content) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Pattern contentPattern = Pattern.compile("invoke-power\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+ 
+        powerName = matcher.group(1);
     }
      
     // </editor-fold>
