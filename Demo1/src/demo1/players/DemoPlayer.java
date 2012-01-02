@@ -1,15 +1,11 @@
 package demo1.players;
 
 import demo1.players.requirements.ComputeFactorial_Requirement;
-import jade.core.Agent;
-import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import jadeorg.core.player.PlayerException;
-import jadeorg.core.player.kb.RoleDescription;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 
 /**
  * A Participant player.
@@ -92,9 +88,9 @@ public class DemoPlayer extends Player {
             enactAndActivateRole(roleFullName, 5000);
         }
         
-//        if (powerFullName != null) {
-//            invokePower(powerFullName, 10000);
-//        }
+        if (powerFullName != null) {
+            invokePower(powerFullName, 10000);
+        }
         
         if (roleFullName != null) {
             deactivateAndDeactRole(roleFullName, 15000);
