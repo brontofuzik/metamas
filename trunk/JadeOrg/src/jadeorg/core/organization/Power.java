@@ -74,25 +74,23 @@ public class Power extends FSMBehaviourState {
 //        this.playerAID = playerAID;
 //    }
     
-    Object getArgument() {
+    protected Object getArgument() {
         return argument;
     }
     
-    Power setArgument(Object argument) {        
+    protected Power setArgument(Object argument) {        
         this.argument = argument;
         return this;
     }
     
-    Object getResult() {
+    protected Object getResult() {
         return result;
     }
     
-    Power setResult(Object result) {
+    protected Power setResult(Object result) {
         this.result = result;
         return this;
     }
-    
-    // ----- PROTECTED -----
     
     protected Role getMyRole() {
         return (Role)myAgent;
