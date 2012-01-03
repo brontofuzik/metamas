@@ -87,16 +87,18 @@ public class Role_MeetRequirementInitiator extends Party {
         
     // ----- PACKAGE -----    
     
-    Power getMyPower() {
-        return (Power)getParent();
-    }
-    
     void setArgument(Object argument) {
         this.argument = argument;
     }
     
     Object getResult() {
         return result;
+    }
+    
+    // ----- PRIVATE -----
+    
+    private Role getMyRole() {
+        return (Role)myAgent;
     }
     
     // </editor-fold>  
@@ -123,7 +125,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onEntry() {
-            getMyPower().getMyRole().logInfo("Sending requirement request.");
+            getMyRole().logInfo("Sending requirement request.");
         }
         
         @Override
@@ -136,7 +138,7 @@ public class Role_MeetRequirementInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPower().getMyRole().logInfo("Requirement request sent.");
+            getMyRole().logInfo("Requirement request sent.");
         }
         
         // </editor-fold>
@@ -162,7 +164,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onEntry() {
-            getMyPower().getMyRole().logInfo("Receiving argument request.");
+            getMyRole().logInfo("Receiving argument request.");
         }
         
         @Override
@@ -179,7 +181,7 @@ public class Role_MeetRequirementInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPower().getMyRole().logInfo("Argument request received.");
+            getMyRole().logInfo("Argument request received.");
         }
         
         // </editor-fold>
@@ -205,7 +207,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onEntry() {
-            getMyPower().getMyRole().logInfo("Sending requirement argument.");
+            getMyRole().logInfo("Sending requirement argument.");
         }
         
         @Override
@@ -227,7 +229,7 @@ public class Role_MeetRequirementInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPower().getMyRole().logInfo("Requirement argument sent.");
+            getMyRole().logInfo("Requirement argument sent.");
         }
         
         // </editor-fold>
@@ -253,7 +255,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onEntry() {
-            getMyPower().getMyRole().logInfo("Receiving requirement result.");
+            getMyRole().logInfo("Receiving requirement result.");
         }
         
         @Override
@@ -272,7 +274,7 @@ public class Role_MeetRequirementInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPower().getMyRole().logInfo("Requirement result received.");
+            getMyRole().logInfo("Requirement result received.");
         }
 
         // </editor-fold>
