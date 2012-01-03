@@ -7,6 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
+import jadeorg.core.organization.power.Power;
 import java.util.logging.Level;
 
 /**

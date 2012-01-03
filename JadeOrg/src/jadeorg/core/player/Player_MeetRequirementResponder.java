@@ -1,5 +1,6 @@
 package jadeorg.core.player;
 
+import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
@@ -252,9 +253,6 @@ public class Player_MeetRequirementResponder extends Party {
 
             // Send the message.
             send(message, roleAID);
-
-            currentRequirement.reset();
-            getParent().reset();  
         }
 
         @Override

@@ -1,5 +1,6 @@
 package jadeorg.core.player;
 
+import jadeorg.core.player.requirement.Requirement;
 import jadeorg.core.player.kb.PlayerKnowledgeBase;
 import jade.core.AID;
 import jade.core.Agent;

@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jadeorg.core.organization.power.Power;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -91,17 +92,15 @@ public class Role_InvokePowerResponder extends Party {
     
     // ----- PROTECTED -----
     
-    protected void addPower(Power power) {    
-        power.buildFSM();
-        
+    protected void addPower(Power power) {        
         powers.put(power.getName(), power);
         
         // Register the power-related state.
-        registerState(power, power.getName());
+        registerState(power);
         
         // Register the power-related transitions.
-        registerTransition(selectPower.getName(), power.getName(), power.hashCode());
-        registerDefaultTransition(power.getName(), sendPowerResult.getName());
+        selectPower.registerTransition(power.hashCode(), power);
+        power.registerDefaultTransition(sendPowerResult);
     }
     
     // ----- PRIVATE -----

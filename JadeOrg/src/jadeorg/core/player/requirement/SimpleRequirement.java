@@ -1,15 +1,16 @@
-package jadeorg.core.player;
+package jadeorg.core.player.requirement;
 
+import jadeorg.core.player.Player;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * A requirement (simple) state.
+ * A simple requirement.
  * @author Lukáš Kúdela
- * @since 2011-11-11
+ * @since 2011-01-02
  * @version %I% %G%
  */
-public abstract class Requirement extends OneShotBehaviourState {
-
+public abstract class SimpleRequirement extends OneShotBehaviourState implements Requirement {
+   
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private Object argument;
@@ -20,7 +21,7 @@ public abstract class Requirement extends OneShotBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected Requirement(String name) {
+    public SimpleRequirement(String name) {
         super(name);
     }
     
@@ -28,22 +29,20 @@ public abstract class Requirement extends OneShotBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected Object getArgument() {
+    public Object getArgument() {
         return argument;
     }
     
-    Requirement setArgument(Object argument) {
+    public void setArgument(Object argument) {
         this.argument = argument;
-        return this;
     }
     
-    Object getResult() {
+    public Object getResult() {
         return result;
     }
     
-    protected Requirement setResult(Object result) {
+    public void setResult(Object result) {
         this.result = result;
-        return this;
     }
     
     // ----- PROTECTED -----
