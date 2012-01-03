@@ -1,6 +1,6 @@
 package demo1.organizations;
 
-import demo1.organizations.powers.ComputeFactorial_Power;
+import demo1.organizations.powers.CalculateFactorial_Power;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 
@@ -46,7 +46,7 @@ public class DemoOrganization extends Organization {
             super.setup();
             
             // Add powers.
-            addPower(new ComputeFactorial_Power());
+            addPower(new CalculateFactorial_Power());
         }
         
         // </editor-fold>

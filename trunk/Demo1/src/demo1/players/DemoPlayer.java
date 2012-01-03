@@ -1,6 +1,6 @@
 package demo1.players;
 
-import demo1.players.requirements.ComputeFactorial_Requirement;
+import demo1.players.requirements.CalculateFactorial_Requirement;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import jadeorg.core.player.PlayerException;
@@ -82,7 +82,7 @@ public class DemoPlayer extends Player {
         super.setup();
         
         // Add the requirements.
-        addRequirement(new ComputeFactorial_Requirement());
+        addRequirement(new CalculateFactorial_Requirement());
         
         if (roleFullName != null) {
             enactAndActivateRole(roleFullName, 5000);
@@ -146,7 +146,7 @@ public class DemoPlayer extends Player {
             @Override
             protected void handleElapsedTimeout() {
                 try {
-                    getMyPlayer().initiateInvokePower("compute-factorial", new Integer(10));
+                    getMyPlayer().initiateInvokePower("calculate-factorial-power", new Integer(10));
                 } catch (PlayerException ex) {
                     getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
                 }

@@ -1,24 +1,24 @@
 package demo1.players.requirements;
 
-import jadeorg.core.player.Requirement;
+import jadeorg.core.player.requirement.SimpleRequirement;
 
 /**
- * The 'Compute factorial' requirement.
+ * The 'Calculate factorial' (simple) requirement.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
  */
-public class ComputeFactorial_Requirement extends Requirement {
+public class CalculateFactorial_Requirement extends SimpleRequirement {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String NAME = "compute-factorial";
+    private static final String NAME = "calculate-factorial-requirement";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ComputeFactorial_Requirement() {
+    public CalculateFactorial_Requirement() {
         super(NAME);
     }
     
