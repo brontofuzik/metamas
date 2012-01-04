@@ -1,1 +1,1 @@
-http://prestigio:7778/acc
+http://78.128.196.33:7778/acc
