@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
-import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jade.core.Agent;
+import jadeorg.proto.jadeextensions.BehaviourState;
 
 /**
  * A party state.
@@ -8,7 +9,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public class PartyState extends OneShotBehaviourState {
+public class PartyState extends BehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -29,11 +30,29 @@ public class PartyState extends OneShotBehaviourState {
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
+    public void setAgent(Agent agent) {
+        party.setAgent(agent);
+    }
+    
+    // ----- PROTECTED -----
+    
+    protected Party getUnderlyingParty() {
+        return party;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
     public void action() {
         party.action();
+    }
+    
+    public boolean done() {
+        return party.done();
     }
     
     // </editor-fold>

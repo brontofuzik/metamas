@@ -9,10 +9,10 @@ import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentInformMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ResultInformMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
 import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
@@ -196,7 +196,7 @@ public class Player_MeetRequirementResponder extends Party {
         
         @Override
         protected int onSuccessReceiver() {
-            ArgumentInformMessage message = new ArgumentInformMessage();
+            RequirementArgumentMessage message = new RequirementArgumentMessage();
             boolean messageReceived = receive(message, roleAID);
 
             if (messageReceived) {
@@ -248,7 +248,7 @@ public class Player_MeetRequirementResponder extends Party {
         @Override
         protected void onSuccessSender() {
             // Create the 'Result inform' message.
-            ResultInformMessage message = new ResultInformMessage();
+            RequirementResultMessage message = new RequirementResultMessage();
             message.setResult(currentRequirement.getResult());
 
             // Send the message.

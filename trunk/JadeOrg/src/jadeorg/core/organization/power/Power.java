@@ -8,13 +8,9 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public interface Power extends State {
+public interface Power<TArgument, TResult> extends State {
     
-    Object getArgument();
+    void setArgument(TArgument argument);
     
-    void setArgument(Object argument);
-    
-    Object getResult();
-    
-    void setResult(Object result);
+    TResult getResult();
 }

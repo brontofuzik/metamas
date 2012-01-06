@@ -10,7 +10,7 @@ import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
-import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentRequestMessage;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
 
 /**
@@ -35,11 +35,13 @@ public class Player_InvokePowerInitiator extends Party {
     
     private Object powerArgument;
     
+    private Object powerResult;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_InvokePowerInitiator(String powerName, Object powerArgument) {
+    public Player_InvokePowerInitiator(String powerName) {
         super(NAME);
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
@@ -47,9 +49,13 @@ public class Player_InvokePowerInitiator extends Party {
         
         setProtocolId(new Integer(hashCode()).toString());
         this.powerName = powerName;
-        this.powerArgument = powerArgument;
         
         registerStatesAndTransitions();
+    }
+    
+    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {
+        this(powerName);
+        this.powerArgument = powerArgument;
     }
     
     // </editor-fold>
@@ -59,6 +65,14 @@ public class Player_InvokePowerInitiator extends Party {
     @Override
     public Protocol getProtocol() {
         return InvokePowerProtocol.getInstance();
+    }
+    
+    public void setPowerArgument(Object powerArgument) {
+        this.powerArgument = powerArgument;
+    }
+    
+    public Object getPowerResult() {
+        return powerResult;
     }
     
     // ----- PRIVATE -----
@@ -202,7 +216,7 @@ public class Player_InvokePowerInitiator extends Party {
         
         @Override
         protected int onSuccessReceiver() {
-            PowerArgumentRequestMessage message = new PowerArgumentRequestMessage();
+            ArgumentRequestMessage message = new ArgumentRequestMessage();
             boolean messageReceived = receive(message, roleAID);
             
             if (messageReceived) {
@@ -279,7 +293,7 @@ public class Player_InvokePowerInitiator extends Party {
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving power result inform.");
+            getMyPlayer().logInfo("Receiving power result.");
         }
         
         @Override
@@ -288,6 +302,7 @@ public class Player_InvokePowerInitiator extends Party {
             boolean messageReceived = receive(message, roleAID);
             
             if (messageReceived) {
+                powerResult = message.getResult();
                 getMyPlayer().knowledgeBase.getActiveRole()
                     .savePowerResult(powerName, message.getResult());
                 return InnerReceiverState.RECEIVED;
@@ -298,7 +313,7 @@ public class Player_InvokePowerInitiator extends Party {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Power result inform received.");
+            getMyPlayer().logInfo("Power result received.");
         }
         
         // </editor-fold>

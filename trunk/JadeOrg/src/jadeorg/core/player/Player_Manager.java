@@ -41,9 +41,9 @@ public class Player_Manager extends ManagerBehaviour {
                 MeetRequirementProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                  
-            ACLMessage message = getMyPlayer().receive(template);          
+            ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                getMyPlayer().putBack(message);
+                myAgent.putBack(message);
                 getMyPlayer().respondToMeetRequirement(message.getConversationId(), message.getSender());
             }
         }

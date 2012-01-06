@@ -34,6 +34,13 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
         return (Party)getParent();
     }
     
+    // ----- PRIVATE -----
+    
+    // TODO Replace with the getParty() getter.
+    private FSMBehaviour getParentFSM() {
+        return (FSMBehaviour)getParent();
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -68,9 +75,7 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // ---------- PRIVATE ----------
     
-    private FSMBehaviour getParentFSM() {
-        return (FSMBehaviour)getParent();
-    }
+
     
     // </editor-fold>
     

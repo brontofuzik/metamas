@@ -186,7 +186,11 @@ public class Role extends Agent {
     
     @Override
     protected void setup() {
-        addBehaviours();
+        super.setup();
+        
+        // Add behaviours.
+        addBehaviour(new Role_Manager());
+        logInfo("Behaviours added.");
         
         // TAG YellowPages
         //registerWithYellowPages();
@@ -194,13 +198,6 @@ public class Role extends Agent {
     
     protected void addPower(Power power) {
         invokePowerResponder.addPower(power);
-    }
-    
-    // ----- Initialization -----
-
-    private void addBehaviours() {
-        addBehaviour(new Role_Manager());
-        logInfo("Behaviours added.");
     }
     
     // ----- Yellow pages registration -----
