@@ -1,6 +1,7 @@
 package demo1.organizations;
 
 import demo1.organizations.powers.CalculateFactorial_Power;
+import jade.core.AID;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 
@@ -47,6 +48,7 @@ public class DemoOrganization extends Organization {
             
             // Add powers.
             addPower(new CalculateFactorial_Power());
+            logInfo("Powers added.");
         }
         
         // </editor-fold>
@@ -62,12 +64,26 @@ public class DemoOrganization extends Organization {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        /**
+         * Responds to the 'Calculate factorial' protocol.
+         * @param protocolId the protocol id
+         * @param askerAID the sender AID
+         */
+        void respondToCalculateFactorial(String protocolId, AID askerAID) {
+            logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).", protocolId));
+        
+            addBehaviour(new Answerer_CalculateFactorialResponder(protocolId, askerAID));
+        }
+        
+        // ----- PROTECTED -----
+        
         @Override
         protected void setup() {
             super.setup();
             
-            // Add powers.
-            // No powers.
+            // Add behaviours.
+            addBehaviour(new Answerer_Manager());
+            logInfo("Behaviours added.");
         }
         
         // </editor-fold>

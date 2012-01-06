@@ -1,18 +1,26 @@
-package demo1.protocols;
+package demo1.protocols.calculatefactorialprotocol;
 
 import jadeorg.proto.Protocol;
 
 /**
  * The 'Calculate factorial' protocol.
  * @author Lukáš Kúdela
- * @since 2011-01-02
+ * @since 2012-01-02
  * @version %I% %G%
  */
 public class CalculateFactorialProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
     private static final String NAME = "calculate-factorial-protocol";
     
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
     private static CalculateFactorialProtocol singleton;
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
