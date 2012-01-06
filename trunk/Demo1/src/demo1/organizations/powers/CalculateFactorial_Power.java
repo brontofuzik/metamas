@@ -9,7 +9,7 @@ import jadeorg.core.organization.power.ComplexPower;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class CalculateFactorial_Power extends ComplexPower {
+public class CalculateFactorial_Power extends ComplexPower<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
