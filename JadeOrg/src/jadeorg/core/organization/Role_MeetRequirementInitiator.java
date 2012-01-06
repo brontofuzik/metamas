@@ -9,11 +9,11 @@ import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentInformMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementRequestMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ResultInformMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
 import java.io.Serializable;
 
 /**
@@ -34,21 +34,60 @@ public class Role_MeetRequirementInitiator extends Party {
     
     private AID playerAID;
     
-    private Object argument;
+    private String requirementName;
     
-    private Object result;
+    private Object requirementArgument;
+    
+    private Object requirementResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Role_MeetRequirementInitiator() {
+    public Role_MeetRequirementInitiator(String requirementName) {
         super(NAME);
+        // ----- Preconditions -----
+        assert requirementName != null && !requirementName.isEmpty();
+        // -------------------------
         
         setProtocolId(new Integer(hashCode()).toString());
+        this.requirementName = requirementName;
         
         registerStatesAndtransitions();
     }
+    
+    public Role_MeetRequirementInitiator(String requirementName, Object requirementArgument) {
+        this(requirementName);
+        
+        this.requirementArgument = requirementArgument;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    @Override
+    public Protocol getProtocol() {
+        return MeetRequirementProtocol.getInstance();
+    }
+    
+    public void setRequirementArgument(Object requirementArgument) {
+        this.requirementArgument = requirementArgument;
+    }
+    
+    public Object getRequirementResult() {
+        return requirementResult;
+    }
+    
+    // ----- PRIVATE -----
+    
+    private Role getMyRole() {
+        return (Role)myAgent;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
     
     private void registerStatesAndtransitions() {
         // ----- States -----
@@ -61,9 +100,11 @@ public class Role_MeetRequirementInitiator extends Party {
         
         // Register the states.
         registerFirstState(sendRequirementRequest);
+        
         registerState(receiveArgumentRequest);
         registerState(sendRequirementArgument);
         registerState(receiveRequirementResult);
+        
         registerLastState(end);
         
         // Regster the transitions.
@@ -77,31 +118,6 @@ public class Role_MeetRequirementInitiator extends Party {
     }
     
     // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return MeetRequirementProtocol.getInstance();
-    }
-        
-    // ----- PACKAGE -----    
-    
-    void setArgument(Object argument) {
-        this.argument = argument;
-    }
-    
-    Object getResult() {
-        return result;
-    }
-    
-    // ----- PRIVATE -----
-    
-    private Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
-    // </editor-fold>  
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
@@ -131,7 +147,7 @@ public class Role_MeetRequirementInitiator extends Party {
         @Override
         protected void onSingleSender() {
             RequirementRequestMessage message = new RequirementRequestMessage();
-            message.setRequirement(getParent().getBehaviourName());
+            message.setRequirement(requirementName);
             
             send(message, playerAID);
         }
@@ -212,7 +228,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected int onManager() {
-            if (argument != null && argument instanceof Serializable) {
+            if (requirementArgument != null && requirementArgument instanceof Serializable) {
                 return SUCCESS;
             } else {
                 return FAILURE;
@@ -221,8 +237,8 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onSuccessSender() {
-            ArgumentInformMessage message = new ArgumentInformMessage();
-            message.setArgument(argument);
+            RequirementArgumentMessage message = new RequirementArgumentMessage();
+            message.setArgument(requirementArgument);
 
             send(message, playerAID);
         }
@@ -260,14 +276,14 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected int onSuccessReceiver() {
-            ResultInformMessage message = new ResultInformMessage();
+            RequirementResultMessage message = new RequirementResultMessage();
             boolean messageReceived = receive(message, playerAID);
 
             if (messageReceived) {
-                result = message.getResult();
+                requirementResult = message.getResult();
                 return InnerReceiverState.RECEIVED;
             } else {
-                result = null;
+                requirementResult = null;
                 return InnerReceiverState.NOT_RECEIVED;
             }
         }

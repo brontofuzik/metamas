@@ -159,18 +159,15 @@ public abstract class Player extends Agent {
     
     @Override
     protected void setup() {
-        addBehaviours();
+        super.setup();
+        
+        // Add behaviours.
+        addBehaviour(new Player_Manager());
+        logInfo("Behaviours added.");
     }
     
     protected void addRequirement(Requirement requirement) {
         meetRequirementResponder.addRequirement(requirement);
-    }
-    
-    // ---------- PRIVATE ----------
-    
-    private void addBehaviours() {
-        addBehaviour(new Player_Manager());
-        logInfo("Behaviours added.");
     }
     
     // </editor-fold>

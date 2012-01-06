@@ -34,7 +34,7 @@ public class Organization_Manager extends ManagerBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
     /**
-     * 
+     * The 'Enact role' protocol handler.
      */
     private class EnactRoleHandler extends HandlerBehaviour {
 
@@ -47,9 +47,9 @@ public class Organization_Manager extends ManagerBehaviour {
                     EnactRoleProtocol.getInstance().getTemplate(),
                     MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                  
-            ACLMessage message = getMyOrganization().receive(template);          
+            ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                getMyOrganization().putBack(message);
+                myAgent.putBack(message);
                 getMyOrganization().respondToEnactRole(message.getConversationId(), message.getSender());
             }
         }
@@ -58,7 +58,7 @@ public class Organization_Manager extends ManagerBehaviour {
     }
 
     /**
-     * 
+     * The 'Deact role' protocol handler.
      */
     private class DeactRoleHandler extends HandlerBehaviour {
 
@@ -71,9 +71,9 @@ public class Organization_Manager extends ManagerBehaviour {
                     DeactRoleProtocol.getInstance().getTemplate(),
                     MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
-            ACLMessage message = getMyOrganization().receive(template);          
+            ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                getMyOrganization().putBack(message);
+                myAgent.putBack(message);
                 getMyOrganization().respondToDeactRole(message.getConversationId(), message.getSender());
             }
         }

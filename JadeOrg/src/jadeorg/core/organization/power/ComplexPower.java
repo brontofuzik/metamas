@@ -3,6 +3,7 @@ package jadeorg.core.organization.power;
 import jadeorg.core.organization.Role;
 import jadeorg.proto.Party;
 import jadeorg.proto.PartyState;
+import jadeorg.proto.PowerParty;
 
 /**
  * A complex power.
@@ -10,19 +11,11 @@ import jadeorg.proto.PartyState;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public abstract class ComplexPower extends PartyState implements Power {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private Object argument;
-    
-    private Object result;
-    
-    // </editor-fold>
+public abstract class ComplexPower<TArgument, TResult> extends PartyState implements Power<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ComplexPower(String name, Party party) {
+    public ComplexPower(String name, PowerParty party) {
         super(name, party);
     }
     
@@ -30,26 +23,18 @@ public abstract class ComplexPower extends PartyState implements Power {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public Object getArgument() {
-        return argument;
+    public void setArgument(TArgument argument) {
+        getUnderlyingPowerParty().setArgument(argument);
     }
     
-    public void setArgument(Object argument) {
-        this.argument = argument;
+    public TResult getResult() {
+        return getUnderlyingPowerParty().getResult();
     }
     
-    public Object getResult() {
-        return result;
-    }
+    // ----- PRIVATE -----
     
-    public void setResult(Object result) {
-        this.result = result;
-    }
-    
-    // ----- PROTECTED -----
-        
-    protected Role getMyPlayer() {
-        return (Role)myAgent;
+    private PowerParty<TArgument, TResult> getUnderlyingPowerParty() {
+        return (PowerParty<TArgument, TResult>)getUnderlyingParty();
     }
     
     // </editor-fold>

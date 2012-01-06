@@ -50,6 +50,10 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    public AID getRoleAID(String roleName) {
+        return knowledgeBase.getRole(roleName);
+    }
+    
     /**
      * Enacts a role.
      * @param player the player
@@ -96,7 +100,11 @@ public abstract class Organization extends Agent {
     
     @Override
     protected void setup() {
-        addBehaviours();
+        super.setup();
+        
+        // Add behaviours.
+        addBehaviour(new Organization_Manager());
+        logInfo("Behaviours addded.");
         
         // TAG YellowPages
         //registerWithYellowPages();
@@ -133,13 +141,6 @@ public abstract class Organization extends Agent {
      */
     protected void addRole(Class roleClass) {        
         addRole(roleClass, new String[0]);
-    }
-
-    // ---------- PRIVATE ----------
-    
-    private void addBehaviours() {
-        addBehaviour(new Organization_Manager());
-        logInfo("Behaviours addded.");
     }
 
     // TAG YellowPages
@@ -224,4 +225,6 @@ public abstract class Organization extends Agent {
         
         // </editor-fold>
     }
+    
+    // </editor-fold>
 }

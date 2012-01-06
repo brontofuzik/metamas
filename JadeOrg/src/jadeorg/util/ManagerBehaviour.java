@@ -55,6 +55,8 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     public abstract class HandlerBehaviour extends OneShotBehaviour {
+        
+        
     }
     
     private class BlockerBehaviour extends OneShotBehaviour {

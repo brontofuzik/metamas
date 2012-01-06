@@ -5,22 +5,22 @@ import jadeorg.lang.BinaryMessage;
 import java.io.Serializable;
 
 /**
- * A 'Result inform' message.
+ * A 'Argument inform' message.
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class ResultInformMessage extends BinaryMessage {
+public class RequirementArgumentMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object result;
+    private Object argument;
     
-    // </editor-fold>`
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ResultInformMessage() {
+    public RequirementArgumentMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -28,27 +28,27 @@ public class ResultInformMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public Object getResult() {
-        return result;
+    public Object getArgument() {
+        return argument;
     }
     
-    public ResultInformMessage setResult(Object result) {
-        this.result = result;
-        return this;
+    public RequirementArgumentMessage setArgument(Object argument) {
+        this.argument = argument;
+        return this; 
     }
     
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    @Override
+     @Override
     protected Serializable getContentObject() {
-        return (Serializable)result;
+        return (Serializable)argument;
     }
 
     @Override
     protected void setContentObject(Serializable contentObject) {
-        result = contentObject;
+        argument = contentObject;
     }
     
     // </editor-fold>

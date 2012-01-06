@@ -1,17 +1,13 @@
-package jadeorg.core.organization.power;
-
-import jadeorg.core.organization.Role;
-import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+package jadeorg.proto;
 
 /**
- * A simple power.
+ * A power party.
  * @author Lukáš Kúdela
- * @since 2011-01-02
+ * @since 2012-01-05
  * @version %I% %G%
  */
-public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourState
-    implements Power<TArgument, TResult> {
-    
+public abstract class PowerParty<TArgument, TResult> extends Party {
+   
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private TArgument argument;
@@ -22,13 +18,13 @@ public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourSt
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SimplePower(String name) {
+    protected PowerParty(String name) {
         super(name);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters"> 
     
     public void setArgument(TArgument argument) {
         this.argument = argument;
@@ -44,15 +40,9 @@ public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourSt
         return argument;
     }
     
-    public void setResult(TResult result) {
+    protected void setResult(TResult result) {
         this.result = result;
     }
     
-    // ----- PROTECTED -----
-    
-    protected Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
-    // </editor-fold> 
+    // </editor-fold>   
 }

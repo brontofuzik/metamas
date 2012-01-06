@@ -11,7 +11,7 @@ import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
-import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentRequestMessage;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
 import java.util.Hashtable;
 import java.util.Map;
@@ -221,7 +221,7 @@ public class Role_InvokePowerResponder extends Party {
         
         @Override
         protected void onSuccessSender() {
-            PowerArgumentRequestMessage message = new PowerArgumentRequestMessage();
+            ArgumentRequestMessage message = new ArgumentRequestMessage();
             
             send(message, playerAID);
         }
