@@ -49,7 +49,7 @@ public class Answerer_CalculateFactorialResponder extends Party {
         setProtocolId(protocolId);
         this.askerAID = askerAID;
         
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -71,7 +71,7 @@ public class Answerer_CalculateFactorialResponder extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State receiveRequest = new ReceiveRequest();
         State meetRequirementCalculateFactorial = new MeetRequirementCalculateFactorial();
@@ -90,7 +90,7 @@ public class Answerer_CalculateFactorialResponder extends Party {
         // Register the transitions.
         receiveRequest.registerDefaultTransition(meetRequirementCalculateFactorial);
         
-        meetRequirementCalculateFactorial.registerDefaultTransition(end);
+        meetRequirementCalculateFactorial.registerDefaultTransition(sendReply);
         
         sendReply.registerDefaultTransition(end);  
     }
