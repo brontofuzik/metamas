@@ -53,7 +53,7 @@ class Player_EnactRoleInitiator extends Party {
         this.organizationAID = organization;
         this.roleName = roleName;
 
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -73,7 +73,7 @@ class Player_EnactRoleInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State sendEnactRequest = new SendEnactRequest();
         State receiveRequirementsInform = new ReceiveRequirementsInform();

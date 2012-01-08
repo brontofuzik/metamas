@@ -30,6 +30,8 @@ public class Role extends Agent {
     
     AID playerAID;
     
+    // ----- PRIVATE -----
+    
     private Logger logger;
     
     // </editor-fold>

@@ -50,7 +50,7 @@ public class Player_InvokePowerInitiator extends Party {
         setProtocolId(new Integer(hashCode()).toString());
         this.powerName = powerName;
         
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     public Player_InvokePowerInitiator(String powerName, Object powerArgument) {
@@ -85,8 +85,8 @@ public class Player_InvokePowerInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TODO Rework all registerStatesAndTransitions() methods.
-    private void registerStatesAndTransitions() {
+    // TODO Rework all buildFSM() methods.
+    private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();
         State sendInvokePowerRequest = new SendInvokePowerRequest();

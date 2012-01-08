@@ -44,7 +44,7 @@ public class Organization_DeactRoleResponder extends Party {
         setProtocolId(protocolId);
         this.playerAID = playerAID;
 
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -69,7 +69,7 @@ public class Organization_DeactRoleResponder extends Party {
     /**
      * Registers the transitions and transitions.
      */
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         State receiveDeactRequest = new ReceiveDeactRequest();
         State sendDeactReply = new SendDeactReply();
         State successEnd = new SuccessEnd();

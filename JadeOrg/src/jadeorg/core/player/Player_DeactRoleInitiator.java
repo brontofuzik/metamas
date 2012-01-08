@@ -47,7 +47,7 @@ public class Player_DeactRoleInitiator extends Party {
         this.organizationAID = organization;
         this.roleName = roleName;
 
-        registerStatesAndTransitions();
+        buildFSM();
     }
 
     // </editor-fold>
@@ -69,7 +69,7 @@ public class Player_DeactRoleInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State sendDeactRequest = new SendDeactRequest();
         State receiveDeactReply = new ReceiveDeactReply();

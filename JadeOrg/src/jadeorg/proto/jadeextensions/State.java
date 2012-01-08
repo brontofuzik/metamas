@@ -12,8 +12,6 @@ public interface State {
     
     String getName();
     
-    int getCode();
-    
     Party getParty();
 
     void registerTransition(int event, State targetState);

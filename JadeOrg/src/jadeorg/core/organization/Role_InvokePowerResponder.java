@@ -32,6 +32,8 @@ public class Role_InvokePowerResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private AID playerAID;
+    
     private Map<String, Power> powers = new Hashtable<String, Power>();
     
     private Power currentPower;
@@ -40,15 +42,13 @@ public class Role_InvokePowerResponder extends Party {
     
     private State sendPowerResult;
     
-    private AID playerAID;
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Role_InvokePowerResponder() {
         super(NAME);   
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -105,7 +105,7 @@ public class Role_InvokePowerResponder extends Party {
     
     // ----- PRIVATE -----
     
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State receiveInvokePowerRequest = new ReceiveInvokePowerRequest();
         State sendPowerArgumentRequest = new SendPowerArgumentRequest();
@@ -373,7 +373,7 @@ public class Role_InvokePowerResponder extends Party {
         
         @Override
         public void action() {
-            // TODO Implement.
+            getMyRole().logInfo("The 'Invoke power' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -399,7 +399,7 @@ public class Role_InvokePowerResponder extends Party {
         
         @Override
         public void action() {
-            // TODO Implement.
+            getMyRole().logInfo("The 'Invoke power' responder party failed.");
         }
         
         // </editor-fold>

@@ -23,7 +23,7 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public ManagerBehaviour() {     
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -41,7 +41,7 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
         parallelBehaviour.addSubBehaviour(handler);
     }
     
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         registerFirstState(new ParallelBehaviour(), PARALLEL_BEHAVIOUR_NAME);
         registerState(new BlockerBehaviour(), BLOCKER_BEHAVIOUR_NAME);
         

@@ -1,11 +1,10 @@
 package jadeorg.proto;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
+import jadeorg.proto.jadeextensions.FSMBehaviourState;
 
 /**
  * A protocol party.
@@ -13,7 +12,7 @@ import jadeorg.lang.Message;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public abstract class Party extends FSMBehaviour {
+public abstract class Party extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -24,24 +23,20 @@ public abstract class Party extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected Party(String name) {
-        setBehaviourName(name);
+        super(name);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public String getName() {
-        return getBehaviourName();
-    }
-    
-    // TODO Change the access modified to protected.
-    public abstract Protocol getProtocol();
-    
     public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
     } 
-   
+    
+    // TODO Change the access modifier to protected.
+    public abstract Protocol getProtocol();
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -90,32 +85,6 @@ public abstract class Party extends FSMBehaviour {
         } else {
             return false;
         }
-    }
-    
-    public ACLMessage receiveACLMessage() {
-        return myAgent.receive();
-    }
-    
-    // ---------- PROTECTED ----------
-    
-    protected void registerState(jadeorg.proto.jadeextensions.State state) {
-        registerState((Behaviour)state, state.getName());
-    }
-    
-    protected void registerFirstState(jadeorg.proto.jadeextensions.State state) {
-        registerFirstState((Behaviour)state, state.getName());
-    }
-    
-    protected void registerLastState(jadeorg.proto.jadeextensions.State state) {
-        registerLastState((Behaviour)state, state.getName());
-    }
-    
-    protected void registerTransition(jadeorg.proto.jadeextensions.State fromState, jadeorg.proto.jadeextensions.State toState) {
-        registerTransition(fromState.getName(), toState.getName(), toState.getCode());
-    }
-    
-    protected void registerDefaultTransition(jadeorg.proto.jadeextensions.State fromState, jadeorg.proto.jadeextensions.State toState) {
-        registerDefaultTransition(fromState.getName(), toState.getName());
     }
     
     // </editor-fold>

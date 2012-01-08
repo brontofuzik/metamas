@@ -13,7 +13,7 @@ public class ArgumentRequestMessage extends SimpleMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final String CONTENT = "power-argument";
+    private static final String CONTENT = "power-argument?";
     
     // </editor-fold>
     
