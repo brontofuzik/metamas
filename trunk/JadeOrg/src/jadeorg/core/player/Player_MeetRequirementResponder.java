@@ -6,12 +6,14 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
+import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
 import java.io.Serializable;
 import java.util.Hashtable;
@@ -39,7 +41,7 @@ public class Player_MeetRequirementResponder extends Party {
     
     private Requirement currentRequirement;
     
-    private State receiveRequirementArgument;
+    private State selectRequirement;
     
     private State sendRequirementResult;
     
@@ -49,29 +51,41 @@ public class Player_MeetRequirementResponder extends Party {
     
     public Player_MeetRequirementResponder() {
         super(NAME);
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
-    private void registerStatesAndTransitions() {        
-        // ----- States -----
-        State sendArgumentRequest = new SendArgumentRequest();       
-        receiveRequirementArgument = new ReceiveRequirementArgument();
+    private void buildFSM() {        
+         // ----- States -----
+        State receiveMeetRequirementRequest = new ReceiveMeetRequirementRequest();
+        State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
+        State receiveRequirementArgument = new ReceiveRequirementArgument();
+        selectRequirement = new SelectRequirement();
         sendRequirementResult = new SendRequirementResult();
-        State end = new End();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
         // ------------------
         
-        // Register the states.
-        registerFirstState(sendArgumentRequest);
+        // Register states.
+        registerFirstState(receiveMeetRequirementRequest);
+        
+        registerState(sendRequirementArgumentRequest);
         registerState(receiveRequirementArgument);
+        registerState(selectRequirement);
         registerState(sendRequirementResult);
-        registerLastState(end);
         
-        // Register the transitions.     
-        sendArgumentRequest.registerDefaultTransition(receiveRequirementArgument);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
         
-        receiveRequirementArgument.registerTransition(1, end);
+        // Register transitions.
+        receiveMeetRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
         
-        sendRequirementResult.registerDefaultTransition(end);      
+        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
+        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.FAILURE, failureEnd);
+        
+        receiveRequirementArgument.registerDefaultTransition(selectRequirement);
+        
+        sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
+        sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
     }
     
     // </editor-fold>
@@ -106,7 +120,6 @@ public class Player_MeetRequirementResponder extends Party {
     void selectRequirement(String requirementName) {
         if (containsRequirement(requirementName)) {
             currentRequirement = getRequirement(requirementName);
-            reset();
         }
     }
     
@@ -115,11 +128,11 @@ public class Player_MeetRequirementResponder extends Party {
     protected void addRequirement(Requirement requirement) {
         requirements.put(requirement.getName(), requirement);
         
-        // Register the state.
+        // Register the requirement-relates states.
         registerState(requirement);
         
-        // Register the transitions.
-        receiveRequirementArgument.registerTransition(requirement.hashCode(), requirement);
+        // Register the requirement-related transitions.
+        selectRequirement.registerTransition(requirement.hashCode(), requirement);
         requirement.registerDefaultTransition(sendRequirementResult);
     }
     
@@ -133,72 +146,121 @@ public class Player_MeetRequirementResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SendArgumentRequest extends SingleSenderState {
-    
+     private class ReceiveMeetRequirementRequest extends SingleReceiverState {
+
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "send-argument-request";
+        private static final String NAME = "receive-meet-requirement-request";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SendArgumentRequest() {
+        ReceiveMeetRequirementRequest() {
             super(NAME);
         }
         
         // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending argument request.");
+            getMyPlayer().logInfo("Receiving meet requirement request.");
         }
         
         @Override
-        protected void onSingleSender() {
-            ArgumentRequestMessage message = new ArgumentRequestMessage();
-
-            send(message, roleAID);
+        protected int onSingleReceiver() {
+            MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
+            boolean messageReceived = receive(message, roleAID);
+            
+            if (messageReceived) {
+                selectRequirement(message.getRequirement());
+                return InnerReceiverState.RECEIVED;
+            } else {
+                return InnerReceiverState.NOT_RECEIVED;
+            }
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Argument request sent.");
+            getMyPlayer().logInfo("Meet requirement request received.");
         }
         
-        // </editor-fold>
+        // </editor-fold>`
     }
     
-    private class ReceiveRequirementArgument extends ReceiveSuccessOrFailure {
-
+    private class SendRequirementArgumentRequest extends SendSuccessOrFailure {
+        
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receive-requirement-argument";
+        private static final String NAME = "send-requirement-argument-request";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
-       
-        ReceiveRequirementArgument() {
+        
+        SendRequirementArgumentRequest() {
             super(NAME, roleAID);
         }
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving argument.");
+            getMyPlayer().logInfo("Send requirement argument request.");
+        }
+
+        @Override
+        protected int onManager() {
+            return SUCCESS;
         }
         
         @Override
-        protected int onSuccessReceiver() {
+        protected void onSuccessSender() {
+            ArgumentRequestMessage message = new ArgumentRequestMessage();
+            
+            send(message, roleAID);
+        }
+
+        @Override
+        protected void onExit() {
+            getMyPlayer().logInfo("Requirement argument request sent.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class ReceiveRequirementArgument extends SingleReceiverState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "receive-requirement-argument";
+        
+        // </editor-fold>
+     
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRequirementArgument() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyPlayer().logInfo("Receiving requirement argument.");
+        }
+        
+        @Override
+        protected int onSingleReceiver() {
             RequirementArgumentMessage message = new RequirementArgumentMessage();
             boolean messageReceived = receive(message, roleAID);
-
+            
             if (messageReceived) {
                 currentRequirement.setArgument(message.getArgument());
                 return InnerReceiverState.RECEIVED;
@@ -209,14 +271,45 @@ public class Player_MeetRequirementResponder extends Party {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Argument received.");
+            getMyPlayer().logInfo("Requirement argument received.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class SelectRequirement extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "select-requirement";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        SelectRequirement() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Do nothing.
+        }
+        
+        @Override
+        public int onEnd() {
+            return currentRequirement.hashCode();
         }
         
         // </editor-fold>
     }
     
     private class SendRequirementResult extends SendSuccessOrFailure {
-
+          
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         private static final String NAME = "send-requirement-result";
@@ -237,21 +330,17 @@ public class Player_MeetRequirementResponder extends Party {
         protected void onEntry() {
             getMyPlayer().logInfo("Sending requirement result.");
         }
-        
+
         @Override
         protected int onManager() {
-            return currentRequirement.getResult() instanceof Serializable ?
-                SUCCESS :
-                FAILURE;
+            return SUCCESS;
         }
         
         @Override
         protected void onSuccessSender() {
-            // Create the 'Result inform' message.
             RequirementResultMessage message = new RequirementResultMessage();
             message.setResult(currentRequirement.getResult());
-
-            // Send the message.
+            
             send(message, roleAID);
         }
 
@@ -259,21 +348,21 @@ public class Player_MeetRequirementResponder extends Party {
         protected void onExit() {
             getMyPlayer().logInfo("Requirement result sent.");
         }
-   
+        
         // </editor-fold>
-    } 
+    }
     
-    private class End extends OneShotBehaviourState {
-
+    private class SuccessEnd extends OneShotBehaviourState {
+    
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "end";
+        private static final String NAME = "success-end";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        End() {
+        SuccessEnd() {
             super(NAME);
         }
         
@@ -283,7 +372,33 @@ public class Player_MeetRequirementResponder extends Party {
         
         @Override
         public void action() {
-            // Do nothing.
+            getMyPlayer().logInfo("The 'Meet requirement' responder party succeeded.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class FailureEnd extends OneShotBehaviourState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "failure-end";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        FailureEnd() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            getMyPlayer().logInfo("The 'Meet requirement' responder party failed.");
         }
         
         // </editor-fold>

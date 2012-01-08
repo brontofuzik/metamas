@@ -53,7 +53,7 @@ class Organization_EnactRoleResponder extends Party {
         setProtocolId(protocolId);
         this.playerAID = playerAID;
         
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -73,7 +73,7 @@ class Organization_EnactRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State receiveEnactRequest = new ReceiveEnactRequest();
         State sendRequirementsInform = new SendRequirementsInform();

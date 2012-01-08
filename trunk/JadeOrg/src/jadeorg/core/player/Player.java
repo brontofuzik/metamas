@@ -116,10 +116,11 @@ public abstract class Player extends Agent {
     }
     
     public void respondToMeetRequirement(String protocolId, AID roleAID) {
-        logInfo("Responding to the 'Meet requirement' protocol.");
+        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).", protocolId));
         
         if (roleAID.equals(knowledgeBase.getActiveRole().getRoleAID())) {
             // The sender role is the active role.
+            meetRequirementResponder.setProtocolId(protocolId);
             meetRequirementResponder.setRoleAID(roleAID);
             addBehaviour(meetRequirementResponder);
         } else {

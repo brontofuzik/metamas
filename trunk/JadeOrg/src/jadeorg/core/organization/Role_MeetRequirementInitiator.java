@@ -12,7 +12,7 @@ import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementRequestMessage;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
 import java.io.Serializable;
 
@@ -53,7 +53,7 @@ public class Role_MeetRequirementInitiator extends Party {
         setProtocolId(new Integer(hashCode()).toString());
         this.requirementName = requirementName;
         
-        registerStatesAndtransitions();
+        buildFSM();
     }
     
     public Role_MeetRequirementInitiator(String requirementName, Object requirementArgument) {
@@ -89,37 +89,71 @@ public class Role_MeetRequirementInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    private void registerStatesAndtransitions() {
+    private void buildFSM() {
         // ----- States -----
+        State initialize = new Initialize();
         State sendRequirementRequest = new SendRequirementRequest();
-        State receiveArgumentRequest = new ReceiveArgumentRequest();
+        State receiveRequirementArgumentRequest = new ReceiveRequirementArgumentRequest();
         State sendRequirementArgument = new SendRequirementArgument();
         State receiveRequirementResult = new ReceiveRequirementResult();
-        State end = new End();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
-        registerFirstState(sendRequirementRequest);
+        registerFirstState(initialize);
         
-        registerState(receiveArgumentRequest);
+        registerState(sendRequirementRequest);   
+        registerState(receiveRequirementArgumentRequest);
         registerState(sendRequirementArgument);
         registerState(receiveRequirementResult);
         
-        registerLastState(end);
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
         
         // Regster the transitions.
-        sendRequirementRequest.registerDefaultTransition(receiveArgumentRequest);
+        initialize.registerDefaultTransition(sendRequirementRequest);
         
-        receiveArgumentRequest.registerDefaultTransition(sendRequirementArgument);
+        sendRequirementRequest.registerDefaultTransition(receiveRequirementArgumentRequest);
+        
+        receiveRequirementArgumentRequest.registerTransition(ReceiveRequirementArgumentRequest.SUCCESS, sendRequirementArgument);
+        receiveRequirementArgumentRequest.registerTransition(ReceiveRequirementArgumentRequest.FAILURE, failureEnd);
         
         sendRequirementArgument.registerDefaultTransition(receiveRequirementResult);
         
-        receiveRequirementResult.registerDefaultTransition(end);            
+        receiveRequirementResult.registerTransition(ReceiveRequirementResult.SUCCESS, successEnd);
+        receiveRequirementResult.registerTransition(ReceiveRequirementResult.FAILURE, failureEnd);
     }
     
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class Initialize extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private static final String NAME = "initialize";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        Initialize() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            playerAID = getMyRole().playerAID;
+        }
+        
+        // </editor-fold>
+    }
     
     private class SendRequirementRequest extends SingleSenderState {
 
@@ -146,7 +180,7 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         protected void onSingleSender() {
-            RequirementRequestMessage message = new RequirementRequestMessage();
+            MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
             message.setRequirement(requirementName);
             
             send(message, playerAID);
@@ -160,18 +194,18 @@ public class Role_MeetRequirementInitiator extends Party {
         // </editor-fold>
     }
     
-    private class ReceiveArgumentRequest extends SingleReceiverState {
+    private class ReceiveRequirementArgumentRequest extends ReceiveSuccessOrFailure {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "receive-argument-request";
+        private static final String NAME = "receive-requirement-argument-request";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        ReceiveArgumentRequest() {
-            super(NAME);
+        ReceiveRequirementArgumentRequest() {
+            super(NAME, playerAID);
         }
         
         // </editor-fold>
@@ -184,7 +218,7 @@ public class Role_MeetRequirementInitiator extends Party {
         }
         
         @Override
-        protected int onSingleReceiver() {
+        protected int onSuccessReceiver() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
             boolean messageReceived = receive(message, playerAID);
             
@@ -296,17 +330,20 @@ public class Role_MeetRequirementInitiator extends Party {
         // </editor-fold>
     }
     
-    private class End extends OneShotBehaviourState {
+    /**
+     * The 'Success end' (one-shot) state.
+     */
+    private class SuccessEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
-        private static final String NAME = "end";
+        private static final String NAME = "success-end";
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        End() {
+        SuccessEnd() {
             super(NAME);
         }
         
@@ -316,8 +353,36 @@ public class Role_MeetRequirementInitiator extends Party {
         
         @Override
         public void action() {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyRole().logInfo("The 'Meet requirement' initiator party suceeded.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Failure end' (one-shot) state.
+     */
+    private class FailureEnd extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "failure-end";
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        FailureEnd() {
+            super(NAME);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            getMyRole().logInfo("The 'Meet requirement' initiator party failed.");
         }
         
         // </editor-fold>

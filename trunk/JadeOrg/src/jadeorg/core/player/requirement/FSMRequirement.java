@@ -1,52 +1,53 @@
 package jadeorg.core.player.requirement;
 
 import jadeorg.core.player.Player;
-import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.FSMBehaviourState;
 
 /**
- * A simple requirement.
+ * A FSM requirement.
  * @author Lukáš Kúdela
  * @since 2011-01-02
  * @version %I% %G%
  */
-public abstract class SimpleRequirement extends OneShotBehaviourState implements Requirement {
-   
+public class FSMRequirement<TArgument, TResult> extends FSMBehaviourState
+    implements Requirement<TArgument, TResult> {
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object argument;
+    private TArgument argument;
     
-    private Object result;
+    private TResult result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SimpleRequirement(String name) {
+    public FSMRequirement(String name) {
         super(name);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public Object getArgument() {
-        return argument;
-    }
-    
-    public void setArgument(Object argument) {
+        
+    public void setArgument(TArgument argument) {
         this.argument = argument;
     }
     
-    public Object getResult() {
+    public TResult getResult() {
         return result;
-    }
-    
-    public void setResult(Object result) {
-        this.result = result;
     }
     
     // ----- PROTECTED -----
     
+    protected TArgument getArgument() {
+        return argument;
+    }
+    
+    protected void setResult(TResult result) {
+        this.result = result;
+    }
+        
     protected Player getMyPlayer() {
         return (Player)myAgent;
     }

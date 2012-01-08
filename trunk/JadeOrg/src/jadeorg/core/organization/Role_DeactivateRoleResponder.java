@@ -42,7 +42,7 @@ public class Role_DeactivateRoleResponder extends Party {
         setProtocolId(protocolId);
         this.playerAID = playerAID;
 
-        registerStatesAndTransitions();
+        buildFSM();
     }
 
     // </editor-fold>
@@ -64,7 +64,7 @@ public class Role_DeactivateRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State receiveActivateRequest = new ReceiveDeactivateRequest();
         State sendActivateReply = new SendDeactivateReply();

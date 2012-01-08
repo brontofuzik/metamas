@@ -16,7 +16,7 @@ public class InvokePowerRequestMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String powerName;
+    private String power;
     
     // </editor-fold>
     
@@ -31,11 +31,11 @@ public class InvokePowerRequestMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     public String getPower() {
-        return powerName;
+        return power;
     }
     
     public InvokePowerRequestMessage setPower(String powerName) {
-        this.powerName = powerName;
+        this.power = powerName;
         return this;
     }
     
@@ -45,7 +45,7 @@ public class InvokePowerRequestMessage extends TextMessage {
     
     @Override
     public String generateContent() {
-        return String.format("invoke-power(%1$s)", powerName);
+        return String.format("invoke-power(%1$s)", power);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class InvokePowerRequestMessage extends TextMessage {
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  
-        powerName = matcher.group(1);
+        power = matcher.group(1);
     }
      
     // </editor-fold>

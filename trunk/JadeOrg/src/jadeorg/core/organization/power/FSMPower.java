@@ -1,15 +1,15 @@
 package jadeorg.core.organization.power;
 
 import jadeorg.core.organization.Role;
-import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.FSMBehaviourState;
 
 /**
- * A simple power.
+ * A FSM power.
  * @author Lukáš Kúdela
  * @since 2011-01-02
  * @version %I% %G%
  */
-public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourState
+public abstract class FSMPower<TArgument, TResult> extends FSMBehaviourState
     implements Power<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -22,14 +22,14 @@ public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourSt
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SimplePower(String name) {
+    public FSMPower(String name) {
         super(name);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
+        
     public void setArgument(TArgument argument) {
         this.argument = argument;
     }
@@ -44,15 +44,13 @@ public abstract class SimplePower<TArgument, TResult> extends OneShotBehaviourSt
         return argument;
     }
     
-    public void setResult(TResult result) {
+    protected void setResult(TResult result) {
         this.result = result;
     }
-    
-    // ----- PROTECTED -----
     
     protected Role getMyRole() {
         return (Role)myAgent;
     }
     
-    // </editor-fold> 
+    // </editor-fold>
 }

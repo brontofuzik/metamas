@@ -1,7 +1,7 @@
 package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.TextMessage;
+import jadeorg.lang.SimpleMessage;
 
 /**
  * 
@@ -9,26 +9,19 @@ import jadeorg.lang.TextMessage;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class ArgumentRequestMessage extends TextMessage {
-
+public class ArgumentRequestMessage extends SimpleMessage {
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final String CONTENT = "requirement-argument?";
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public ArgumentRequestMessage() {
         super(ACLMessage.REQUEST);
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    public String generateContent() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void parseContent(String content) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        setContent(CONTENT);
     }
     
     // </editor-fold>

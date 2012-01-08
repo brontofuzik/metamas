@@ -2,6 +2,8 @@ package jadeorg.proto.roleprotocol.meetrequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.TextMessage;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A 'Requirement request' message.
@@ -11,7 +13,7 @@ import jadeorg.lang.TextMessage;
  * @since
  * @version %I% %G%
  */
-public class RequirementRequestMessage extends TextMessage {
+public class MeetRequirementRequestMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -21,7 +23,7 @@ public class RequirementRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RequirementRequestMessage() {
+    public MeetRequirementRequestMessage() {
         super(ACLMessage.REQUEST);
     }
     
@@ -33,7 +35,7 @@ public class RequirementRequestMessage extends TextMessage {
         return requirement;
     }
     
-    public RequirementRequestMessage setRequirement(String requirement) {
+    public MeetRequirementRequestMessage setRequirement(String requirement) {
         this.requirement = requirement;
         return this;
     }
@@ -44,12 +46,16 @@ public class RequirementRequestMessage extends TextMessage {
 
     @Override
     public String generateContent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return String.format("meet-requirement(%1$s)", requirement);
     }
 
     @Override
     public void parseContent(String content) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Pattern contentPattern = Pattern.compile("meet-requirement\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+ 
+        requirement = matcher.group(1);
     }
     
     // </editor-fold>

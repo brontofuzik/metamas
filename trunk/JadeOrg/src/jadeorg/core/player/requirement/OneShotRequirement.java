@@ -1,12 +1,16 @@
-package jadeorg.proto;
+package jadeorg.core.player.requirement;
+
+import jadeorg.core.player.Player;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * A power party.
+ * A one-shot requirement.
  * @author Lukáš Kúdela
- * @since 2012-01-05
+ * @since 2011-01-02
  * @version %I% %G%
  */
-public abstract class PowerParty<TArgument, TResult> extends Party {
+public abstract class OneShotRequirement<TArgument, TResult> extends OneShotBehaviourState
+    implements Requirement<TArgument, TResult> {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -18,14 +22,14 @@ public abstract class PowerParty<TArgument, TResult> extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected PowerParty(String name) {
+    public OneShotRequirement(String name) {
         super(name);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters"> 
-    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
     public void setArgument(TArgument argument) {
         this.argument = argument;
     }
@@ -44,5 +48,9 @@ public abstract class PowerParty<TArgument, TResult> extends Party {
         this.result = result;
     }
     
-    // </editor-fold>   
+    protected Player getMyPlayer() {
+        return (Player)myAgent;
+    }
+    
+    // </editor-fold>
 }

@@ -8,13 +8,9 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public interface Requirement extends State {
+public interface Requirement<TArgument, TResult> extends State {
+        
+    void setArgument(TArgument argument);
     
-    Object getArgument();
-    
-    void setArgument(Object argument);
-    
-    Object getResult();
-    
-    void setResult(Object result);
+    TResult getResult();
 }
