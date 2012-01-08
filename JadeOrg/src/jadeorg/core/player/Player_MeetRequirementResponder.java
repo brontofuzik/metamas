@@ -4,10 +4,8 @@ import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
-import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
@@ -15,7 +13,6 @@ import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
-import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -73,7 +70,7 @@ public class Player_MeetRequirementResponder extends Party {
         registerState(selectRequirement);
         registerState(sendRequirementResult);
         
-        registerLastState(successEnd);
+        registerLastState(successEnd);     
         registerLastState(failureEnd);
         
         // Register transitions.
@@ -86,6 +83,10 @@ public class Player_MeetRequirementResponder extends Party {
         
         sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
         sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
+        
+        // HACK This transition is necessary to avoid the 'Inconsistent FSM' exception
+        // incorrectly thrown by Jade.
+        successEnd.registerDefaultTransition(successEnd);
     }
     
     // </editor-fold>
@@ -297,7 +298,7 @@ public class Player_MeetRequirementResponder extends Party {
         
         @Override
         public void action() {
-            // Do nothing.
+            getMyPlayer().logInfo("Selecting requirement.");
         }
         
         @Override
