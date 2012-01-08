@@ -1,6 +1,6 @@
 package demo1.players.requirements;
 
-import jadeorg.core.player.requirement.SimpleRequirement;
+import jadeorg.core.player.requirement.OneShotRequirement;
 
 /**
  * The 'Calculate factorial' (simple) requirement.
@@ -8,7 +8,7 @@ import jadeorg.core.player.requirement.SimpleRequirement;
  * @since
  * @version %I% %G%
  */
-public class CalculateFactorial_Requirement extends SimpleRequirement {
+public class CalculateFactorial_Requirement extends OneShotRequirement<Integer, Integer> {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -29,13 +29,15 @@ public class CalculateFactorial_Requirement extends SimpleRequirement {
     @Override
     public void action() {
         // Get and convert the argument.
-        int argument = ((Integer)getArgument()).intValue();
+        int argument = getArgument().intValue();
         
         int result = factorial(argument);
         
         // Convert and set the result.
         setResult(new Integer(result));
     }
+    
+    // ----- PRIVATE -----
     
     private static int factorial(int n) {
         if (n > 1) {

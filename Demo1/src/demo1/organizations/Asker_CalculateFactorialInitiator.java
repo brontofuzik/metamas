@@ -5,7 +5,7 @@ import demo1.protocols.calculatefactorialprotocol.ReplyMessage;
 import demo1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jadeorg.core.organization.Role;
-import jadeorg.proto.PowerParty;
+import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -18,7 +18,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integer> {
+public class Asker_CalculateFactorialInitiator extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -30,6 +30,10 @@ public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integ
     
     private AID answererAID;
     
+    private int argument;
+    
+    private int result;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -40,7 +44,7 @@ public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integ
         // TODO Think about automating the protocol id setting.
         setProtocolId(new Integer(hashCode()).toString());
         
-        registerStatesAndTransitions();
+        buildFSM();
     }
     
     // </editor-fold>
@@ -52,11 +56,19 @@ public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integ
         return CalculateFactorialProtocol.getInstance();
     }
     
+    public void setArgument(int argument) {
+        this.argument = argument;
+    }
+    
+    public int getResult() {
+        return result;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    private void registerStatesAndTransitions() {
+    private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();
         State sendRequest = new SendRequest();
@@ -142,7 +154,7 @@ public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integ
         @Override
         protected void onSingleSender() {
             RequestMessage message = new RequestMessage();
-            message.setArgument(getArgument());
+            message.setArgument(argument);
             
             send(message, answererAID);
         }
@@ -184,7 +196,7 @@ public class Asker_CalculateFactorialInitiator extends PowerParty<Integer, Integ
             boolean messageReceived = receive(message, answererAID);
             
             if (messageReceived) {
-                setResult(message.getResult());
+                result = message.getResult();
                 return InnerReceiverState.RECEIVED;
             } else {
                 return InnerReceiverState.NOT_RECEIVED;
