@@ -8,7 +8,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
-import jadeorg.core.organization.power.Power;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -21,11 +22,12 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    // TODO Check this out.
     String name;
     
     Organization myOrganization;
     
-    Role_InvokePowerResponder invokePowerResponder = new Role_InvokePowerResponder();
+    Map<String, Class> powers = new Hashtable<String, Class>();
     
     RoleState state = RoleState.INACTIVE;
     
@@ -139,8 +141,7 @@ public class Role extends Agent {
         
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
-            invokePowerResponder.setMessage(aclMessage);
-            addBehaviour(invokePowerResponder);
+            addBehaviour(new Role_InvokePowerResponder(aclMessage));
         } else {
             // The sender player is not enacting this role.
             // TODO
@@ -200,8 +201,17 @@ public class Role extends Agent {
         //registerWithYellowPages();
     }
     
-    protected void addPower(Power power) {
-        invokePowerResponder.addPower(power);
+    protected void addPower(Class powerClass) {
+        // ----- Preconditions -----
+        if (powerClass == null) {
+            throw new IllegalArgumentException("powerClass");
+        }
+        // -------------------------
+        
+        String powerName = powerClass.getName();
+        powers.put(powerName, powerClass);
+        
+        logInfo(String.format("Power (%1$s) added.", powerName));
     }
     
     // ----- Yellow pages registration -----
