@@ -19,12 +19,7 @@ public class DemoOrganization extends Organization {
     protected void setup() {        
         super.setup();
         
-        addRoles();
-    }
-    
-    // ----- PRIVATE -----
-    
-    private void addRoles() {
+        // Add roles.
         addRole(Asker.class);
         addRole(Answerer.class);
         logInfo("Roles added.");
@@ -47,7 +42,7 @@ public class DemoOrganization extends Organization {
             super.setup();
             
             // Add powers.
-            addPower(new CalculateFactorial_Power());
+            addPower(CalculateFactorial_Power.class);
             logInfo("Powers added.");
         }
         
@@ -67,10 +62,11 @@ public class DemoOrganization extends Organization {
         /**
          * Responds to the 'Calculate factorial' protocol.
          * @param protocolId the protocol id
-         * @param askerAID the sender AID
+         * @param askerAID the asker AID
          */
         void respondToCalculateFactorial(String protocolId, AID askerAID) {
-            logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).", protocolId));
+            logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).",
+                protocolId));
         
             addBehaviour(new Answerer_CalculateFactorialResponder(protocolId, askerAID));
         }
