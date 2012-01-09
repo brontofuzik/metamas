@@ -94,10 +94,9 @@ public class Role_Manager extends ManagerBehaviour {
                 InvokePowerProtocol.getInstance().getTemplate(),
                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST));      
             
-            ACLMessage message = myAgent.receive(template);
-            if (message != null) {
-                myAgent.putBack(message);
-                getMyRole().respondToInvokePower(message.getConversationId(), message.getSender());
+            ACLMessage aclMessage = myAgent.receive(template);
+            if (aclMessage != null) {
+                getMyRole().respondToInvokePower(aclMessage);
             }
         }
         

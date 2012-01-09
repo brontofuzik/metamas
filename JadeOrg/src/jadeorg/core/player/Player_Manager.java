@@ -43,8 +43,7 @@ public class Player_Manager extends ManagerBehaviour {
                  
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                myAgent.putBack(message);
-                getMyPlayer().respondToMeetRequirement(message.getConversationId(), message.getSender());
+                getMyPlayer().respondToMeetRequirement(message);
             }
         }
         

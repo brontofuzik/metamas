@@ -4,6 +4,7 @@ import jadeorg.core.player.requirement.Requirement;
 import jadeorg.core.player.kb.PlayerKnowledgeBase;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import java.util.logging.Level;
 
@@ -115,13 +116,12 @@ public abstract class Player extends Agent {
         }
     }
     
-    public void respondToMeetRequirement(String protocolId, AID roleAID) {
-        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).", protocolId));
+    public void respondToMeetRequirement(ACLMessage message) {
+        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).", message.getConversationId()));
         
-        if (roleAID.equals(knowledgeBase.getActiveRole().getRoleAID())) {
+        if (message.getSender().equals(knowledgeBase.getActiveRole().getRoleAID())) {
             // The sender role is the active role.
-            meetRequirementResponder.setProtocolId(protocolId);
-            meetRequirementResponder.setRoleAID(roleAID);
+            meetRequirementResponder.setMessage(message);
             addBehaviour(meetRequirementResponder);
         } else {
             // The sender role is not the active role.

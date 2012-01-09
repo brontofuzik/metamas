@@ -1,5 +1,6 @@
 package jadeorg.core.player;
 
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
 import jadeorg.proto.Party;
@@ -31,6 +32,8 @@ public class Player_MeetRequirementResponder extends Party {
     // </editor-fold>
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private ACLMessage aclMessage;
     
     private AID roleAID;
     
@@ -83,10 +86,6 @@ public class Player_MeetRequirementResponder extends Party {
         
         sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
         sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
-        
-        // HACK This transition is necessary to avoid the 'Inconsistent FSM' exception
-        // incorrectly thrown by Jade.
-        successEnd.registerDefaultTransition(successEnd);
     }
     
     // </editor-fold>
@@ -99,6 +98,14 @@ public class Player_MeetRequirementResponder extends Party {
     }
     
     // ----- PACKAGE -----
+    
+    void setMessage(ACLMessage aclMessage) {
+        // ----- Preconditions -----
+        assert aclMessage != null;
+        // -------------------------
+        
+        this.aclMessage = aclMessage;
+    }
     
     void setRoleAID(AID roleAID) {
         this.roleAID = roleAID;
@@ -142,12 +149,13 @@ public class Player_MeetRequirementResponder extends Party {
     private Requirement getRequirement(String requirementName) {
         return requirements.get(requirementName);
     }
+
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-     private class ReceiveMeetRequirementRequest extends SingleReceiverState {
+     private class ReceiveMeetRequirementRequest extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -164,31 +172,18 @@ public class Player_MeetRequirementResponder extends Party {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        protected void onEntry() {
-            getMyPlayer().logInfo("Receiving meet requirement request.");
-        }
         
         @Override
-        protected int onSingleReceiver() {
+        public void action() {
             MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
-            boolean messageReceived = receive(message, roleAID);
+            message.parseContent(aclMessage.getContent());
             
-            if (messageReceived) {
-                selectRequirement(message.getRequirement());
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyPlayer().logInfo("Meet requirement request received.");
+            setProtocolId(aclMessage.getConversationId());
+            roleAID = aclMessage.getSender();
+            selectRequirement(message.getRequirement());
         }
         
-        // </editor-fold>`
+        // </editor-fold>
     }
     
     private class SendRequirementArgumentRequest extends SendSuccessOrFailure {

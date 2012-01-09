@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
@@ -32,6 +33,8 @@ public class Role_InvokePowerResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private ACLMessage aclMessage;
+    
     private AID playerAID;
     
     private Map<String, Power> powers = new Hashtable<String, Power>();
@@ -47,7 +50,7 @@ public class Role_InvokePowerResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Role_InvokePowerResponder() {
-        super(NAME);   
+        super(NAME);        
         buildFSM();
     }
     
@@ -62,12 +65,12 @@ public class Role_InvokePowerResponder extends Party {
     
     // ----- PACKAGE -----
     
-    void setPlayerAID(AID playerAID) {
+    void setMessage(ACLMessage aclMessage) {
         // ----- Preconditions -----
-        assert playerAID != null;
+        assert aclMessage != null;
         // -------------------------
-        
-        this.playerAID = playerAID;
+          
+        this.aclMessage = aclMessage;
     }
     
     // ----- PRIVATE -----
@@ -147,7 +150,7 @@ public class Role_InvokePowerResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class ReceiveInvokePowerRequest extends SingleReceiverState {
+    private class ReceiveInvokePowerRequest extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -164,31 +167,18 @@ public class Role_InvokePowerResponder extends Party {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        protected void onEntry() {
-            getMyRole().logInfo("Receiving invoke power request.");
-        }
         
         @Override
-        protected int onSingleReceiver() {
+        public void action() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
+            message.parseContent(aclMessage.getContent());
             
-            if (messageReceived) {
-                selectPower(message.getPower());
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyRole().logInfo("Invoke power request received.");
+            setProtocolId(aclMessage.getConversationId());
+            playerAID = aclMessage.getSender();
+            selectPower(message.getPower());
         }
         
-        // </editor-fold>`
+        // </editor-fold>
     }
     
     private class SendPowerArgumentRequest extends SendSuccessOrFailure {

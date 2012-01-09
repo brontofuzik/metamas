@@ -6,6 +6,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import jadeorg.core.organization.power.Power;
 import java.util.logging.Level;
@@ -131,13 +132,12 @@ public class Role extends Agent {
         }
     }
     
-    public void respondToInvokePower(String protocolId, AID playerAID) {
-        logInfo(String.format("Responding to the 'Invoke power' (protocolId=%1$s) protocol.", protocolId));
+    public void respondToInvokePower(ACLMessage aclMessage) {
+        logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).", aclMessage.getConversationId()));
         
         if (playerAID.equals(this.playerAID)) {
             // The sender player is enacting this role.
-            invokePowerResponder.setProtocolId(protocolId);
-            invokePowerResponder.setPlayerAID(playerAID);
+            invokePowerResponder.setMessage(aclMessage);
             addBehaviour(invokePowerResponder);
         } else {
             // The sender player is not enacting this role.
