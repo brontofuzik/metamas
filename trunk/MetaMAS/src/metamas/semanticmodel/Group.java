@@ -3,10 +3,6 @@ package metamas.semanticmodel;
 import java.util.HashMap;
 import java.util.Map;
 import metamas.utilities.Assert;
-import metamas.semanticmodel.GroupClass;
-import metamas.semanticmodel.Position;
-import metamas.exceptions.PositionAlreadyOccupiedError;
-import metamas.exceptions.PositionNotDefinedError;
 
 /**
  * A concrete group - an instance of a group class.
@@ -68,12 +64,12 @@ public class Group {
         
         // Assert that the position is defined for this group.
         if (!isPositionDefined(positionName)) {
-            throw new PositionNotDefinedError(positionName, this);
+            //throw new PositionNotDefinedError(positionName, this);
         }
         
         // Assert that the position is not already occupied.
         if (isPositionOccupied(positionName)) {
-            throw new PositionAlreadyOccupiedError(positionName, this);
+            //throw new PositionAlreadyOccupiedError(positionName, this);
         }
         
         agents.put(positionName, agent);
