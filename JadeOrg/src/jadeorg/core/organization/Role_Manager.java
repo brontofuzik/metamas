@@ -40,18 +40,19 @@ public class Role_Manager extends ManagerBehaviour {
      */
     private class ActivateRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ActivateRoleHandler() {
+            super(ActivateRoleProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                ActivateRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-                    
-            ACLMessage message = myAgent.receive(template);
-            if (message != null) {
-                getMyRole().respondToActivateRole(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyRole().respondToActivateRole(message);
         }
         
         // </editor-fold>
@@ -62,18 +63,19 @@ public class Role_Manager extends ManagerBehaviour {
      */
     private class DeactivateRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        DeactivateRoleHandler() {
+            super(DeactivateRoleProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                DeactivateRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));         
-            
-            ACLMessage message = myAgent.receive(template);
-            if (message != null) {
-                getMyRole().respondToDeactivateRole(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyRole().respondToDeactivateRole(message);
         }
         
         // </editor-fold>
@@ -84,18 +86,19 @@ public class Role_Manager extends ManagerBehaviour {
      */
     private class InvokePowerHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        InvokePowerHandler() {
+            super(InvokePowerProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                InvokePowerProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));      
-            
-            ACLMessage aclMessage = myAgent.receive(template);
-            if (aclMessage != null) {
-                getMyRole().respondToInvokePower(aclMessage);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyRole().respondToInvokePower(message);
         }
         
         // </editor-fold>
