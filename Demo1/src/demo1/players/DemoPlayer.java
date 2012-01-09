@@ -146,7 +146,7 @@ public class DemoPlayer extends Player {
             @Override
             protected void handleElapsedTimeout() {
                 try {
-                    getMyPlayer().initiateInvokePower("calculate-factorial-power", new Integer(10));
+                    getMyPlayer().initiateInvokePower("demo1.organizations.powers.CalculateFactorial_Power", new Integer(10));
                 } catch (PlayerException ex) {
                     getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
                 }

@@ -9,20 +9,6 @@ import jadeorg.core.player.requirement.OneShotRequirement;
  * @version %I% %G%
  */
 public class CalculateFactorial_Requirement extends OneShotRequirement<Integer, Integer> {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "calculate-factorial-requirement";
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public CalculateFactorial_Requirement() {
-        super(NAME);
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

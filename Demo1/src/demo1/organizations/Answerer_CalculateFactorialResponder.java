@@ -21,12 +21,6 @@ import jadeorg.proto.jadeextensions.State;
  */
 public class Answerer_CalculateFactorialResponder extends Party {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "calculate-factorial-responder";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private AID askerAID;
@@ -40,7 +34,6 @@ public class Answerer_CalculateFactorialResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Answerer_CalculateFactorialResponder(String protocolId, AID askerAID) {
-        super(NAME);
         // ----- Preconditions -----
         assert protocolId != null && !protocolId.isEmpty();
         assert askerAID != null;
@@ -100,20 +93,6 @@ public class Answerer_CalculateFactorialResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class ReceiveRequest extends SingleReceiverState {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-request";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        ReceiveRequest() {
-            super(NAME);
-        }
-                
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -144,17 +123,11 @@ public class Answerer_CalculateFactorialResponder extends Party {
     }
     
     private class MeetRequirementCalculateFactorial extends MeetRequirementState {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "meet-requirement-calculate-factorial";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         MeetRequirementCalculateFactorial() {
-            super(NAME, "calculate-factorial-requirement");
+            super("demo1.players.requirements.CalculateFactorial_Requirement");
         }
         
         // </editor-fold>
@@ -175,20 +148,6 @@ public class Answerer_CalculateFactorialResponder extends Party {
     }
     
     private class SendReply extends SingleSenderState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-reply";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendReply() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -214,20 +173,6 @@ public class Answerer_CalculateFactorialResponder extends Party {
     }
     
     private class End extends OneShotBehaviourState {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        End() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

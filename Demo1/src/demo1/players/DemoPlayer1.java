@@ -11,7 +11,7 @@ public class DemoPlayer1 extends DemoPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public DemoPlayer1() {
-        super(new PowerFullName("demoOrganization.Asker.calculate-factorial-power"));
+        super(new PowerFullName("demoOrganization.Asker.CalculateFactorial_Power"));
     }
     
     // </editor-fold>

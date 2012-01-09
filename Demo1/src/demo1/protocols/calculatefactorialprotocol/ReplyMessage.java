@@ -2,8 +2,6 @@ package demo1.protocols.calculatefactorialprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.TextMessage;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * A 'Calculate factorial reply' message.
