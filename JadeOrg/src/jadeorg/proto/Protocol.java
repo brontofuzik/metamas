@@ -11,32 +11,22 @@ import jade.lang.acl.MessageTemplate;
  */
 public abstract class Protocol {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private String name;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    protected Protocol(String name) {
-        this.name = name;
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the protocol name.
-     * @return the protocol name
+     * Gets the name of this protocol.
+     * @return the name of this protocol
      */
     public String getName() {
-        return name;
+        return getClass().getName();
     }
     
+    /**
+     * Gets a message template matching this protocol.
+     * @return a message template matching this protocol
+     */
     public MessageTemplate getTemplate() {
-        return MessageTemplate.MatchProtocol(name);
+        return MessageTemplate.MatchProtocol(getName());
     }
     
     // </editor-fold>

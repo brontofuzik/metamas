@@ -10,24 +10,10 @@ import jadeorg.proto.Protocol;
  * @version %I% %G%
  */
 public class DeactivateRoleProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "deactivate-role-protocol";
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private static DeactivateRoleProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private DeactivateRoleProtocol() {
-        super(NAME);
-    }
     
     // </editor-fold>
     
