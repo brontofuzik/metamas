@@ -1,7 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.Party;
+import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-09
  * @version %I% %G%
  */
-public class Player_ActivateRoleInitiator extends Party {
+public class Player_ActivateRoleInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -33,7 +33,6 @@ public class Player_ActivateRoleInitiator extends Party {
         assert roleAID != null;
         // -------------------------
 
-        setProtocolId(new Integer(hashCode()).toString());
         this.roleName = roleName;
         this.roleAID = roleAID;
         
