@@ -1,7 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto.Party;
+import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -21,7 +21,7 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_MeetRequirementInitiator extends Party {
+public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -42,7 +42,6 @@ public class Role_MeetRequirementInitiator extends Party {
         assert requirementName != null && !requirementName.isEmpty();
         // -------------------------
         
-        setProtocolId(new Integer(hashCode()).toString());
         this.requirementName = requirementName;
         
         buildFSM();

@@ -1,7 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.Party;
+import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SingleSenderState;
@@ -19,7 +19,7 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokePowerInitiator extends Party {
+public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -39,8 +39,7 @@ public class Player_InvokePowerInitiator extends Party {
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
         // -------------------------
-        
-        setProtocolId(new Integer(hashCode()).toString());
+
         this.powerName = powerName;
         
         buildFSM();
