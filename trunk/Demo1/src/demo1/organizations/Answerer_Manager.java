@@ -38,19 +38,15 @@ public class Answerer_Manager extends ManagerBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate template =
-                MessageTemplate.and(
-                    CalculateFactorialProtocol.getInstance().getTemplate(),
-                    MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+            MessageTemplate template = MessageTemplate.and(
+                CalculateFactorialProtocol.getInstance().getTemplate(),
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                  
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                myAgent.putBack(message);
-                getMyAnswerer().respondToCalculateFactorial(message.getConversationId(), message.getSender());
+                getMyAnswerer().respondToCalculateFactorial(message);
+            }
         }
-        
-        // </editor-fold>
-    }
     
         // </editor-fold>
     }
