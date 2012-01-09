@@ -50,8 +50,7 @@ public class Role_Manager extends ManagerBehaviour {
                     
             ACLMessage message = myAgent.receive(template);
             if (message != null) {
-                myAgent.putBack(message);
-                getMyRole().respondToActivateRole(message.getConversationId(), message.getSender());
+                getMyRole().respondToActivateRole(message);
             }
         }
         
@@ -73,8 +72,7 @@ public class Role_Manager extends ManagerBehaviour {
             
             ACLMessage message = myAgent.receive(template);
             if (message != null) {
-                myAgent.putBack(message);
-                getMyRole().respondToDeactivateRole(message.getConversationId(), message.getSender());
+                getMyRole().respondToDeactivateRole(message);
             }
         }
         

@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -25,22 +26,24 @@ public class Role_ActivateRoleResponder extends Party {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-
+    
+    private ACLMessage aclMessage;
+    
     private AID playerAID;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_ActivateRoleResponder(String protocolId, AID playerAID) {
+    Role_ActivateRoleResponder(ACLMessage aclMessage) {
         super(NAME);
         // ----- Preconditions -----
-        assert protocolId != null && !protocolId.isEmpty();
-        assert playerAID != null;
+        assert aclMessage != null;
         // -------------------------
         
-        setProtocolId(protocolId);
-        this.playerAID = playerAID;
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        playerAID = aclMessage.getSender();
         
         buildFSM();
     }
@@ -91,7 +94,7 @@ public class Role_ActivateRoleResponder extends Party {
      * The 'Receive activate request' (single receiver) state.
      * A state in which the 'Activate request' message is received.
      */
-    private class ReceiveActivateRequest extends SingleReceiverState {
+    private class ReceiveActivateRequest extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -108,27 +111,11 @@ public class Role_ActivateRoleResponder extends Party {
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+       
         @Override
-        protected void onEntry() {
-            getMyRole().logInfo("Receiving activate request.");
-        }
-        
-        @Override
-        protected int onSingleReceiver() {
+        public void action() {
             ActivateRequestMessage message = new ActivateRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-                
-            if (messageReceived) {
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyRole().logInfo("Activate request received.");
+            message.parseContent(aclMessage.getContent());
         }
 
         // </editor-fold>

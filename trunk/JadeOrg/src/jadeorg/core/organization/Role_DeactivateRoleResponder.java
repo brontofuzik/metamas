@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -26,21 +27,23 @@ public class Role_DeactivateRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
+    private ACLMessage aclMessage;
+    
     private AID playerAID;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_DeactivateRoleResponder(String protocolId, AID playerAID) {
+    Role_DeactivateRoleResponder(ACLMessage aclMessage) {
         super(NAME);
         // ----- Preconditions -----
-        assert protocolId != null && !protocolId.isEmpty();
-        assert playerAID != null;
+        assert aclMessage != null;
         // -------------------------
         
-        setProtocolId(protocolId);
-        this.playerAID = playerAID;
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        playerAID = aclMessage.getSender();
 
         buildFSM();
     }
@@ -92,7 +95,7 @@ public class Role_DeactivateRoleResponder extends Party {
     /**
      * The 'Receive deactivate request' (single receiver) state.
      */
-    private class ReceiveDeactivateRequest extends SingleReceiverState {
+    private class ReceiveDeactivateRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -109,27 +112,11 @@ public class Role_DeactivateRoleResponder extends Party {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        protected void onEntry() {
-            getMyRole().logInfo("Receiving deactivate request.");
-        }
         
         @Override
-        protected int onSingleReceiver() {
+        public void action() {
             DeactivateRequestMessage message = new DeactivateRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-                
-            if (messageReceived) {
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyRole().logInfo("Activate request received.");
+            message.parseContent(aclMessage.getContent());
         }
         
         // </editor-fold>
