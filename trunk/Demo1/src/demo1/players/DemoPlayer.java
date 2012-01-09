@@ -82,7 +82,7 @@ public class DemoPlayer extends Player {
         super.setup();
         
         // Add the requirements.
-        addRequirement(new CalculateFactorial_Requirement());
+        addRequirement(CalculateFactorial_Requirement.class);
         
         if (roleFullName != null) {
             enactAndActivateRole(roleFullName, 5000);
