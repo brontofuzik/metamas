@@ -18,10 +18,9 @@ public abstract class SingleReceiverState extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SingleReceiverState(String name) {
-        super(name);
-        
+    public SingleReceiverState() {        
         addReceiver(new SingleReceiver());
+        
         buildFSM();
     }
     
@@ -36,17 +35,11 @@ public abstract class SingleReceiverState extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class SingleReceiver extends InnerReceiverState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "single-receiver";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SingleReceiver() {
-            super(NAME, RECEIVED, null);
+            super(RECEIVED, null);
         }
         
         // </editor-fold>

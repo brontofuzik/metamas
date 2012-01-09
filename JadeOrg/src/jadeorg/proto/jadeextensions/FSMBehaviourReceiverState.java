@@ -10,14 +10,6 @@ import jadeorg.lang.Message;
  * @version %I% %G%
  */
 public abstract class FSMBehaviourReceiverState extends FSMBehaviourState implements ReceiverState {
-
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    protected FSMBehaviourReceiverState(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

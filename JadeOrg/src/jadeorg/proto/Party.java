@@ -20,14 +20,6 @@ public abstract class Party extends FSMBehaviourState {
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    protected Party(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     public void setProtocolId(String protocolId) {

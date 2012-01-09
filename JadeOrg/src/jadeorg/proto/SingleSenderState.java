@@ -1,7 +1,5 @@
 package jadeorg.proto;
 
-import jade.core.AID;
-
 /**
  * A single sender state.
  * @author Lukáš Kúdela
@@ -20,10 +18,9 @@ public abstract class SingleSenderState extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SingleSenderState(String name) {
-        super(name);
-        
+    protected SingleSenderState() {        
         addSender(SINGLE_SENDER, new SingleSender());
+        
         buildFSM();
     }
     
@@ -43,20 +40,6 @@ public abstract class SingleSenderState extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class SingleSender extends InnerSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "single-sender";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SingleSender() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

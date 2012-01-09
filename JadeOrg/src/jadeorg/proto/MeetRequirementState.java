@@ -23,9 +23,7 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected MeetRequirementState(String name, String requirementName) {
-        super(name);
-        
+    protected MeetRequirementState(String requirementName) {        
         this.requirementName = requirementName;
         
         buildFSM();
@@ -71,20 +69,6 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
      * The 'Set requirement argument' (one-shot) state.
      */
     private class SetRequirementArgument extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "set-requirement-argument";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SetRequirementArgument() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -100,20 +84,6 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
      * The 'Get requirement result' (one-shot) state.
      */
     private class GetRequirementResult extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "get-requirement-result";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        GetRequirementResult() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

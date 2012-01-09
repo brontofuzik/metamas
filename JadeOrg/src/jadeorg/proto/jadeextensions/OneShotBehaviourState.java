@@ -14,8 +14,8 @@ public abstract class OneShotBehaviourState extends OneShotBehaviour implements 
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected OneShotBehaviourState(String name) {
-        setBehaviourName(name);
+    protected OneShotBehaviourState() {
+        setBehaviourName(getClass().getName());
     }
     
     // </editor-fold>

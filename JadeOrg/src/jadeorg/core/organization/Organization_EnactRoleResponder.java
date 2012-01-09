@@ -27,12 +27,6 @@ import java.lang.reflect.InvocationTargetException;
  * @version %I% %G%
  */
 class Organization_EnactRoleResponder extends Party {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "enact-role-responder";
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -47,7 +41,6 @@ class Organization_EnactRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Organization_EnactRoleResponder(ACLMessage aclMessage) {
-        super(NAME);
         // ----- Preconditions -----
         assert aclMessage != null;
         // -------------------------
@@ -112,20 +105,6 @@ class Organization_EnactRoleResponder extends Party {
     
     private class ReceiveEnactRequest extends OneShotBehaviourState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-enact-request";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        ReceiveEnactRequest() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -140,16 +119,10 @@ class Organization_EnactRoleResponder extends Party {
     
     private class SendRequirementsInform extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-requirements-inform";
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendRequirementsInform() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -198,16 +171,10 @@ class Organization_EnactRoleResponder extends Party {
     
     private class ReceiveRequirementsReply extends ReceiveAgreeOrRefuse {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-requirements-reply";
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementsReply() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -228,20 +195,6 @@ class Organization_EnactRoleResponder extends Party {
     }
     
     private class SendRoleAID extends SingleSenderState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-role-aid";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendRoleAID() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -333,20 +286,6 @@ class Organization_EnactRoleResponder extends Party {
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "success-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SuccessEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -361,20 +300,6 @@ class Organization_EnactRoleResponder extends Party {
      * The 'Failure end' state.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "failure-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        FailureEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

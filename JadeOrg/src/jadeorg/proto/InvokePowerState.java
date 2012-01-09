@@ -23,9 +23,7 @@ public abstract class InvokePowerState extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected InvokePowerState(String name, String powerName) {
-        super(name);
-        
+    protected InvokePowerState(String powerName) {        
         buildFSM();
     }
             
@@ -69,20 +67,6 @@ public abstract class InvokePowerState extends FSMBehaviourState {
      * The 'Set power argument' (one-shot) state.
      */
     private class SetPowerArgument extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "set-power-argument";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SetPowerArgument() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -98,20 +82,6 @@ public abstract class InvokePowerState extends FSMBehaviourState {
      * The 'Get power result' (one-shot) state.
      */
     private class GetPowerResult extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "get-power-result";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        GetPowerResult() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

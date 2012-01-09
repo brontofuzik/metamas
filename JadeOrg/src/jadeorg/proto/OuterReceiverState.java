@@ -25,14 +25,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    protected OuterReceiverState(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     protected int getExitValue() {
@@ -126,20 +118,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     
     protected class EntryState extends OneShotBehaviourState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "entry";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        protected EntryState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -151,20 +129,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     protected class ManagerState extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "manager";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected ManagerState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -198,8 +162,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerReceiverState(String name, int outerReceiverStateExitValue, AID senderAID) {
-            super(name);
+        protected InnerReceiverState(int outerReceiverStateExitValue, AID senderAID) {
             this.outerReceiverStateExitValue = outerReceiverStateExitValue;
             this.senderAID = senderAID;
         } 
@@ -244,17 +207,11 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @version %I% %G%
      */
     protected class ReceiveAgree extends InnerReceiverState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-agree";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public ReceiveAgree(int outerReceiverStateExitValue, AID senderAID) {
-            super(NAME, outerReceiverStateExitValue, senderAID);
+            super(outerReceiverStateExitValue, senderAID);
         }
         
         // </editor-fold>
@@ -295,17 +252,11 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @version %I% %G%
      */
     protected class ReceiveRefuse extends InnerReceiverState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-refuse";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public ReceiveRefuse(int outerReceiverStateExitValue, AID senderAID) {
-            super(NAME, outerReceiverStateExitValue, senderAID);
+            super(outerReceiverStateExitValue, senderAID);
         }
         
         // </editor-fold>
@@ -347,16 +298,10 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      */
     protected class ReceiveFailure extends InnerReceiverState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "receive-failure";
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         public ReceiveFailure(int outerReceiverStateExitValue, AID senderAID) {
-            super(NAME, outerReceiverStateExitValue, senderAID);
+            super(outerReceiverStateExitValue, senderAID);
         }
 
         // </editor-fold>
@@ -392,20 +337,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     
     protected class BlockerState extends OneShotBehaviourState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "blocker";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected BlockerState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -419,20 +350,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     protected class ExitState extends OneShotBehaviourState {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "exit";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected ExitState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

@@ -17,12 +17,6 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @version %I% %G%
  */
 public class Player_DeactRoleInitiator extends Party {
-    
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-    private static final String NAME = "deact-protocol-initiator";
-
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -37,7 +31,6 @@ public class Player_DeactRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactRoleInitiator(AID organization, String roleName) {
-        super(NAME);
         // ----- Preconditions -----
         assert organization != null;
         assert roleName != null && !roleName.isEmpty();
@@ -99,20 +92,6 @@ public class Player_DeactRoleInitiator extends Party {
      * A state in which the 'Deact request' message is sent.
      */
     private class SendDeactRequest extends SingleSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-deact-request";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendDeactRequest() {
-            super(NAME);
-        }
-
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -143,16 +122,10 @@ public class Player_DeactRoleInitiator extends Party {
      */
     private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-
-        private static final String NAME = "receive-deact-reply";
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveDeactReply() {
-            super(NAME, organizationAID);
+            super(organizationAID);
         }
 
         // </editor-fold>
@@ -182,20 +155,6 @@ public class Player_DeactRoleInitiator extends Party {
      * A state in which the 'Deact role' initiator party succeedes.
      */
     private class SuccessEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "success-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SuccessEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -212,20 +171,6 @@ public class Player_DeactRoleInitiator extends Party {
      * A state in which the 'Deact role' initiator party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "failure-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        FailureEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

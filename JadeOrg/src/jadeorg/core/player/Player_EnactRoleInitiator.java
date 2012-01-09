@@ -21,12 +21,6 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @version %I% %G%
  */
 class Player_EnactRoleInitiator extends Party {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "enact-role-initiator";
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -43,7 +37,6 @@ class Player_EnactRoleInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Player_EnactRoleInitiator(AID organization, String roleName) {
-        super(NAME);
         // ----- Preconditions -----
         assert organization != null;
         assert roleName != null && !roleName.isEmpty();
@@ -113,20 +106,6 @@ class Player_EnactRoleInitiator extends Party {
      */
     private class SendEnactRequest extends SingleSenderState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-enact-request";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendEnactRequest() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -158,16 +137,10 @@ class Player_EnactRoleInitiator extends Party {
      */
     private class ReceiveRequirementsInform extends ReceiveSuccessOrFailure {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-requirements-inform";
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveRequirementsInform() {
-            super(NAME, organizationAID);
+            super(organizationAID);
         }
 
         // </editor-fold>
@@ -208,16 +181,10 @@ class Player_EnactRoleInitiator extends Party {
      */
     private class SendRequirementsReply extends SendAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-requirements-reply";
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementsReply() {
-            super(NAME, organizationAID);
+            super(organizationAID);
         }
 
         // </editor-fold>
@@ -254,20 +221,6 @@ class Player_EnactRoleInitiator extends Party {
      */
     private class ReceiveRoleAID extends SingleReceiverState {
 
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-
-        private static final String NAME = "receive-role-aid";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveRoleAID() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -303,20 +256,6 @@ class Player_EnactRoleInitiator extends Party {
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "success-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SuccessEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -332,20 +271,6 @@ class Player_EnactRoleInitiator extends Party {
      * A state in which the 'Enact' protocol initiator party ends.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "failure-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        FailureEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

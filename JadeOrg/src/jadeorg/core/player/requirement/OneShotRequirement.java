@@ -20,14 +20,6 @@ public abstract class OneShotRequirement<TArgument, TResult> extends OneShotBeha
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public OneShotRequirement(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
     public void setArgument(TArgument argument) {

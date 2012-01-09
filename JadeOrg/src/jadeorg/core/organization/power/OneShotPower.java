@@ -20,14 +20,6 @@ public abstract class OneShotPower<TArgument, TResult> extends OneShotBehaviourS
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public OneShotPower(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     public void setArgument(TArgument argument) {

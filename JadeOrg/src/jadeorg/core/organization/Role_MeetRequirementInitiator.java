@@ -5,7 +5,6 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
-import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
@@ -24,12 +23,6 @@ import java.io.Serializable;
  */
 public class Role_MeetRequirementInitiator extends Party {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "meet-requirement-initiator";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private AID playerAID;
@@ -45,7 +38,6 @@ public class Role_MeetRequirementInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Role_MeetRequirementInitiator(String requirementName) {
-        super(NAME);
         // ----- Preconditions -----
         assert requirementName != null && !requirementName.isEmpty();
         // -------------------------
@@ -130,20 +122,6 @@ public class Role_MeetRequirementInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class Initialize extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private static final String NAME = "initialize";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        Initialize() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -156,20 +134,6 @@ public class Role_MeetRequirementInitiator extends Party {
     }
     
     private class SendRequirementRequest extends SingleSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-requirement-request";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendRequirementRequest() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -195,17 +159,11 @@ public class Role_MeetRequirementInitiator extends Party {
     }
     
     private class ReceiveRequirementArgumentRequest extends ReceiveSuccessOrFailure {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-requirement-argument-request";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         ReceiveRequirementArgumentRequest() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -238,17 +196,11 @@ public class Role_MeetRequirementInitiator extends Party {
     }
     
     private class SendRequirementArgument extends SendSuccessOrFailure {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-requirement-argument";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendRequirementArgument() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -286,17 +238,11 @@ public class Role_MeetRequirementInitiator extends Party {
     }
     
     private class ReceiveRequirementResult extends ReceiveSuccessOrFailure {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-requirement-result";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementResult() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -334,20 +280,6 @@ public class Role_MeetRequirementInitiator extends Party {
      * The 'Success end' (one-shot) state.
      */
     private class SuccessEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "success-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SuccessEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -363,20 +295,6 @@ public class Role_MeetRequirementInitiator extends Party {
      * The 'Failure end' (one-shot) state.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "failure-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        FailureEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
