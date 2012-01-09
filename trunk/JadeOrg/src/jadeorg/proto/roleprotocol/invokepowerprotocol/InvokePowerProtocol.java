@@ -13,28 +13,10 @@ import jadeorg.proto.Protocol;
  */
 public class InvokePowerProtocol extends Protocol {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    /** The name of the protocol. */
-    private static final String NAME = "invoke-power-protocol";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /** The singleton instance of this protocol. */
     private static InvokePowerProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    /**
-     * Creates a new instance of the InvokePowerProtocol class.
-     */
-    private InvokePowerProtocol() {
-        super(NAME);
-    }
     
     // </editor-fold>
     

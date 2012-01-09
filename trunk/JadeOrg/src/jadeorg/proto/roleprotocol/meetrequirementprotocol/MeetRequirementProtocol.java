@@ -12,24 +12,10 @@ import jadeorg.proto.Protocol;
  * @version %I% %G%
  */
 public class MeetRequirementProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "meet-requirement-protocol";
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private static MeetRequirementProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private MeetRequirementProtocol() {
-        super(NAME);
-    }
     
     // </editor-fold>
     
