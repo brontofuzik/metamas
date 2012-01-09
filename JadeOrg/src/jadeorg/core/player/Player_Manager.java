@@ -1,7 +1,6 @@
 package jadeorg.core.player;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.util.ManagerBehaviour;
 
