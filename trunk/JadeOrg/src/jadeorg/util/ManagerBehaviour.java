@@ -3,6 +3,9 @@ package jadeorg.util;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ParallelBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jadeorg.proto.Protocol;
 
 /**
  * A manager behaviour.
@@ -54,19 +57,67 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public abstract class HandlerBehaviour extends OneShotBehaviour {
+    protected abstract class HandlerBehaviour extends OneShotBehaviour {
         
+        // <editor-fold defaultstate="collapsed" desc="Fields">
         
+        private Protocol protocol;
+        
+        private int performative;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        protected HandlerBehaviour(Protocol protocol, int performative) {
+            // ----- Preconditions -----
+            assert protocol != null;
+            assert performative >= 0;
+            // -------------------------
+            
+            this.protocol = protocol;
+            this.performative = performative;
+        }
+        
+        protected HandlerBehaviour(Protocol protocol) {
+            this(protocol, ACLMessage.REQUEST);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            MessageTemplate template = MessageTemplate.and(
+                protocol.getTemplate(),
+                MessageTemplate.MatchPerformative(performative));
+                 
+            ACLMessage message = myAgent.receive(template);          
+            if (message != null) {
+                handleMessage(message);
+            }
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected abstract void handleMessage(ACLMessage message);
+        
+        // </editor-fold>
     }
     
     private class BlockerBehaviour extends OneShotBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
             if (myAgent.getCurQueueSize() == 0) {
                 getParent().block();
             }
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

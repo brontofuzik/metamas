@@ -33,20 +33,21 @@ public class Player_Manager extends ManagerBehaviour {
     
     private class MeetRequirementHandler extends HandlerBehaviour {
     
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        MeetRequirementHandler() {
+            super(MeetRequirementProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                MeetRequirementProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-                 
-            ACLMessage message = myAgent.receive(template);          
-            if (message != null) {
-                getMyPlayer().respondToMeetRequirement(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyPlayer().respondToMeetRequirement(message);
         }
-        
+               
         // </editor-fold>
     }
     

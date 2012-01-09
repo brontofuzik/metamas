@@ -38,18 +38,19 @@ public class Organization_Manager extends ManagerBehaviour {
      */
     private class EnactRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        EnactRoleHandler() {
+            super(EnactRoleProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                EnactRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-                 
-            ACLMessage message = myAgent.receive(template);          
-            if (message != null) {
-                getMyOrganization().respondToEnactRole(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyOrganization().respondToEnactRole(message);
         }
         
         // </editor-fold>
@@ -60,18 +61,19 @@ public class Organization_Manager extends ManagerBehaviour {
      */
     private class DeactRoleHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        DeactRoleHandler() {
+            super(DeactRoleProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                DeactRoleProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-
-            ACLMessage message = myAgent.receive(template);          
-            if (message != null) {
-                getMyOrganization().respondToDeactRole(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyOrganization().respondToDeactRole(message);
         }
         
         // </editor-fold>
