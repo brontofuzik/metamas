@@ -1,7 +1,6 @@
 package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;

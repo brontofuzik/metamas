@@ -1,7 +1,6 @@
 package jadeorg.core.organization;
 
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.util.ManagerBehaviour;
