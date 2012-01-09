@@ -4,11 +4,11 @@ import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import demo1.protocols.calculatefactorialprotocol.ReplyMessage;
 import demo1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
 import jadeorg.proto.MeetRequirementState;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
-import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
@@ -19,9 +19,11 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public class Answerer_CalculateFactorialResponder extends Party {
+public class Answerer_CalculateFactorialResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private final ACLMessage aclMessage;
     
     private AID askerAID;
     
@@ -33,14 +35,11 @@ public class Answerer_CalculateFactorialResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Answerer_CalculateFactorialResponder(String protocolId, AID askerAID) {
-        // ----- Preconditions -----
-        assert protocolId != null && !protocolId.isEmpty();
-        assert askerAID != null;
-        // -------------------------
+    public Answerer_CalculateFactorialResponder(ACLMessage aclMessage) {
+        super(aclMessage);
         
-        setProtocolId(protocolId);
-        this.askerAID = askerAID;
+        this.aclMessage = aclMessage;
+        askerAID = aclMessage.getSender();
         
         buildFSM();
     }
@@ -92,31 +91,16 @@ public class Answerer_CalculateFactorialResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class ReceiveRequest extends SingleReceiverState {
+    private class ReceiveRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void onEntry() {
-            getMyRole().logInfo("Receiving calculate factorial request.");
-        }
-        
-        @Override
-        protected int onSingleReceiver() {
+        public void action() {
             RequestMessage message = new RequestMessage();
-            boolean messageReceived = receive(message, askerAID);
+            message.parseACLMessage(aclMessage);
             
-            if (messageReceived) {
-                argument = message.getArgument();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyRole().logInfo("Calculate factorial request received.");
+            argument = message.getArgument();
         }
         
         // </editor-fold>

@@ -2,6 +2,7 @@ package demo1.organizations;
 
 import demo1.organizations.powers.CalculateFactorial_Power;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 
@@ -64,11 +65,11 @@ public class DemoOrganization extends Organization {
          * @param protocolId the protocol id
          * @param askerAID the asker AID
          */
-        void respondToCalculateFactorial(String protocolId, AID askerAID) {
+        void respondToCalculateFactorial(ACLMessage aclMessage) {
             logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).",
-                protocolId));
+                aclMessage.getConversationId()));
         
-            addBehaviour(new Answerer_CalculateFactorialResponder(protocolId, askerAID));
+            addBehaviour(new Answerer_CalculateFactorialResponder(aclMessage));
         }
         
         // ----- PROTECTED -----
