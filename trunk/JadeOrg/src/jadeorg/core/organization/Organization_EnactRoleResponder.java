@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import jadeorg.proto.OuterSenderState;
@@ -35,6 +36,8 @@ class Organization_EnactRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
+    private ACLMessage aclMessage;
+    
     private AID playerAID;
 
     private String roleName;
@@ -43,15 +46,15 @@ class Organization_EnactRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Organization_EnactRoleResponder(String protocolId, AID playerAID) {
+    Organization_EnactRoleResponder(ACLMessage aclMessage) {
         super(NAME);
         // ----- Preconditions -----
-        assert protocolId != null && !protocolId.isEmpty();
-        assert playerAID != null;
+        assert aclMessage != null;
         // -------------------------
         
-        setProtocolId(protocolId);
-        this.playerAID = playerAID;
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        this.playerAID = aclMessage.getSender();
         
         buildFSM();
     }
@@ -107,7 +110,7 @@ class Organization_EnactRoleResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class ReceiveEnactRequest extends SingleReceiverState {
+    private class ReceiveEnactRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -126,32 +129,13 @@ class Organization_EnactRoleResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        protected void onEntry() {
-            getMyOrganization().logInfo("Receiving enact request.");
-        }
-        
-        @Override
-        protected int onSingleReceiver() {
-            // Receive the 'Enact request' message.
+        public void action() {
             EnactRequestMessage message = new EnactRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-            
-            // Process the message.
-            if (messageReceived) {
-                roleName = message.getRoleName();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-
-        @Override
-        protected void onExit() {
-            getMyOrganization().logInfo("Enact request received.");
+            message.parseContent(aclMessage.getContent());
+            roleName = message.getRoleName();
         }
         
-        // </editor-fold>
-        
+        // </editor-fold>        
     }
     
     private class SendRequirementsInform extends SendSuccessOrFailure {

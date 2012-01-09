@@ -49,8 +49,7 @@ public class Organization_Manager extends ManagerBehaviour {
                  
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                myAgent.putBack(message);
-                getMyOrganization().respondToEnactRole(message.getConversationId(), message.getSender());
+                getMyOrganization().respondToEnactRole(message);
             }
         }
         
@@ -73,8 +72,7 @@ public class Organization_Manager extends ManagerBehaviour {
 
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
-                myAgent.putBack(message);
-                getMyOrganization().respondToDeactRole(message.getConversationId(), message.getSender());
+                getMyOrganization().respondToDeactRole(message);
             }
         }
         
