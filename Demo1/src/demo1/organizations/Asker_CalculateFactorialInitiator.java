@@ -5,7 +5,7 @@ import demo1.protocols.calculatefactorialprotocol.ReplyMessage;
 import demo1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jadeorg.core.organization.Role;
-import jadeorg.proto.Party;
+import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -18,7 +18,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2011-01-02
  * @version %I% %G%
  */
-public class Asker_CalculateFactorialInitiator extends Party {
+public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -32,10 +32,7 @@ public class Asker_CalculateFactorialInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Asker_CalculateFactorialInitiator() {        
-        // TODO Think about automating the protocol id setting.
-        setProtocolId(new Integer(hashCode()).toString());
-        
+    public Asker_CalculateFactorialInitiator() {                
         buildFSM();
     }
     
