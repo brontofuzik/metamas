@@ -237,10 +237,9 @@ class Organization_EnactRoleResponder extends Party {
          */
         private Role createRoleAgent(String roleClassName, String roleName) {
             Class roleClass = getMyOrganization().roles.get(roleClassName);
-            //System.out.println("ROLE CLASS: " + roleClass);
             Class organizationClass = myAgent.getClass();
-            //System.out.println("ORGANIZATION CLASS: " + organizationClass);
 
+            // Get the role constructor.
             Constructor roleConstructor = null;
             try {
                 roleConstructor = roleClass.getConstructor(organizationClass);
@@ -249,7 +248,8 @@ class Organization_EnactRoleResponder extends Party {
             } catch (SecurityException ex) {
                 ex.printStackTrace();
             }
-            //System.out.println("CTOR: " + roleConstructor.getParameterTypes());
+            
+            // Instantiate the role.
             Role role = null;
             try {
                 role = (Role)roleConstructor.newInstance(myAgent);
@@ -262,9 +262,11 @@ class Organization_EnactRoleResponder extends Party {
             } catch (InvocationTargetException ex) {
                 ex.printStackTrace();
             }
-            //System.out.println("ROLE: " + role);
+            
+            // Initialize the role.
             role.setRoleName(roleName);
             role.setMyOrganization((Organization)myAgent);
+            
             return role;
         }
 

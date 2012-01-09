@@ -14,8 +14,8 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
-import java.util.Hashtable;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * An 'Invoke power' protocol responder party (new version).
@@ -31,11 +31,11 @@ public class Role_InvokePowerResponder extends Party {
     
     private AID playerAID;
     
-    private Map<String, Power> powers = new Hashtable<String, Power>();
+    private String powerName;
     
-    private Power currentPower;
+    private State receivePowerArgument;
     
-    private State selectPower;
+    private Power power;
     
     private State sendPowerResult;
     
@@ -43,7 +43,15 @@ public class Role_InvokePowerResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Role_InvokePowerResponder() {     
+    Role_InvokePowerResponder(ACLMessage aclMessage) {
+        // ----- Preconditions -----
+        assert aclMessage != null;
+        // -------------------------
+        
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        this.playerAID = aclMessage.getSender();
+        
         buildFSM();
     }
     
@@ -76,37 +84,11 @@ public class Role_InvokePowerResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    boolean containsPower(String powerName) {
-        return powers.containsKey(powerName);
-    }
-    
-    void selectPower(String powerName) {
-        if (containsPower(powerName)) {
-            currentPower = getPower(powerName);
-        }
-    }
-    
-    // ----- PROTECTED -----
-    
-    protected void addPower(Power power) {        
-        powers.put(power.getName(), power);
-        
-        // Register the power-related state.
-        registerState(power);
-        
-        // Register the power-related transitions.
-        selectPower.registerTransition(power.hashCode(), power);
-        power.registerDefaultTransition(sendPowerResult);
-    }
-    
-    // ----- PRIVATE -----
-    
     private void buildFSM() {
         // ----- States -----
         State receiveInvokePowerRequest = new ReceiveInvokePowerRequest();
         State sendPowerArgumentRequest = new SendPowerArgumentRequest();
-        State receivePowerArgument = new ReceivePowerArgument();
-        selectPower = new SelectPower();
+        receivePowerArgument = new ReceivePowerArgument();
         sendPowerResult = new SendPowerResult();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
@@ -117,7 +99,6 @@ public class Role_InvokePowerResponder extends Party {
         
         registerState(sendPowerArgumentRequest);
         registerState(receivePowerArgument);
-        registerState(selectPower);
         registerState(sendPowerResult);
         
         registerLastState(successEnd);
@@ -129,14 +110,53 @@ public class Role_InvokePowerResponder extends Party {
         sendPowerArgumentRequest.registerTransition(SendPowerArgumentRequest.SUCCESS, receivePowerArgument);
         sendPowerArgumentRequest.registerTransition(SendPowerArgumentRequest.FAILURE, failureEnd);
         
-        receivePowerArgument.registerDefaultTransition(selectPower);
-        
         sendPowerResult.registerTransition(SendPowerResult.SUCCESS, successEnd);
         sendPowerResult.registerTransition(SendPowerResult.FAILURE, failureEnd);
     }
     
-    private Power getPower(String powerName) {
-        return powers.get(powerName);
+    private void selectPower(String powerName) {
+        //System.out.println("----- ADDING POWER: " + powerName + " -----");
+        power = createPower(powerName);
+        
+        // Register the power-related states.
+        registerState(power);
+        
+        // Register the power-related transitions.
+        receivePowerArgument.registerDefaultTransition(power);
+        power.registerDefaultTransition(sendPowerResult);
+        //System.out.println("----- POWER ADDED -----");
+    }
+    
+    private Power createPower(String powerName) {
+        //System.out.println("----- CREATING POWER: " + powerName + " -----");
+        Class powerClass = getMyRole().powers.get(powerName);
+        
+        // Get the power constructor.
+        Constructor powerConstructor = null;
+        try {
+            powerConstructor = powerClass.getConstructor();
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+        
+        // Instantiate the power.
+        Power power = null;
+        try {
+            power = (Power)powerConstructor.newInstance();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        }        
+        //System.out.println("----- POWER CREATED -----");
+        
+        return power;
     }
     
     // </editor-fold>
@@ -151,10 +171,9 @@ public class Role_InvokePowerResponder extends Party {
         public void action() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
             message.parseContent(aclMessage.getContent());
+            powerName = message.getPower();            
             
-            setProtocolId(aclMessage.getConversationId());
-            playerAID = aclMessage.getSender();
-            selectPower(message.getPower());
+            selectPower(powerName);
         }
         
         // </editor-fold>
@@ -212,7 +231,7 @@ public class Role_InvokePowerResponder extends Party {
             boolean messageReceived = receive(message, playerAID);
             
             if (messageReceived) {
-                currentPower.setArgument(message.getArgument());
+                power.setArgument(message.getArgument());
                 return InnerReceiverState.RECEIVED;
             } else {
                 return InnerReceiverState.NOT_RECEIVED;
@@ -222,23 +241,6 @@ public class Role_InvokePowerResponder extends Party {
         @Override
         protected void onExit() {
             getMyRole().logInfo("Power argument received.");
-        }
-        
-        // </editor-fold>
-    }
-    
-    private class SelectPower extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            // Do nothing.
-        }
-        
-        @Override
-        public int onEnd() {
-            return currentPower.hashCode();
         }
         
         // </editor-fold>
@@ -269,7 +271,7 @@ public class Role_InvokePowerResponder extends Party {
         @Override
         protected void onSuccessSender() {
             PowerResultMessage message = new PowerResultMessage();
-            message.setResult(currentPower.getResult());
+            message.setResult(power.getResult());
             
             send(message, playerAID);
         }
