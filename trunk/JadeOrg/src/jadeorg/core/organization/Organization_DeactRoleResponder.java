@@ -2,8 +2,8 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.jadeextensions.State;
@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Organization_DeactRoleResponder extends Party {
+public class Organization_DeactRoleResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -31,12 +31,9 @@ public class Organization_DeactRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Organization_DeactRoleResponder(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
+        super(aclMessage);
 
         this.aclMessage = aclMessage;
-        setProtocolId(aclMessage.getConversationId());
         this.playerAID = aclMessage.getSender();
 
         buildFSM();
@@ -98,7 +95,7 @@ public class Organization_DeactRoleResponder extends Party {
         @Override
         public void action() {
             DeactRequestMessage message = new DeactRequestMessage();
-            message.parseContent(aclMessage.getContent());
+            message.parseACLMessage(aclMessage);
             roleName = message.getRoleName();
         }
         

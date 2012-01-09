@@ -3,8 +3,8 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Role_InvokePowerResponder extends Party {
+public class Role_InvokePowerResponder extends ResponderParty {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -44,12 +44,9 @@ public class Role_InvokePowerResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Role_InvokePowerResponder(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
+        super(aclMessage);
         
         this.aclMessage = aclMessage;
-        setProtocolId(aclMessage.getConversationId());
         this.playerAID = aclMessage.getSender();
         
         buildFSM();
@@ -170,9 +167,9 @@ public class Role_InvokePowerResponder extends Party {
         @Override
         public void action() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
-            message.parseContent(aclMessage.getContent());
-            powerName = message.getPower();            
+            message.parseACLMessage(aclMessage);
             
+            powerName = message.getPower();                       
             selectPower(powerName);
         }
         

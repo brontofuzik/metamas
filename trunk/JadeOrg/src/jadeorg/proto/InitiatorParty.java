@@ -3,7 +3,7 @@ package jadeorg.proto;
 /**
  * An initiator party.
  * @author Lukáš Kúdela
- * @since
+ * @since 2012-01-09
  * @version %I% %G%
  */
 public abstract class InitiatorParty extends Party {
