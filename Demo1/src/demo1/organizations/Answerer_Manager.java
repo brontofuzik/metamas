@@ -3,7 +3,6 @@ package demo1.organizations;
 import demo1.organizations.DemoOrganization.Answerer;
 import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import jadeorg.util.ManagerBehaviour;
 
 /**
