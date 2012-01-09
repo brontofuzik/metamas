@@ -14,6 +14,8 @@ import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -31,11 +33,11 @@ public class Player_MeetRequirementResponder extends Party {
     
     private AID roleAID;
     
-    private Map<String, Requirement> requirements = new Hashtable<String, Requirement>();
+    private String requirementName;
     
-    private Requirement currentRequirement;
+    private State receiveRequirementArgument;
     
-    private State selectRequirement;
+    private Requirement requirement;
     
     private State sendRequirementResult;
     
@@ -43,42 +45,16 @@ public class Player_MeetRequirementResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_MeetRequirementResponder() {
+    public Player_MeetRequirementResponder(ACLMessage aclMessage) {
+        // ----- Preconditions -----
+        assert aclMessage != null;
+        // -------------------------
+        
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        this.roleAID = aclMessage.getSender();
+        
         buildFSM();
-    }
-    
-    private void buildFSM() {        
-         // ----- States -----
-        State receiveMeetRequirementRequest = new ReceiveMeetRequirementRequest();
-        State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
-        State receiveRequirementArgument = new ReceiveRequirementArgument();
-        selectRequirement = new SelectRequirement();
-        sendRequirementResult = new SendRequirementResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
-        // ------------------
-        
-        // Register states.
-        registerFirstState(receiveMeetRequirementRequest);
-        
-        registerState(sendRequirementArgumentRequest);
-        registerState(receiveRequirementArgument);
-        registerState(selectRequirement);
-        registerState(sendRequirementResult);
-        
-        registerLastState(successEnd);     
-        registerLastState(failureEnd);
-        
-        // Register transitions.
-        receiveMeetRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
-        
-        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
-        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.FAILURE, failureEnd);
-        
-        receiveRequirementArgument.registerDefaultTransition(selectRequirement);
-        
-        sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
-        sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
     }
     
     // </editor-fold>
@@ -114,35 +90,80 @@ public class Player_MeetRequirementResponder extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    boolean containsRequirement(String requirementName) {
-        return requirements.containsKey(requirementName);
-    }
-    
-    void selectRequirement(String requirementName) {
-        if (containsRequirement(requirementName)) {
-            currentRequirement = getRequirement(requirementName);
-        }
-    }
-    
-    // ----- PROTECTED -----
-    
-    protected void addRequirement(Requirement requirement) {
-        requirements.put(requirement.getName(), requirement);
+    private void buildFSM() {        
+         // ----- States -----
+        State receiveMeetRequirementRequest = new ReceiveMeetRequirementRequest();
+        State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
+        receiveRequirementArgument = new ReceiveRequirementArgument();
+        sendRequirementResult = new SendRequirementResult();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
+        // ------------------
         
-        // Register the requirement-relates states.
+        // Register states.
+        registerFirstState(receiveMeetRequirementRequest);
+        
+        registerState(sendRequirementArgumentRequest);
+        registerState(receiveRequirementArgument);
+        registerState(sendRequirementResult);
+        
+        registerLastState(successEnd);     
+        registerLastState(failureEnd);
+        
+        // Register transitions.
+        receiveMeetRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
+        
+        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
+        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.FAILURE, failureEnd);
+        
+        sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
+        sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
+    }
+    
+    private void selectRequirement(String requirementName) {
+        //System.out.println("----- ADDING REQUIREMENT: " + requirementName + " -----");
+        requirement = createRequirement(requirementName);
+        
+        // Register the requirement-related states.
         registerState(requirement);
         
         // Register the requirement-related transitions.
-        selectRequirement.registerTransition(requirement.hashCode(), requirement);
+        receiveRequirementArgument.registerDefaultTransition(requirement);
         requirement.registerDefaultTransition(sendRequirementResult);
+        //System.out.println("----- REQUIREMENT ADDED -----");
     }
     
-    // ---------- PRIVATE ----------
-    
-    private Requirement getRequirement(String requirementName) {
-        return requirements.get(requirementName);
+    private Requirement createRequirement(String requirementName) {
+        //System.out.println("----- CREATING REQUIREMENT: " + requirementName + " -----");
+        Class requirementClass = getMyPlayer().requirements.get(requirementName);
+        
+        // Get the requirement constructor.
+        Constructor requirementConstructor = null;
+        try {
+            requirementConstructor = requirementClass.getConstructor();
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+        
+        // Instantiate the requirement.
+        Requirement requirement = null;
+        try {
+            requirement = (Requirement)requirementConstructor.newInstance();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        }        
+        //System.out.println("----- REQUIREMENT CREATED -----");
+        
+        return requirement;
     }
-
     
     // </editor-fold>
     
@@ -156,10 +177,9 @@ public class Player_MeetRequirementResponder extends Party {
         public void action() {
             MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
             message.parseContent(aclMessage.getContent());
+            requirementName = message.getRequirement();
             
-            setProtocolId(aclMessage.getConversationId());
-            roleAID = aclMessage.getSender();
-            selectRequirement(message.getRequirement());
+            selectRequirement(requirementName);
         }
         
         // </editor-fold>
@@ -217,7 +237,7 @@ public class Player_MeetRequirementResponder extends Party {
             boolean messageReceived = receive(message, roleAID);
             
             if (messageReceived) {
-                currentRequirement.setArgument(message.getArgument());
+                requirement.setArgument(message.getArgument());
                 return InnerReceiverState.RECEIVED;
             } else {
                 return InnerReceiverState.NOT_RECEIVED;
@@ -227,23 +247,6 @@ public class Player_MeetRequirementResponder extends Party {
         @Override
         protected void onExit() {
             getMyPlayer().logInfo("Requirement argument received.");
-        }
-        
-        // </editor-fold>
-    }
-    
-    private class SelectRequirement extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            getMyPlayer().logInfo("Selecting requirement.");
-        }
-        
-        @Override
-        public int onEnd() {
-            return currentRequirement.hashCode();
         }
         
         // </editor-fold>
@@ -274,7 +277,7 @@ public class Player_MeetRequirementResponder extends Party {
         @Override
         protected void onSuccessSender() {
             RequirementResultMessage message = new RequirementResultMessage();
-            message.setResult(currentRequirement.getResult());
+            message.setResult(requirement.getResult());
             
             send(message, roleAID);
         }
