@@ -14,8 +14,8 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected FSMBehaviourState(String name) {
-        setBehaviourName(name);
+    protected FSMBehaviourState() {
+        setBehaviourName(getClass().getName());
     }
     
     // </editor-fold>
@@ -76,61 +76,6 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     // ---------- PRIVATE ----------
     
 
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    protected abstract class EntryState extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "entry";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected EntryState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-    }
-    
-    protected abstract class ExitState extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "exit";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected ExitState() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-    }
-    
-    protected abstract class SendFailure extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-failure";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected SendFailure() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-    }
     
     // </editor-fold>
 }

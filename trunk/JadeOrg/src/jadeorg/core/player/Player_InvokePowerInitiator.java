@@ -21,12 +21,6 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
  */
 public class Player_InvokePowerInitiator extends Party {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "invoke-power-initiator";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private AID roleAID;
@@ -42,7 +36,6 @@ public class Player_InvokePowerInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_InvokePowerInitiator(String powerName) {
-        super(NAME);
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
         // -------------------------
@@ -85,7 +78,6 @@ public class Player_InvokePowerInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TODO Rework all buildFSM() methods.
     private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();
@@ -127,20 +119,6 @@ public class Player_InvokePowerInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class Initialize extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private static final String NAME = "initialize";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        Initialize() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -153,20 +131,6 @@ public class Player_InvokePowerInitiator extends Party {
     }
     
     private class SendInvokePowerRequest extends SingleSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-invoke-request";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendInvokePowerRequest() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -193,16 +157,10 @@ public class Player_InvokePowerInitiator extends Party {
     
     private class ReceivePowerArgumentRequest extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-power-argument-request";
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceivePowerArgumentRequest() {
-            super(NAME, roleAID);
+            super(roleAID);
         }
         
         // </editor-fold>
@@ -235,20 +193,6 @@ public class Player_InvokePowerInitiator extends Party {
     }
     
     private class SendPowerArgument extends SingleSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-power-argument";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendPowerArgument() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
        
@@ -275,16 +219,10 @@ public class Player_InvokePowerInitiator extends Party {
     
     private class ReceivePowerResult extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-power-result";
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceivePowerResult() {
-            super(NAME, roleAID);
+            super(roleAID);
         }
         
         // </editor-fold>
@@ -320,20 +258,6 @@ public class Player_InvokePowerInitiator extends Party {
     }
     
     private class SuccessEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "success-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SuccessEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -347,20 +271,6 @@ public class Player_InvokePowerInitiator extends Party {
     
     private class FailureEnd extends OneShotBehaviourState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "failure-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        FailureEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override

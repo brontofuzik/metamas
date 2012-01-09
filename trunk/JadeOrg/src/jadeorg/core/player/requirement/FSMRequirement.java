@@ -20,14 +20,6 @@ public class FSMRequirement<TArgument, TResult> extends FSMBehaviourState
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public FSMRequirement(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
     public void setArgument(TArgument argument) {

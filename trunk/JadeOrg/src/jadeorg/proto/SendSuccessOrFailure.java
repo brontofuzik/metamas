@@ -21,11 +21,10 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SendSuccessOrFailure(String name, AID receiverAID) {
-        super(name);
-        
+    protected SendSuccessOrFailure(AID receiverAID) {        
         addSender(SUCCESS, new SendSuccess(receiverAID));
         addSender(FAILURE, new SendFailure(receiverAID));
+        
         buildFSM();
     }
     
@@ -40,17 +39,11 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class SendSuccess extends InnerSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-success";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendSuccess(AID receiverAID) {
-            super(NAME, receiverAID);
+            super(receiverAID);
         }
         
         // </editor-fold>

@@ -21,11 +21,10 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveSuccessOrFailure(String name, AID senderAID) {
-        super(name);
-        
+    protected ReceiveSuccessOrFailure(AID senderAID) {
         addReceiver(new ReceiveSuccess(senderAID));
         addReceiver(new ReceiveFailure(FAILURE, senderAID));
+        
         buildFSM();
     }
     
@@ -41,16 +40,10 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
     
     private class ReceiveSuccess extends InnerReceiverState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-success";
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveSuccess(AID senderAID) {
-            super(NAME, SUCCESS, senderAID);
+            super(SUCCESS, senderAID);
         }
         
         // </editor-fold>

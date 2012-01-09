@@ -21,11 +21,10 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveAgreeOrRefuse(String name, AID senderAID) {
-        super(name);
-
+    protected ReceiveAgreeOrRefuse(AID senderAID) {
         addReceiver(this.new MyReceiveAgree(senderAID));
         addReceiver(this.new MyReceiveRefuse(senderAID));
+        
         buildFSM();
     }
     

@@ -6,7 +6,6 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.SendAgreeOrRefuse;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -18,12 +17,6 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @version %I% %G%
  */
 public class Organization_DeactRoleResponder extends Party {
-    
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-    private static final String NAME = "deact-role-responder";
-
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -38,7 +31,6 @@ public class Organization_DeactRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Organization_DeactRoleResponder(ACLMessage aclMessage) {
-        super(NAME);
         // ----- Preconditions -----
         assert aclMessage != null;
         // -------------------------
@@ -100,20 +92,6 @@ public class Organization_DeactRoleResponder extends Party {
      * A state in which the 'Deact request' message is received.
      */
     private class ReceiveDeactRequest extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "receive-deact-request";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveDeactRequest() {
-            super(NAME);
-        }
-
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -132,17 +110,11 @@ public class Organization_DeactRoleResponder extends Party {
      * A state in which the 'Enact reply' message is sent.
      */
     private class SendDeactReply extends SendAgreeOrRefuse {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-deact-reply";
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SendDeactReply() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
         
         // </editor-fold>
@@ -189,20 +161,6 @@ public class Organization_DeactRoleResponder extends Party {
      * A state in which the 'Deact role' responder party succeedes.
      */
     private class SuccessEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "success-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SuccessEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -219,20 +177,6 @@ public class Organization_DeactRoleResponder extends Party {
      * A state in which the 'Deact role' responder party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "failure-end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        FailureEnd() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

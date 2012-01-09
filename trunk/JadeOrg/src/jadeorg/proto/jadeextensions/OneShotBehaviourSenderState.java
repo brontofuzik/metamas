@@ -10,14 +10,6 @@ import jadeorg.lang.Message;
  * @version %I% %G%
  */
 public abstract class OneShotBehaviourSenderState extends OneShotBehaviourState implements SenderState {
-
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    protected OneShotBehaviourSenderState(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

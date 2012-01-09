@@ -21,11 +21,10 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SendAgreeOrRefuse(String name, AID receiverAID) {
-        super(name);
-            
+    protected SendAgreeOrRefuse(AID receiverAID) {            
         addSender(AGREE, this.new MySendAgree(receiverAID));
         addSender(REFUSE, this.new MySendRefuse(receiverAID));
+        
         buildFSM();
     }
     

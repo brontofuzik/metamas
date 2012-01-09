@@ -6,7 +6,6 @@ import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.SendAgreeOrRefuse;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -19,12 +18,6 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  */
 public class Role_DeactivateRoleResponder extends Party {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-    private static final String NAME = "deactivate-role-responder";
-
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     private ACLMessage aclMessage;
@@ -36,7 +29,6 @@ public class Role_DeactivateRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     Role_DeactivateRoleResponder(ACLMessage aclMessage) {
-        super(NAME);
         // ----- Preconditions -----
         assert aclMessage != null;
         // -------------------------
@@ -97,20 +89,6 @@ public class Role_DeactivateRoleResponder extends Party {
      */
     private class ReceiveDeactivateRequest extends OneShotBehaviourState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "recive-deactivate-request";
-
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveDeactivateRequest() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -126,17 +104,11 @@ public class Role_DeactivateRoleResponder extends Party {
      * The 'Send deactivate reply' (multi sender) state.
      */
     private class SendDeactivateReply extends SendAgreeOrRefuse {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "send-deactivate-reply";
-
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         SendDeactivateReply() {
-            super(NAME, playerAID);
+            super(playerAID);
         }
 
         // </editor-fold>
@@ -176,20 +148,6 @@ public class Role_DeactivateRoleResponder extends Party {
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "success-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SuccessEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
-
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -205,20 +163,6 @@ public class Role_DeactivateRoleResponder extends Party {
      * A state in which the 'Deactivate role' protocol responder party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-
-        private static final String NAME = "failure-end";
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        FailureEnd() {
-            super(NAME);
-        }
-
-        // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

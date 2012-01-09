@@ -20,14 +20,6 @@ public abstract class FSMPower<TArgument, TResult> extends FSMBehaviourState
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public FSMPower(String name) {
-        super(name);
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
     public void setArgument(TArgument argument) {
