@@ -7,6 +7,7 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 import java.util.Hashtable;
 import java.util.Map;
@@ -58,10 +59,11 @@ public abstract class Organization extends Agent {
      * Enacts a role.
      * @param player the player
      */
-    public void respondToEnactRole(String protocolId, AID playerAID) {
-        logInfo("Responding to the 'Enact role' protocol.");
+    public void respondToEnactRole(ACLMessage message) {
+        logInfo(String.format("Responding to the 'Enact role' protocol (id = %1$s).",
+            message.getConversationId()));
         
-        addBehaviour(new Organization_EnactRoleResponder(protocolId, playerAID));
+        addBehaviour(new Organization_EnactRoleResponder(message));
     }
 
     /**
@@ -69,10 +71,11 @@ public abstract class Organization extends Agent {
      * @param player the player
      */
     // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    public void respondToDeactRole(String protocolId, AID playerAID) {
-        logInfo("Responding to the 'Deact role' protocol.");
+    public void respondToDeactRole(ACLMessage message) {
+        logInfo(String.format("Responding to the 'Deact role' protocol (id = %1$s).",
+            message.getConversationId()));
         
-        addBehaviour(new Organization_DeactRoleResponder(protocolId, playerAID));
+        addBehaviour(new Organization_DeactRoleResponder(message));
     }
     
     // ----- Logging -----

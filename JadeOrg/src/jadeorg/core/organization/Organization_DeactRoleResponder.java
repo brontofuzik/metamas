@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -26,23 +27,25 @@ public class Organization_DeactRoleResponder extends Party {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    private String roleName;
-
+    private ACLMessage aclMessage;
+    
     private AID playerAID;
+    
+    private String roleName;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Organization_DeactRoleResponder(String protocolId, AID playerAID) {
+    public Organization_DeactRoleResponder(ACLMessage aclMessage) {
         super(NAME);
         // ----- Preconditions -----
-        assert protocolId != null && !protocolId.isEmpty();
-        assert playerAID != null;
+        assert aclMessage != null;
         // -------------------------
 
-        setProtocolId(protocolId);
-        this.playerAID = playerAID;
+        this.aclMessage = aclMessage;
+        setProtocolId(aclMessage.getConversationId());
+        this.playerAID = aclMessage.getSender();
 
         buildFSM();
     }
@@ -96,7 +99,7 @@ public class Organization_DeactRoleResponder extends Party {
      * The 'Receive deact request' (single receiver) state.
      * A state in which the 'Deact request' message is received.
      */
-    private class ReceiveDeactRequest extends SingleReceiverState {
+    private class ReceiveDeactRequest extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
 
@@ -115,26 +118,10 @@ public class Organization_DeactRoleResponder extends Party {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void onEntry() {
-            getMyOrganization().logInfo("Receiving deact request.");
-        }
-        
-        @Override
-        protected int onSingleReceiver() {
+        public void action() {
             DeactRequestMessage message = new DeactRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-            
-            if (messageReceived) {
-                roleName = message.getRoleName();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
-        }
-        
-        @Override
-        protected void onExit() {
-            getMyOrganization().logInfo("Deact request received.");
+            message.parseContent(aclMessage.getContent());
+            roleName = message.getRoleName();
         }
         
         // </editor-fold>
