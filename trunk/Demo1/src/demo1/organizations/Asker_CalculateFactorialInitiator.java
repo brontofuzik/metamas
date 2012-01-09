@@ -19,12 +19,6 @@ import jadeorg.proto.jadeextensions.State;
  * @version %I% %G%
  */
 public class Asker_CalculateFactorialInitiator extends Party {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "calculate-factorial-initiator";
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -38,9 +32,7 @@ public class Asker_CalculateFactorialInitiator extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Asker_CalculateFactorialInitiator() {
-        super(NAME);
-        
+    public Asker_CalculateFactorialInitiator() {        
         // TODO Think about automating the protocol id setting.
         setProtocolId(new Integer(hashCode()).toString());
         
@@ -103,20 +95,6 @@ public class Asker_CalculateFactorialInitiator extends Party {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class Initialize extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "initialize";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        Initialize() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -129,20 +107,6 @@ public class Asker_CalculateFactorialInitiator extends Party {
     }
     
     private class SendRequest extends SingleSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "send-request";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SendRequest() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -168,20 +132,6 @@ public class Asker_CalculateFactorialInitiator extends Party {
     }
     
     private class ReceiveReply extends SingleReceiverState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "receive-reply";  
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        ReceiveReply() {
-            super(NAME);
-        }      
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -212,20 +162,6 @@ public class Asker_CalculateFactorialInitiator extends Party {
     }
     
     private class End extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "end";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        End() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

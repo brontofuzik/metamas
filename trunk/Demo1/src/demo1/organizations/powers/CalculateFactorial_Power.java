@@ -13,12 +13,6 @@ import jadeorg.proto.jadeextensions.State;
  */
 public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "calculate-factorial-power";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private Asker_CalculateFactorialInitiator calculateFactorialInitiator;
@@ -27,9 +21,7 @@ public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public CalculateFactorial_Power() {
-        super(NAME);
-        
+    public CalculateFactorial_Power() {       
         buildFSM();
     }
     
@@ -62,20 +54,6 @@ public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class SetPowerArgument extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "set-power-argument";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        SetPowerArgument() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -88,20 +66,6 @@ public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     }
     
     private class GetPowerResult extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "get-power-result";
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        GetPowerResult() {
-            super(NAME);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

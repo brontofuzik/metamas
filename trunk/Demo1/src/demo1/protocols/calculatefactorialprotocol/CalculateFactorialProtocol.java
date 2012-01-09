@@ -10,23 +10,9 @@ import jadeorg.proto.Protocol;
  */
 public class CalculateFactorialProtocol extends Protocol {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String NAME = "calculate-factorial-protocol";
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private static CalculateFactorialProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private CalculateFactorialProtocol() {
-        super(NAME);
-    }
     
     // </editor-fold>
     
