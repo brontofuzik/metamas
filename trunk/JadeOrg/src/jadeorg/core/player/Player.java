@@ -6,6 +6,8 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -18,11 +20,12 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The knowledge base. */
-    public PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    Map<String, Class> requirements = new HashMap<String, Class>();
     
-    /** The 'Meet requirement' responder party behaviour. */
-    private Player_MeetRequirementResponder meetRequirementResponder = new Player_MeetRequirementResponder();
+    /** The knowledge base. */
+    PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    
+    // ----- PRIVATE -----
     
     /** The logger. */
     private Logger logger;
@@ -117,12 +120,12 @@ public abstract class Player extends Agent {
     }
     
     public void respondToMeetRequirement(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).", message.getConversationId()));
+        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
+            message.getConversationId()));
         
         if (message.getSender().equals(knowledgeBase.getActiveRole().getRoleAID())) {
             // The sender role is the active role.
-            meetRequirementResponder.setMessage(message);
-            addBehaviour(meetRequirementResponder);
+            addBehaviour(new Player_MeetRequirementResponder(message));
         } else {
             // The sender role is not the active role.
             // TODO
@@ -167,8 +170,17 @@ public abstract class Player extends Agent {
         logInfo("Behaviours added.");
     }
     
-    protected void addRequirement(Requirement requirement) {
-        meetRequirementResponder.addRequirement(requirement);
+    protected void addRequirement(Class requirementClass) {
+        // ----- Preconditions -----
+        if (requirementClass == null) {
+            throw new IllegalArgumentException("requirementClass");
+        }
+        // -------------------------
+        
+        String requirementName = requirementClass.getName();
+        requirements.put(requirementName, requirementClass);
+        
+        logInfo(String.format("Requirement (%1$s) added.", requirementName));
     }
     
     // </editor-fold>
