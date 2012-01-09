@@ -34,18 +34,19 @@ public class Answerer_Manager extends ManagerBehaviour {
     
     private class CalculateFactorialHandler extends HandlerBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        CalculateFactorialHandler() {
+            super(CalculateFactorialProtocol.getInstance());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            MessageTemplate template = MessageTemplate.and(
-                CalculateFactorialProtocol.getInstance().getTemplate(),
-                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-                 
-            ACLMessage message = myAgent.receive(template);          
-            if (message != null) {
-                getMyAnswerer().respondToCalculateFactorial(message);
-            }
+        protected void handleMessage(ACLMessage message) {
+            getMyAnswerer().respondToCalculateFactorial(message);
         }
     
         // </editor-fold>
