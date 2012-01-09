@@ -3,8 +3,8 @@ package jadeorg.core.player;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -16,8 +16,6 @@ import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequest
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * A 'Meet requirement' protocol responder party (new version).
@@ -25,7 +23,7 @@ import java.util.Map;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_MeetRequirementResponder extends Party {
+public class Player_MeetRequirementResponder extends ResponderParty {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -46,12 +44,9 @@ public class Player_MeetRequirementResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_MeetRequirementResponder(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
+        super(aclMessage);
         
         this.aclMessage = aclMessage;
-        setProtocolId(aclMessage.getConversationId());
         this.roleAID = aclMessage.getSender();
         
         buildFSM();
@@ -176,9 +171,9 @@ public class Player_MeetRequirementResponder extends Party {
         @Override
         public void action() {
             MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
-            message.parseContent(aclMessage.getContent());
-            requirementName = message.getRequirement();
+            message.parseACLMessage(aclMessage);
             
+            requirementName = message.getRequirement();         
             selectRequirement(requirementName);
         }
         

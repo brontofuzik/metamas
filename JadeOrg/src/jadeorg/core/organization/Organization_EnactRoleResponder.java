@@ -4,17 +4,15 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.proto.OuterSenderState;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.ReceiveAgreeOrRefuse;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
@@ -26,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-11
  * @version %I% %G%
  */
-class Organization_EnactRoleResponder extends Party {
+class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -41,12 +39,9 @@ class Organization_EnactRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Organization_EnactRoleResponder(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
+        super(aclMessage);
         
         this.aclMessage = aclMessage;
-        setProtocolId(aclMessage.getConversationId());
         this.playerAID = aclMessage.getSender();
         
         buildFSM();
@@ -110,7 +105,7 @@ class Organization_EnactRoleResponder extends Party {
         @Override
         public void action() {
             EnactRequestMessage message = new EnactRequestMessage();
-            message.parseContent(aclMessage.getContent());
+            message.parseACLMessage(aclMessage);
             roleName = message.getRoleName();
         }
         

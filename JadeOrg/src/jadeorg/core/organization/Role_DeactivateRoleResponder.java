@@ -2,8 +2,8 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.Party;
 import jadeorg.proto.Protocol;
+import jadeorg.proto.ResponderParty;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.jadeextensions.State;
@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-20
  * @version %I% %G%
  */
-public class Role_DeactivateRoleResponder extends Party {
+public class Role_DeactivateRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -29,12 +29,9 @@ public class Role_DeactivateRoleResponder extends Party {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     Role_DeactivateRoleResponder(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
+        super(aclMessage);
         
         this.aclMessage = aclMessage;
-        setProtocolId(aclMessage.getConversationId());
         playerAID = aclMessage.getSender();
 
         buildFSM();
@@ -94,7 +91,7 @@ public class Role_DeactivateRoleResponder extends Party {
         @Override
         public void action() {
             DeactivateRequestMessage message = new DeactivateRequestMessage();
-            message.parseContent(aclMessage.getContent());
+            message.parseACLMessage(aclMessage);
         }
         
         // </editor-fold>

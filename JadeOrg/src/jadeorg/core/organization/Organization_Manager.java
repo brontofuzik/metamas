@@ -42,10 +42,9 @@ public class Organization_Manager extends ManagerBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate template =
-                MessageTemplate.and(
-                    EnactRoleProtocol.getInstance().getTemplate(),
-                    MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+            MessageTemplate template = MessageTemplate.and(
+                EnactRoleProtocol.getInstance().getTemplate(),
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
                  
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
@@ -65,10 +64,9 @@ public class Organization_Manager extends ManagerBehaviour {
         
         @Override
         public void action() {
-            MessageTemplate template =
-                MessageTemplate.and(
-                    DeactRoleProtocol.getInstance().getTemplate(),
-                    MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+            MessageTemplate template = MessageTemplate.and(
+                DeactRoleProtocol.getInstance().getTemplate(),
+                MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
 
             ACLMessage message = myAgent.receive(template);          
             if (message != null) {
