@@ -1,8 +1,5 @@
-package metamas.semanticmodel;
+package metamas.semanticmodel.player;
 
-import metamas.semanticmodel.AgentClass;
-import metamas.semanticmodel.Agent;
-import metamas.semanticmodel.Skill;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +8,7 @@ import org.junit.Test;
  *
  * @author Lukáš Kúdela
  */
-public class AgentClassTest {
+public class PlayerClassTest {
     
     // <editor-fold defaultstate="collapsed" desc="Test case parameters">
     
@@ -21,7 +18,7 @@ public class AgentClassTest {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AgentClass agentClass;
+    private PlayerClass agentClass;
     
     // </editor-fold>
     
@@ -29,7 +26,7 @@ public class AgentClassTest {
     
     @Before
     public void setUp() {
-        agentClass = new AgentClass(AGENT_CLASS_NAME);
+        agentClass = new PlayerClass(AGENT_CLASS_NAME);
     }
     
     // </editor-fold>
@@ -44,15 +41,15 @@ public class AgentClassTest {
         
         // ----- Set up -----
         
-        Skill skill = new Skill(SKILL_NAME);
+//        Skill skill = new Skill(SKILL_NAME);
         
         // ----- Exercise -----
         
-        agentClass.addPosessedSkill(skill);
+//        agentClass.addPosessedSkill(skill);
         
         // ----- Verify -----
         
-        assertTrue(agentClass.possessesSkill(skill));
+ //       assertTrue(agentClass.possessesSkill(skill));
     }
     
     @Test
@@ -63,7 +60,7 @@ public class AgentClassTest {
 
         // ----- Exercise -----
 
-        Agent agent = agentClass.createAgent(AGENT_NAME);
+        Player agent = agentClass.createAgent(AGENT_NAME);
 
         // ----- Verify -----
 

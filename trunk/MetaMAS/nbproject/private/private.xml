@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/utilities/Assert.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/semanticmodel/AgentClass.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/test/metamas/semanticmodel/AgentClassTest.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/test/metamas/semanticmodel/GroupTest.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/semanticmodel/protocol/Party.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/semanticmodel/protocol/State.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/semanticmodel/organization/Agent.java</file>
+        <file>file:/C:/DATA/projects/MAS/MetaMAS/MetaMAS/src/metamas/semanticmodel/organization/OrganizationClass.java</file>
+    </open-files>
 </project-private>

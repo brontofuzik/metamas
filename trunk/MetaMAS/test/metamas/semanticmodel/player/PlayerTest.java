@@ -1,7 +1,7 @@
-package metamas.semanticmodel;
+package metamas.semanticmodel.player;
 
-import metamas.semanticmodel.AgentClass;
-import metamas.semanticmodel.Agent;
+import metamas.semanticmodel.player.PlayerClass;
+import metamas.semanticmodel.player.Player;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
  *
  * @author Lukáš Kúdela
  */
-public class AgentTest {
+public class PlayerTest {
     
     // <editor-fold defaultstate="collapsed" desc="Test parameters">
     
@@ -22,9 +22,9 @@ public class AgentTest {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static AgentClass agentClass;
+    private static PlayerClass agentClass;
     
-    private Agent agent;
+    private Player agent;
     
     // </editor-fold>
     
@@ -32,7 +32,7 @@ public class AgentTest {
     
     @BeforeClass
     public static void testFixtureSetUp() {
-        agentClass = new AgentClass(AGENT_CLASS_NAME);
+        agentClass = new PlayerClass(AGENT_CLASS_NAME);
     }
     
     // </editor-fold>
@@ -43,7 +43,7 @@ public class AgentTest {
     public void testConstructor() {
         // ----- Exercise -----
         
-        agent = new Agent(AGENT_NAME, agentClass);
+        agent = new Player(AGENT_NAME, agentClass);
         
         // ----- Verify -----
         
@@ -56,7 +56,7 @@ public class AgentTest {
         try {
             // ----- Exercise -----
             
-            agent = new Agent("", agentClass);
+            agent = new Player("", agentClass);
             fail();
         } catch (Throwable throwable) {
             // ----- Verify -----
@@ -69,7 +69,7 @@ public class AgentTest {
     public void testGetName() {
         // ----- Set up -----
         
-        agent = new Agent(AGENT_NAME, agentClass);
+        agent = new Player(AGENT_NAME, agentClass);
         
         // ----- Exercise & Verify -----
         
@@ -80,7 +80,7 @@ public class AgentTest {
     public void testGetKlass() {
         // ----- Set up -----
         
-        agent = new Agent(AGENT_NAME, agentClass);
+        agent = new Player(AGENT_NAME, agentClass);
         
         // ----- Exercise & Verify -----
         

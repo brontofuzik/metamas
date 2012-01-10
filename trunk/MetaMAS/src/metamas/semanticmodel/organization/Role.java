@@ -1,31 +1,25 @@
-package metamas.semanticmodel;
+package metamas.semanticmodel.organization;
 
 import metamas.utilities.Assert;
 
 /**
- * A position within a group typed to a role.
+ *
  * @author Lukáš Kúdela
  */
-public abstract class Position {
+public class Role {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    /** The name of the position. */
-    protected String name;
-
-    /** The role of the position. */
-    protected Role role;
+    private String name;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Position(String name, Role role) {
+    public Role(String name) {
         Assert.isNotEmpty(name, "name");
-        Assert.isNotNull(role, "role");
 
-        this.name  = name;
-        this.role = role;
+        this.name = name;
     }
 
     // </editor-fold>
@@ -34,10 +28,6 @@ public abstract class Position {
 
     public String getName() {
         return name;
-    }
-    
-    public Role getRole() {
-        return role;
     }
 
     // </editor-fold>
