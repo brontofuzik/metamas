@@ -1,30 +1,26 @@
-package metamas.semanticmodel;
+package metamas.semanticmodel.player;
 
-import metamas.semanticmodel.AgentClass;
 import metamas.utilities.Assert;
 
 /**
- * An concrete agent - an instance of an agent class.
  * @author Lukáš Kúdela
+ * @since 2012-01-10
+ * @version %I% %G%
  */
-public class Agent {
-    
+public class PlayerClass {
+
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     private String name;
-
-    private AgentClass klass;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Agent(String name, AgentClass klass) {
+    public PlayerClass(String name) {
         Assert.isNotEmpty(name, "name");
-        Assert.isNotNull(klass, "klass");
 
         this.name = name;
-        this.klass = klass;
     }
 
     // </editor-fold>
@@ -35,8 +31,14 @@ public class Agent {
         return name;
     }
 
-    public AgentClass getKlass() {
-        return klass;
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    public Player createAgent(String name) {
+        Assert.isNotEmpty(name, "name");
+
+        return new Player(name, this);
     }
 
     // </editor-fold>

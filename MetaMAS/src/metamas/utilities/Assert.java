@@ -1,8 +1,9 @@
 package metamas.utilities;
 
 /**
- *
  * @author Lukáš Kúdela
+ * @since 2012-01-10
+ * @version %I% %G%
  */
 public class Assert {
 

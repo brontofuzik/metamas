@@ -1,11 +1,12 @@
-package metamas.semanticmodel;
+package metamas.semanticmodel.organization;
 
-import metamas.semanticmodel.OrganizationClass;
 import metamas.utilities.Assert;
 
 /**
  * A concrete organization - an instance of an organization class.
- * @author hp
+ * @author Lukáš Kúdela
+ * @since 2012-01-10
+ * @version %I% %G%
  */
 public class Organization {
     
@@ -20,8 +21,10 @@ public class Organization {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Organization(String name, OrganizationClass klass) {
+        // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
         Assert.isNotNull(klass, "klass");
+        // -------------------------
         
         this.name = name;
         this.klass = klass;
