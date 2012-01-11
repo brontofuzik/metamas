@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.State;
 /**
  * The 'Calculate factorial' protocol responder party.
  * @author Lukáš Kúdela
- * @since 2011-01-02
+ * @since 2012-01-02
  * @version %I% %G%
  */
 public class Answerer_CalculateFactorialResponder extends ResponderParty {
