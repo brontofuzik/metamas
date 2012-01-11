@@ -6,7 +6,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 /**
  * A one-shot requirement.
  * @author Lukáš Kúdela
- * @since 2011-01-02
+ * @since 2012-01-02
  * @version %I% %G%
  */
 public abstract class OneShotRequirement<TArgument, TResult> extends OneShotBehaviourState

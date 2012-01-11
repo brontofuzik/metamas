@@ -6,7 +6,7 @@ import jadeorg.proto.jadeextensions.FSMBehaviourState;
 /**
  * A FSM requirement.
  * @author Lukáš Kúdela
- * @since 2011-01-02
+ * @since 2012-01-02
  * @version %I% %G%
  */
 public class FSMRequirement<TArgument, TResult> extends FSMBehaviourState
