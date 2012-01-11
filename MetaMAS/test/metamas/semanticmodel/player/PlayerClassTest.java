@@ -60,7 +60,7 @@ public class PlayerClassTest {
 
         // ----- Exercise -----
 
-        Player agent = agentClass.createAgent(AGENT_NAME);
+        Player agent = agentClass.createPlayer(AGENT_NAME);
 
         // ----- Verify -----
 

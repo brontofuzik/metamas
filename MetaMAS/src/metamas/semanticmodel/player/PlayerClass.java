@@ -1,8 +1,11 @@
 package metamas.semanticmodel.player;
 
+import java.util.HashMap;
+import java.util.Map;
 import metamas.utilities.Assert;
 
 /**
+ * An player class.
  * @author Lukáš Kúdela
  * @since 2012-01-10
  * @version %I% %G%
@@ -12,14 +15,18 @@ public class PlayerClass {
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     private String name;
+    
+    private Map<String, Requirement> requirements = new HashMap<String, Requirement>();
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public PlayerClass(String name) {
+        // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
-
+        // -------------------------
+        
         this.name = name;
     }
 
@@ -35,9 +42,19 @@ public class PlayerClass {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    public Player createAgent(String name) {
+    public void addRequirement(Requirement requirement) {
+        // ----- Preconditions -----
+        Assert.isNotNull(requirement, "requirement");
+        // -------------------------
+        
+        requirements.put(requirement.getName(), requirement);
+    }
+    
+    public Player createPlayer(String name) {
+        // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
-
+        // -------------------------
+        
         return new Player(name, this);
     }
 
