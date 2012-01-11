@@ -3,9 +3,9 @@ package metamas.semanticmodel.player;
 import metamas.utilities.Assert;
 
 /**
- * An concrete agent - an instance of an agent class.
+ * An concrete player - an instance of a player class.
  * @author Lukáš Kúdela
- * @since
+ * @since 2012-01-11
  * @version %I% %G%
  */
 public class Player {
