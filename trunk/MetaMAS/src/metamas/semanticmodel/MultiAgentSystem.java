@@ -103,5 +103,9 @@ public class MultiAgentSystem {
         protocols.put(protocol.getName(), protocol);
     }
     
+    public void generate(String string) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
     // </editor-fold>
 }

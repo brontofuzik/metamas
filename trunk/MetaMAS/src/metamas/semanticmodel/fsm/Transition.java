@@ -1,10 +1,13 @@
-package metamas.semanticmodel.protocol;
+package metamas.semanticmodel.fsm;
 
+import metamas.semanticmodel.protocol.Message;
 import metamas.utilities.Assert;
 
 /**
- * An interaction protocol transition.
+ * A FSM transition.
  * @author Lukáš Kúdela
+ * @since 2012-01-13
+ * @version %I% %G%
  */
 class Transition {
     

@@ -1,13 +1,15 @@
-package metamas.semanticmodel.protocol;
+package metamas.semanticmodel.fsm;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import metamas.semanticmodel.protocol.Message;
 import metamas.utilities.Assert;
 
 /**
- * An interaction protocol state.
+ * A FSM state.
  * @author Lukáš Kúdela
+ * @since 2012-01-13
+ * @version %I% %G%
  */
 public abstract class State {
     
