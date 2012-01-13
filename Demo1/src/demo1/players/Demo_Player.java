@@ -13,7 +13,7 @@ import java.util.Set;
  * @since 2011-11-20
  * @version %I% %G%
  */
-public class DemoPlayer extends Player {
+public class Demo_Player extends Player {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -35,12 +35,12 @@ public class DemoPlayer extends Player {
     
     // ----- PROTECTED -----
     
-    protected DemoPlayer(PowerFullName powerFullName) {
+    protected Demo_Player(PowerFullName powerFullName) {
         roleFullName = powerFullName.getRoleFullName();
         this.powerFullName = powerFullName;
     }
     
-    protected DemoPlayer(RoleFullName roleFullName) {
+    protected Demo_Player(RoleFullName roleFullName) {
         this.roleFullName = roleFullName;
         powerFullName = null;
     }

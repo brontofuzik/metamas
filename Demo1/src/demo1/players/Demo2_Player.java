@@ -6,12 +6,12 @@ package demo1.players;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class DemoPlayer2 extends DemoPlayer {
+public class Demo2_Player extends Demo_Player {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public DemoPlayer2() {
-        super(new RoleFullName("demoOrganization.Answerer"));
+    public Demo2_Player() {
+        super(new RoleFullName("demo_Organization.Answerer"));
     }
     
     // </editor-fold>

@@ -1,6 +1,6 @@
 package demo1.organizations;
 
-import demo1.organizations.DemoOrganization.Answerer;
+import demo1.organizations.Demo_Organization.Answerer;
 import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import jade.lang.acl.ACLMessage;
 import jadeorg.util.ManagerBehaviour;
@@ -50,4 +50,6 @@ public class Answerer_Manager extends ManagerBehaviour {
     
         // </editor-fold>
     }
+    
+    // </editor-fold>
 }
