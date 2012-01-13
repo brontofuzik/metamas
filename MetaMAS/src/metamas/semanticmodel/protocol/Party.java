@@ -1,7 +1,6 @@
 package metamas.semanticmodel.protocol;
 
-import java.util.HashMap;
-import java.util.Map;
+import metamas.semanticmodel.fsm.State;
 import metamas.semanticmodel.organization.Role;
 import metamas.utilities.Assert;
 

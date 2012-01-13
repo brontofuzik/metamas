@@ -1,5 +1,6 @@
 package metamas.semanticmodel.organization;
 
+import metamas.semanticmodel.fsm.FSM;
 import metamas.utilities.Assert;
 
 /**
@@ -12,21 +13,32 @@ public class Power {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String name;
+    private final String name;
     
-    private PowerType type;
+    private final PowerType type;
+    
+    private final String argumentType;
+    
+    private final String resultType;
+    
+    private FSM fsm;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Power(String name, PowerType type) {
+    public Power(String name, PowerType type, String argumentType,
+        String resultType) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
+        Assert.isNotEmpty(argumentType, "argumentType");
+        Assert.isNotEmpty(resultType, "resultType");
         // -------------------------
         
         this.name = name;
         this.type = type;
+        this.argumentType = argumentType;
+        this.resultType = resultType;
     }
     
     // </editor-fold>
@@ -45,6 +57,19 @@ public class Power {
     
     public String getName() {
         return name;
+    }
+    
+    public PowerType getType() {
+        return type;
+    }
+    
+    public FSM getFSM() {
+        return fsm;
+    }
+    
+    public void setFSM(FSM calculateFactorialPowerFSM) {
+        // TODO
+        throw new UnsupportedOperationException("Not yet implemented");
     }
     
     // </editor-fold>

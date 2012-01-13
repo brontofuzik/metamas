@@ -3,8 +3,10 @@ package metamas.semanticmodel.protocol;
 import metamas.utilities.Assert;
 
 /**
- * A interaction protocol message.
+ * A message.
  * @author Lukáš Kúdela
+ * @since 2012-01-12
+ * @version %I% %G%
  */
 public class Message {
     
@@ -12,17 +14,32 @@ public class Message {
     
     private String name;
     
+    private MessageType type;
+    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Message(String name) {
-       Assert.isNotEmpty(name, "name"); 
-           
-       this.name = name;
+    public Message(String name, MessageType type) {
+        // ----- Preconditions ----- 
+        Assert.isNotEmpty(name, "name");
+        // -------------------------   
+        
+        this.name = name;
+        this.type = type;
     }
         
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Enums">
+    
+    public enum MessageType
+    {
+        TextMessage,
+        BinaryMessage
+    }
+    
+    // </editor-fold>  
     
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
     

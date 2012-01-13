@@ -1,59 +1,69 @@
-package metamas.semanticmodel.protocol;
+package metamas.semanticmodel.organization;
 
 import java.util.HashMap;
 import java.util.Map;
+import metamas.semanticmodel.fsm.FSM;
 import metamas.utilities.Assert;
 
 /**
- * A protocol.
+ * A role class.
  * @author Lukáš Kúdela
  * @since 2012-01-12
  * @version %I% %G%
  */
-public class Protocol {
+public class RoleClass {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The name of the interaction protocol. */
+
     private String name;
     
-    private Map<String, Message> messages = new HashMap<String, Message>();
+    private Map<String, Power> powers = new HashMap<String, Power>();
     
+    /** The FSM representing the role*/
+    private FSM fsm;
+
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    public Protocol(String name) {
+
+    public RoleClass(String name) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
-        // -------------------------        
+        // -------------------------
         
         this.name = name;
     }
-    
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters & Setters">
-   
-    /**
-     * Gets the name.
-     * @return The name.
-     */
+
     public String getName() {
         return name;
     }
     
+    public FSM getFSM() {
+        return fsm;
+    }
+    
+    public void setFSM(FSM fsm) {
+        // TODO
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void addMessage(Message message) {
+    public void addPower(Power power) {
         // ----- Preconditions -----
-        Assert.isNotNull(message, "message");
+        Assert.isNotNull(power, "power");
         // -------------------------
         
-        messages.put(message.getName(), message);
+        powers.put(power.getName(), power);
     }
     
     // </editor-fold>
+
+
 }

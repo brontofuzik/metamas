@@ -38,6 +38,9 @@ public class OrganizationClass {
    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    public void addRole(RoleClass roleClass) {
+    }
+    
     public Organization createOrganization(String name) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");

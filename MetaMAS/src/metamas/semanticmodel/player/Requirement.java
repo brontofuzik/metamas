@@ -12,21 +12,30 @@ public class Requirement {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String name;
+    private final String name;
     
-    private RequirementType type;
+    private final RequirementType type;
+    
+    private final String argumentType;
+    
+    private final String resultType;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Requirement(String name, RequirementType type) {
+    public Requirement(String name, RequirementType type, String argumentType,
+        String resultType) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
+        Assert.isNotEmpty(argumentType, "argumentType");
+        Assert.isNotEmpty(resultType, "resultType");
         // -------------------------
         
         this.name = name;
         this.type = type;
+        this.argumentType = argumentType;
+        this.resultType = resultType;
     }
     
     // </editor-fold>
@@ -45,6 +54,10 @@ public class Requirement {
     
     public String getName() {
         return name;
+    }
+    
+    public RequirementType getType() {
+        return type;
     }
     
     // </editor-fold>
