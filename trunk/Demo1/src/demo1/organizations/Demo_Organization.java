@@ -11,7 +11,7 @@ import jadeorg.core.organization.Role;
  * @since 2011-11-20
  * @version %I% %G%
  */
-public class DemoOrganization extends Organization {
+public class Demo_Organization extends Organization {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
