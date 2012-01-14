@@ -55,29 +55,6 @@ public abstract class Organization extends Agent {
         return knowledgeBase.getRole(roleName);
     }
     
-    /**
-     * Enacts a role.
-     * @param player the player
-     */
-    public void respondToEnactRole(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Enact role' protocol (id = %1$s).",
-            message.getConversationId()));
-        
-        addBehaviour(new Organization_EnactRoleResponder(message));
-    }
-
-    /**
-     * Deacts a role.
-     * @param player the player
-     */
-    // TODO Move the precondition assertions to the 'Deact' protocol responder beahviour.
-    public void respondToDeactRole(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Deact role' protocol (id = %1$s).",
-            message.getConversationId()));
-        
-        addBehaviour(new Organization_DeactRoleResponder(message));
-    }
-    
     // ----- Logging -----
     
     /**
@@ -106,7 +83,7 @@ public abstract class Organization extends Agent {
         super.setup();
         
         // Add behaviours.
-        addBehaviour(new Organization_Manager());
+        addBehaviour(new Organization_Responder());
         logInfo("Behaviours addded.");
         
         // TAG YellowPages

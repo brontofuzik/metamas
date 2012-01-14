@@ -110,44 +110,6 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void respondToActivateRole(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Activate role' protocol (id = %1$s).",
-            message.getConversationId()));
-        
-        if (playerAID.equals(this.playerAID)) {
-            // The sender player is enacting this role.
-            addBehaviour(new Role_ActivateRoleResponder(message));
-        } else {
-            // The sender player is not enacting this role.
-            // TODO
-        }
-    }
-
-    public void respondToDeactivateRole(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Deactivate role' protocol (id = %1$s).",
-            message.getConversationId()));
-        
-        if (playerAID.equals(this.playerAID)) {
-            // The sender player is enacting this role.
-            addBehaviour(new Role_DeactivateRoleResponder(message));
-        } else {
-            // The sender player is not enacting this role.
-            // TODO
-        }
-    }
-    
-    public void respondToInvokePower(ACLMessage aclMessage) {
-        logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).", aclMessage.getConversationId()));
-        
-        if (playerAID.equals(this.playerAID)) {
-            // The sender player is enacting this role.
-            addBehaviour(new Role_InvokePowerResponder(aclMessage));
-        } else {
-            // The sender player is not enacting this role.
-            // TODO
-        }
-    }
-    
     // ----- Logging -----
     
     /**
@@ -194,7 +156,7 @@ public class Role extends Agent {
         super.setup();
         
         // Add behaviours.
-        addBehaviour(new Role_Manager());
+        addBehaviour(new Role_Responder());
         logInfo("Behaviours added.");
         
         // TAG YellowPages

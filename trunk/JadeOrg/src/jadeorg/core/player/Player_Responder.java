@@ -2,20 +2,20 @@ package jadeorg.core.player;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.util.ManagerBehaviour;
+import jadeorg.core.Responder;
 
 /**
- * The player manager behaviour.
+ * The player responder.
  * @author Lukáš Kúdela
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_Manager extends ManagerBehaviour {
+public class Player_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_Manager() {
-        addHandler(new MeetRequirementHandler());
+    Player_Responder() {
+        addResponder(new MeetRequirementResponderWrapper());
     }
     
     // </editor-fold>
@@ -30,11 +30,11 @@ public class Player_Manager extends ManagerBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MeetRequirementHandler extends HandlerBehaviour {
+    private class MeetRequirementResponderWrapper extends ResponderWrapper {
     
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        MeetRequirementHandler() {
+        MeetRequirementResponderWrapper() {
             super(MeetRequirementProtocol.getInstance());
         }
         
@@ -44,7 +44,16 @@ public class Player_Manager extends ManagerBehaviour {
 
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyPlayer().respondToMeetRequirement(message);
+            getMyPlayer().logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
+                message.getConversationId()));
+        
+            if (message.getSender().equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
+                // The sender role is the active role.
+                getMyPlayer().addBehaviour(new Player_MeetRequirementResponder(message));
+            } else {
+                // The sender role is not the active role.
+                // TODO
+            }
         }
                
         // </editor-fold>

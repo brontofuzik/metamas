@@ -1,11 +1,15 @@
 package jadeorg.core.player;
 
-import jadeorg.core.player.requirement.Requirement;
 import jadeorg.core.player.kb.PlayerKnowledgeBase;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
+import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
+import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
+import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -42,6 +46,8 @@ public abstract class Player extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    private Player_Initiator initiator;
+    
     public void initiateEnactRole(String organizationName, String roleName) throws PlayerException {
         logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.", organizationName, roleName));
         
@@ -58,6 +64,12 @@ public abstract class Player extends Agent {
             String message = String.format("Error enacting a role. The organization '%1$s' does not exist.", organizationName);
             throw new PlayerException(this, message);
         }
+    }
+    
+    public void enactRole(String organizationName, String roleName) {
+        initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
+            new Object[] { organizationName, roleName });
+        addBehaviour(initiator);
     }
     
     // TODO Check if the role is enacted.
@@ -78,6 +90,12 @@ public abstract class Player extends Agent {
         }
     }
     
+    public void deactRole(String organizationName, String roleName) {
+        initiator.initiateProtocol(DeactRoleProtocol.getInstance(),
+            new Object[] { organizationName, roleName });
+        addBehaviour(initiator);
+    }
+    
     public void initiateActivateRole(String roleName) throws PlayerException {
         logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.", roleName));
         
@@ -93,6 +111,12 @@ public abstract class Player extends Agent {
         }
     }
     
+    public void activateRole(String roleName) {
+        initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
+            new Object[] { roleName });
+        addBehaviour(initiator);
+    }
+    
     public void initiateDeactivateRole(String roleName) throws PlayerException {
         logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.", roleName));
         
@@ -104,6 +128,12 @@ public abstract class Player extends Agent {
             String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.", roleName);
             throw new PlayerException(this, message);
         }
+    }
+    
+    public void deactivateRole(String roleName) {
+        initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
+            new Object[] { roleName });
+        addBehaviour(initiator);
     }
     
     public void initiateInvokePower(String powerName, Object argument) throws PlayerException {
@@ -119,17 +149,10 @@ public abstract class Player extends Agent {
         }
     }
     
-    public void respondToMeetRequirement(ACLMessage message) {
-        logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
-            message.getConversationId()));
-        
-        if (message.getSender().equals(knowledgeBase.getActiveRole().getRoleAID())) {
-            // The sender role is the active role.
-            addBehaviour(new Player_MeetRequirementResponder(message));
-        } else {
-            // The sender role is not the active role.
-            // TODO
-        }
+    public void invokePower(String powerName, Object argument) {
+        initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
+            new Object[] { powerName, argument });
+        addBehaviour(initiator);
     }
     
     public abstract boolean evaluateRequirements(String[] requirements);
@@ -166,7 +189,7 @@ public abstract class Player extends Agent {
         super.setup();
         
         // Add behaviours.
-        addBehaviour(new Player_Manager());
+        addBehaviour(new Player_Responder());
         logInfo("Behaviours added.");
     }
     
