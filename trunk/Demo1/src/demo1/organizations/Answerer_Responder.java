@@ -3,20 +3,20 @@ package demo1.organizations;
 import demo1.organizations.Demo_Organization.Answerer;
 import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import jade.lang.acl.ACLMessage;
-import jadeorg.util.ManagerBehaviour;
+import jadeorg.core.Responder;
 
 /**
- * The Asker role manager behaviour.
+ * The Asker role responder.
  * @author Lukáš Kúdela
  * @since 2012-01-05
  * @version %I% %G%
  */
-public class Answerer_Manager extends ManagerBehaviour {
+public class Answerer_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Answerer_Manager() {
-        addHandler(new CalculateFactorialHandler());
+    Answerer_Responder() {
+        addResponder(new CalculateFactorialHandler());
     }
      
     // </editor-fold>
@@ -31,7 +31,7 @@ public class Answerer_Manager extends ManagerBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class CalculateFactorialHandler extends HandlerBehaviour {
+    private class CalculateFactorialHandler extends ResponderWrapper {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -45,7 +45,10 @@ public class Answerer_Manager extends ManagerBehaviour {
         
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyAnswerer().respondToCalculateFactorial(message);
+            getMyAnswerer().logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).",
+                message.getConversationId()));
+        
+            getMyAnswerer().addBehaviour(new Answerer_CalculateFactorialResponder(message));
         }
     
         // </editor-fold>
