@@ -1,31 +1,22 @@
-package jadeorg.util;
+package jadeorg.core;
 
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.ParallelBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.proto.Protocol;
 
 /**
- * A manager behaviour.
+ * A responder.
  * @author Lukáš Kúdela
- * @since
+ * @since 2012-01-13
  * @version %I% %G%
  */
-public abstract class ManagerBehaviour extends FSMBehaviour {
-
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
-    
-    private static final String PARALLEL_BEHAVIOUR_NAME = "parallel";
-    
-    private static final String BLOCKER_BEHAVIOUR_NAME = "blocker";
-    
-    // </editor-fold>
+public class Responder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ManagerBehaviour() {     
+    public Responder() {     
         buildFSM();
     }
     
@@ -33,31 +24,35 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected void addHandler(HandlerBehaviour handler) {
+    protected void addResponder(ResponderWrapper responder) {
         // ----- Preconditions -----
-        if (handler == null) {
-            throw new IllegalArgumentException("handler");
+        if (responder == null) {
+            throw new IllegalArgumentException("responder");
         }
         // -------------------------
         
-        ParallelBehaviour parallelBehaviour = ((ParallelBehaviour)getState(PARALLEL_BEHAVIOUR_NAME));
-        parallelBehaviour.addSubBehaviour(handler);
+        ParallelBehaviour parallelBehaviour = ((ParallelBehaviour)getState(ParallelBehaviour.NAME));
+        parallelBehaviour.addSubBehaviour(responder);
     }
     
+    // ----- PRIVATE -----
+    
     private void buildFSM() {
-        registerFirstState(new ParallelBehaviour(), PARALLEL_BEHAVIOUR_NAME);
-        registerState(new BlockerBehaviour(), BLOCKER_BEHAVIOUR_NAME);
+        // Register the states.
+        registerFirstState(new ParallelBehaviour(), ParallelBehaviour.NAME);
+        registerState(new BlockerBehaviour(), BlockerBehaviour.NAME);
         
-        registerDefaultTransition(PARALLEL_BEHAVIOUR_NAME, BLOCKER_BEHAVIOUR_NAME);
-        registerDefaultTransition(BLOCKER_BEHAVIOUR_NAME, PARALLEL_BEHAVIOUR_NAME,
-            new String[] { PARALLEL_BEHAVIOUR_NAME });
+        // Register the transitions.
+        registerDefaultTransition(ParallelBehaviour.NAME, BlockerBehaviour.NAME);
+        registerDefaultTransition(BlockerBehaviour.NAME, ParallelBehaviour.NAME,
+            new String[] { ParallelBehaviour.NAME });
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    protected abstract class HandlerBehaviour extends OneShotBehaviour {
+    protected abstract class ResponderWrapper extends OneShotBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
@@ -69,7 +64,7 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected HandlerBehaviour(Protocol protocol, int performative) {
+        protected ResponderWrapper(Protocol protocol, int performative) {
             // ----- Preconditions -----
             assert protocol != null;
             assert performative >= 0;
@@ -79,7 +74,7 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
             this.performative = performative;
         }
         
-        protected HandlerBehaviour(Protocol protocol) {
+        protected ResponderWrapper(Protocol protocol) {
             this(protocol, ACLMessage.REQUEST);
         }
         
@@ -106,8 +101,23 @@ public abstract class ManagerBehaviour extends FSMBehaviour {
         // </editor-fold>
     }
     
+    private class ParallelBehaviour extends jade.core.behaviours.ParallelBehaviour {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "ParallelBehaviour";
+        
+        // </editor-fold>
+    }
+    
     private class BlockerBehaviour extends OneShotBehaviour {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "BlockerBehaviour";
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
