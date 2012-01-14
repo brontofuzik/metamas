@@ -65,10 +65,7 @@ public class Demo_Organization extends Organization {
          * @param askerAID the asker AID
          */
         void respondToCalculateFactorial(ACLMessage aclMessage) {
-            logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
-        
-            addBehaviour(new Answerer_CalculateFactorialResponder(aclMessage));
+
         }
         
         // ----- PROTECTED -----
@@ -78,7 +75,7 @@ public class Demo_Organization extends Organization {
             super.setup();
             
             // Add behaviours.
-            addBehaviour(new Answerer_Manager());
+            addBehaviour(new Answerer_Responder());
             logInfo("Behaviours added.");
         }
         
