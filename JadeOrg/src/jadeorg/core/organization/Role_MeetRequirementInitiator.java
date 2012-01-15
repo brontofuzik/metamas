@@ -134,6 +134,15 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     private class SendRequirementRequest extends SingleSenderState {
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -159,10 +168,11 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     private class ReceiveRequirementArgumentRequest extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveRequirementArgumentRequest() {
-            super(playerAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -196,10 +206,11 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     private class SendRequirementArgument extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendRequirementArgument() {
-            super(playerAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -238,10 +249,11 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     private class ReceiveRequirementResult extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        ReceiveRequirementResult() {
-            super(playerAID);
+        @Override
+        protected AID getSenderAID() {
+            return playerAID;
         }
         
         // </editor-fold>

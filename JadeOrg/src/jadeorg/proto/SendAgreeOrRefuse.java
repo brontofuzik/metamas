@@ -21,12 +21,18 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SendAgreeOrRefuse(AID receiverAID) {            
-        addSender(AGREE, this.new MySendAgree(receiverAID));
-        addSender(REFUSE, this.new MySendRefuse(receiverAID));
+    protected SendAgreeOrRefuse() {            
+        addSender(AGREE, this.new MySendAgree());
+        addSender(REFUSE, this.new MySendRefuse());
         
         buildFSM();
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected abstract AID getReceiverAID();
     
     // </editor-fold>
 
@@ -45,27 +51,45 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     private class MySendAgree extends OuterSenderState.SendAgree {
+            
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        MySendAgree(AID receiverAID) {
-            super(receiverAID);
+        @Override
+        protected AID getReceiverAID() {
+            return SendAgreeOrRefuse.this.getReceiverAID();
         }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         protected void onSent() {
             onAgree();
         }
+        
+        // </editor-fold>
     }
     
     private class MySendRefuse extends OuterSenderState.SendRefuse {
-    
-        MySendRefuse(AID receiverAID) {
-            super(receiverAID);
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return SendAgreeOrRefuse.this.getReceiverAID();
         }
         
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
         @Override
         protected void onSent() {
             onRefuse();
-        }       
+        }
+
+        // </editor-fold>
     }
     
     // </editor-fold>

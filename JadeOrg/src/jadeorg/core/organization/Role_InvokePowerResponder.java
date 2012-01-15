@@ -178,10 +178,11 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     private class SendPowerArgumentRequest extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendPowerArgumentRequest() {
-            super(playerAID);
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -215,6 +216,15 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     private class ReceivePowerArgument extends SingleReceiverState {
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return playerAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -245,10 +255,11 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     private class SendPowerResult extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendPowerResult() {
-            super(playerAID);
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
         
         // </editor-fold>

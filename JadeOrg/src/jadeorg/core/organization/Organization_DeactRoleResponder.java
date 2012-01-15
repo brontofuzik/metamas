@@ -2,6 +2,7 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -62,18 +63,25 @@ public class Organization_DeactRoleResponder extends ResponderParty {
      * Registers the transitions and transitions.
      */
     private void buildFSM() {
+        State assertPreconditions = new MyAssertPreconditions();
         State receiveDeactRequest = new ReceiveDeactRequest();
         State sendDeactReply = new SendDeactReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
 
         // Register the states.
-        registerFirstState(receiveDeactRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(receiveDeactRequest);
         registerState(sendDeactReply);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transisions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveDeactRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
 
         sendDeactReply.registerTransition(SendAgreeOrRefuse.AGREE, successEnd);
@@ -83,6 +91,21 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class MyAssertPreconditions extends AssertPreconditions {
+             
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyOrganization().logInfo(String.format(
+                "Responding to the 'Deact role' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+            return true;
+        }
+        
+        // </editor-fold>
+    }
     
     /**
      * The 'Receive deact request' (single receiver) state.
@@ -108,10 +131,11 @@ public class Organization_DeactRoleResponder extends ResponderParty {
      */
     private class SendDeactReply extends SendAgreeOrRefuse {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendDeactReply() {
-            super(playerAID);
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -157,7 +181,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
      * The 'Success end' (simple) state.
      * A state in which the 'Deact role' responder party succeedes.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class SuccessEnd extends OneShotBehaviourState {      
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

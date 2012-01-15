@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -20,21 +21,22 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
+    /** The role name. */
     private String roleName;
     
+    /** The role AID. */
     private AID roleAID;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player_DeactivateRoleInitiator(String roleName, AID roleAID) {
+    public Player_DeactivateRoleInitiator(String roleName) {
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
 
         this.roleName = roleName;
-        this.roleAID = roleAID;
         
         registerStatesAndtransitions();
     }
@@ -60,6 +62,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State sendDeactivateRequest = new SendDeactivateRequest();
         State receiveDeactivateReply = new ReceiveDeactivateReply();
         State successEnd = new SuccessEnd();
@@ -67,12 +70,18 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(sendDeactivateRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(sendDeactivateRequest);
         registerState(receiveDeactivateReply);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendDeactivateRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 
         receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.AGREE, successEnd); 
@@ -83,10 +92,43 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    private class MyAssertPreconditions extends AssertPreconditions {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyPlayer().logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.",
+                roleName));
+
+            if (getMyPlayer().knowledgeBase.canDeactivateRole(roleName)) {
+                // The role can be deactivated.
+                roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                return true;
+            } else {
+                // The role can not be deactivated.
+                String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.",
+                    roleName);
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
     /**
      * 
      */
     private class SendDeactivateRequest extends SingleSenderState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return roleAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -115,12 +157,13 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
      */
     private class ReceiveDeactivateReply extends ReceiveAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveDeactivateReply() {
-            super(roleAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return roleAID;
         }
-
+        
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">

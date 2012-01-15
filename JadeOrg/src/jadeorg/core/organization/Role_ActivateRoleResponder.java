@@ -2,6 +2,7 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -56,6 +57,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State receiveActivateRequest = new ReceiveActivateRequest();
         State sendActivateReply = new SendActivateReply();
         State successEnd = new SuccessEnd();
@@ -63,12 +65,18 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         // ------------------
 
         // Register states.
-        registerFirstState(receiveActivateRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(receiveActivateRequest);
         registerState(sendActivateReply);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveActivateRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
         sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
@@ -79,6 +87,28 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
+    private class MyAssertPreconditions extends AssertPreconditions {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyRole().logInfo(String.format("Responding to the 'Activate role' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+        
+            if (aclMessage.getSender().equals(getMyRole().playerAID)) {
+                // The sender player is enacting this role.
+                return true;
+            } else {
+                // The sender player is not enacting this role.
+                // TODO
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
     /**
      * The 'Receive activate request' (single receiver) state.
      * A state in which the 'Activate request' message is received.
@@ -102,12 +132,13 @@ public class Role_ActivateRoleResponder extends ResponderParty {
      */
     private class SendActivateReply extends SendAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendActivateReply() {
-            super(playerAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
-
+        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

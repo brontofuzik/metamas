@@ -72,9 +72,6 @@ public class Organization_Responder extends Responder {
         
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyOrganization().logInfo(String.format("Responding to the 'Deact role' protocol (id = %1$s).",
-                message.getConversationId()));
-        
             getMyOrganization().addBehaviour(new Organization_DeactRoleResponder(message));
         }
         

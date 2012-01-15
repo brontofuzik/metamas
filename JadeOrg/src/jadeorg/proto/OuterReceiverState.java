@@ -156,15 +156,12 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         private int outerReceiverStateExitValue;
         
-        private AID senderAID;
-        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerReceiverState(int outerReceiverStateExitValue, AID senderAID) {
+        protected InnerReceiverState(int outerReceiverStateExitValue) {
             this.outerReceiverStateExitValue = outerReceiverStateExitValue;
-            this.senderAID = senderAID;
         } 
         
         // </editor-fold>
@@ -178,9 +175,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             }
         }
         
-        protected AID getSenderAID() {
-            return senderAID;
-        }
+        protected abstract AID getSenderAID();
         
         // ----- PRIVATE -----
         
@@ -206,12 +201,12 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected class ReceiveAgree extends InnerReceiverState {
+    protected abstract class ReceiveAgree extends InnerReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveAgree(int outerReceiverStateExitValue, AID senderAID) {
-            super(outerReceiverStateExitValue, senderAID);
+        public ReceiveAgree(int outerReceiverStateExitValue) {
+            super(outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -251,12 +246,12 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected class ReceiveRefuse extends InnerReceiverState {
+    protected abstract class ReceiveRefuse extends InnerReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public ReceiveRefuse(int outerReceiverStateExitValue, AID senderAID) {
-            super(outerReceiverStateExitValue, senderAID);
+        public ReceiveRefuse(int outerReceiverStateExitValue) {
+            super(outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -296,12 +291,12 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-09
      * @version %I% %G%
      */
-    protected class ReceiveFailure extends InnerReceiverState {
+    protected abstract class ReceiveFailure extends InnerReceiverState {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-        public ReceiveFailure(int outerReceiverStateExitValue, AID senderAID) {
-            super(outerReceiverStateExitValue, senderAID);
+        public ReceiveFailure(int outerReceiverStateExitValue) {
+            super(outerReceiverStateExitValue);
         }
 
         // </editor-fold>

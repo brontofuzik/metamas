@@ -21,12 +21,18 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveAgreeOrRefuse(AID senderAID) {
-        addReceiver(this.new MyReceiveAgree(senderAID));
-        addReceiver(this.new MyReceiveRefuse(senderAID));
+    protected ReceiveAgreeOrRefuse() {
+        addReceiver(this.new MyReceiveAgree());
+        addReceiver(this.new MyReceiveRefuse());
         
         buildFSM();
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected abstract AID getSenderAID();
     
     // </editor-fold>
     
@@ -46,26 +52,60 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     private class MyReceiveAgree extends OuterReceiverState.ReceiveAgree {
         
-        MyReceiveAgree(AID senderAID) {
-            super(AGREE, senderAID);
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        MyReceiveAgree() {
+            super(AGREE);
         }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return ReceiveAgreeOrRefuse.this.getSenderAID();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         protected void onReceived() {
             onAgree();
         }
+
+        // </editor-fold>    
     }
     
     private class MyReceiveRefuse extends OuterReceiverState.ReceiveRefuse {
         
-        MyReceiveRefuse(AID senderAID) {
-            super(REFUSE, senderAID);
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        MyReceiveRefuse() {
+            super(REFUSE);
         }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return ReceiveAgreeOrRefuse.this.getSenderAID();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         protected void onReceived() {
             onRefuse();
-        }       
+        }
+
+        // </editor-fold>
     }
     
     // </editor-fold>

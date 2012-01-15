@@ -21,12 +21,18 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected SendSuccessOrFailure(AID receiverAID) {        
-        addSender(SUCCESS, new SendSuccess(receiverAID));
-        addSender(FAILURE, new SendFailure(receiverAID));
+    protected SendSuccessOrFailure() {        
+        addSender(SUCCESS, new MySendSuccess());
+        addSender(FAILURE, new MySendFailure());
         
         buildFSM();
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected abstract AID getReceiverAID();
     
     // </editor-fold>
     
@@ -38,12 +44,13 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SendSuccess extends InnerSenderState {
+    private class MySendSuccess extends InnerSenderState {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendSuccess(AID receiverAID) {
-            super(receiverAID);
+       @Override
+        protected AID getReceiverAID() {
+            return SendSuccessOrFailure.this.getReceiverAID();
         }
         
         // </editor-fold>
@@ -56,6 +63,18 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         }
     
         // </editor-fold>
+    }
+    
+    private class MySendFailure extends SendFailure {
+
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return SendSuccessOrFailure.this.getReceiverAID();
+        }
+        
+        // </editor-fold>     
     }
     
     // </editor-fold> 

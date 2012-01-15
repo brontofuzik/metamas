@@ -131,30 +131,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     }
     
     protected abstract class InnerSenderState extends OneShotBehaviourState {
-       
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private AID receiverAID;
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        protected AID getReceiverAID() {
-            return receiverAID;
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected InnerSenderState(AID receiverAID) {
-            this.receiverAID = receiverAID;
-        }
-        
-        protected InnerSenderState() {
-            this(null);
-        }
+        protected abstract AID getReceiverAID();
         
         // </editor-fold>
     }
@@ -165,15 +145,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected class SendAgree extends InnerSenderState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public SendAgree(AID receiverAID) {
-            super(receiverAID);
-        }
-        
-        // </editor-fold>
+    protected abstract class SendAgree extends InnerSenderState {  
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -203,16 +175,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected class SendRefuse extends InnerSenderState {
-            
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public SendRefuse(AID receiverAID) {
-            super(receiverAID);
-        }
-        
-        // </editor-fold>
-        
+    protected abstract class SendRefuse extends InnerSenderState {
+                
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -241,15 +205,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
      * @since 2011-12-09
      * @version %I% %G%
      */
-    protected class SendFailure extends InnerSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        public SendFailure(AID receiverAID) {
-            super(receiverAID);
-        }
-
-        // </editor-fold>
+    protected abstract class SendFailure extends InnerSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -20,6 +21,9 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
+    /** The organization name. */
+    private String organizationName;
+    
     /** The organization AID */
     private AID organizationAID;
 
@@ -30,13 +34,13 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player_DeactRoleInitiator(AID organization, String roleName) {
+    Player_DeactRoleInitiator(String organizationName, String roleName) {
         // ----- Preconditions -----
-        assert organization != null;
+        assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
-        this.organizationAID = organization;
+        this.organizationName = organizationName;
         this.roleName = roleName;
 
         buildFSM();
@@ -63,6 +67,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State sendDeactRequest = new SendDeactRequest();
         State receiveDeactReply = new ReceiveDeactReply();
         State successEnd = new SuccessEnd();
@@ -70,12 +75,18 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(sendDeactRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(sendDeactRequest);
         registerState(receiveDeactReply);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
-        // Register the transitions (NEW).
+        // Register the transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendDeactRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         sendDeactRequest.registerDefaultTransition(receiveDeactReply);
             
         receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, successEnd);
@@ -86,11 +97,47 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    private class MyAssertPreconditions extends AssertPreconditions {
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyPlayer().logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.",
+                organizationName, roleName));
+
+            // TAG YellowPages
+            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+
+            organizationAID = new AID(organizationName, AID.ISLOCALNAME);
+            if (organizationAID != null) {
+                // The organizaiton exists.
+                return true;
+            } else {
+                // The organization does not exist.
+                String message = String.format("Error deacting a role. The organization '%1$s' does not exist.",
+                    organizationName);
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
     /**
      * The 'Send deact request' (single sender) state.
      * A state in which the 'Deact request' message is sent.
      */
     private class SendDeactRequest extends SingleSenderState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return organizationAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -121,12 +168,13 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
      */
     private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveDeactReply() {
-            super(organizationAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return organizationAID;
         }
-
+        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

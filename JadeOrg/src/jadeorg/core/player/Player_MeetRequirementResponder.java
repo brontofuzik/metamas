@@ -182,10 +182,11 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     private class SendRequirementArgumentRequest extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendRequirementArgumentRequest() {
-            super(roleAID);
+        @Override
+        protected AID getReceiverAID() {
+            return roleAID;
         }
         
         // </editor-fold>
@@ -219,6 +220,15 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     private class ReceiveRequirementArgument extends SingleReceiverState {
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return roleAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -249,10 +259,11 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     private class SendRequirementResult extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendRequirementResult() {
-            super(roleAID);
+        @Override
+        protected AID getReceiverAID() {
+            return roleAID;
         }
         
         // </editor-fold>

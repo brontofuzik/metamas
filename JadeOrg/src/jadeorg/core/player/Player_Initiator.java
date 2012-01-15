@@ -1,6 +1,5 @@
 package jadeorg.core.player;
 
-import jade.core.AID;
 import jadeorg.core.Initiator;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -71,29 +70,8 @@ public class Player_Initiator extends Initiator {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
-        
-            // TAG YELLOW-PAGES
-            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-
-            // Check if the organization exists.
-            AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-            if (organizationAID != null) {
-                // The organization exists.
-                getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationAID, roleName));
-            } else {
-                // The organization does not exist.
-                String message = String.format("Error enacting a role. The organization '%1$s' does not exist.",
-                    organizationName);
-                //throw new PlayerException(this, message);
-            }
+            getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationName, roleName));
         }
-        
-//        @Override
-//        public void action() {
-//            getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationName, roleName));
-//        }
         
         // </editor-fold>
     }
@@ -130,22 +108,7 @@ public class Player_Initiator extends Initiator {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
-
-            // TAG YellowPages
-            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-
-            AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-            if (organizationAID != null) {
-                // The organizaiton exists.
-                getMyPlayer().addBehaviour(new Player_DeactRoleInitiator(organizationAID, roleName));
-            } else {
-                // The organization does not exist.
-                String message = String.format("Error deacting a role. The organization '%1$s' does not exist.",
-                    organizationName);
-                //throw new PlayerException(this, message);
-            }
+            getMyPlayer().addBehaviour(new Player_DeactRoleInitiator(organizationName, roleName));
         }
         
         // </editor-fold>
@@ -180,20 +143,7 @@ public class Player_Initiator extends Initiator {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.",
-                roleName));
-
-            // Check if the role can be activated.
-            if (getMyPlayer().knowledgeBase.canActivateRole(roleName)) {
-                // The role can be activated.
-                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
-                getMyPlayer().addBehaviour(new Player_ActivateRoleInitiator(roleName, roleAID));
-            } else {
-                // The role can not be activated.
-                String message = String.format("Error activating the role '%1$s'. It is not enacted.",
-                    roleName);
-                //throw new PlayerException(this, message);
-            }
+            getMyPlayer().addBehaviour(new Player_ActivateRoleInitiator(roleName));
         }
         
         // </editor-fold>
@@ -228,19 +178,7 @@ public class Player_Initiator extends Initiator {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.",
-                roleName));
-
-            if (getMyPlayer().knowledgeBase.canDeactivateRole(roleName)) {
-                // The role can be deactivated.
-                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
-                getMyPlayer().addBehaviour(new Player_DeactivateRoleInitiator(roleName, roleAID));
-            } else {
-                // The role can not be deactivated.
-                String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.",
-                    roleName);
-                //throw new PlayerException(this, message);
-            }
+            getMyPlayer().addBehaviour(new Player_DeactivateRoleInitiator(roleName));
         }
         
         // </editor-fold>
