@@ -104,6 +104,15 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     }
     
     private class SendRequest extends SingleSenderState {
+      
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return answererAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -129,6 +138,15 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     }
     
     private class ReceiveReply extends SingleReceiverState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return answererAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
