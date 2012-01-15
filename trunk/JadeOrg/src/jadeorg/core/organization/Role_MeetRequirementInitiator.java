@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -82,7 +83,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State assertPreconditions = new MyAssertPreconditions();
         State sendRequirementRequest = new SendRequirementRequest();
         State receiveRequirementArgumentRequest = new ReceiveRequirementArgumentRequest();
         State sendRequirementArgument = new SendRequirementArgument();
@@ -92,7 +93,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
+        registerFirstState(assertPreconditions);
         
         registerState(sendRequirementRequest);   
         registerState(receiveRequirementArgumentRequest);
@@ -103,7 +104,8 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        initialize.registerDefaultTransition(sendRequirementRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendRequirementRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
         
         sendRequirementRequest.registerDefaultTransition(receiveRequirementArgumentRequest);
         
@@ -120,13 +122,25 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
+    private class MyAssertPreconditions extends AssertPreconditions {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            playerAID = getMyRole().playerAID;
+        protected boolean preconditionsSatisfied() {
+            getMyRole().logInfo(String.format("Initiating the 'Meet requirement' (%1$s) protocol.",
+                requirementName));
+
+            if (true) {
+                // The role can invoke the requirement.
+                playerAID = getMyRole().playerAID;
+                return true;
+            } else {
+                // The role can not invoke the requirement.
+                String message = String.format("I cannot invoke the requirement '%1$s'.",
+                    requirementName);
+                return false;
+            }
         }
         
         // </editor-fold>

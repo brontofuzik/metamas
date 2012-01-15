@@ -44,16 +44,7 @@ public class Player_Responder extends Responder {
 
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyPlayer().logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
-                message.getConversationId()));
-        
-            if (message.getSender().equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
-                // The sender role is the active role.
-                getMyPlayer().addBehaviour(new Player_MeetRequirementResponder(message));
-            } else {
-                // The sender role is not the active role.
-                // TODO
-            }
+            getMyPlayer().addBehaviour(new Player_MeetRequirementResponder(message));
         }
                
         // </editor-fold>
