@@ -133,6 +133,15 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     
     private class SendReply extends SingleSenderState {
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return askerAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
