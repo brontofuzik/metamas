@@ -3,7 +3,6 @@ package demo1.players;
 import demo1.players.requirements.CalculateFactorial_Requirement;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
-import jadeorg.core.player.PlayerException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,11 +108,11 @@ public class Demo_Player extends Player {
             
             @Override
             protected void handleElapsedTimeout() {
-                try {
-                    getMyPlayer().initiateEnactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
-                } catch (PlayerException ex) {
-                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
-                }
+//                try {
+                    getMyPlayer().enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+//                } catch (PlayerException ex) {
+//                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
+//                }
             }
         });
         
@@ -126,11 +125,11 @@ public class Demo_Player extends Player {
             
             @Override
             protected void handleElapsedTimeout() {
-                try {
-                    getMyPlayer().initiateActivateRole(roleFullName.getRoleName());
-                } catch (PlayerException ex) {
-                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
-                }
+//                try {
+                    getMyPlayer().activateRole(roleFullName.getRoleName());
+//                } catch (PlayerException ex) {
+//                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
+//                }
             }
         });
     }
@@ -145,11 +144,11 @@ public class Demo_Player extends Player {
             
             @Override
             protected void handleElapsedTimeout() {
-                try {
-                    getMyPlayer().initiateInvokePower("demo1.organizations.powers.CalculateFactorial_Power", new Integer(10));
-                } catch (PlayerException ex) {
-                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
-                }
+//                try {
+                    getMyPlayer().invokePower("demo1.organizations.powers.CalculateFactorial_Power", new Integer(10));
+//                } catch (PlayerException ex) {
+//                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
+//                }
             }
         });
     }
@@ -164,11 +163,11 @@ public class Demo_Player extends Player {
             
             @Override
             protected void handleElapsedTimeout() {
-                try {
-                    getMyPlayer().initiateDeactivateRole(roleFullName.getRoleName());
-                } catch (PlayerException ex) {
-                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
-                }
+//                try {
+                    getMyPlayer().deactivateRole(roleFullName.getRoleName());
+//                } catch (PlayerException ex) {
+//                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
+//                }
             }
         });
         
@@ -181,11 +180,11 @@ public class Demo_Player extends Player {
             
             @Override
             protected void handleElapsedTimeout() {
-                try {
-                    getMyPlayer().initiateDeactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
-                } catch (PlayerException ex) {
-                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
-                }
+//                try {
+                    getMyPlayer().deactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+//                } catch (PlayerException ex) {
+//                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
+//                }
             }
         });
     }
