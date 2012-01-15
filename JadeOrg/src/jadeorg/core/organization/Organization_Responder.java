@@ -48,10 +48,7 @@ public class Organization_Responder extends Responder {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void handleMessage(ACLMessage message) {
-            getMyOrganization().logInfo(String.format("Responding to the 'Enact role' protocol (id = %1$s).",
-                message.getConversationId()));
-            
+        protected void handleMessage(ACLMessage message) {            
             getMyOrganization().addBehaviour(new Organization_EnactRoleResponder(message));
         }
         

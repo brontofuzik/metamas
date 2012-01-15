@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.Agent;
 import jade.lang.acl.MessageTemplate;
 
 /**

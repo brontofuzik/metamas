@@ -6,8 +6,8 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
+import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
@@ -34,6 +34,8 @@ public class Role extends Agent {
     AID playerAID;
     
     // ----- PRIVATE -----
+    
+    private Role_Initiator initiator = new Role_Initiator(this);
     
     private Logger logger;
     
@@ -109,6 +111,11 @@ public class Role extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    public void invokeRequirement(String requirementName, Object argument) {
+        initiator.initiateProtocol(MeetRequirementProtocol.getInstance(),
+            new Object[] { requirementName, argument } );
+    }
     
     // ----- Logging -----
     
