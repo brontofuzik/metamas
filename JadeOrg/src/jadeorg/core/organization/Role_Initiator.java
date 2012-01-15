@@ -63,18 +63,7 @@ public class Role_Initiator extends Initiator {
 
         @Override
         public void action() {
-            getMyRole().logInfo(String.format("Initiating the 'Meet requirement' (%1$s) protocol.",
-                requirementName));
-
-            if (true) {
-                // The role can invoke the requirement.
-                getMyRole().addBehaviour(new Role_MeetRequirementInitiator(requirementName, argument));
-            } else {
-                // The role can not invoke the requirement.
-                String message = String.format("I cannot invoke the requirement '%1$s'.",
-                    requirementName);
-                //throw new PlayerException(getMyPlayer(), message);
-            }
+            getMyRole().addBehaviour(new Role_MeetRequirementInitiator(requirementName, argument));
         }
         
         // </editor-fold>

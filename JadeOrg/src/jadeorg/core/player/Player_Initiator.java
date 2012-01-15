@@ -216,18 +216,7 @@ public class Player_Initiator extends Initiator {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.",
-                powerName));
-
-            if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
-                // The player can invoke the power.
-                getMyPlayer().addBehaviour(new Player_InvokePowerInitiator(powerName, argument));
-            } else {
-                // The player can not invoke the power.
-                String message = String.format("I cannot invoke the power '%1$s'.",
-                    powerName);
-                //throw new PlayerException(getMyPlayer(), message);
-            }
+            getMyPlayer().addBehaviour(new Player_InvokePowerInitiator(powerName, argument));
         }
         
         // </editor-fold>

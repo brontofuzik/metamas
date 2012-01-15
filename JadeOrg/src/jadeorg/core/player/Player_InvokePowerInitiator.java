@@ -80,7 +80,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State assertPreconditions = new MyAssertPreconditions();
         State sendInvokePowerRequest = new SendInvokePowerRequest();
         State receivePowerArgumentRequest = new ReceivePowerArgumentRequest();
         State sendPowerArgument = new SendPowerArgument();
@@ -90,7 +90,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
+        registerFirstState(assertPreconditions);
         
         registerState(sendInvokePowerRequest);
         registerState(receivePowerArgumentRequest);
@@ -101,7 +101,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendInvokePowerRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendInvokePowerRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
         
         sendInvokePowerRequest.registerDefaultTransition(receivePowerArgumentRequest);
         
@@ -137,18 +138,6 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
                     powerName);
                 return false;
             }
-        }
-        
-        // </editor-fold>
-    }
-    
-    private class Initialize extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            roleAID = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
         }
         
         // </editor-fold>

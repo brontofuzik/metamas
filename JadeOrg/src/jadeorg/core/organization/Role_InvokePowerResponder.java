@@ -3,6 +3,7 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -159,6 +160,28 @@ public class Role_InvokePowerResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class MyAssertPreconditions extends AssertPreconditions {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyRole().logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+        
+            if (aclMessage.getSender().equals(getMyRole().playerAID)) {
+                // The sender player is enacting this role.
+                return true;
+            } else {
+                // The sender player is not enacting this role.
+                // TODO
+                return false;
+            }
+        }
+    
+        // </editor-fold>      
+    }
     
     private class ReceiveInvokePowerRequest extends OneShotBehaviourState {
         

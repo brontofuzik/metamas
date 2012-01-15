@@ -3,6 +3,7 @@ package jadeorg.core.player;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -87,6 +88,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     private void buildFSM() {        
          // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State receiveMeetRequirementRequest = new ReceiveMeetRequirementRequest();
         State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
         receiveRequirementArgument = new ReceiveRequirementArgument();
@@ -96,8 +98,9 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         // ------------------
         
         // Register states.
-        registerFirstState(receiveMeetRequirementRequest);
+        registerFirstState(assertPreconditions);
         
+        registerState(receiveMeetRequirementRequest);    
         registerState(sendRequirementArgumentRequest);
         registerState(receiveRequirementArgument);
         registerState(sendRequirementResult);
@@ -106,6 +109,9 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveMeetRequirementRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         receiveMeetRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
         
         sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
@@ -164,7 +170,29 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-     private class ReceiveMeetRequirementRequest extends OneShotBehaviourState {
+    private class MyAssertPreconditions extends AssertPreconditions {
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyPlayer().logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+        
+            if (aclMessage.getSender().equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
+                // The sender role is the active role.
+                return true;
+            } else {
+                // The sender role is not the active role.
+                // TODO
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class ReceiveMeetRequirementRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

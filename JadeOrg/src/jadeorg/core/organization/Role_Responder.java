@@ -51,16 +51,7 @@ public class Role_Responder extends Responder {
         
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyRole().logInfo(String.format("Responding to the 'Activate role' protocol (id = %1$s).",
-                message.getConversationId()));
-        
-            if (message.getSender().equals(getMyRole().playerAID)) {
-                // The sender player is enacting this role.
-                getMyRole().addBehaviour(new Role_ActivateRoleResponder(message));
-            } else {
-                // The sender player is not enacting this role.
-                // TODO
-            }
+            getMyRole().addBehaviour(new Role_ActivateRoleResponder(message));
         }
         
         // </editor-fold>
@@ -83,16 +74,7 @@ public class Role_Responder extends Responder {
         
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyRole().logInfo(String.format("Responding to the 'Deactivate role' protocol (id = %1$s).",
-                message.getConversationId()));
-        
-            if (message.getSender().equals(getMyRole().playerAID)) {
-                // The sender player is enacting this role.
-                getMyRole().addBehaviour(new Role_DeactivateRoleResponder(message));
-            } else {
-                // The sender player is not enacting this role.
-                // TODO
-            }
+            getMyRole().addBehaviour(new Role_DeactivateRoleResponder(message));
         }
         
         // </editor-fold>
@@ -115,16 +97,7 @@ public class Role_Responder extends Responder {
         
         @Override
         protected void handleMessage(ACLMessage message) {
-            getMyRole().logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).",
-                message.getConversationId()));
-        
-            if (message.getSender().equals(getMyRole().playerAID)) {
-                // The sender player is enacting this role.
-                getMyRole().addBehaviour(new Role_InvokePowerResponder(message));
-            } else {
-                // The sender player is not enacting this role.
-                // TODO
-            }
+            getMyRole().addBehaviour(new Role_InvokePowerResponder(message));
         }
         
         // </editor-fold>
