@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -40,29 +41,17 @@ class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_EnactRoleInitiator(AID organizationAID, String roleName) {
+    Player_EnactRoleInitiator(String organizationName, String roleName) {
         // ----- Preconditions -----
-        assert organizationAID != null;
+        assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
-        this.organizationAID = organizationAID;
+        this.organizationName = organizationName;
         this.roleName = roleName;
 
         buildFSM();
     }
-    
-//    Player_EnactRoleInitiator(String organizationName, String roleName) {
-//        // ----- Preconditions -----
-//        assert organizationName != null && !organizationName.isEmpty();
-//        assert roleName != null && !roleName.isEmpty();
-//        // -------------------------
-//
-//        this.organizationName = organizationName;
-//        this.roleName = roleName;
-//
-//        buildFSM();
-//    }
     
     // </editor-fold>
     
@@ -83,7 +72,7 @@ class Player_EnactRoleInitiator extends InitiatorParty {
 
     private void buildFSM() {
         // ----- States -----
-        //State assertPreconditions = new AssertPreconditions();
+        State assertPreconditions = new MyAssertPreconditions();
         State sendEnactRequest = new SendEnactRequest();
         State receiveRequirementsInform = new ReceiveRequirementsInform();
         State sendRequirementsReply = new SendRequirementsReply();
@@ -93,17 +82,19 @@ class Player_EnactRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        //registerFirstState(assertPreconditions);
-        registerFirstState(sendEnactRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(sendEnactRequest);
         registerState(receiveRequirementsInform);
         registerState(sendRequirementsReply);
         registerState(receiveRoleAID);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
-//        assertPreconditions.registerTransition(AssertPreconditions.SUCCESS, sendEnactRequest);
-//        assertPreconditions.registerTransition(AssertPreconditions.FAILURE, failureEnd);
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendEnactRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
         
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
@@ -120,25 +111,12 @@ class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class AssertPreconditions extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final int SUCCESS = 1;
-        private static final int FAILURE = 2;
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private int exitValue;
-        
-        // </editor-fold>
+    private class MyAssertPreconditions extends AssertPreconditions {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
+        protected boolean preconditionsSatisfied() {
             getMyPlayer().logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
             
@@ -149,18 +127,13 @@ class Player_EnactRoleInitiator extends InitiatorParty {
             organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organization exists.
-                exitValue = SUCCESS;
+                return true;
             } else {
                 // The organization does not exist.
                 String message = String.format("Error enacting a role. The organization '%1$s' does not exist.",
                     organizationName);
-                exitValue = FAILURE;
+                return false;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>
@@ -172,6 +145,15 @@ class Player_EnactRoleInitiator extends InitiatorParty {
      */
     private class SendEnactRequest extends SingleSenderState {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return organizationAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
@@ -195,6 +177,8 @@ class Player_EnactRoleInitiator extends InitiatorParty {
         }
 
         // </editor-fold>
+
+
     }
     
     /**
@@ -203,14 +187,15 @@ class Player_EnactRoleInitiator extends InitiatorParty {
      */
     private class ReceiveRequirementsInform extends ReceiveSuccessOrFailure {
 
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        ReceiveRequirementsInform() {
-            super(organizationAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return organizationAID;
         }
-
+        
         // </editor-fold>
-
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
@@ -247,12 +232,13 @@ class Player_EnactRoleInitiator extends InitiatorParty {
      */
     private class SendRequirementsReply extends SendAgreeOrRefuse {
 
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendRequirementsReply() {
-            super(organizationAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return organizationAID;
         }
-
+        
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -287,6 +273,15 @@ class Player_EnactRoleInitiator extends InitiatorParty {
      */
     private class ReceiveRoleAID extends SingleReceiverState {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return organizationAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override

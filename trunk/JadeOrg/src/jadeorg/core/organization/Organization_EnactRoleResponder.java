@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -66,6 +67,7 @@ class Organization_EnactRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State receiveEnactRequest = new ReceiveEnactRequest();
         State sendRequirementsInform = new SendRequirementsInform();
         State receiveRequirementsReply = new ReceiveRequirementsReply();
@@ -75,14 +77,20 @@ class Organization_EnactRoleResponder extends ResponderParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(receiveEnactRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(receiveEnactRequest);
         registerState(sendRequirementsInform);
         registerState(receiveRequirementsReply);
         registerState(sendRoleAID);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveEnactRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         receiveEnactRequest.registerDefaultTransition(sendRequirementsInform);
 
         sendRequirementsInform.registerTransition(SendRequirementsInform.SUCCESS, receiveRequirementsReply);
@@ -98,34 +106,16 @@ class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class AssertPreconditions extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final int SUCCESS = 1;
-        private static final int FAILURE = 2;
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private int exitValue;
-        
-        // </editor-fold>
+    private class MyAssertPreconditions extends AssertPreconditions {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        protected boolean preconditionsSatisfied() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Enact role' protocol (id = %1$s).",
                 aclMessage.getConversationId()));
-            exitValue = SUCCESS;
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
+            return true;
         }
         
         // </editor-fold>
@@ -147,10 +137,11 @@ class Organization_EnactRoleResponder extends ResponderParty {
     
     private class SendRequirementsInform extends SendSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        SendRequirementsInform() {
-            super(playerAID);
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -199,10 +190,11 @@ class Organization_EnactRoleResponder extends ResponderParty {
     
     private class ReceiveRequirementsReply extends ReceiveAgreeOrRefuse {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        ReceiveRequirementsReply() {
-            super(playerAID);
+        @Override
+        protected AID getSenderAID() {
+            return playerAID;
         }
         
         // </editor-fold>
@@ -223,6 +215,15 @@ class Organization_EnactRoleResponder extends ResponderParty {
     }
     
     private class SendRoleAID extends SingleSenderState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

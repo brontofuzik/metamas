@@ -21,12 +21,18 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveSuccessOrFailure(AID senderAID) {
-        addReceiver(new ReceiveSuccess(senderAID));
-        addReceiver(new ReceiveFailure(FAILURE, senderAID));
+    protected ReceiveSuccessOrFailure() {
+        addReceiver(new MyReceiveSuccess());
+        addReceiver(new MyReceiveFailure());
         
         buildFSM();
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected abstract AID getSenderAID();
     
     // </editor-fold>
     
@@ -38,12 +44,21 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class ReceiveSuccess extends InnerReceiverState {
+    private class MyReceiveSuccess extends InnerReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveSuccess(AID senderAID) {
-            super(SUCCESS, senderAID);
+        MyReceiveSuccess() {
+            super(SUCCESS);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return ReceiveSuccessOrFailure.this.getSenderAID();
         }
         
         // </editor-fold>
@@ -53,6 +68,26 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
         @Override
         public void action() {
             setExitValue(onSuccessReceiver());
+        }
+        
+        // </editor-fold>
+    }
+    
+    private class MyReceiveFailure extends ReceiveFailure {
+
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        MyReceiveFailure() {
+            super(FAILURE);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return ReceiveSuccessOrFailure.this.getSenderAID();
         }
         
         // </editor-fold>

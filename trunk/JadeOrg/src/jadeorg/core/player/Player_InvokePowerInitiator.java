@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -35,21 +36,21 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_InvokePowerInitiator(String powerName) {
+    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {       
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
         // -------------------------
 
         this.powerName = powerName;
+        this.powerArgument = powerArgument;
         
         buildFSM();
     }
     
-    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {
-        this(powerName);
-        this.powerArgument = powerArgument;
+    public Player_InvokePowerInitiator(String powerName) {
+        this(powerName, null);
     }
-    
+ 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
@@ -117,6 +118,30 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    private class MyAssertPreconditions extends AssertPreconditions {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {    
+            getMyPlayer().logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.",
+                powerName));
+
+            if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
+                // The player can invoke the power.
+                roleAID = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
+                return true;
+            } else {
+                // The player can not invoke the power.
+                String message = String.format("I cannot invoke the power '%1$s'.",
+                    powerName);
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
+    
     private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -130,6 +155,15 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     }
     
     private class SendInvokePowerRequest extends SingleSenderState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return roleAID;
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -151,15 +185,16 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
             getMyPlayer().logInfo("Invoke power requets sent.");
         }
         
-        // </editor-fold>    
+        // </editor-fold>
     }
     
     private class ReceivePowerArgumentRequest extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        ReceivePowerArgumentRequest() {
-            super(roleAID);
+        @Override
+        protected AID getSenderAID() {
+            return roleAID;
         }
         
         // </editor-fold>
@@ -193,6 +228,15 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     private class SendPowerArgument extends SingleSenderState {
         
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return roleAID;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
        
         @Override
@@ -218,10 +262,11 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     private class ReceivePowerResult extends ReceiveSuccessOrFailure {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        ReceivePowerResult() {
-            super(roleAID);
+        @Override
+        protected AID getSenderAID() {
+            return roleAID;
         }
         
         // </editor-fold>

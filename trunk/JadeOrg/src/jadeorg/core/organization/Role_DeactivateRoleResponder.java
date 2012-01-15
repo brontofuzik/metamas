@@ -2,6 +2,7 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -58,6 +59,7 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
+        State assertPreconditions = new MyAssertPreconditions();
         State receiveActivateRequest = new ReceiveDeactivateRequest();
         State sendActivateReply = new SendDeactivateReply();
         State successEnd = new SuccessEnd();
@@ -65,12 +67,18 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
         // ------------------
 
         // Register states.
-        registerFirstState(receiveActivateRequest);
+        registerFirstState(assertPreconditions);
+        
+        registerState(receiveActivateRequest);
         registerState(sendActivateReply);
+        
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register transitions.
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveActivateRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
         sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
@@ -80,6 +88,28 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class MyAssertPreconditions extends AssertPreconditions {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected boolean preconditionsSatisfied() {
+            getMyRole().logInfo(String.format("Responding to the 'Deactivate role' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+        
+            if (aclMessage.getSender().equals(getMyRole().playerAID)) {
+                // The sender player is enacting this role.
+                return true;
+            } else {
+                // The sender player is not enacting this role.
+                // TODO
+                return false;
+            }
+        }
+        
+        // </editor-fold>
+    }
     
     /**
      * The 'Receive deactivate request' (single receiver) state.
@@ -102,12 +132,13 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
      */
     private class SendDeactivateReply extends SendAgreeOrRefuse {
         
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        SendDeactivateReply() {
-            super(playerAID);
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getReceiverAID() {
+            return playerAID;
         }
-
+        
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

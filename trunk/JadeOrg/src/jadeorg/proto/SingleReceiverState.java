@@ -1,5 +1,7 @@
 package jadeorg.proto;
 
+import jade.core.AID;
+
 /**
  * A single receiver state.
  * @author Lukáš Kúdela
@@ -26,6 +28,12 @@ public abstract class SingleReceiverState extends OuterReceiverState {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected abstract AID getSenderAID();
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
     protected abstract int onSingleReceiver();   
@@ -39,7 +47,16 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         SingleReceiver() {
-            super(RECEIVED, null);
+            super(RECEIVED);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID getSenderAID() {
+            return SingleReceiverState.this.getSenderAID();
         }
         
         // </editor-fold>
