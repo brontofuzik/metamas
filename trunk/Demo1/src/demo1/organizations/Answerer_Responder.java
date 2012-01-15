@@ -16,7 +16,7 @@ public class Answerer_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Answerer_Responder() {
-        addResponder(new CalculateFactorialHandler());
+        addResponder(new CalculateFactorialResponderWrapper());
     }
      
     // </editor-fold>
@@ -31,11 +31,11 @@ public class Answerer_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class CalculateFactorialHandler extends ResponderWrapper {
+    private class CalculateFactorialResponderWrapper extends ResponderWrapper {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        CalculateFactorialHandler() {
+        CalculateFactorialResponderWrapper() {
             super(CalculateFactorialProtocol.getInstance());
         }
         
