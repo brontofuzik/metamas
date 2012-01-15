@@ -5,6 +5,7 @@ import jadeorg.core.Initiator;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
+import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 
 /**
@@ -17,7 +18,8 @@ public class Player_Initiator extends Initiator {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_Initiator() {
+    Player_Initiator(Player player) {
+        super(player);
         addInitiator(new EnactRoleInitiatorWrapper());
         addInitiator(new DeactRoleInitiatorWrapper());
         addInitiator(new ActivateRoleInitiatorWrapper());
@@ -39,6 +41,14 @@ public class Player_Initiator extends Initiator {
     
     private class EnactRoleInitiatorWrapper extends InitiatorWrapper {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private String organizationName;
+        
+        private String roleName;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         EnactRoleInitiatorWrapper() {
@@ -49,12 +59,10 @@ public class Player_Initiator extends Initiator {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        private String getOrganizationName() {
-            return (String)getArguments()[0];
-        }
-        
-        private String getRoleName() {
-            return (String)getArguments()[1];
+        @Override
+        public void setArguments(Object[] arguments) {
+            organizationName = (String)arguments[0];
+            roleName = (String)arguments[1];           
         }
         
         // </editor-fold>
@@ -64,29 +72,42 @@ public class Player_Initiator extends Initiator {
         @Override
         public void action() {
             getMyPlayer().logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.",
-                getOrganizationName(), getRoleName()));
+                organizationName, roleName));
         
             // TAG YELLOW-PAGES
             //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
 
             // Check if the organization exists.
-            AID organizationAID = new AID(getOrganizationName(), AID.ISLOCALNAME);
+            AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organization exists.
-                getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationAID, getRoleName()));
+                getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationAID, roleName));
             } else {
                 // The organization does not exist.
                 String message = String.format("Error enacting a role. The organization '%1$s' does not exist.",
-                    getOrganizationName());
+                    organizationName);
                 //throw new PlayerException(this, message);
             }
         }
+        
+//        @Override
+//        public void action() {
+//            getMyPlayer().addBehaviour(new Player_EnactRoleInitiator(organizationName, roleName));
+//        }
         
         // </editor-fold>
     }
     
     private class DeactRoleInitiatorWrapper extends InitiatorWrapper {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private String organizationName;
+        
+        private String roleName;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         DeactRoleInitiatorWrapper() {
@@ -97,12 +118,10 @@ public class Player_Initiator extends Initiator {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        private String getOrganizationName() {
-            return (String)getArguments()[0];
-        }
-        
-        private String getRoleName() {
-            return (String)getArguments()[1];
+        @Override
+        public void setArguments(Object[] arguments) {
+            organizationName = (String)arguments[0];
+            roleName = (String)arguments[1];           
         }
         
         // </editor-fold>
@@ -112,19 +131,19 @@ public class Player_Initiator extends Initiator {
         @Override
         public void action() {
             getMyPlayer().logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.",
-                getOrganizationName(), getRoleName()));
+                organizationName, roleName));
 
             // TAG YellowPages
             //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
 
-            AID organizationAID = new AID(getOrganizationName(), AID.ISLOCALNAME);
+            AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organizaiton exists.
-                getMyPlayer().addBehaviour(new Player_DeactRoleInitiator(organizationAID, getRoleName()));
+                getMyPlayer().addBehaviour(new Player_DeactRoleInitiator(organizationAID, roleName));
             } else {
                 // The organization does not exist.
                 String message = String.format("Error deacting a role. The organization '%1$s' does not exist.",
-                        getOrganizationName());
+                    organizationName);
                 //throw new PlayerException(this, message);
             }
         }
@@ -134,6 +153,12 @@ public class Player_Initiator extends Initiator {
     
     private class ActivateRoleInitiatorWrapper extends InitiatorWrapper {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private String roleName;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ActivateRoleInitiatorWrapper() {
@@ -144,10 +169,11 @@ public class Player_Initiator extends Initiator {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        private String getRoleName() {
-            return (String)getArguments()[0];
+        @Override
+        public void setArguments(Object[] arguments) {
+            roleName = (String)arguments[0];
         }
-        
+            
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -155,17 +181,17 @@ public class Player_Initiator extends Initiator {
         @Override
         public void action() {
             getMyPlayer().logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.",
-                getRoleName()));
+                roleName));
 
             // Check if the role can be activated.
-            if (getMyPlayer().knowledgeBase.canActivateRole(getRoleName())) {
+            if (getMyPlayer().knowledgeBase.canActivateRole(roleName)) {
                 // The role can be activated.
-                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(getRoleName()).getRoleAID();
-                getMyPlayer().addBehaviour(new Player_ActivateRoleInitiator(getRoleName(), roleAID));
+                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                getMyPlayer().addBehaviour(new Player_ActivateRoleInitiator(roleName, roleAID));
             } else {
                 // The role can not be activated.
                 String message = String.format("Error activating the role '%1$s'. It is not enacted.",
-                    getRoleName());
+                    roleName);
                 //throw new PlayerException(this, message);
             }
         }
@@ -175,20 +201,27 @@ public class Player_Initiator extends Initiator {
     
     private class DeactivateRoleInitiatorWrapper extends InitiatorWrapper {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private String roleName;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         DeactivateRoleInitiatorWrapper() {
-            super(DeactRoleProtocol.getInstance());
+            super(DeactivateRoleProtocol.getInstance());
         }
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        private String getRoleName() {
-            return (String)getArguments()[0];
+        @Override
+        public void setArguments(Object[] arguments) {
+            roleName = (String)arguments[0];
         }
-        
+            
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -196,16 +229,16 @@ public class Player_Initiator extends Initiator {
         @Override
         public void action() {
             getMyPlayer().logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.",
-                getRoleName()));
+                roleName));
 
-            if (getMyPlayer().knowledgeBase.canDeactivateRole(getRoleName())) {
+            if (getMyPlayer().knowledgeBase.canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(getRoleName()).getRoleAID();
-                getMyPlayer().addBehaviour(new Player_DeactivateRoleInitiator(getRoleName(), roleAID));
+                AID roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                getMyPlayer().addBehaviour(new Player_DeactivateRoleInitiator(roleName, roleAID));
             } else {
                 // The role can not be deactivated.
                 String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.",
-                    getRoleName());
+                    roleName);
                 //throw new PlayerException(this, message);
             }
         }
@@ -215,6 +248,14 @@ public class Player_Initiator extends Initiator {
     
     private class InvokePowerInitiatorWrapper extends InitiatorWrapper {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private String powerName;
+        
+        private Object argument;
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokePowerInitiatorWrapper() {
@@ -225,12 +266,10 @@ public class Player_Initiator extends Initiator {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        private String getPowerName() {
-            return (String)getArguments()[0];
-        }
-        
-        private Object getArgument() {
-            return getArguments()[1];
+        @Override
+        public void setArguments(Object[] arguments) {
+            powerName = (String)arguments[0];
+            argument = arguments[1];
         }
         
         // </editor-fold>
@@ -240,19 +279,20 @@ public class Player_Initiator extends Initiator {
         @Override
         public void action() {
             getMyPlayer().logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.",
-                getPowerName()));
+                powerName));
 
-            if (getMyPlayer().knowledgeBase.canInvokePower(getPowerName())) {
+            if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
                 // The player can invoke the power.
-                getMyPlayer().addBehaviour(new Player_InvokePowerInitiator(getPowerName(), getArgument()));
+                getMyPlayer().addBehaviour(new Player_InvokePowerInitiator(powerName, argument));
             } else {
                 // The player can not invoke the power.
-                String message = String.format("I cannot invoke the power '%1$s'.", getPowerName());
+                String message = String.format("I cannot invoke the power '%1$s'.",
+                    powerName);
                 //throw new PlayerException(getMyPlayer(), message);
             }
         }
         
-        // </editor-fold> 
+        // </editor-fold>
     }
     
     // </editor-fold>

@@ -1,5 +1,6 @@
 package jadeorg.core;
 
+import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jadeorg.proto.Protocol;
@@ -12,26 +13,16 @@ import jadeorg.proto.Protocol;
  */
 public class Initiator extends FSMBehaviour {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private Protocol protocol;
-    
-    private Object[] arguments; 
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected Initiator() {
+    protected Initiator(Agent agent) {
+        // ----- Preconditions -----
+        assert agent != null;
+        // -------------------------
+        
+        myAgent = agent;
+        
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    protected Object[] getArguments() {
-        return arguments;
     }
     
     // </editor-fold>
@@ -39,8 +30,12 @@ public class Initiator extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public void initiateProtocol(Protocol protocol, Object[] arguments) {
-        this.protocol = protocol;
-        this.arguments = arguments;
+        InitiatorWrapper initiator = (InitiatorWrapper)getState(protocol.getName());
+        initiator.setArguments(arguments);   
+        registerDefaultTransition(SelectInitiator.NAME, protocol.getName());
+        reset();
+        
+        myAgent.addBehaviour(this);
     }
     
     // ----- PROTECTED -----
@@ -52,22 +47,15 @@ public class Initiator extends FSMBehaviour {
         }
         // -------------------------
         
-        // Register the initiator-related state.
-        registerLastState(initiator, initiator.getBehaviourName());
-        
-        // Register the initiator-related transition.
-        registerTransition(SelectInitiator.NAME, initiator.getBehaviourName(),
-                initiator.getProtocol().hashCode());
+        // Register as one of the final states.
+        registerLastState(initiator, initiator.getName());
     }
     
     // ----- PRIVATE -----
     
     private void buildFSM() {
-        // Register the states.
+        // Register the initial state.
         registerFirstState(new SelectInitiator(), SelectInitiator.NAME);
-        
-        // Register the transitions.
-        // No transitions.
     }
     
     // </editor-fold>
@@ -79,7 +67,7 @@ public class Initiator extends FSMBehaviour {
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private Protocol protocol;
-        
+               
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -96,9 +84,11 @@ public class Initiator extends FSMBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        public Protocol getProtocol() {
-            return protocol;
+        public String getName() {
+            return protocol.getName();
         }
+        
+        public abstract void setArguments(Object[] arguments);
         
         // </editor-fold>
     }
@@ -119,11 +109,7 @@ public class Initiator extends FSMBehaviour {
         public void action() {
             // Do nothing.
         }
-        
-        public int onEnd() {
-            return protocol.hashCode();
-        }
-        
+                
         // </editor-fold>
     }
     

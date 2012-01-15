@@ -98,6 +98,39 @@ class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    private class AssertPreconditions extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final int SUCCESS = 1;
+        private static final int FAILURE = 2;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int exitValue;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            getMyOrganization().logInfo(String.format(
+                "Responding to the 'Enact role' protocol (id = %1$s).",
+                aclMessage.getConversationId()));
+            exitValue = SUCCESS;
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
+        }
+        
+        // </editor-fold>
+    }
+    
     private class ReceiveEnactRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

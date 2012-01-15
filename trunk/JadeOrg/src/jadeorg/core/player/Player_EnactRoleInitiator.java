@@ -24,29 +24,45 @@ class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The organization name. */
+    private String organizationName;
+    
     /** The organization AID. */
     private AID organizationAID;
 
     /** The role name */
     private String roleName;
     
+    /** The role requirements. */
     private String[] requirements;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_EnactRoleInitiator(AID organization, String roleName) {
+    Player_EnactRoleInitiator(AID organizationAID, String roleName) {
         // ----- Preconditions -----
-        assert organization != null;
+        assert organizationAID != null;
         assert roleName != null && !roleName.isEmpty();
         // -------------------------
 
-        this.organizationAID = organization;
+        this.organizationAID = organizationAID;
         this.roleName = roleName;
 
         buildFSM();
     }
+    
+//    Player_EnactRoleInitiator(String organizationName, String roleName) {
+//        // ----- Preconditions -----
+//        assert organizationName != null && !organizationName.isEmpty();
+//        assert roleName != null && !roleName.isEmpty();
+//        // -------------------------
+//
+//        this.organizationName = organizationName;
+//        this.roleName = roleName;
+//
+//        buildFSM();
+//    }
     
     // </editor-fold>
     
@@ -67,6 +83,7 @@ class Player_EnactRoleInitiator extends InitiatorParty {
 
     private void buildFSM() {
         // ----- States -----
+        //State assertPreconditions = new AssertPreconditions();
         State sendEnactRequest = new SendEnactRequest();
         State receiveRequirementsInform = new ReceiveRequirementsInform();
         State sendRequirementsReply = new SendRequirementsReply();
@@ -76,6 +93,7 @@ class Player_EnactRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
+        //registerFirstState(assertPreconditions);
         registerFirstState(sendEnactRequest);
         registerState(receiveRequirementsInform);
         registerState(sendRequirementsReply);
@@ -83,7 +101,10 @@ class Player_EnactRoleInitiator extends InitiatorParty {
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
-        // Register the transitions (NEW).
+        // Register the transitions.
+//        assertPreconditions.registerTransition(AssertPreconditions.SUCCESS, sendEnactRequest);
+//        assertPreconditions.registerTransition(AssertPreconditions.FAILURE, failureEnd);
+        
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
         receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.SUCCESS, sendRequirementsReply);
@@ -98,6 +119,52 @@ class Player_EnactRoleInitiator extends InitiatorParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    private class AssertPreconditions extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final int SUCCESS = 1;
+        private static final int FAILURE = 2;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int exitValue;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        public void action() {
+            getMyPlayer().logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.",
+                organizationName, roleName));
+            
+            // TAG YELLOW-PAGES
+            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+            
+            // Check if the organization exists.
+            organizationAID = new AID(organizationName, AID.ISLOCALNAME);
+            if (organizationAID != null) {
+                // The organization exists.
+                exitValue = SUCCESS;
+            } else {
+                // The organization does not exist.
+                String message = String.format("Error enacting a role. The organization '%1$s' does not exist.",
+                    organizationName);
+                exitValue = FAILURE;
+            }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
+        }
+        
+        // </editor-fold>
+    }
     
     /**
      * The 'Send enact request' active state.
