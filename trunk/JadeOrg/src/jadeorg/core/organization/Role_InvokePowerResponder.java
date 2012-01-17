@@ -44,7 +44,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Role_InvokePowerResponder(ACLMessage aclMessage) {
+    public Role_InvokePowerResponder(ACLMessage aclMessage) {
         super(aclMessage);
         
         this.aclMessage = aclMessage;

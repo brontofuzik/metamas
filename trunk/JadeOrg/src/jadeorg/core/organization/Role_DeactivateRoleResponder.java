@@ -29,7 +29,7 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Role_DeactivateRoleResponder(ACLMessage aclMessage) {
+    public Role_DeactivateRoleResponder(ACLMessage aclMessage) {
         super(aclMessage);
         
         this.aclMessage = aclMessage;

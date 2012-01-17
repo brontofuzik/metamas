@@ -21,7 +21,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-11
  * @version %I% %G%
  */
-class Player_EnactRoleInitiator extends InitiatorParty {
+public class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -41,7 +41,7 @@ class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Player_EnactRoleInitiator(String organizationName, String roleName) {
+    public Player_EnactRoleInitiator(String organizationName, String roleName) {
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();

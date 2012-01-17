@@ -1,11 +1,11 @@
 package jadeorg.proto;
 
-import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 /**
  * An interaction protocol.
- * DP: Abstract factory - Abstract factory
+ * Design pattern: Abstract factory, Role: Abstract factory
  * @author Lukáš Kúdela
  * @since 2011-10-21
  * @version %I% %G%
@@ -29,6 +29,24 @@ public abstract class Protocol {
     public MessageTemplate getTemplate() {
         return MessageTemplate.MatchProtocol(getName());
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Creates an initiator party.
+     * @param arguments the initiator party's contructor arguments
+     * @returns an initiator party
+     */
+    public abstract InitiatorParty createInitiatorParty(Object[] arguments);
+    
+    /**
+     * Creates a responder party.
+     * @param message the ACL message
+     * @returns a responder party
+     */
+    public abstract ResponderParty createResponderParty(ACLMessage message);
     
     // </editor-fold>
 }

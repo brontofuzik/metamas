@@ -34,7 +34,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    Player_DeactRoleInitiator(String organizationName, String roleName) {
+    public Player_DeactRoleInitiator(String organizationName, String roleName) {
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
