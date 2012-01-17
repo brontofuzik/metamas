@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-11
  * @version %I% %G%
  */
-class Organization_EnactRoleResponder extends ResponderParty {
+public class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -39,7 +39,7 @@ class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Organization_EnactRoleResponder(ACLMessage aclMessage) {
+    public Organization_EnactRoleResponder(ACLMessage aclMessage) {
         super(aclMessage);
         
         this.aclMessage = aclMessage;
