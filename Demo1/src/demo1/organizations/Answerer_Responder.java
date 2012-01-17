@@ -1,8 +1,6 @@
 package demo1.organizations;
 
-import demo1.organizations.Demo_Organization.Answerer;
 import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
-import jade.lang.acl.ACLMessage;
 import jadeorg.core.Responder;
 
 /**
@@ -16,43 +14,8 @@ public class Answerer_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Answerer_Responder() {
-        addResponder(new CalculateFactorialResponderWrapper());
+        addResponder(CalculateFactorialProtocol.getInstance());
     }
      
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    private Answerer getMyAnswerer() {
-        return (Answerer)myAgent;        
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    private class CalculateFactorialResponderWrapper extends ResponderWrapper {
-
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        CalculateFactorialResponderWrapper() {
-            super(CalculateFactorialProtocol.getInstance());
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        protected void handleMessage(ACLMessage message) {
-            getMyAnswerer().logInfo(String.format("Responding to the 'Calculate factorial' protocol (id = %1$s).",
-                message.getConversationId()));
-        
-            getMyAnswerer().addBehaviour(new Answerer_CalculateFactorialResponder(message));
-        }
-    
-        // </editor-fold>
-    }
-    
     // </editor-fold>
 }
