@@ -1,18 +1,18 @@
-package auction.organizations;
+package example2.organizations.auction;
 
-import auction.organizations.powers.Auction_Power;
-import auction.organizations.powers.Bid_Power;
+import example2.organizations.auction.bidder.Bidder_Responder;
+import example2.organizations.auction.auctioner.Auction_Power;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 import java.util.logging.Level;
 
 /**
- * An English auction organization.
+ * An Auction organization.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
  */
-public class EnglishAuction_Organization extends Organization {
+public class Auction_Organization extends Organization {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
@@ -20,19 +20,18 @@ public class EnglishAuction_Organization extends Organization {
     protected void setup() {        
         super.setup();
         
-        addRoles();
-    }
-    
-    private void addRoles() {
-        addRole(Auctioneer_Role.class/*, new String[] { "propose-task", "evaluate-bidders" }*/);
-        addRole(Bidder_Role.class/*, new String[] { "evaluate-task", "execute-task" }*/);
+        // Add roles.
+        addRole(Auctioneer_Role.class);
+        addRole(Bidder_Role.class);
         log(Level.INFO, "Roles added.");
     }
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
     /**
-     * An Uuctioneer role.
+     * An Auctioneer role.
      * @author Lukáš Kúdela
      * @since 2011-11-20
      * @version %I% %G%
@@ -45,8 +44,12 @@ public class EnglishAuction_Organization extends Organization {
         protected void setup() {
             super.setup();
             
+            // Add behaviours.
+            // No behaviours.
+            
             // Add powers.
-            addPower(new Auction_Power());
+            addPower(Auction_Power.class);
+            logInfo("Powers added.");
         }
         
         // </editor-fold>
@@ -66,10 +69,15 @@ public class EnglishAuction_Organization extends Organization {
         protected void setup() {
             super.setup();
             
+            // Add behaviours.
+            addBehaviour(new Bidder_Responder());
+            logInfo("Behaviours added.");
+            
             // Add powers.
-            addPower(new Bid_Power());
         }
         
         // </editor-fold>
     }
+    
+    // </editor-fold>
 }
