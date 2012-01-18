@@ -30,9 +30,8 @@ public class Initiator extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public void initiateProtocol(Protocol protocol, Object[] arguments) {
-        InitiatorWrapper initiator = (InitiatorWrapper)getState(protocol.getName());
-        initiator.setArguments(arguments);   
-        registerDefaultTransition(SelectInitiator.NAME, protocol.getName());
+        setProtocol(protocol);
+        setArguments(arguments);
         reset();
         
         myAgent.addBehaviour(this);
@@ -40,39 +39,103 @@ public class Initiator extends FSMBehaviour {
     
     // ----- PROTECTED -----
     
-    protected void addInitiator(InitiatorWrapper initiator) {
+    protected void addInitiator(Protocol protocol) {
         // ----- Preconditions -----
-        if (initiator == null) {
-            throw new IllegalArgumentException("initiator");
+        if (protocol == null) {
+            throw new IllegalArgumentException("protocol");
         }
         // -------------------------
         
-        // Register as one of the final states.
-        registerLastState(initiator, initiator.getName());
+        InitiatorState initiator = new InitiatorState(protocol);
+        registerLastState(initiator, initiator.getProtocol().getName());
+        registerTransition(SelectInitiator.NAME, initiator.getProtocol().getName(),
+            initiator.getProtocol().getName().hashCode());
     }
     
     // ----- PRIVATE -----
     
     private void buildFSM() {
-        // Register the initial state.
+        // Register the states.
         registerFirstState(new SelectInitiator(), SelectInitiator.NAME);
+        
+        // Register the transitions.
+        // No transitions.
+    }
+    
+    private Protocol getProtocol() {
+        SelectInitiator selectInitiator = (SelectInitiator)getState(SelectInitiator.NAME);
+        return selectInitiator.getProtocol();
+    }
+    
+    private void setProtocol(Protocol protocol) {
+        SelectInitiator selectInitiator = (SelectInitiator)getState(SelectInitiator.NAME);
+        selectInitiator.setProtocol(protocol);
+    }
+    
+    private void setArguments(Object[] arguments) {
+        InitiatorState initiatorState = (InitiatorState)getState(getProtocol().getName());
+        initiatorState.setArguments(arguments);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    protected abstract class InitiatorWrapper extends OneShotBehaviour {
+    // ----- PRIVATE -----
+    
+    private class SelectInitiator extends OneShotBehaviour {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        private static final String NAME = "SelectInitiator"; 
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
         private Protocol protocol;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        private Protocol getProtocol() {
+            return protocol;
+        }
+        
+        private void setProtocol(Protocol protocol) {
+            this.protocol = protocol;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Do nothing.
+        }
+        
+        public int onEnd() {
+            return protocol.getName().hashCode();
+        }
+                
+        // </editor-fold>
+    }
+    
+    private class InitiatorState extends OneShotBehaviour {
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private Protocol protocol;
+        
+        private Object[] arguments;
                
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InitiatorWrapper(Protocol protocol) {
+        private InitiatorState(Protocol protocol) {
             // ----- Preconditions -----
             assert protocol != null;
             // -------------------------
@@ -84,33 +147,24 @@ public class Initiator extends FSMBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        public String getName() {
-            return protocol.getName();
+        private Protocol getProtocol() {
+            return this.protocol;
         }
         
-        public abstract void setArguments(Object[] arguments);
+        private void setArguments(Object[] arguments) {
+            this.arguments = arguments;
+        }
         
         // </editor-fold>
-    }
-    
-    // ----- PRIVATE -----
-    
-    private class SelectInitiator extends OneShotBehaviour {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        private static final String NAME = "SelectInitiator"; 
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            // Do nothing.
+            myAgent.addBehaviour(protocol.createInitiatorParty(arguments));
         }
-                
-        // </editor-fold>
+        
+         // </editor-fold>     
     }
     
     // </editor-fold>

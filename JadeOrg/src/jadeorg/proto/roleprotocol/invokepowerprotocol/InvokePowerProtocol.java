@@ -53,7 +53,7 @@ public class InvokePowerProtocol extends Protocol {
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String powerName = (String)arguments[0];
-        Object argument = (String)arguments[1];
+        Object argument = arguments[1];
         return new Player_InvokePowerInitiator(powerName, argument);
     }
 
