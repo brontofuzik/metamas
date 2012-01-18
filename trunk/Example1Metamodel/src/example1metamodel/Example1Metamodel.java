@@ -18,7 +18,7 @@ import metamas.semanticmodel.protocol.Protocol;
  * @since 2012-01-10
  * @version %I% %G%
  */
-public class Demo1Metamodel {
+public class Example1Metamodel {
 
     /**
      * @param args the command line arguments
