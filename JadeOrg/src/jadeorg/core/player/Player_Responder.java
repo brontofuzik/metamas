@@ -1,6 +1,6 @@
 package jadeorg.core.player;
 
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
 import jadeorg.core.Responder;
 
 /**
@@ -14,7 +14,7 @@ public class Player_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Player_Responder() {
-        addResponder(MeetRequirementProtocol.getInstance());
+        addResponder(InvokeRequirementProtocol.getInstance());
     }
     
     // </editor-fold>

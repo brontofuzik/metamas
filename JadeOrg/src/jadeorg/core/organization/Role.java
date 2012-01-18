@@ -7,7 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
@@ -115,12 +115,12 @@ public class Role extends Agent {
     
     // TAG OBSOLETE
 //    public void invokeRequirement(String requirementName, Object argument) {
-//        initiator.initiateProtocol(MeetRequirementProtocol.getInstance(),
+//        initiator.initiateProtocol(InvokeRequirementProtocol.getInstance(),
 //            new Object[] { requirementName, argument } );
 //    }
     
     public void invokeRequirement(String requirementName, Object argument) {
-        addBehaviour(MeetRequirementProtocol.getInstance()
+        addBehaviour(InvokeRequirementProtocol.getInstance()
             .createInitiatorParty(new Object[] { requirementName, argument }));    
     }
     

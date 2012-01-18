@@ -1,7 +1,7 @@
 package jadeorg.core.organization;
 
 import jadeorg.core.Initiator;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
 
 // TAG OBSOLETE
 /**
@@ -16,7 +16,7 @@ public class Role_Initiator extends Initiator {
     
     Role_Initiator(Role role) {
         super(role);        
-        addInitiator(MeetRequirementProtocol.getInstance());
+        addInitiator(InvokeRequirementProtocol.getInstance());
     }
     
     // </editor-fold>

@@ -9,20 +9,20 @@ import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.RequirementArgumentMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.ArgumentRequestMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementRequestMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.RequirementResultMessage;
 import java.io.Serializable;
 
 /**
- * A 'Meet requirement' protocol initiator party (new version).
+ * A 'Invoke requirement' protocol initiator party (new version).
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_MeetRequirementInitiator extends InitiatorParty {
+public class Role_InvokeRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -38,7 +38,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Role_MeetRequirementInitiator(String requirementName) {
+    public Role_InvokeRequirementInitiator(String requirementName) {
         // ----- Preconditions -----
         assert requirementName != null && !requirementName.isEmpty();
         // -------------------------
@@ -48,7 +48,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         buildFSM();
     }
     
-    public Role_MeetRequirementInitiator(String requirementName, Object requirementArgument) {
+    public Role_InvokeRequirementInitiator(String requirementName, Object requirementArgument) {
         this(requirementName);
         
         this.requirementArgument = requirementArgument;
@@ -60,7 +60,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
     
     @Override
     public Protocol getProtocol() {
-        return MeetRequirementProtocol.getInstance();
+        return InvokeRequirementProtocol.getInstance();
     }
     
     public void setRequirementArgument(Object requirementArgument) {
@@ -128,7 +128,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         
         @Override
         protected boolean preconditionsSatisfied() {
-            getMyRole().logInfo(String.format("Initiating the 'Meet requirement' (%1$s) protocol.",
+            getMyRole().logInfo(String.format("Initiating the 'Invoke requirement' (%1$s) protocol.",
                 requirementName));
 
             if (true) {
@@ -166,7 +166,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         
         @Override
         protected void onSingleSender() {
-            MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
+            InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
             message.setRequirement(requirementName);
             
             send(message, playerAID);
@@ -310,7 +310,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Meet requirement' initiator party suceeded.");
+            getMyRole().logInfo("The 'Invoke requirement' initiator party suceeded.");
         }
         
         // </editor-fold>
@@ -325,7 +325,7 @@ public class Role_MeetRequirementInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Meet requirement' initiator party failed.");
+            getMyRole().logInfo("The 'Invoke requirement' initiator party failed.");
         }
         
         // </editor-fold>

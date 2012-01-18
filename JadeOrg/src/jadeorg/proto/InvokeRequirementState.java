@@ -1,29 +1,29 @@
 package jadeorg.proto;
 
-import jadeorg.core.organization.Role_MeetRequirementInitiator;
+import jadeorg.core.organization.Role_InvokeRequirementInitiator;
 import jadeorg.proto.jadeextensions.FSMBehaviourState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
 
 /**
- * A 'Meet requirement' (party) state.
+ * A 'Invoke requirement' (party) state.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
  */
-public abstract class MeetRequirementState extends FSMBehaviourState {
+public abstract class InvokeRequirementState extends FSMBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private String requirementName;
     
-    private Role_MeetRequirementInitiator meetRequirementInitiator;
+    private Role_InvokeRequirementInitiator invokeRequirementInitiator;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected MeetRequirementState(String requirementName) {        
+    protected InvokeRequirementState(String requirementName) {        
         this.requirementName = requirementName;
         
         buildFSM();
@@ -44,21 +44,21 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
     private void buildFSM() {
         // ----- States -----
         State setPowerArgument = new SetRequirementArgument();
-        meetRequirementInitiator = new Role_MeetRequirementInitiator(requirementName);
+        invokeRequirementInitiator = new Role_InvokeRequirementInitiator(requirementName);
         State setResultState = new GetRequirementResult();
         // ------------------
         
         // Register the states.
         registerFirstState(setPowerArgument);
         
-        registerState(meetRequirementInitiator);
+        registerState(invokeRequirementInitiator);
         
         registerLastState(setResultState);
         
         // Register the transitions.
-        setPowerArgument.registerDefaultTransition(meetRequirementInitiator);
+        setPowerArgument.registerDefaultTransition(invokeRequirementInitiator);
         
-        meetRequirementInitiator.registerDefaultTransition(setResultState);
+        invokeRequirementInitiator.registerDefaultTransition(setResultState);
     }
     
     // </editor-fold>
@@ -74,7 +74,7 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
         
         @Override
         public void action() {
-            meetRequirementInitiator.setRequirementArgument(getRequirementArgument());
+            invokeRequirementInitiator.setRequirementArgument(getRequirementArgument());
         }
         
         // </editor-fold>
@@ -89,7 +89,7 @@ public abstract class MeetRequirementState extends FSMBehaviourState {
         
         @Override
         public void action() {
-            setRequirementResult(meetRequirementInitiator.getRequirementResult());
+            setRequirementResult(invokeRequirementInitiator.getRequirementResult());
         }
         
         // </editor-fold>
