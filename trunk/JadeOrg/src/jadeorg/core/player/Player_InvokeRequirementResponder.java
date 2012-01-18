@@ -10,21 +10,21 @@ import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementArgumentMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.ArgumentRequestMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementRequestMessage;
-import jadeorg.proto.roleprotocol.meetrequirementprotocol.RequirementResultMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.RequirementArgumentMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.ArgumentRequestMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementRequestMessage;
+import jadeorg.proto.roleprotocol.invokerequirementprotocol.RequirementResultMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * A 'Meet requirement' protocol responder party (new version).
+ * A 'Invoke requirement' protocol responder party (new version).
  * @author Lukáš Kúdela
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_MeetRequirementResponder extends ResponderParty {
+public class Player_InvokeRequirementResponder extends ResponderParty {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -44,7 +44,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_MeetRequirementResponder(ACLMessage aclMessage) {
+    public Player_InvokeRequirementResponder(ACLMessage aclMessage) {
         super(aclMessage);
         
         this.aclMessage = aclMessage;
@@ -59,7 +59,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     
     @Override
     public Protocol getProtocol() {
-        return MeetRequirementProtocol.getInstance();
+        return InvokeRequirementProtocol.getInstance();
     }
     
     // ----- PACKAGE -----
@@ -89,7 +89,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
     private void buildFSM() {        
          // ----- States -----
         State assertPreconditions = new MyAssertPreconditions();
-        State receiveMeetRequirementRequest = new ReceiveMeetRequirementRequest();
+        State receiveInvokeRequirementRequest = new ReceiveInvokeRequirementRequest();
         State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
         receiveRequirementArgument = new ReceiveRequirementArgument();
         sendRequirementResult = new SendRequirementResult();
@@ -100,7 +100,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         // Register states.
         registerFirstState(assertPreconditions);
         
-        registerState(receiveMeetRequirementRequest);    
+        registerState(receiveInvokeRequirementRequest);    
         registerState(sendRequirementArgumentRequest);
         registerState(receiveRequirementArgument);
         registerState(sendRequirementResult);
@@ -109,10 +109,10 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveMeetRequirementRequest);
+        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveInvokeRequirementRequest);
         assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
         
-        receiveMeetRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
+        receiveInvokeRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
         
         sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
         sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.FAILURE, failureEnd);
@@ -176,7 +176,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         
         @Override
         protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Responding to the 'Meet requirement' protocol (id = %1$s).",
+            getMyPlayer().logInfo(String.format("Responding to the 'Invoke requirement' protocol (id = %1$s).",
                 aclMessage.getConversationId()));
         
             if (aclMessage.getSender().equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
@@ -192,13 +192,13 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class ReceiveMeetRequirementRequest extends OneShotBehaviourState {
+    private class ReceiveInvokeRequirementRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            MeetRequirementRequestMessage message = new MeetRequirementRequestMessage();
+            InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
             message.parseACLMessage(aclMessage);
             
             requirementName = message.getRequirement();         
@@ -330,7 +330,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Meet requirement' responder party succeeded.");
+            getMyPlayer().logInfo("The 'Invoke requirement' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -342,7 +342,7 @@ public class Player_MeetRequirementResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Meet requirement' responder party failed.");
+            getMyPlayer().logInfo("The 'Invoke requirement' responder party failed.");
         }
         
         // </editor-fold>

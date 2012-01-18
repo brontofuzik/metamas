@@ -251,10 +251,10 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         @Override
         protected int onManager() {
             if (getMyPlayer().evaluateRequirements(requirements)) {
-                // The player meets the requirements.
+                // The player invokes the requirements.
                 return AGREE;
             } else {
-                // The player does not meet the requirements.
+                // The player does not invoke the requirements.
                 return REFUSE;
             }
         }
