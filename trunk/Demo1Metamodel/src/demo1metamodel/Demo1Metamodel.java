@@ -5,7 +5,6 @@ import metamas.semanticmodel.fsm.FSM;
 import metamas.semanticmodel.organization.Organization;
 import metamas.semanticmodel.organization.OrganizationClass;
 import metamas.semanticmodel.organization.Power;
-import metamas.semanticmodel.organization.Role;
 import metamas.semanticmodel.organization.RoleClass;
 import metamas.semanticmodel.player.Player;
 import metamas.semanticmodel.player.PlayerClass;
