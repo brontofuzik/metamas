@@ -6,7 +6,7 @@ import demo1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
-import jadeorg.proto.MeetRequirementState;
+import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
@@ -66,7 +66,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     private void buildFSM() {
         // ----- States -----
         State receiveRequest = new ReceiveRequest();
-        State meetRequirementCalculateFactorial = new MeetRequirementCalculateFactorial();
+        State invokeRequirementCalculateFactorial = new InvokeRequirementCalculateFactorial();
         State sendReply = new SendReply();
         State end = new End();
         // ------------------
@@ -74,15 +74,15 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // Register the states.
         registerFirstState(receiveRequest);
         
-        registerState(meetRequirementCalculateFactorial);
+        registerState(invokeRequirementCalculateFactorial);
         registerState(sendReply);
         
         registerLastState(end);
         
         // Register the transitions.
-        receiveRequest.registerDefaultTransition(meetRequirementCalculateFactorial);
+        receiveRequest.registerDefaultTransition(invokeRequirementCalculateFactorial);
         
-        meetRequirementCalculateFactorial.registerDefaultTransition(sendReply);
+        invokeRequirementCalculateFactorial.registerDefaultTransition(sendReply);
         
         sendReply.registerDefaultTransition(end);  
     }
@@ -106,11 +106,11 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class MeetRequirementCalculateFactorial extends MeetRequirementState {
+    private class InvokeRequirementCalculateFactorial extends InvokeRequirementState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        MeetRequirementCalculateFactorial() {
+        InvokeRequirementCalculateFactorial() {
             super("demo1.players.requirements.CalculateFactorial_Requirement");
         }
         
