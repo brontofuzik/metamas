@@ -1,6 +1,6 @@
-package demo1.organizations;
+package example1.organizations;
 
-import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
+import example1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import jadeorg.core.Responder;
 
 /**

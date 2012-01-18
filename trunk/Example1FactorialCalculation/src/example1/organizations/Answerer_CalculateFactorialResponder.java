@@ -1,8 +1,8 @@
-package demo1.organizations;
+package example1.organizations;
 
-import demo1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
-import demo1.protocols.calculatefactorialprotocol.ReplyMessage;
-import demo1.protocols.calculatefactorialprotocol.RequestMessage;
+import example1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
+import example1.protocols.calculatefactorialprotocol.ReplyMessage;
+import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
