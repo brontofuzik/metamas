@@ -48,46 +48,10 @@ public abstract class Player extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-//    public void initiateEnactRole_Old(String organizationName, String roleName) throws PlayerException {
-//        logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.", organizationName, roleName));
-//        
-//        // TAG YELLOW-PAGES
-//        //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-//        
-//        // Check if the organization exists.
-//        AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-//        if (organizationAID != null) {
-//            // The organization exists.
-//            addBehaviour(new Player_EnactRoleInitiator(organizationAID, roleName));
-//        } else {
-//            // The organization does not exist.
-//            String message = String.format("Error enacting a role. The organization '%1$s' does not exist.", organizationName);
-//            throw new PlayerException(this, message);
-//        }
-//    }
-    
     public void enactRole(String organizationName, String roleName) {
         initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
             new Object[] { organizationName, roleName });
     }
-    
-//    // TODO Check if the role is enacted.
-//    public void initiateDeactRole_Old(String organizationName, String roleName) throws PlayerException {        
-//        logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.", organizationName, roleName));
-//        
-//        // TAG YellowPages
-//        //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
-//        
-//        AID organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-//        if (organizationAID != null) {
-//            // The organizaiton exists.
-//            addBehaviour(new Player_DeactRoleInitiator(organizationAID, roleName));
-//        } else {
-//            // The organization does not exist.
-//            String message = String.format("Error deacting a role. The organization '%1$s' does not exist.", organizationName);
-//            throw new PlayerException(this, message);
-//        }
-//    }
     
     // TODO Check if the role is enacted.
     public void deactRole(String organizationName, String roleName) {
@@ -95,56 +59,15 @@ public abstract class Player extends Agent {
             new Object[] { organizationName, roleName });
     }
     
-//    public void initiateActivateRole_Old(String roleName) throws PlayerException {
-//        logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.", roleName));
-//        
-//        // Check if the role can be activated.
-//        if (knowledgeBase.canActivateRole(roleName)) {
-//            // The role can be activated.
-//            AID roleAID = knowledgeBase.getEnactedRole(roleName).getRoleAID();
-//            addBehaviour(new Player_ActivateRoleInitiator(roleName, roleAID));
-//        } else {
-//            // The role can not be activated.
-//            String message = String.format("Error activating the role '%1$s'. It is not enacted.", roleName);
-//            throw new PlayerException(this, message);
-//        }
-//    }
-    
     public void activateRole(String roleName) {
         initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
             new Object[] { roleName });
     }
     
-//    public void initiateDeactivateRole_Old(String roleName) throws PlayerException {
-//        logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.", roleName));
-//        
-//        if (knowledgeBase.canDeactivateRole(roleName)) {
-//            // The role can be deactivated.
-//            addBehaviour(new Player_DeactivateRoleInitiator(roleName, knowledgeBase.getEnactedRole(roleName).getRoleAID()));
-//        } else {
-//            // The role can not be deactivated.
-//            String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.", roleName);
-//            throw new PlayerException(this, message);
-//        }
-//    }
-    
     public void deactivateRole(String roleName) {
         initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
             new Object[] { roleName });
     }
-    
-//    public void initiateInvokePower_Old(String powerName, Object argument) throws PlayerException {
-//        logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.", powerName));
-//        
-//        if (knowledgeBase.canInvokePower(powerName)) {
-//            // The player can invoke the power.
-//            addBehaviour(new Player_InvokePowerInitiator(powerName, argument));
-//        } else {
-//            // The player can not invoke the power.
-//            String message = String.format("I cannot invoke the power '%1$s'.", powerName);
-//            throw new PlayerException(this, message);
-//        }
-//    }
     
     public void invokePower(String powerName, Object argument) {
         initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
