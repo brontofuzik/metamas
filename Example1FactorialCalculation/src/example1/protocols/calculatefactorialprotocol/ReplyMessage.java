@@ -1,4 +1,4 @@
-package demo1.protocols.calculatefactorialprotocol;
+package example1.protocols.calculatefactorialprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.TextMessage;

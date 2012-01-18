@@ -1,6 +1,6 @@
-package demo1.players;
+package example1.players;
 
-import demo1.players.requirements.CalculateFactorial_Requirement;
+import example1.players.requirements.CalculateFactorial_Requirement;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package demo1.players;
+package example1.players;
 
 /**
  * The Participant2 player. The player playing the Answerer role.

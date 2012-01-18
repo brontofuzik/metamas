@@ -1,6 +1,6 @@
-package demo1.organizations.powers;
+package example1.organizations.powers;
 
-import demo1.organizations.Asker_CalculateFactorialInitiator;
+import example1.organizations.Asker_CalculateFactorialInitiator;
 import jadeorg.core.organization.power.FSMPower;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;

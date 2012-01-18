@@ -1,6 +1,6 @@
-package demo1.organizations;
+package example1.organizations;
 
-import demo1.organizations.powers.CalculateFactorial_Power;
+import example1.organizations.powers.CalculateFactorial_Power;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;

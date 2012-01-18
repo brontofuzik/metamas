@@ -1,7 +1,7 @@
-package demo1.protocols.calculatefactorialprotocol;
+package example1.protocols.calculatefactorialprotocol;
 
-import demo1.organizations.Answerer_CalculateFactorialResponder;
-import demo1.organizations.Asker_CalculateFactorialInitiator;
+import example1.organizations.Answerer_CalculateFactorialResponder;
+import example1.organizations.Asker_CalculateFactorialInitiator;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;

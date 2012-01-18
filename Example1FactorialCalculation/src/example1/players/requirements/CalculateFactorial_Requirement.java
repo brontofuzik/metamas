@@ -1,4 +1,4 @@
-package demo1.players.requirements;
+package example1.players.requirements;
 
 import jadeorg.core.player.requirement.OneShotRequirement;
 
