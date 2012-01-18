@@ -30,8 +30,9 @@ public abstract class Player extends Agent {
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     // ----- PRIVATE -----
-    
-    private Player_Initiator initiator = new Player_Initiator(this);
+
+    // TAG OBSOLETE
+//    private Player_Initiator initiator = new Player_Initiator(this);
     
     /** The logger. */
     private Logger logger;
@@ -47,31 +48,60 @@ public abstract class Player extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    // TAG OBSOLETE
+//    public void enactRole(String organizationName, String roleName) {
+//        initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
+//            new Object[] { organizationName, roleName });
+//    }
     
     public void enactRole(String organizationName, String roleName) {
-        initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
-            new Object[] { organizationName, roleName });
+        addBehaviour(EnactRoleProtocol.getInstance()
+            .createInitiatorParty(new Object[] { organizationName, roleName }));
     }
     
-    // TODO Check if the role is enacted.
+    // TAG OBSOLETE
+//    public void deactRole(String organizationName, String roleName) {
+//        initiator.initiateProtocol(DeactRoleProtocol.getInstance(),
+//            new Object[] { organizationName, roleName });
+//    }
+    
     public void deactRole(String organizationName, String roleName) {
-        initiator.initiateProtocol(DeactRoleProtocol.getInstance(),
-            new Object[] { organizationName, roleName });
+        addBehaviour(DeactRoleProtocol.getInstance()
+            .createInitiatorParty(new Object[] { organizationName, roleName }));
     }
+    
+    // TAG OBSOLETE
+//    public void activateRole(String roleName) {
+//        initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
+//            new Object[] { roleName });
+//    }
     
     public void activateRole(String roleName) {
-        initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
-            new Object[] { roleName });
+        addBehaviour(ActivateRoleProtocol.getInstance()
+            .createInitiatorParty(new Object[] { roleName }));
     }
+    
+    // TAG OBSOLETE
+//    public void deactivateRole(String roleName) {
+//        initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
+//            new Object[] { roleName });
+//    }
     
     public void deactivateRole(String roleName) {
-        initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
-            new Object[] { roleName });
+        addBehaviour(DeactivateRoleProtocol.getInstance()
+            .createInitiatorParty(new Object[] { roleName }));
     }
     
+    // TAG OBSOLETE
+//    public void invokePower(String powerName, Object argument) {
+//        initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
+//            new Object[] { powerName, argument });
+//    }
+    
     public void invokePower(String powerName, Object argument) {
-        initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
-            new Object[] { powerName, argument });
+        addBehaviour(InvokePowerProtocol.getInstance()
+            .createInitiatorParty(new Object[] { powerName, argument }));
     }
     
     public abstract boolean evaluateRequirements(String[] requirements);

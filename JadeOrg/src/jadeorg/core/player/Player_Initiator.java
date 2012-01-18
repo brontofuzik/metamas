@@ -7,6 +7,7 @@ import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 
+// TAG OBSOLETE
 /**
  * The player initiator.
  * @author Lukáš Kúdela

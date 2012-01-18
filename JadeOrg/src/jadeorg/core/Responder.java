@@ -13,7 +13,7 @@ import jadeorg.proto.Protocol;
  * @since 2012-01-13
  * @version %I% %G%
  */
-public class Responder extends FSMBehaviour {
+public abstract class Responder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

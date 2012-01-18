@@ -34,8 +34,9 @@ public class Role extends Agent {
     AID playerAID;
     
     // ----- PRIVATE -----
-    
-    private Role_Initiator initiator = new Role_Initiator(this);
+  
+    // TAG OBSOLETE
+//    private Role_Initiator initiator = new Role_Initiator(this);
     
     private Logger logger;
     
@@ -112,9 +113,15 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    // TAG OBSOLETE
+//    public void invokeRequirement(String requirementName, Object argument) {
+//        initiator.initiateProtocol(MeetRequirementProtocol.getInstance(),
+//            new Object[] { requirementName, argument } );
+//    }
+    
     public void invokeRequirement(String requirementName, Object argument) {
-        initiator.initiateProtocol(MeetRequirementProtocol.getInstance(),
-            new Object[] { requirementName, argument } );
+        addBehaviour(MeetRequirementProtocol.getInstance()
+            .createInitiatorParty(new Object[] { requirementName, argument }));    
     }
     
     // ----- Logging -----

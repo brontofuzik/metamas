@@ -3,6 +3,7 @@ package jadeorg.core.organization;
 import jadeorg.core.Initiator;
 import jadeorg.proto.roleprotocol.meetrequirementprotocol.MeetRequirementProtocol;
 
+// TAG OBSOLETE
 /**
  * A role initiator.
  * @author Lukáš Kúdela

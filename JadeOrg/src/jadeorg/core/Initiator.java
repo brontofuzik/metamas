@@ -11,7 +11,7 @@ import jadeorg.proto.Protocol;
  * @since 2012-01-13
  * @version %I% %G%
  */
-public class Initiator extends FSMBehaviour {
+public abstract class Initiator extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
