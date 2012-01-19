@@ -1,4 +1,4 @@
-package example1.players;
+package example1.players.demo;
 
 /**
  * The Demo1_Player player. The player playing the Asker role.

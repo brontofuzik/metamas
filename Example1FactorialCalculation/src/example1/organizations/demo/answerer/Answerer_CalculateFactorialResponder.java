@@ -1,4 +1,4 @@
-package example1.organizations;
+package example1.organizations.demo.answerer;
 
 import example1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import example1.protocols.calculatefactorialprotocol.ReplyMessage;
@@ -111,7 +111,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeRequirementCalculateFactorial() {
-            super("demo1.players.requirements.CalculateFactorial_Requirement");
+            super("example1.players.demo.CalculateFactorial_Requirement");
         }
         
         // </editor-fold>

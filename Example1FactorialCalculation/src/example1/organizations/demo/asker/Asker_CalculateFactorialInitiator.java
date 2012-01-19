@@ -1,4 +1,4 @@
-package example1.organizations;
+package example1.organizations.demo.asker;
 
 import example1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import example1.protocols.calculatefactorialprotocol.ReplyMessage;

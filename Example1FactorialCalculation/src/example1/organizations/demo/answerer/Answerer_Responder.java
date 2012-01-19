@@ -1,4 +1,4 @@
-package example1.organizations;
+package example1.organizations.demo.answerer;
 
 import example1.protocols.calculatefactorialprotocol.CalculateFactorialProtocol;
 import jadeorg.core.Responder;
@@ -13,7 +13,7 @@ public class Answerer_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Answerer_Responder() {
+    public Answerer_Responder() {
         addResponder(CalculateFactorialProtocol.getInstance());
     }
      
