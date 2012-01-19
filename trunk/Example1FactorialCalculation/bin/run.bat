@@ -6,7 +6,7 @@ SET SOLUTION_DIR=C:\DATA\projects\MAS\MetaMAS
 REM Solution directory for Prestigio
 REM SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
 
-SET PROJECT_NAME=Example1CalculateFactorial
+SET PROJECT_NAME=Example1FactorialCalculation
 SET PROJECT_DIR=%SOLUTION_DIR%\%PROJECT_NAME%
 SET JADE_VERSION=4.1.1
 
@@ -22,18 +22,19 @@ SET ROOT_NAMESPACE=example1
 
 REM ----- Organizations -----
 SET ORGANIZATION_PACKAGE=%ROOT_NAMESPACE%.organizations
-SET DEMO_ORGANIZATION=demo_Organization:%ORGANIZATION_PACKAGE%.Demo_Organization
+SET DEMO_ORGANIZATION=demo_Organization:%ORGANIZATION_PACKAGE%.demo.Demo_Organization
 SET ORGANIZATIONS=%DEMO_ORGANIZATION%
 
 REM ----- Players -----
 SET PLAYER_PACKAGE=%ROOT_NAMESPACE%.players
-SET DEMO1_PLAYER=demo1_Player:%PLAYER_PACKAGE%.Demo1_Player
-SET DEMO2_PLAYER=demo2_Player:%PLAYER_PACKAGE%.Demo2_Player
+SET DEMO1_PLAYER=demo1_Player:%PLAYER_PACKAGE%.demo.Demo1_Player
+SET DEMO2_PLAYER=demo2_Player:%PLAYER_PACKAGE%.demo.Demo2_Player
 SET PLAYERS=%DEMO1_PLAYER%;%DEMO2_PLAYER%
 
 Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JAVA_OPTIONS=-classpath %CLASSPATH%
+REM -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
 SET JADE_OPTIONS=-gui
 
 SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer

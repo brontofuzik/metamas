@@ -1,13 +1,12 @@
-package example1.players;
+package example1.players.demo;
 
-import example1.players.requirements.CalculateFactorial_Requirement;
 import jade.core.behaviours.WakerBehaviour;
 import jadeorg.core.player.Player;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A Participant player.
+ * A Demo player.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
@@ -145,7 +144,7 @@ public class Demo_Player extends Player {
             @Override
             protected void handleElapsedTimeout() {
 //                try {
-                    getMyPlayer().invokePower("demo1.organizations.powers.CalculateFactorial_Power", new Integer(10));
+                    getMyPlayer().invokePower("example1.organizations.demo.asker.CalculateFactorial_Power", new Integer(10));
 //                } catch (PlayerException ex) {
 //                    getMyPlayer().logSevere(String.format("Error: %1$s", ex.getMessage()));
 //                }

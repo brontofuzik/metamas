@@ -1,6 +1,7 @@
-package example1.organizations;
+package example1.organizations.demo;
 
-import example1.organizations.powers.CalculateFactorial_Power;
+import example1.organizations.demo.answerer.Answerer_Responder;
+import example1.organizations.demo.asker.CalculateFactorial_Power;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
@@ -27,6 +28,8 @@ public class Demo_Organization extends Organization {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
     /**
      * An Asker role.
      * @author Lukáš Kúdela
@@ -40,6 +43,9 @@ public class Demo_Organization extends Organization {
         @Override
         protected void setup() {
             super.setup();
+            
+            // Add behaviours.
+            // No behaviours.
             
             // Add powers.
             addPower(CalculateFactorial_Power.class);
@@ -59,17 +65,6 @@ public class Demo_Organization extends Organization {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
-        /**
-         * Responds to the 'Calculate factorial' protocol.
-         * @param protocolId the protocol id
-         * @param askerAID the asker AID
-         */
-        void respondToCalculateFactorial(ACLMessage aclMessage) {
-
-        }
-        
-        // ----- PROTECTED -----
-        
         @Override
         protected void setup() {
             super.setup();
@@ -77,8 +72,13 @@ public class Demo_Organization extends Organization {
             // Add behaviours.
             addBehaviour(new Answerer_Responder());
             logInfo("Behaviours added.");
+            
+            // Add powers.
+            // No powers.
         }
         
         // </editor-fold>
     }
+    
+    // </editor-fold>
 }
