@@ -9,7 +9,7 @@ import jadeorg.proto.ResponderParty;
  * The 'English auction' protocol responder party.
  * Design pattern: Abstract factory, Role: Concrete product
  * @author Lukáš Kúdela
- * @since 2012-01-20
+ * @since 2012-01-18
  * @version %I% %G%
  */
 public class Bidder_EnglishAuctionResponder extends ResponderParty {
