@@ -232,7 +232,7 @@ public abstract class Player extends Agent {
      * @return the end timeout
      */
     protected final int scheduleInvokePower(final PowerFullName powerFullName,
-        final int timeout) {
+        final int timeout, final int duration) {
         // Initiate the 'Invoke power' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
@@ -242,7 +242,7 @@ public abstract class Player extends Agent {
                     new Integer(10));
             }
         });
-        return timeout + 2000;
+        return timeout + duration;
     }  
     
     // ----- Logging -----
