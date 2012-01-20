@@ -33,7 +33,8 @@ SET PLAYERS=%DEMO1_PLAYER%;%DEMO2_PLAYER%
 
 Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JAVA_OPTIONS=-classpath %CLASSPATH%
+REM -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
 SET JADE_OPTIONS=-gui
 
 SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
