@@ -51,25 +51,26 @@ public abstract class Demo_Player extends Player {
         // Add the requirements.
         addRequirement(CalculateFactorial_Requirement.class);
         
-        scheduleEnactRole(roleFullName, 5000);
-        scheduleActivateRole(roleFullName, 6000);
+        int timeout = 2000;
+        timeout = scheduleEnactRole(roleFullName, timeout);
+        timeout = scheduleActivateRole(roleFullName, timeout);
         
         // Schedule individual behaviours.
-        doScheduleBehaviours();
+        timeout = doScheduleBehaviours(timeout);
 
-        scheduleDeactivateRole(roleFullName, 15000);
-        scheduleDeactRole(roleFullName, 16000);
+        timeout = scheduleDeactivateRole(roleFullName, timeout);
+        scheduleDeactRole(roleFullName, timeout);
     }
     
     /**
      * Schedule individual behaviours.
      * Design pattern: Template method, Role: Primitive operation
      */
-    protected abstract void doScheduleBehaviours();
+    protected abstract int doScheduleBehaviours(int timeout);
   
     // ----- PRIVATE -----
     
-    private void scheduleEnactRole(final RoleFullName roleFullName, int timeout) {
+    private int scheduleEnactRole(final RoleFullName roleFullName, int timeout) {
         // Initiate the 'Enact role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {    
@@ -79,9 +80,10 @@ public abstract class Demo_Player extends Player {
                     roleFullName.getRoleName());
             }
         });
+        return timeout + 2000;
     }
 
-    private void scheduleActivateRole(final RoleFullName roleFullName, int timeout) {
+    private int scheduleActivateRole(final RoleFullName roleFullName, int timeout) {
         // Initiate the 'Activate role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {            
@@ -90,9 +92,10 @@ public abstract class Demo_Player extends Player {
                 getMyPlayer().activateRole(roleFullName.getRoleName());
             }
         });
+        return timeout + 2000;
     }
 
-    private void scheduleDeactivateRole(final RoleFullName roleFullName, int timeout) {
+    private int scheduleDeactivateRole(final RoleFullName roleFullName, int timeout) {
         // Initiate the 'Deactivate role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
@@ -101,9 +104,10 @@ public abstract class Demo_Player extends Player {
                 getMyPlayer().deactivateRole(roleFullName.getRoleName());
             }
         });
+        return timeout + 2000;
     }
 
-    private void scheduleDeactRole(final RoleFullName roleFullName, int timeout) {
+    private int scheduleDeactRole(final RoleFullName roleFullName, int timeout) {
         // Initiate the 'Deact role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
@@ -113,6 +117,7 @@ public abstract class Demo_Player extends Player {
                     roleFullName.getRoleName());
             }
         });
+        return timeout + 2000;
     }
    
     // </editor-fold>

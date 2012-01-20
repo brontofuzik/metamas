@@ -37,13 +37,13 @@ public class Demo1_Player extends Demo_Player {
      * Design pattern: Template method, Role: Primitive operation
      */
     @Override
-    protected void doScheduleBehaviours() {
-        scheduleInvokePower(powerFullName, 10000);
+    protected int doScheduleBehaviours(int timeout) {
+        return scheduleInvokePower(powerFullName, timeout);
     }
     
     // ----- PRIVATE -----
     
-    private void scheduleInvokePower(final PowerFullName powerFullName, int timeout) {
+    private int scheduleInvokePower(final PowerFullName powerFullName, int timeout) {
         // Initiate the 'Invoke power' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
@@ -53,6 +53,7 @@ public class Demo1_Player extends Demo_Player {
                     new Integer(10));
             }
         });
+        return timeout + 2000;
     }  
     
     // </editor-fold>
