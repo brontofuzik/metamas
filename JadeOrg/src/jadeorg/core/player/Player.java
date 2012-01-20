@@ -220,7 +220,7 @@ public abstract class Player extends Agent {
      * @param powerName the name of the power to invoke
      * @param argument the power argument
      */
-    protected final void invokePower(final String powerName, final Object argument) {
+    protected final <T> void invokePower(final String powerName, final T argument) {
         addBehaviour(InvokePowerProtocol.getInstance()
             .createInitiatorParty(new Object[] { powerName, argument }));
     }
@@ -228,18 +228,19 @@ public abstract class Player extends Agent {
     /**
      * Schedules a power invocation.
      * @param powerFullName the full name of the power invoke
+     * @param argument the power argument
      * @param timeout the start timeout
      * @return the end timeout
      */
-    protected final int scheduleInvokePower(final PowerFullName powerFullName,
-        final int timeout, final int duration) {
+    protected final <T> int scheduleInvokePower(final PowerFullName powerFullName,
+        final T argument, final int timeout, final int duration) {
         // Initiate the 'Invoke power' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().invokePower(powerFullName.getPowerName(),
-                    new Integer(10));
+                    argument);
             }
         });
         return timeout + duration;
