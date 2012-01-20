@@ -38,7 +38,7 @@ public class Demo1_Player extends Demo_Player {
      */
     @Override
     protected int doScheduleBehaviours(int timeout) {
-        return scheduleInvokePower(powerFullName, timeout);
+        return scheduleInvokePower(powerFullName, timeout, 2000);
     }
     
     // </editor-fold>
