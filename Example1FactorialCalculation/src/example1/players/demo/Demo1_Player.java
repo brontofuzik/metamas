@@ -41,20 +41,5 @@ public class Demo1_Player extends Demo_Player {
         return scheduleInvokePower(powerFullName, timeout);
     }
     
-    // ----- PRIVATE -----
-    
-    private int scheduleInvokePower(final PowerFullName powerFullName, int timeout) {
-        // Initiate the 'Invoke power' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().invokePower(powerFullName.getPowerName(),
-                    new Integer(10));
-            }
-        });
-        return timeout + 2000;
-    }  
-    
     // </editor-fold>
 }

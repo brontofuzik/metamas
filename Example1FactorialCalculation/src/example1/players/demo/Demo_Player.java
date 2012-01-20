@@ -67,58 +67,6 @@ public abstract class Demo_Player extends Player {
      * Design pattern: Template method, Role: Primitive operation
      */
     protected abstract int doScheduleBehaviours(int timeout);
-  
-    // ----- PRIVATE -----
-    
-    private int scheduleEnactRole(final RoleFullName roleFullName, int timeout) {
-        // Initiate the 'Enact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {    
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().enactRole(roleFullName.getOrganizationName(),
-                    roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
 
-    private int scheduleActivateRole(final RoleFullName roleFullName, int timeout) {
-        // Initiate the 'Activate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {            
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().activateRole(roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-
-    private int scheduleDeactivateRole(final RoleFullName roleFullName, int timeout) {
-        // Initiate the 'Deactivate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().deactivateRole(roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-
-    private int scheduleDeactRole(final RoleFullName roleFullName, int timeout) {
-        // Initiate the 'Deact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().deactRole(roleFullName.getOrganizationName(),
-                    roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-   
     // </editor-fold>
 }
