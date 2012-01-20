@@ -1,5 +1,8 @@
 package example2.players.participant;
 
+import example2.organizations.auction.auctioneer.AuctionArgument;
+import example2.organizations.auction.auctioneer.AuctionType;
+
 /**
  * The 'Participant3' player.
  * @author Lukáš Kúdela
@@ -25,31 +28,63 @@ public class Participant3_Player extends Participant_Player {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Schedule individual behaviours.
+     * Schedule the Pollock auction.
      * Design pattern: Template method, Role: Primitive operation
+     * @param
+     * @return
      */
     @Override
-    protected int doScheduleBehaviours(int timeout) {
-        // First auction: Pollock.
-        timeout = scheduleActivateRole(auctioneerRoleFullName, timeout);
-        timeout += 4000;
-        timeout = scheduleDeactivateRole(auctioneerRoleFullName, timeout);
-       
-//        timeout += 8000;
-//        
-//        // Second auction: Kooning.
-//        timeout = scheduleActivateRole(bidderRoleFullName, timeout);
-//        timeout += 4000;
-//        timeout = scheduleDeactivateRole(bidderRoleFullName, timeout);
-//        
-//        timeout += 8000;
-//        
-//        // Third auction: Klimt.
-//        timeout = scheduleActivateRole(bidderRoleFullName, timeout);
-//        timeout = scheduleInvokePower(auctionPowerFullName, timeout, 4000);
-//        return scheduleDeactivateRole(bidderRoleFullName, timeout);
+    protected int doSchedulePollockAuction(int timeout) {
+        // Activate the 'Bidder' role.
+        timeout = scheduleActivateRole(bidderRoleFullName, timeout);
         
-        return timeout;
+        timeout += 4000;
+        
+        // Deactivate the 'Bidder' role.
+        return scheduleDeactivateRole(bidderRoleFullName, timeout);
+    }
+
+    /**
+     * Schedule the Kooning auction.
+     * Design pattern: Template method, Role: Primitive operation
+     * @param timeout 
+     * @return 
+     */
+    @Override
+    protected int doScheduleKooningAuction(int timeout) {
+        // Activate the 'Bidder' role.
+        timeout = scheduleActivateRole(bidderRoleFullName, timeout);
+        
+        timeout += 4000;
+        
+        // Deactivate the 'Bidder' role.
+        return scheduleDeactivateRole(bidderRoleFullName, timeout);
+    }
+
+    /**
+     * Schedule the Klimt auction.
+     * Design pattern: Template method, Role: Primitive operation
+     * @param timeout
+     * @return 
+     */
+    @Override
+    protected int doScheduleKlimtAuction(int timeout) {
+        // Activate the 'Auctioneer' role.
+        timeout = scheduleActivateRole(auctioneerRoleFullName, timeout);
+        
+        // Invoke the 'Auction' power.
+        Item klimt = getItemToSell(KLIMT);
+        AuctionArgument auctionArgument = new AuctionArgument(
+            AuctionType.ENVELOPE,
+            klimt.getName(),
+            klimt.getPrice(),
+            klimt.getPrice(),
+            1.0);
+        timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
+            timeout, 4000);
+       
+        // Deactivate the 'Auctioneer' role.
+        return scheduleDeactivateRole(auctioneerRoleFullName, timeout);
     }
     
     // </editor-fold>

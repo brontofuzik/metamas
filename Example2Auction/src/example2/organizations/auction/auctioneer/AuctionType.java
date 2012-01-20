@@ -20,9 +20,10 @@ public enum AuctionType {
     DUTCH,
     
     /**
-     * The sealed-bid first-price auction.
+     * The Envelope auction,
+     * a. k. a. the sealed-bid first-price auction.
      */
-    SEALED_FIRST_PRICE,
+    ENVELOPE,
     
     /**
      * The Vickrey auction,

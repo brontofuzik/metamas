@@ -1,18 +1,18 @@
 package example2.organizations.auction.auctioneer;
 
-import example2.protocols.dutchauctionprotocol.DutchAuctionProtocol;
+import example2.protocols.englishauction.EnglishAuctionProtocol;
 import jade.core.AID;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 
 /**
- * The 'Dutch auction' protocol initiator party.
+ * The 'English auction' protocol initiator party.
  * Design pattern: Abstract factory, Role: Concrete product
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Auctioner_DutchAuctionInitiator extends InitiatorParty
+public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
     implements AuctionInitiator {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -23,7 +23,7 @@ public class Auctioner_DutchAuctionInitiator extends InitiatorParty
     
     private double reservationPrice;
     
-    private double bidDecrement;
+    private double bidIncrement;
     
     private boolean winnerDetermined;
     
@@ -37,7 +37,7 @@ public class Auctioner_DutchAuctionInitiator extends InitiatorParty
     
     @Override
     public Protocol getProtocol() {
-        return DutchAuctionProtocol.getInstance();
+        return EnglishAuctionProtocol.getInstance();
     }
     
     @Override
@@ -45,7 +45,7 @@ public class Auctioner_DutchAuctionInitiator extends InitiatorParty
         itemName = argument.getItemName();
         startingPrice = argument.getStartingPrice();
         reservationPrice = argument.getReservationPrice();
-        bidDecrement = argument.getBidChange();
+        bidIncrement = argument.getBidChange();
     }
 
     @Override

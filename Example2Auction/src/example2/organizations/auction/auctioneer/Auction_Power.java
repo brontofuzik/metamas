@@ -16,9 +16,9 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
     
     private AuctionType auctionType;
     
-    private Auctioner_EnglishAuctionInitiator englishAuctionInitiator;
+    private Auctioneer_EnglishAuctionInitiator englishAuctionInitiator;
     
-    private Auctioner_DutchAuctionInitiator dutchAuctionInitiator;
+    private Auctioneer_DutchAuctionInitiator dutchAuctionInitiator;
     
     // </editor-fold>
     
@@ -37,8 +37,8 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         State initialize = new Initialize();
         State setPowerArgument = new SetPowerArgument();
         State selectAuctionType = new SelectAuctionType();
-        englishAuctionInitiator = new Auctioner_EnglishAuctionInitiator();
-        dutchAuctionInitiator = new Auctioner_DutchAuctionInitiator();
+        englishAuctionInitiator = new Auctioneer_EnglishAuctionInitiator();
+        dutchAuctionInitiator = new Auctioneer_DutchAuctionInitiator();
         State getPowerResult = new GetPowerResult(); 
         // ------------------
         
