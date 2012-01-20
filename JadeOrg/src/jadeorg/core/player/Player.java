@@ -70,9 +70,36 @@ public abstract class Player extends Agent {
 //            new Object[] { organizationName, roleName });
 //    }
     
-    public final void enactRole(String organizationName, String roleName) {
+    /**
+     * Enacts a role.
+     * @param organizationName the name of the organization
+     * @param roleName the name of the role to enact
+     */
+    protected final void enactRole(final String organizationName,
+        final String roleName) {
         addBehaviour(EnactRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { organizationName, roleName }));
+    }
+    
+    /**
+     * Schedules a role enactment.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to enact
+     * @param timeout the start timeout
+     * @return the end timeout
+     */
+    protected final int scheduleEnactRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Enact role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout)
+        {    
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().enactRole(roleFullName.getOrganizationName(),
+                    roleFullName.getRoleName());
+            }
+        });
+        return timeout + 2000;
     }
     
     // TAG OBSOLETE
@@ -81,9 +108,36 @@ public abstract class Player extends Agent {
 //            new Object[] { organizationName, roleName });
 //    }
     
-    public final void deactRole(String organizationName, String roleName) {
+    /**
+     * Deacts a role.
+     * @param organizationName the name of the organization
+     * @param roleName the name of the role to deact
+     */
+    protected final void deactRole(final String organizationName,
+        final String roleName) {
         addBehaviour(DeactRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { organizationName, roleName }));
+    }
+    
+    /**
+     * Schedules a role deactment.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to deact
+     * @param timeout the start timeout
+     * @return the end timeout
+     */
+    protected final int scheduleDeactRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Deact role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout)
+        {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().deactRole(roleFullName.getOrganizationName(),
+                    roleFullName.getRoleName());
+            }
+        });
+        return timeout + 2000;
     }
     
     // TAG OBSOLETE
@@ -92,9 +146,33 @@ public abstract class Player extends Agent {
 //            new Object[] { roleName });
 //    }
     
-    public final void activateRole(String roleName) {
+    /**
+     * Activates a role.
+     * @param roleName the name of the role to activate
+     */
+    protected final void activateRole(final String roleName) {
         addBehaviour(ActivateRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { roleName }));
+    }
+    
+    /**
+     * Schedules a role activation.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to actiavte
+     * @param timeout the start timeout
+     * @return the end timeout
+     */
+    protected final int scheduleActivateRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Activate role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout)
+        {            
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().activateRole(roleFullName.getRoleName());
+            }
+        });
+        return timeout + 2000;
     }
     
     // TAG OBSOLETE
@@ -103,9 +181,32 @@ public abstract class Player extends Agent {
 //            new Object[] { roleName });
 //    }
     
-    public final void deactivateRole(String roleName) {
+    /**
+     * Deactivates a role.
+     * @param roleName the name of the role to deactivate
+     */
+    protected final void deactivateRole(final String roleName) {
         addBehaviour(DeactivateRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { roleName }));
+    }
+    
+    /**
+     * Schedules a role deactivation.
+     * @param roleFullName the full name of the role to deactivate
+     * @param timeout the start timeout
+     * @return the end timeout
+     */
+    protected final int scheduleDeactivateRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Deactivate role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout)
+        {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().deactivateRole(roleFullName.getRoleName());
+            }
+        });
+        return timeout + 2000;
     }
     
     // TAG OBSOLETE
@@ -114,10 +215,35 @@ public abstract class Player extends Agent {
 //            new Object[] { powerName, argument });
 //    }
     
-    public final void invokePower(String powerName, Object argument) {
+    /**
+     * Invokes a power.
+     * @param powerName the name of the power to invoke
+     * @param argument the power argument
+     */
+    protected final void invokePower(final String powerName, final Object argument) {
         addBehaviour(InvokePowerProtocol.getInstance()
             .createInitiatorParty(new Object[] { powerName, argument }));
     }
+    
+    /**
+     * Schedules a power invocation.
+     * @param powerFullName the full name of the power invoke
+     * @param timeout the start timeout
+     * @return the end timeout
+     */
+    protected final int scheduleInvokePower(final PowerFullName powerFullName,
+        final int timeout) {
+        // Initiate the 'Invoke power' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout)
+        {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().invokePower(powerFullName.getPowerName(),
+                    new Integer(10));
+            }
+        });
+        return timeout + 2000;
+    }  
     
     // ----- Logging -----
     
