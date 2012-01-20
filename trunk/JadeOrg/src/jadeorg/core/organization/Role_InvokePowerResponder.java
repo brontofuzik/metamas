@@ -128,6 +128,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     private Power createPower(String powerName) {
         //System.out.println("----- CREATING POWER: " + powerName + " -----");
         Class powerClass = getMyRole().powers.get(powerName);
+        //System.out.println("----- POWER CLASS: " + powerClass + " -----");
         
         // Get the power constructor.
         Constructor powerConstructor = null;
@@ -138,7 +139,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
-        
+                
         // Instantiate the power.
         Power power = null;
         try {
