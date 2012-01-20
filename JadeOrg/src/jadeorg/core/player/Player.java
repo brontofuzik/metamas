@@ -1,9 +1,8 @@
 package jadeorg.core.player;
 
 import jadeorg.core.player.kb.PlayerKnowledgeBase;
-import jade.core.AID;
 import jade.core.Agent;
-import jade.lang.acl.ACLMessage;
+import jade.core.behaviours.WakerBehaviour;
 import jade.util.Logger;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -11,7 +10,9 @@ import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -30,6 +31,11 @@ public abstract class Player extends Agent {
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     // ----- PRIVATE -----
+    
+    /**
+     * The abilities.
+     */
+    private static final Set<String> abilities = new HashSet<String>();
 
     // TAG OBSOLETE
 //    private Player_Initiator initiator = new Player_Initiator(this);
@@ -49,62 +55,69 @@ public abstract class Player extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Evaluates a set of requirements.
+     * @param requirements the set of requirements to evaluate
+     * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise
+     */
+    public /* virtual */ boolean evaluateRequirements(String[] requirements) {
+        return evaluateAllRequirements(requirements);
+    }
+    
     // TAG OBSOLETE
-//    public void enactRole(String organizationName, String roleName) {
+//    public final void enactRole(String organizationName, String roleName) {
 //        initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
 //            new Object[] { organizationName, roleName });
 //    }
     
-    public void enactRole(String organizationName, String roleName) {
+    public final void enactRole(String organizationName, String roleName) {
         addBehaviour(EnactRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { organizationName, roleName }));
     }
     
     // TAG OBSOLETE
-//    public void deactRole(String organizationName, String roleName) {
+//    public final void deactRole(String organizationName, String roleName) {
 //        initiator.initiateProtocol(DeactRoleProtocol.getInstance(),
 //            new Object[] { organizationName, roleName });
 //    }
     
-    public void deactRole(String organizationName, String roleName) {
+    public final void deactRole(String organizationName, String roleName) {
         addBehaviour(DeactRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { organizationName, roleName }));
     }
     
     // TAG OBSOLETE
-//    public void activateRole(String roleName) {
+//    public final activateRole(String roleName) {
 //        initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
 //            new Object[] { roleName });
 //    }
     
-    public void activateRole(String roleName) {
+    public final void activateRole(String roleName) {
         addBehaviour(ActivateRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { roleName }));
     }
     
     // TAG OBSOLETE
-//    public void deactivateRole(String roleName) {
+//    public final void deactivateRole(String roleName) {
 //        initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
 //            new Object[] { roleName });
 //    }
     
-    public void deactivateRole(String roleName) {
+    public final void deactivateRole(String roleName) {
         addBehaviour(DeactivateRoleProtocol.getInstance()
             .createInitiatorParty(new Object[] { roleName }));
     }
     
     // TAG OBSOLETE
-//    public void invokePower(String powerName, Object argument) {
+//    public final void invokePower(String powerName, Object argument) {
 //        initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
 //            new Object[] { powerName, argument });
 //    }
     
-    public void invokePower(String powerName, Object argument) {
+    public final void invokePower(String powerName, Object argument) {
         addBehaviour(InvokePowerProtocol.getInstance()
             .createInitiatorParty(new Object[] { powerName, argument }));
     }
-    
-    public abstract boolean evaluateRequirements(String[] requirements);
     
     // ----- Logging -----
     
@@ -133,6 +146,14 @@ public abstract class Player extends Agent {
     
     // ---------- PROTECTED ----------
     
+    /**
+     * Adds an ability (requirement).
+     * @param ability the ability
+     */
+    protected static void addAbility(String ability) {
+        abilities.add(ability);
+    }
+    
     @Override
     protected void setup() {
         super.setup();
@@ -142,7 +163,11 @@ public abstract class Player extends Agent {
         logInfo("Behaviours added.");
     }
     
-    protected void addRequirement(Class requirementClass) {
+    /**
+     * Adds a requirement.
+     * @param requirementClass the requirement class
+     */
+    protected final void addRequirement(Class requirementClass) {
         // ----- Preconditions -----
         if (requirementClass == null) {
             throw new IllegalArgumentException("requirementClass");
@@ -155,9 +180,65 @@ public abstract class Player extends Agent {
         logInfo(String.format("Requirement (%1$s) added.", requirementName));
     }
     
+    /**
+     * Evaluates a set of requirements.
+     * @param requirements the set of requirements to evaluate
+     * @return <c>true</c> if all requirement can be met; <c>false</c> otherwise
+     */
+    protected final boolean evaluateAllRequirements(String[] requirements) {
+        for (String requirement : requirements) {
+            if (evaluateRequirement(requirement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Evaluates a set of requirements.
+     * @param requirements the set of requirements to evaluate
+     * @return <c>true</c> if any requirement can be met; <c>false</c> otherwise
+     */
+    protected final boolean evaluteAnyRequirement(String[] requirements) {
+        for (String requirement : requirements) {
+            if (evaluateRequirement(requirement)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Evaluates a requirement.
+     * @param requirement the requirement to evaluate
+     * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise 
+     */
+    protected /* virtual */ boolean evaluateRequirement(String requirement) {
+        return abilities.contains(requirement);
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    protected abstract class PlayerWakerBehaviour extends WakerBehaviour {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        protected PlayerWakerBehaviour(Player player, int timeout) {
+            super(player, timeout);
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        protected Player getMyPlayer() {
+            return (Player)myAgent;
+        }
+        
+        // </editor-fold>
+    }
     
     protected static class RoleFullName {
         

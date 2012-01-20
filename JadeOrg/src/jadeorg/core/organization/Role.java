@@ -184,7 +184,7 @@ public class Role extends Agent {
         }
         // -------------------------
         
-        String powerName = powerClass.getName();
+        String powerName = powerClass.getSimpleName();
         powers.put(powerName, powerClass);
         
         logInfo(String.format("Power (%1$s) added.", powerName));
