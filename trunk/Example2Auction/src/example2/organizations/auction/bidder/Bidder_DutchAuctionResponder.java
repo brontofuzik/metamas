@@ -1,6 +1,6 @@
 package example2.organizations.auction.bidder;
 
-import example2.protocols.dutchauctionprotocol.DutchAuctionProtocol;
+import example2.protocols.dutchauction.DutchAuctionProtocol;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
@@ -16,7 +16,7 @@ public class Bidder_DutchAuctionResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    Bidder_DutchAuctionResponder(ACLMessage message) {
+    public Bidder_DutchAuctionResponder(ACLMessage message) {
         super(message);
     }
     
