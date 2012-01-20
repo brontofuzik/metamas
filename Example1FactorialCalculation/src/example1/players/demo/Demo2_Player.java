@@ -27,8 +27,9 @@ public class Demo2_Player extends Demo_Player {
      * Design pattern: Template method, Role: Primitive operation
      */
     @Override
-    protected void doScheduleBehaviours() {
+    protected int doScheduleBehaviours(int timeout) {
         // No behaviours.
+        return timeout + 2000;
     }
     
     // </editor-fold>
