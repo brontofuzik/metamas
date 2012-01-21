@@ -32,18 +32,14 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Asker_CalculateFactorialInitiator() {                
+    public Asker_CalculateFactorialInitiator() {
+        super(CalculateFactorialProtocol.getInstance());
         buildFSM();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return CalculateFactorialProtocol.getInstance();
-    }
     
     public void setArgument(int argument) {
         this.argument = argument;

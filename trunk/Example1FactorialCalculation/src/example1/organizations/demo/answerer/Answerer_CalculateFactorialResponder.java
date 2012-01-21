@@ -36,7 +36,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Answerer_CalculateFactorialResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(CalculateFactorialProtocol.getInstance(), aclMessage);
         
         this.aclMessage = aclMessage;
         askerAID = aclMessage.getSender();
@@ -47,13 +47,6 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return CalculateFactorialProtocol.getInstance();
-    }
-    
-    // ----- PRIVATE -----
     
     private Role getMyRole() {
         return (Role)myAgent;
