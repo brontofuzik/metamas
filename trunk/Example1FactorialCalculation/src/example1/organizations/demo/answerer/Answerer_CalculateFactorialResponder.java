@@ -23,8 +23,6 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private final ACLMessage aclMessage;
-    
     private AID askerAID;
     
     private int argument;
@@ -38,8 +36,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     public Answerer_CalculateFactorialResponder(ACLMessage aclMessage) {
         super(CalculateFactorialProtocol.getInstance(), aclMessage);
         
-        this.aclMessage = aclMessage;
-        askerAID = aclMessage.getSender();
+        askerAID = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -91,7 +88,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         @Override
         public void action() {
             RequestMessage message = new RequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
             
             argument = message.getArgument();
         }
