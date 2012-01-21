@@ -13,12 +13,11 @@ import jadeorg.proto.Protocol;
  */
 public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty {
 
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    @Override
-    public Protocol getProtocol() {
-        return EnvelopeAuctionProtocol.getInstance();
-    }
+    public Auctioneer_EnvelopeAuctionInitiator() {
+        super(EnvelopeAuctionProtocol.getInstance());
+    }    
     
     // </editor-fold>
 }
