@@ -32,6 +32,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactivateRoleInitiator(String roleName) {
+        super(DeactivateRoleProtocol.getInstance());
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
@@ -44,13 +45,6 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-
-    @Override
-    public Protocol getProtocol() {
-        return DeactivateRoleProtocol.getInstance();
-    }
-    
-    // ----- PRIVATE -----
     
     private Player getMyPlayer() {
         return (Player)myAgent;

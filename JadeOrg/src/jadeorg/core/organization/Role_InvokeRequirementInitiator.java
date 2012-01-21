@@ -39,6 +39,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Role_InvokeRequirementInitiator(String requirementName) {
+        super(InvokeRequirementProtocol.getInstance());
         // ----- Preconditions -----
         assert requirementName != null && !requirementName.isEmpty();
         // -------------------------
@@ -57,11 +58,6 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return InvokeRequirementProtocol.getInstance();
-    }
     
     public void setRequirementArgument(Object requirementArgument) {
         this.requirementArgument = requirementArgument;

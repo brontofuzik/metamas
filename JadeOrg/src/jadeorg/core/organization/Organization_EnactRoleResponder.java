@@ -40,7 +40,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Organization_EnactRoleResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(EnactRoleProtocol.getInstance(), aclMessage);
         
         this.aclMessage = aclMessage;
         this.playerAID = aclMessage.getSender();
@@ -51,11 +51,6 @@ public class Organization_EnactRoleResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return EnactRoleProtocol.getInstance();
-    }
     
     private Organization getMyOrganization() {
         return (Organization)myAgent;

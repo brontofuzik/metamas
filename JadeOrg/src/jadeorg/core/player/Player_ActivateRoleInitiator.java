@@ -32,6 +32,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_ActivateRoleInitiator(String roleName) {
+        super(ActivateRoleProtocol.getInstance());
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
@@ -44,11 +45,6 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-
-    @Override
-    public Protocol getProtocol() {
-        return ActivateRoleProtocol.getInstance();
-    }
     
     private Player getMyPlayer() {
         return (Player)myAgent;
