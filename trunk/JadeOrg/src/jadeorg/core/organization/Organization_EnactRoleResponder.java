@@ -28,8 +28,6 @@ import java.lang.reflect.InvocationTargetException;
 public class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
-
-    private ACLMessage aclMessage;
     
     private AID playerAID;
 
@@ -41,9 +39,8 @@ public class Organization_EnactRoleResponder extends ResponderParty {
     
     public Organization_EnactRoleResponder(ACLMessage aclMessage) {
         super(EnactRoleProtocol.getInstance(), aclMessage);
-        
-        this.aclMessage = aclMessage;
-        this.playerAID = aclMessage.getSender();
+       
+        playerAID = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -109,7 +106,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         protected boolean preconditionsSatisfied() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Enact role' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
+                getACLMessage().getConversationId()));
             return true;
         }
         
@@ -123,7 +120,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         @Override
         public void action() {
             EnactRequestMessage message = new EnactRequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
             roleName = message.getRoleName();
         }
         

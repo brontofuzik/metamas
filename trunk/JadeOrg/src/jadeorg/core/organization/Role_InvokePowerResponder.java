@@ -28,8 +28,6 @@ public class Role_InvokePowerResponder extends ResponderParty {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private ACLMessage aclMessage;
-    
     private AID playerAID;
     
     private String powerName;
@@ -47,8 +45,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     public Role_InvokePowerResponder(ACLMessage aclMessage) {
         super(InvokePowerProtocol.getInstance(), aclMessage);
         
-        this.aclMessage = aclMessage;
-        this.playerAID = aclMessage.getSender();
+        playerAID = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -152,9 +149,9 @@ public class Role_InvokePowerResponder extends ResponderParty {
         @Override
         protected boolean preconditionsSatisfied() {
             getMyRole().logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
+                getACLMessage().getConversationId()));
         
-            if (aclMessage.getSender().equals(getMyRole().playerAID)) {
+            if (playerAID.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
                 return true;
             } else {
@@ -174,7 +171,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         @Override
         public void action() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
             
             powerName = message.getPower();                       
             selectPower(powerName);

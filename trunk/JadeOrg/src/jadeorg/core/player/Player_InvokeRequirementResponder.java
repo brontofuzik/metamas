@@ -28,8 +28,6 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private ACLMessage aclMessage;
-    
     private AID roleAID;
     
     private String requirementName;
@@ -46,9 +44,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     public Player_InvokeRequirementResponder(ACLMessage aclMessage) {
         super(InvokeRequirementProtocol.getInstance(), aclMessage);
-        
-        this.aclMessage = aclMessage;
-        this.roleAID = aclMessage.getSender();
+
+        roleAID = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -156,9 +153,9 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         @Override
         protected boolean preconditionsSatisfied() {
             getMyPlayer().logInfo(String.format("Responding to the 'Invoke requirement' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
+                getACLMessage().getConversationId()));
         
-            if (aclMessage.getSender().equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
+            if (roleAID.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
                 return true;
             } else {
@@ -178,7 +175,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         @Override
         public void action() {
             InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
             
             requirementName = message.getRequirement();         
             selectRequirement(requirementName);

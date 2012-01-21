@@ -3,7 +3,6 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.AssertPreconditions;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
@@ -20,8 +19,6 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 public class Organization_DeactRoleResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
-
-    private ACLMessage aclMessage;
     
     private AID playerAID;
     
@@ -34,8 +31,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     public Organization_DeactRoleResponder(ACLMessage aclMessage) {
         super(DeactRoleProtocol.getInstance(), aclMessage);
 
-        this.aclMessage = aclMessage;
-        this.playerAID = aclMessage.getSender();
+        playerAID = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -93,7 +89,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         protected boolean preconditionsSatisfied() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Deact role' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
+                getACLMessage().getConversationId()));
             return true;
         }
         
@@ -111,7 +107,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         @Override
         public void action() {
             DeactRequestMessage message = new DeactRequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
             roleName = message.getRoleName();
         }
         
