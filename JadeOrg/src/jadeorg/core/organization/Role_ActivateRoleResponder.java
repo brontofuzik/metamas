@@ -21,8 +21,6 @@ public class Role_ActivateRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private ACLMessage aclMessage;
-    
     private AID playerAID;
 
     // </editor-fold>
@@ -32,8 +30,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
     public Role_ActivateRoleResponder(ACLMessage aclMessage) {
         super(ActivateRoleProtocol.getInstance(), aclMessage);
         
-        this.aclMessage = aclMessage;
-        playerAID = aclMessage.getSender();
+        playerAID = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -89,9 +86,9 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         @Override
         protected boolean preconditionsSatisfied() {
             getMyRole().logInfo(String.format("Responding to the 'Activate role' protocol (id = %1$s).",
-                aclMessage.getConversationId()));
+                getACLMessage().getConversationId()));
         
-            if (aclMessage.getSender().equals(getMyRole().playerAID)) {
+            if (playerAID.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
                 return true;
             } else {
@@ -115,7 +112,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         @Override
         public void action() {
             ActivateRequestMessage message = new ActivateRequestMessage();
-            message.parseACLMessage(aclMessage);
+            message.parseACLMessage(getACLMessage());
         }
 
         // </editor-fold>
