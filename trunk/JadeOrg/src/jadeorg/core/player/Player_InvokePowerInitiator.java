@@ -36,7 +36,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {       
+    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {
+        super(InvokePowerProtocol.getInstance());
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
         // -------------------------
@@ -54,11 +55,6 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return InvokePowerProtocol.getInstance();
-    }
     
     public void setPowerArgument(Object powerArgument) {
         this.powerArgument = powerArgument;

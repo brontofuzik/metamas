@@ -12,7 +12,8 @@ public abstract class ResponderParty extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ResponderParty(ACLMessage aclMessage) {
+    protected ResponderParty(Protocol protocol, ACLMessage aclMessage) {
+        super(protocol);
         // ----- Preconditions -----
         assert aclMessage != null && aclMessage.getConversationId() != null
             && !aclMessage.getConversationId().isEmpty();

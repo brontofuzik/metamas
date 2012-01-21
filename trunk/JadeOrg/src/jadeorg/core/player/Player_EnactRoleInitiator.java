@@ -42,6 +42,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_EnactRoleInitiator(String organizationName, String roleName) {
+        super(EnactRoleProtocol.getInstance());
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
@@ -56,11 +57,6 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return EnactRoleProtocol.getInstance();
-    }
     
     private Player getMyPlayer() {
         return (Player)myAgent;

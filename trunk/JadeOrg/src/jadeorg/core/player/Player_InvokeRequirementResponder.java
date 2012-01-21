@@ -45,7 +45,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_InvokeRequirementResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(InvokeRequirementProtocol.getInstance(), aclMessage);
         
         this.aclMessage = aclMessage;
         this.roleAID = aclMessage.getSender();
@@ -56,27 +56,6 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return InvokeRequirementProtocol.getInstance();
-    }
-    
-    // ----- PACKAGE -----
-    
-    void setMessage(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
-        
-        this.aclMessage = aclMessage;
-    }
-    
-    void setRoleAID(AID roleAID) {
-        this.roleAID = roleAID;
-    }  
-    
-    // ----- PRIVATE -----
     
     private Player getMyPlayer() {
         return (Player)myAgent;

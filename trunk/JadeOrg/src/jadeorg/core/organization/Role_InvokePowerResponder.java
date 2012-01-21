@@ -45,7 +45,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Role_InvokePowerResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(InvokePowerProtocol.getInstance(), aclMessage);
         
         this.aclMessage = aclMessage;
         this.playerAID = aclMessage.getSender();
@@ -56,24 +56,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return InvokePowerProtocol.getInstance();
-    }
-    
-    // ----- PACKAGE -----
-    
-    void setMessage(ACLMessage aclMessage) {
-        // ----- Preconditions -----
-        assert aclMessage != null;
-        // -------------------------
-          
-        this.aclMessage = aclMessage;
-    }
-    
-    // ----- PRIVATE -----
-    
+
     private Role getMyRole() {
         return (Role)myAgent;
     }

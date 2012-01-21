@@ -30,7 +30,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Role_ActivateRoleResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(ActivateRoleProtocol.getInstance(), aclMessage);
         
         this.aclMessage = aclMessage;
         playerAID = aclMessage.getSender();
@@ -41,11 +41,6 @@ public class Role_ActivateRoleResponder extends ResponderParty {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-
-    @Override
-    public Protocol getProtocol() {
-        return ActivateRoleProtocol.getInstance();
-    }
     
     private Role getMyRole() {
         return (Role)myAgent;

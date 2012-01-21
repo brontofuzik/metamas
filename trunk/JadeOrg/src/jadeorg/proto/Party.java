@@ -16,7 +16,21 @@ public abstract class Party extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private Protocol protocol;
+    
     private String protocolId;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    protected Party(Protocol protocol) {
+        // ----- Preconditions -----
+        assert protocol != null;
+        // -------------------------
+        
+        this.protocol = protocol;
+    }
     
     // </editor-fold>
     
@@ -24,10 +38,7 @@ public abstract class Party extends FSMBehaviourState {
     
     public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
-    } 
-    
-    // TODO Change the access modifier to protected.
-    public abstract Protocol getProtocol();
+    }
     
     // </editor-fold>
     
@@ -41,7 +52,7 @@ public abstract class Party extends FSMBehaviourState {
     public void send(Message message, AID receiverAID) {
         // Generate the ACL message.
         ACLMessage aclMessage = message.generateACLMessage();      
-        aclMessage.setProtocol(getProtocol().getName());
+        aclMessage.setProtocol(protocol.getName());
         aclMessage.setConversationId(protocolId);
         aclMessage.addReceiver(receiverAID);
         
@@ -61,7 +72,7 @@ public abstract class Party extends FSMBehaviourState {
             MessageTemplate.and(
                 MessageTemplate.MatchPerformative(message.getPerformative()),
                 MessageTemplate.and(
-                    MessageTemplate.MatchProtocol(getProtocol().getName()),
+                    MessageTemplate.MatchProtocol(protocol.getName()),
                     MessageTemplate.and(
                         MessageTemplate.MatchConversationId(protocolId),
                         MessageTemplate.MatchSender(senderAID))));

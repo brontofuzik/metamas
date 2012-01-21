@@ -32,7 +32,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Organization_DeactRoleResponder(ACLMessage aclMessage) {
-        super(aclMessage);
+        super(DeactRoleProtocol.getInstance(), aclMessage);
 
         this.aclMessage = aclMessage;
         this.playerAID = aclMessage.getSender();
@@ -43,13 +43,6 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-
-    @Override
-    public Protocol getProtocol() {
-        return DeactRoleProtocol.getInstance();
-    }
-    
-    // ----- PRIVATE -----
     
     private Organization getMyOrganization() {
         return (Organization)myAgent;

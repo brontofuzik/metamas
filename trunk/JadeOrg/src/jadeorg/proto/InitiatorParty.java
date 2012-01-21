@@ -10,7 +10,8 @@ public abstract class InitiatorParty extends Party {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected InitiatorParty() {
+    protected InitiatorParty(Protocol protocol) {
+        super(protocol);
         setProtocolId(new Integer(hashCode()).toString());
     }
     
