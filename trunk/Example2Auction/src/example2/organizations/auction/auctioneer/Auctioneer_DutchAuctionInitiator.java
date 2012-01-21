@@ -3,7 +3,6 @@ package example2.organizations.auction.auctioneer;
 import example2.protocols.dutchauction.DutchAuctionProtocol;
 import jade.core.AID;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 
 /**
  * The 'Dutch auction' protocol initiator party.
@@ -33,12 +32,15 @@ public class Auctioneer_DutchAuctionInitiator extends InitiatorParty
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return DutchAuctionProtocol.getInstance();
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    public Auctioneer_DutchAuctionInitiator() {
+        super(DutchAuctionProtocol.getInstance());
     }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
     public void setAuctionArgument(AuctionArgument argument) {

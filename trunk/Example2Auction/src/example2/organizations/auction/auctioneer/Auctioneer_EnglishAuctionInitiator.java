@@ -33,12 +33,15 @@ public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return EnglishAuctionProtocol.getInstance();
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    public Auctioneer_EnglishAuctionInitiator() {
+        super(EnglishAuctionProtocol.getInstance());
     }
+      
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
     public void setAuctionArgument(AuctionArgument argument) {

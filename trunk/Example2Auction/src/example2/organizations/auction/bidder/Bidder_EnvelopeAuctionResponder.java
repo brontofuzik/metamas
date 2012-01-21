@@ -6,7 +6,6 @@ package example2.organizations.auction.bidder;
 
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 
 /**
@@ -21,16 +20,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Bidder_EnvelopeAuctionResponder(ACLMessage message) {
-        super(message);
-    }
-    
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    @Override
-    public Protocol getProtocol() {
-        return EnvelopeAuctionProtocol.getInstance();
+        super(EnvelopeAuctionProtocol.getInstance(), message);
     }
     
     // </editor-fold>

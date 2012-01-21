@@ -2,7 +2,6 @@ package example2.organizations.auction.auctioneer;
 
 import example2.protocols.vickereyauction.VickereyAuctionProtocol;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 
 /**
  * The 'Vickerey auction' protocol initiator party.
@@ -13,12 +12,11 @@ import jadeorg.proto.Protocol;
  */
 public class Auctioneer_VickereyAuctionInitiator extends InitiatorParty {
 
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    @Override
-    public Protocol getProtocol() {
-        return VickereyAuctionProtocol.getInstance();
-    } 
+    public Auctioneer_VickereyAuctionInitiator() {
+        super(VickereyAuctionProtocol.getInstance());
+    }    
     
     // </editor-fold>
 }
