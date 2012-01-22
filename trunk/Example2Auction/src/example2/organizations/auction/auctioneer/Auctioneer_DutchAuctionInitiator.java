@@ -42,6 +42,19 @@ public class Auctioneer_DutchAuctionInitiator extends InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the type of the auction.
+     * @return the type of the auction
+     */
+    @Override
+    public AuctionType getAuctionType() {
+        return AuctionType.DUTCH;
+    }
+    
+    /**
+     * Sets the auction argument.
+     * @param argument the auction argument
+     */
     @Override
     public void setAuctionArgument(AuctionArgument argument) {
         itemName = argument.getItemName();
@@ -50,6 +63,10 @@ public class Auctioneer_DutchAuctionInitiator extends InitiatorParty
         bidDecrement = argument.getBidChange();
     }
 
+    /**
+     * Gets the auction result
+     * @return the auction result
+     */
     @Override
     public AuctionResult getAuctionResult() {
         return new AuctionResult(winnerDetermined, finalPrice, winnerAID);

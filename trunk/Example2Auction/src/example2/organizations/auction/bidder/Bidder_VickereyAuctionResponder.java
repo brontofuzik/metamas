@@ -4,7 +4,7 @@
  */
 package example2.organizations.auction.bidder;
 
-import example2.protocols.vickereyauction.VickereyAuctionProtocol;
+import example2.protocols.vickreyauction.VickreyAuctionProtocol;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.ResponderParty;
 
@@ -20,7 +20,7 @@ public class Bidder_VickereyAuctionResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Bidder_VickereyAuctionResponder(ACLMessage message) {
-        super(VickereyAuctionProtocol.getInstance(), message);
+        super(VickreyAuctionProtocol.getInstance(), message);
     }
     
     // </editor-fold>

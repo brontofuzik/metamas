@@ -3,7 +3,7 @@ package example2.organizations.auction.bidder;
 import example2.protocols.dutchauction.DutchAuctionProtocol;
 import example2.protocols.englishauction.EnglishAuctionProtocol;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
-import example2.protocols.vickereyauction.VickereyAuctionProtocol;
+import example2.protocols.vickreyauction.VickreyAuctionProtocol;
 import jadeorg.core.Responder;
 
 /**
@@ -21,7 +21,7 @@ public class Bidder_Responder extends Responder {
         addResponder(EnglishAuctionProtocol.getInstance());
         addResponder(DutchAuctionProtocol.getInstance());
         addResponder(EnvelopeAuctionProtocol.getInstance());
-        addResponder(VickereyAuctionProtocol.getInstance());
+        addResponder(VickreyAuctionProtocol.getInstance());
     }
      
     // </editor-fold>

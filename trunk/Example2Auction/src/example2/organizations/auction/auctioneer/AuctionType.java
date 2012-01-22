@@ -11,23 +11,33 @@ public enum AuctionType {
      * The English auction,
      * a. k. a. the open-bid ascending price auction.
      */
-    ENGLISH,
+    ENGLISH(0),
     
     /**
      * The Dutch auction,
      * a. k. a. the open-bid descending price auction
      */
-    DUTCH,
+    DUTCH(1),
     
     /**
      * The Envelope auction,
      * a. k. a. the sealed-bid first-price auction.
      */
-    ENVELOPE,
+    ENVELOPE(2),
     
     /**
      * The Vickrey auction,
      * a. k. a. sealed-bid second-price auction.
      */
-    VICKREY
+    VICKREY(3);
+    
+    private int value;
+    
+    private AuctionType(int value) {
+        this.value = value;
+    }
+    
+    public int getValue() {
+        return value;
+    }
 }

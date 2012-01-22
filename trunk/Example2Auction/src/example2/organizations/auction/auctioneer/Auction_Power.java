@@ -16,9 +16,15 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
     
     private AuctionType auctionType;
     
-    private Auctioneer_EnglishAuctionInitiator englishAuctionInitiator;
+    private AuctionInitiator auctionInitiator;
     
-    private Auctioneer_DutchAuctionInitiator dutchAuctionInitiator;
+    //private Auctioneer_EnglishAuctionInitiator englishAuctionInitiator;
+    
+    //private Auctioneer_DutchAuctionInitiator dutchAuctionInitiator;
+    
+    //private Auctioneer_EnvelopeAuctionInitiator envelopeAuctionInitiator;
+    
+    //private Auctioneer_VickereyAuctionInitiator vickreyAuctionInitiator;
     
     // </editor-fold>
     
@@ -37,8 +43,14 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         State initialize = new Initialize();
         State setPowerArgument = new SetPowerArgument();
         State selectAuctionType = new SelectAuctionType();
-        englishAuctionInitiator = new Auctioneer_EnglishAuctionInitiator();
-        dutchAuctionInitiator = new Auctioneer_DutchAuctionInitiator();
+        Auctioneer_EnglishAuctionInitiator englishAuctionInitiator =
+            new Auctioneer_EnglishAuctionInitiator();
+        Auctioneer_DutchAuctionInitiator dutchAuctionInitiator =
+            new Auctioneer_DutchAuctionInitiator();
+        Auctioneer_EnvelopeAuctionInitiator envelopeAuctionInitiator =
+            new Auctioneer_EnvelopeAuctionInitiator();
+        Auctioneer_VickereyAuctionInitiator vickreyAuctionInitiator =
+            new Auctioneer_VickereyAuctionInitiator();
         State getPowerResult = new GetPowerResult(); 
         // ------------------
         
@@ -49,22 +61,39 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         registerState(selectAuctionType);
         registerState(englishAuctionInitiator);
         registerState(dutchAuctionInitiator);
+        registerState(envelopeAuctionInitiator);
+        registerState(vickreyAuctionInitiator);
         
         registerLastState(getPowerResult);
         
         // Register the transitions.
+        // The 'Initialize' state
         initialize.registerDefaultTransition(setPowerArgument);
         
+        // The 'Set power argument' state
         setPowerArgument.registerDefaultTransition(selectAuctionType);
         
-        selectAuctionType.registerTransition(englishAuctionInitiator.getName().hashCode(),
-            englishAuctionInitiator);
-        selectAuctionType.registerTransition(dutchAuctionInitiator.getName().hashCode(),
-            dutchAuctionInitiator);
+        // The 'Select auction type' state
+        selectAuctionType.registerTransition(englishAuctionInitiator
+            .getAuctionType().getValue(), englishAuctionInitiator);
+        selectAuctionType.registerTransition(dutchAuctionInitiator
+            .getAuctionType().getValue(), dutchAuctionInitiator);
+        selectAuctionType.registerTransition(envelopeAuctionInitiator
+            .getAuctionType().getValue(), envelopeAuctionInitiator);
+        selectAuctionType.registerTransition(vickreyAuctionInitiator
+            .getAuctionType().getValue(), vickreyAuctionInitiator);
         
+        // The 'English auction initiator' state
         englishAuctionInitiator.registerDefaultTransition(getPowerResult);
         
+        // The 'Dutch auction initiator' state
         dutchAuctionInitiator.registerDefaultTransition(getPowerResult);
+        
+        // The 'Envelope auction initiator' state
+        envelopeAuctionInitiator.registerDefaultTransition(getPowerResult);
+        
+        // The 'Vickrey auction initiator' state
+        vickreyAuctionInitiator.registerDefaultTransition(getPowerResult);
     }
     
     // </editor-fold>
@@ -89,16 +118,7 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         
         @Override
         public void action() {
-            switch (auctionType) {
-                case ENGLISH:
-                    englishAuctionInitiator.setAuctionArgument(getArgument());
-                    
-                case DUTCH:
-                    dutchAuctionInitiator.setAuctionArgument(getArgument());
-                    
-                default:
-                    englishAuctionInitiator.setAuctionArgument(getArgument());                               
-            }
+            auctionInitiator.setAuctionArgument(getArgument());
         }
         
         // </editor-fold>
@@ -115,16 +135,7 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         
         @Override
         public int onEnd() {
-            switch (auctionType) {
-                case ENGLISH:
-                    return englishAuctionInitiator.getCode();
-                    
-                case DUTCH:
-                    return dutchAuctionInitiator.getCode();
-                    
-                default:
-                    return englishAuctionInitiator.getCode();                               
-            }
+            return auctionInitiator.getAuctionType().getValue();
         }
         
         // </editor-fold>
@@ -136,16 +147,7 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         
         @Override
         public void action() {
-            switch (auctionType) {
-                case ENGLISH:
-                    setResult(englishAuctionInitiator.getAuctionResult());
-                    
-                case DUTCH:
-                    setResult(dutchAuctionInitiator.getAuctionResult());
-                    
-                default:
-                    setResult(englishAuctionInitiator.getAuctionResult());                              
-            }
+            setResult(auctionInitiator.getAuctionResult());
         }
         
         // </editor-fold>

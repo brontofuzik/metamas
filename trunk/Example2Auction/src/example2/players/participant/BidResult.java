@@ -10,8 +10,14 @@ public class BidResult {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * A flag indicating wheter a bid has been made.
+     */
     private boolean bidMade;
     
+    /**
+     * The bid.
+     */
     private double bid;
     
     // </editor-fold>

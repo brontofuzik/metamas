@@ -12,10 +12,19 @@ public class AuctionResult {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * A flag indicating whether a winner has been determined.
+     */
     private boolean winnerDetermined;
     
+    /**
+     * The final price.
+     */
     private double finalPrice;
     
+    /**
+     * The AID of the winner.
+     */
     private AID winnerAID;
     
     // </editor-fold>
