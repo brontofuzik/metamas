@@ -7,7 +7,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
 import jadeorg.proto.InvokeRequirementState;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
