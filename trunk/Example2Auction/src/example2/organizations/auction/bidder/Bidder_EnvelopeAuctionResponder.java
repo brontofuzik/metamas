@@ -5,6 +5,7 @@
 package example2.organizations.auction.bidder;
 
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.ResponderParty;
 
@@ -17,6 +18,15 @@ import jadeorg.proto.ResponderParty;
  */
 public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
 
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    /**
+     * The aucitoneer. More precisely, its AID.
+     */
+    private AID auctioneer;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Bidder_EnvelopeAuctionResponder(ACLMessage message) {

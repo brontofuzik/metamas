@@ -1,7 +1,10 @@
 package example2.organizations.auction.auctioneer;
 
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
+import jade.core.AID;
 import jadeorg.proto.InitiatorParty;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The 'Envelope auction' protocol initiator party.
@@ -13,6 +16,25 @@ import jadeorg.proto.InitiatorParty;
 public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     implements AuctionInitiator {
 
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    /**
+     * The bidders. More precisely their AIDs.
+     */
+    private Set<AID> bidders = new HashSet<AID>();
+    
+    /**
+     * The name of the item.
+     */
+    private String itemName;
+    
+    /**
+     * The reservation price. Optional.
+     */
+    private Double reservationPrice;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Auctioneer_EnvelopeAuctionInitiator() {
@@ -38,7 +60,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     @Override
     public void setAuctionArgument(AuctionArgument argument) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        itemName = argument.getItemName();
+        reservationPrice = argument.getReservationPrice();
     }
 
     /**

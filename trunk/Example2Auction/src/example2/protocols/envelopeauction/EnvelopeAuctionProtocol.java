@@ -18,12 +18,19 @@ public class EnvelopeAuctionProtocol extends Protocol {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The singleton instance of the EnvelopeAuctionProtocol class.
+     */
     private static EnvelopeAuctionProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the EnvelopeAuctionProtocol class.
+     * The constructor is prive to prevent the direct instantiation of the class.
+     */
     private EnvelopeAuctionProtocol() {
     }
     
@@ -31,6 +38,10 @@ public class EnvelopeAuctionProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the singleton instance of the EnvelopeAuctionProtocol class.
+     * @return the singleton instance of the EnvelopAuctionProtocol class
+     */
     public static EnvelopeAuctionProtocol getInstance() {
         if (singleton == null) {
             singleton = new EnvelopeAuctionProtocol();
