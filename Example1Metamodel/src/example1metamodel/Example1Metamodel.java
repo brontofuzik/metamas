@@ -11,6 +11,7 @@ import metamas.semanticmodel.player.PlayerClass;
 import metamas.semanticmodel.player.Requirement;
 import metamas.semanticmodel.protocol.Message;
 import metamas.semanticmodel.protocol.Message.MessageType;
+import metamas.semanticmodel.protocol.Party;
 import metamas.semanticmodel.protocol.Protocol;
 
 /**
@@ -41,6 +42,16 @@ public class Example1Metamodel {
         calculateFactorialProtocol.addMessage(new Message("RequestMessage", MessageType.TextMessage));
         calculateFactorialProtocol.addMessage(new Message("ReplyMessage", MessageType.TextMessage));
         
+        // The 'Calculate factorial' initiator party.
+        Party calculateFactorialProtocolInitiatorParty = new Party("CalculateFactorialInitiator");
+        calculateFactorialProtocolInitiatorParty.setFSM(createCalculateFactorialInitiatorFSM());
+        calculateFactorialProtocol.setInitiatorParty(calculateFactorialProtocolInitiatorParty);
+        
+        // The 'Calculate factorial' responder party.
+        Party calculateFactorialResponderParty = new Party("CalculateFactorialResponder");
+        calculateFactorialResponderParty.setFSM(createCalculateFactorialResponderFMS());
+        calculateFactorialProtocol.setResponderParty(calculateFactorialResponderParty);
+      
         // ---------- Organizations ----------
         
         // The 'Demo' organization class.
@@ -56,23 +67,16 @@ public class Example1Metamodel {
         // The 'Asker' role class.
         RoleClass askerRoleClass = new RoleClass("Asker_Role");
         demoOrganizationClass.addRole(askerRoleClass);
-        FSM askerRoleFSM = new FSM();
-        // TODO
-        askerRoleClass.setFSM(askerRoleFSM);
         
         // The 'Calculate factorial' power.
         Power calculateFactorialPower = new Power("CalculateFactorial_Power",
             Power.PowerType.FSMPower, "Integer", "Integer");
-        FSM calculateFactorialPowerFSM = new FSM();
-        // TODO
-        calculateFactorialPower.setFSM(calculateFactorialPowerFSM);
+        calculateFactorialPower.setFSM(createFactorialPowerFSM());
+        askerRoleClass.addPower(calculateFactorialPower);
         
         // The 'Answerer' role.
         RoleClass answererRoleClass = new RoleClass("Answerer_Role");
         demoOrganizationClass.addRole(answererRoleClass);
-        FSM answererRoleFSM = new FSM();
-        // TODO
-        answererRoleClass.setFSM(answererRoleFSM);
         
         // ---------- Players ----------
         
@@ -94,5 +98,20 @@ public class Example1Metamodel {
         demo1Mas.addPlayer(demo2Player);
         
         return demo1Mas;
+    }
+
+    private static FSM createFactorialPowerFSM() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    private static FSM createCalculateFactorialInitiatorFSM() {
+         // TODO Implement.
+        throw new UnsupportedOperationException("Not yet implemented");       
+    }
+    
+    private static FSM createCalculateFactorialResponderFMS() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
