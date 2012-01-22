@@ -1,5 +1,6 @@
 package metamas.semanticmodel.protocol;
 
+import metamas.semanticmodel.fsm.FSM;
 import metamas.semanticmodel.fsm.State;
 import metamas.semanticmodel.organization.Role;
 import metamas.utilities.Assert;
@@ -16,18 +17,18 @@ public class Party {
     
     private Role role;
     
-    private State startState;
+    private FSM fsm;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Party(String name, Role role) {
+    public Party(String name /* , Role role */) {
         Assert.isNotEmpty(name, "name");
         Assert.isNotNull(role, "role");
         
         this.name = name;
-        this.role = role;
+//        this.role = role;
     }
     
     // </editor-fold>
@@ -42,14 +43,13 @@ public class Party {
         return role;
     }
     
-    public State getStartState() {
-        return startState;
+    public FSM getFSM() {
+        return fsm;
     }
     
-    public void setStartState(State state) {
-        Assert.isNotNull(state, "state");
-        
-        this.startState = state;
+    public Party setFSM(FSM fms) {
+        this.fsm = fsm;
+        return this;
     }
     
     // </editor-fold>
