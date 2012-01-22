@@ -74,12 +74,8 @@ public class Participant3_Player extends Participant_Player {
         
         // Invoke the 'Auction' power.
         Item klimt = getItemToSell(KLIMT);
-        AuctionArgument auctionArgument = new AuctionArgument(
-            AuctionType.ENVELOPE,
-            klimt.getName(),
-            klimt.getPrice(),
-            klimt.getPrice(),
-            1.0);
+        AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
+            klimt.getName(), klimt.getPrice());
         timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
             timeout, 4000);
        

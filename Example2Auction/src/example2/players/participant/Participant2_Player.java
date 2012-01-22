@@ -57,12 +57,8 @@ public class Participant2_Player extends Participant_Player {
         
         // Invoke the 'Auction' power.
         Item kooning = getItemToSell(KOONING);
-        AuctionArgument auctionArgument = new AuctionArgument(
-            AuctionType.ENVELOPE,
-            kooning.getName(),
-            kooning.getPrice(),
-            kooning.getPrice(),
-            1.0);
+        AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
+            kooning.getName(), kooning.getPrice());
         timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
             timeout, 4000);
        

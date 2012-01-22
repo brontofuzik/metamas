@@ -40,12 +40,8 @@ public class Participant1_Player extends Participant_Player {
         
         // Invoke the 'Auction' power.
         Item pollock = getItemToSell(POLLOCK);
-        AuctionArgument auctionArgument = new AuctionArgument(
-            AuctionType.ENVELOPE,
-            pollock.getName(),
-            pollock.getPrice(),
-            pollock.getPrice(),
-            1.0);
+        AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
+            pollock.getName(), pollock.getPrice());
         timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
             timeout, 4000);
        
