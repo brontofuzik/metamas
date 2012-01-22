@@ -1,9 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import jadeorg.proto.SingleSenderState;
@@ -61,7 +59,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendDeactRequest = new SendDeactRequest();
         State receiveDeactReply = new ReceiveDeactReply();
         State successEnd = new SuccessEnd();
@@ -69,7 +67,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendDeactRequest);
         registerState(receiveDeactReply);
@@ -78,8 +76,8 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendDeactRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendDeactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendDeactRequest.registerDefaultTransition(receiveDeactReply);
             
@@ -91,28 +89,40 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
+        
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Deact role' (%1$s.%2$s) protocol.",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
 
-            // TAG YellowPages
-            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+//            // TAG YellowPages
+//            DFAgentDescription organization = YellowPages
+//                .searchOrganizationWithRole(this, organizationName, roleName);
 
             organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organizaiton exists.
-                return true;
+                exitValue = OK;
             } else {
                 // The organization does not exist.
                 String message = String.format("Error deacting a role. The organization '%1$s' does not exist.",
                     organizationName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

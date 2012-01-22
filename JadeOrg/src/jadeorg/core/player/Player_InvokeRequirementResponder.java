@@ -3,8 +3,6 @@ package jadeorg.core.player;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
@@ -64,7 +62,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     private void buildFSM() {        
          // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State receiveInvokeRequirementRequest = new ReceiveInvokeRequirementRequest();
         State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
         receiveRequirementArgument = new ReceiveRequirementArgument();
@@ -74,7 +72,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         // ------------------
         
         // Register states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(receiveInvokeRequirementRequest);    
         registerState(sendRequirementArgumentRequest);
@@ -85,8 +83,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveInvokeRequirementRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveInvokeRequirementRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveInvokeRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
         
@@ -146,23 +144,34 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
+        
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Responding to the 'Invoke requirement' protocol (id = %1$s).",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Responding to the 'Invoke requirement' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (roleAID.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
-                return true;
+                exitValue = OK;
             } else {
                 // The sender role is not the active role.
                 // TODO
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

@@ -1,9 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.SingleSenderState;
@@ -56,7 +54,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendDeactivateRequest = new SendDeactivateRequest();
         State receiveDeactivateReply = new ReceiveDeactivateReply();
         State successEnd = new SuccessEnd();
@@ -64,7 +62,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendDeactivateRequest);
         registerState(receiveDeactivateReply);
@@ -73,8 +71,8 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendDeactivateRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendDeactivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 
@@ -86,25 +84,37 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
 
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Deactivate role' (%1$s) protocol.",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
             if (getMyPlayer().knowledgeBase.canDeactivateRole(roleName)) {
                 // The role can be deactivated.
                 roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
-                return true;
+                exitValue = OK;
             } else {
                 // The role can not be deactivated.
-                String message = String.format("I cannot deactivate the role '%1$s' because I do not play it.",
+                String message = String.format(
+                    "I cannot deactivate the role '%1$s' because I do not play it.",
                     roleName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

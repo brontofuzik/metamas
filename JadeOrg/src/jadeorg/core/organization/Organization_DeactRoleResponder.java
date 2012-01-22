@@ -2,7 +2,6 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
@@ -52,14 +51,14 @@ public class Organization_DeactRoleResponder extends ResponderParty {
      * Registers the transitions and transitions.
      */
     private void buildFSM() {
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State receiveDeactRequest = new ReceiveDeactRequest();
         State sendDeactReply = new SendDeactReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
 
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(receiveDeactRequest);
         registerState(sendDeactReply);
@@ -68,8 +67,8 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register the transisions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveDeactRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveDeactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
 
@@ -81,16 +80,26 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
-             
+    private class Initialize extends OneShotBehaviourState {
+        
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
+        public void action() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Deact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
-            return true;
+            exitValue = OK;
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

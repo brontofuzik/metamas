@@ -1,9 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleSenderState;
@@ -79,7 +77,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendRequirementRequest = new SendRequirementRequest();
         State receiveRequirementArgumentRequest = new ReceiveRequirementArgumentRequest();
         State sendRequirementArgument = new SendRequirementArgument();
@@ -89,7 +87,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendRequirementRequest);   
         registerState(receiveRequirementArgumentRequest);
@@ -100,8 +98,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendRequirementRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendRequirementRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendRequirementRequest.registerDefaultTransition(receiveRequirementArgumentRequest);
         
@@ -118,25 +116,36 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
+        
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyRole().logInfo(String.format("Initiating the 'Invoke requirement' (%1$s) protocol.",
+        public void action() {
+            getMyRole().logInfo(String.format(
+                "Initiating the 'Invoke requirement' (%1$s) protocol.",
                 requirementName));
 
             if (true) {
                 // The role can invoke the requirement.
                 playerAID = getMyRole().playerAID;
-                return true;
+                exitValue = OK;
             } else {
                 // The role can not invoke the requirement.
                 String message = String.format("I cannot invoke the requirement '%1$s'.",
                     requirementName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>
