@@ -3,8 +3,6 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
-import jadeorg.proto.AssertPreconditions;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
@@ -64,6 +62,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     private void buildFSM() {
         // ----- States -----
+        State initialize = new Initialize();
         State receiveInvokePowerRequest = new ReceiveInvokePowerRequest();
         State sendPowerArgumentRequest = new SendPowerArgumentRequest();
         receivePowerArgument = new ReceivePowerArgument();
@@ -73,8 +72,9 @@ public class Role_InvokePowerResponder extends ResponderParty {
         // ------------------
         
         // Register states.
-        registerFirstState(receiveInvokePowerRequest);
+        registerFirstState(initialize);
         
+        registerState(receiveInvokePowerRequest);      
         registerState(sendPowerArgumentRequest);
         registerState(receivePowerArgument);
         registerState(sendPowerResult);
@@ -83,6 +83,9 @@ public class Role_InvokePowerResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register transitions.
+        initialize.registerTransition(Initialize.OK, receiveInvokePowerRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        
         receiveInvokePowerRequest.registerDefaultTransition(sendPowerArgumentRequest);
         
         sendPowerArgumentRequest.registerTransition(SendPowerArgumentRequest.SUCCESS, receivePowerArgument);
@@ -142,26 +145,37 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
 
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyRole().logInfo(String.format("Responding to the 'Invoke power' protocol (id = %1$s).",
+        public void action() {
+            getMyRole().logInfo(String.format(
+                "Responding to the 'Invoke power' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (playerAID.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
-                return true;
+                exitValue = OK;
             } else {
                 // The sender player is not enacting this role.
                 // TODO
-                return false;
+                exitValue = FAIL;
             }
         }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
+        }
     
-        // </editor-fold>      
+        // </editor-fold>
     }
     
     private class ReceiveInvokePowerRequest extends OneShotBehaviourState {

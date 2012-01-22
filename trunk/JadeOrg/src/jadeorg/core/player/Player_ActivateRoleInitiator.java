@@ -1,9 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.SingleSenderState;
@@ -56,7 +54,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendActivateRequest = new SendActivateRequest();
         State receiveActivateReply = new ReceiveActivateReply();
         State successEnd = new SuccessEnd();
@@ -64,7 +62,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendActivateRequest);
         registerState(receiveActivateReply);
@@ -73,8 +71,8 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendActivateRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendActivateRequest.registerDefaultTransition(receiveActivateReply);
 
@@ -86,26 +84,37 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
 
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Activate role' (%1$s) protocol.",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Initiating the 'Activate role' (%1$s) protocol.",
                 roleName));
 
             // Check if the role can be activated.
             if (getMyPlayer().knowledgeBase.canActivateRole(roleName)) {
                 // The role can be activated.
                 roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
-                return true;
+                exitValue = OK;
             } else {
                 // The role can not be activated.
                 String message = String.format("Error activating the role '%1$s'. It is not enacted.",
                     roleName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

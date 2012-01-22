@@ -4,8 +4,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.proto.AssertPreconditions;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
@@ -59,7 +57,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State receiveEnactRequest = new ReceiveEnactRequest();
         State sendRequirementsInform = new SendRequirementsInform();
         State receiveRequirementsReply = new ReceiveRequirementsReply();
@@ -69,7 +67,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(receiveEnactRequest);
         registerState(sendRequirementsInform);
@@ -80,8 +78,8 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveEnactRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveEnactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveEnactRequest.registerDefaultTransition(sendRequirementsInform);
 
@@ -98,18 +96,27 @@ public class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
+        
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
+        public void action() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Enact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
-            return true;
         }
         
+        @Override
+        public int onEnd() {
+            return exitValue;
+        }
+                
         // </editor-fold>
     }
     

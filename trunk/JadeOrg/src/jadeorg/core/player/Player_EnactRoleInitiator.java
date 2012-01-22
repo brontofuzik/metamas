@@ -1,9 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -68,7 +66,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendEnactRequest = new SendEnactRequest();
         State receiveRequirementsInform = new ReceiveRequirementsInform();
         State sendRequirementsReply = new SendRequirementsReply();
@@ -78,7 +76,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         // ------------------
 
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendEnactRequest);
         registerState(receiveRequirementsInform);
@@ -89,8 +87,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendEnactRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendEnactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
@@ -107,29 +105,42 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
+
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyPlayer().logInfo(String.format("Initiating the 'Enact role' (%1$s.%2$s) protocol.",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Initiating the 'Enact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
             
-            // TAG YELLOW-PAGES
-            //DFAgentDescription organization = YellowPages.searchOrganizationWithRole(this, organizationName, roleName);
+//            // TAG YELLOW-PAGES
+//            DFAgentDescription organization = YellowPages
+//                .searchOrganizationWithRole(this, organizationName, roleName);
             
             // Check if the organization exists.
             organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organization exists.
-                return true;
+                exitValue = OK;
             } else {
                 // The organization does not exist.
-                String message = String.format("Error enacting a role. The organization '%1$s' does not exist.",
+                String message = String.format(
+                    "Error enacting a role. The organization '%1$s' does not exist.",
                     organizationName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>
@@ -173,8 +184,6 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         }
 
         // </editor-fold>
-
-
     }
     
     /**

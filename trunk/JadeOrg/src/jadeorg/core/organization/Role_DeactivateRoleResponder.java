@@ -2,8 +2,6 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.AssertPreconditions;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
@@ -49,7 +47,7 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State receiveActivateRequest = new ReceiveDeactivateRequest();
         State sendActivateReply = new SendDeactivateReply();
         State successEnd = new SuccessEnd();
@@ -57,7 +55,7 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
         // ------------------
 
         // Register states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(receiveActivateRequest);
         registerState(sendActivateReply);
@@ -66,8 +64,8 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
 
         // Register transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, receiveActivateRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
@@ -79,23 +77,34 @@ public class Role_DeactivateRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
 
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {
-            getMyRole().logInfo(String.format("Responding to the 'Deactivate role' protocol (id = %1$s).",
+        public void action() {
+            getMyRole().logInfo(String.format(
+                "Responding to the 'Deactivate role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (playerAID.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
-                return true;
+                exitValue = OK;
             } else {
                 // The sender player is not enacting this role.
                 // TODO
-                return false;
+                exitValue = FAIL;
             }
+        }
+       
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>

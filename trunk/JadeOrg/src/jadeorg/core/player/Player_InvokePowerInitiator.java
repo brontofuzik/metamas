@@ -1,9 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.proto.AssertPreconditions;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -76,7 +74,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State assertPreconditions = new MyAssertPreconditions();
+        State initialize = new Initialize();
         State sendInvokePowerRequest = new SendInvokePowerRequest();
         State receivePowerArgumentRequest = new ReceivePowerArgumentRequest();
         State sendPowerArgument = new SendPowerArgument();
@@ -86,7 +84,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // ------------------
         
         // Register the states.
-        registerFirstState(assertPreconditions);
+        registerFirstState(initialize);
         
         registerState(sendInvokePowerRequest);
         registerState(receivePowerArgumentRequest);
@@ -97,8 +95,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Register the transitions.
-        assertPreconditions.registerTransition(MyAssertPreconditions.SUCCESS, sendInvokePowerRequest);
-        assertPreconditions.registerTransition(MyAssertPreconditions.FAILURE, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendInvokePowerRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendInvokePowerRequest.registerDefaultTransition(receivePowerArgumentRequest);
         
@@ -115,25 +113,37 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyAssertPreconditions extends AssertPreconditions {
+    private class Initialize extends OneShotBehaviourState {
 
+        public static final int OK = 0;
+        public static final int FAIL = 1;
+        
+        private int exitValue;
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected boolean preconditionsSatisfied() {    
-            getMyPlayer().logInfo(String.format("Initiating the 'Invoke power' (%1$s) protocol.",
+        public void action() {
+            getMyPlayer().logInfo(String.format(
+                "Initiating the 'Invoke power' (%1$s) protocol.",
                 powerName));
 
             if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
                 // The player can invoke the power.
                 roleAID = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
-                return true;
+                exitValue = OK;
             } else {
                 // The player can not invoke the power.
-                String message = String.format("I cannot invoke the power '%1$s'.",
+                String message = String.format(
+                    "I cannot invoke the power '%1$s'.",
                     powerName);
-                return false;
+                exitValue = FAIL;
             }
+        }
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
         }
         
         // </editor-fold>
