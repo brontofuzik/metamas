@@ -33,12 +33,31 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private Double reservationPrice;
     
+    /**
+     * A flag indicating whether the winner has been determined.
+     */
+    private boolean winnerDetermined;
+    
+    /**
+     * The AID of the winner.
+     */
+    private AID winnerAID;
+    
+    /**
+     * The final price.
+     */
+    private double finalPrice;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Auctioneer_EnvelopeAuctionInitiator class.
+     */
     public Auctioneer_EnvelopeAuctionInitiator() {
         super(EnvelopeAuctionProtocol.getInstance());
+        buildFSM();
     }    
     
     // </editor-fold>
@@ -70,7 +89,17 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     @Override
     public AuctionResult getAuctionResult() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new AuctionResult(winnerDetermined, winnerAID, finalPrice);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Builds the FSM.
+     */
+    private static void buildFSM() {
     }
     
     // </editor-fold>

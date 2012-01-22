@@ -52,4 +52,27 @@ public class BidResult {
     
    
     // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Creates a positive (successful) bid result.
+     * Design pattern: Static factory method
+     * @param bid the bid
+     * @return the positive bid result
+     */
+    public static BidResult createPositiveBidResult(double bid) {
+        return new BidResult(true, bid);
+    }
+    
+    /**
+     * Creates a negative (unsuccessful) bid result.
+     * Design pattern: Static factory method
+     * @return the negative bid result
+     */
+    public static BidResult createNegativeBidResult() {
+        return new BidResult(false, 0.0);
+    }
+    
+    // </editor-fold>
 }

@@ -69,7 +69,7 @@ public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
      */
     @Override
     public AuctionResult getAuctionResult() {
-        return new AuctionResult(winnerDetermined, finalPrice, winnerAID);
+        return new AuctionResult(winnerDetermined, winnerAID, finalPrice);
     }
     
     // </editor-fold>
