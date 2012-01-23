@@ -121,7 +121,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
     private class ReceiveAuctionCFP extends SingleReceiverState {
 
         @Override
-        protected AID getSenderAID() {
+        protected AID[] getSenders() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -148,7 +148,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
     private class SendBid extends SingleSenderState {
 
         @Override
-        protected AID getReceiverAID() {
+        protected AID[] getReceivers() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
