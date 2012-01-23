@@ -1,5 +1,6 @@
 package example2.organizations.auction.auctioneer;
 
+import example2.organizations.auction.Auction_Organization.Auctioneer_Role;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jadeorg.proto.InitiatorParty;
@@ -92,6 +93,16 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         return new AuctionResult(winnerDetermined, winnerAID, finalPrice);
     }
     
+    // ----- PRIVATE -----
+    
+    /**
+     * Gets my 'Auctioneer' role.
+     * @return my 'Auctioneer' role
+     */
+    private Auctioneer_Role getMyAuctioneer() {
+        return (Auctioneer_Role)myAgent;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -100,7 +111,16 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      * Builds the FSM.
      */
     private static void buildFSM() {
+        // ----- States -----
+        // ------------------
+        
+        // Register the states.
+        
+        // REgister the transitions.
     }
     
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
     // </editor-fold>
 }
