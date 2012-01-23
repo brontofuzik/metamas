@@ -125,8 +125,8 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return askerAID;
+        protected AID[] getReceivers() {
+            return new AID[] { askerAID };
         }
         
         // </editor-fold>

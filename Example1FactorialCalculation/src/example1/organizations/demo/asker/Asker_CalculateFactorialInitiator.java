@@ -6,7 +6,6 @@ import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jadeorg.core.organization.Role;
 import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -104,8 +103,8 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return answererAID;
+        protected AID[] getReceivers() {
+            return new AID[] { answererAID };
         }
         
         // </editor-fold>
@@ -138,8 +137,8 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return answererAID;
+        protected AID[] getSenders() {
+            return new AID[] { answererAID };
         }
         
         // </editor-fold>
