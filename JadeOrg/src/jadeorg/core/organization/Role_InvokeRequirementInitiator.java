@@ -148,8 +148,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return playerAID;
+        protected AID[] getReceivers() {
+            return new AID[] { playerAID };
         }
         
         // </editor-fold>
@@ -182,8 +182,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return playerAID;
+        protected AID[] getSenders() {
+            return new AID[] { playerAID };
         }
         
         // </editor-fold>
@@ -220,8 +220,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return playerAID;
+        protected AID[] getReceivers() {
+            return new AID[] { playerAID };
         }
         
         // </editor-fold>
@@ -263,8 +263,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return playerAID;
+        protected AID[] getSenders() {
+            return new AID[] { playerAID };
         }
         
         // </editor-fold>

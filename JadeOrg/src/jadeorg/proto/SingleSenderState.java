@@ -30,7 +30,7 @@ public abstract class SingleSenderState extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected abstract AID getReceiverAID();
+    protected abstract AID[] getReceivers();
     
     // </editor-fold>
     
@@ -52,8 +52,8 @@ public abstract class SingleSenderState extends OuterSenderState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return SingleSenderState.this.getReceiverAID();
+        protected AID[] getReceivers() {
+            return SingleSenderState.this.getReceivers();
         }
         
         // </editor-fold>

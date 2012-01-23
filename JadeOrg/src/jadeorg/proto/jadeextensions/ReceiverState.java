@@ -11,5 +11,13 @@ import jadeorg.lang.Message;
  */
 public interface ReceiverState {
     
-    boolean receive(Message message, AID senderAID);
+    /**
+     * Receives a message.
+     * @param message the message to receive
+     * @param senders the senders. More precisely, their AIDs
+     * @return a flag indicating whether the message has been received
+     */
+    public boolean receive(Message message, AID[] senders);
+    
+    public boolean receive(Message message, AID sender);
 }

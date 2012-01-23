@@ -119,8 +119,8 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return roleAID;
+        protected AID[] getReceivers() {
+            return new AID[] { roleAID };
         }
         
         // </editor-fold>
@@ -155,8 +155,8 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return roleAID;
+        protected AID[] getSenders() {
+            return new AID[] { roleAID };
         }
         
         // </editor-fold>

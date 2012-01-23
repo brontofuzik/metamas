@@ -146,8 +146,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return organizationAID;
+        protected AID[] getReceivers() {
+            return new AID[] { organizationAID };
         }
         
         // </editor-fold>
@@ -186,8 +186,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return organizationAID;
+        protected AID[] getSenders() {
+            return new AID[] { organizationAID };
         }
         
         // </editor-fold>
@@ -231,8 +231,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return organizationAID;
+        protected AID[] getReceivers() {
+            return new AID[] { organizationAID };
         }
         
         // </editor-fold>
@@ -272,8 +272,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return organizationAID;
+        protected AID[] getSenders() {
+            return new AID[] { organizationAID };
         }
         
         // </editor-fold>

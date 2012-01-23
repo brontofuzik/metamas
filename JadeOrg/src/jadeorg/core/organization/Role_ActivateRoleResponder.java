@@ -127,8 +127,8 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return playerAID;
+        protected AID[] getReceivers() {
+            return new AID[] { playerAID };
         }
         
         // </editor-fold>

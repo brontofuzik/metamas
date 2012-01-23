@@ -32,7 +32,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected abstract AID getReceiverAID();
+    protected abstract AID[] getReceivers();
     
     // </editor-fold>
     
@@ -49,8 +49,8 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
        @Override
-        protected AID getReceiverAID() {
-            return SendSuccessOrFailure.this.getReceiverAID();
+        protected AID[] getReceivers() {
+            return SendSuccessOrFailure.this.getReceivers();
         }
         
         // </editor-fold>
@@ -70,8 +70,8 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getReceiverAID() {
-            return SendSuccessOrFailure.this.getReceiverAID();
+        protected AID[] getReceivers() {
+            return SendSuccessOrFailure.this.getReceivers();
         }
         
         // </editor-fold>     
