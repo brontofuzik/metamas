@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
@@ -66,7 +67,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State sendEnactRequest = new SendEnactRequest();
         State receiveRequirementsInform = new ReceiveRequirementsInform();
         State sendRequirementsReply = new SendRequirementsReply();
@@ -87,8 +88,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, sendEnactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, sendEnactRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
@@ -105,17 +106,12 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyPlayer().logInfo(String.format(
                 "Initiating the 'Enact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
@@ -128,19 +124,14 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
             organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organization exists.
-                exitValue = OK;
+                return OK;
             } else {
                 // The organization does not exist.
                 String message = String.format(
                     "Error enacting a role. The organization '%1$s' does not exist.",
                     organizationName);
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>

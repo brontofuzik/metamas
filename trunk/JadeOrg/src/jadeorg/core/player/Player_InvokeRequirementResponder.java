@@ -3,6 +3,7 @@ package jadeorg.core.player;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.SingleReceiverState;
@@ -62,7 +63,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     private void buildFSM() {        
          // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State receiveInvokeRequirementRequest = new ReceiveInvokeRequirementRequest();
         State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
         receiveRequirementArgument = new ReceiveRequirementArgument();
@@ -83,8 +84,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveInvokeRequirementRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, receiveInvokeRequirementRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         receiveInvokeRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
         
@@ -144,34 +145,24 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-        
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
-        
+    private class MyInitialize extends Initialize {
+
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
+        public int initialize() {
             getMyPlayer().logInfo(String.format(
                 "Responding to the 'Invoke requirement' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (roleAID.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
-                exitValue = OK;
+                return OK;
             } else {
                 // The sender role is not the active role.
                 // TODO
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>

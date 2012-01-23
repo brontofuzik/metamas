@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
@@ -57,7 +58,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State receiveEnactRequest = new ReceiveEnactRequest();
         State sendRequirementsInform = new SendRequirementsInform();
         State receiveRequirementsReply = new ReceiveRequirementsReply();
@@ -78,8 +79,8 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, receiveEnactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, receiveEnactRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         receiveEnactRequest.registerDefaultTransition(sendRequirementsInform);
 
@@ -96,27 +97,18 @@ public class Organization_EnactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-        
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Enact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
+            return OK;
         }
         
-        @Override
-        public int onEnd() {
-            return exitValue;
-        }
-                
         // </editor-fold>
     }
     
@@ -291,7 +283,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
                 ex.printStackTrace();
             }
             
-            // Initialize the role.
+            // MyInitialize the role.
             role.setRoleName(roleName);
             role.setMyOrganization((Organization)myAgent);
             

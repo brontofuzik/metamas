@@ -2,6 +2,7 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
@@ -47,7 +48,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State receiveActivateRequest = new ReceiveActivateRequest();
         State sendActivateReply = new SendActivateReply();
         State successEnd = new SuccessEnd();
@@ -64,8 +65,8 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
 
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
@@ -77,34 +78,24 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
-    private class Initialize extends OneShotBehaviourState {
-
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyRole().logInfo(String.format(
                 "Responding to the 'Activate role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (playerAID.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
-                exitValue = OK;
+                return OK;
             } else {
                 // The sender player is not enacting this role.
                 // TODO
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>

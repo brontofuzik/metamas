@@ -2,6 +2,7 @@ package jadeorg.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
@@ -51,7 +52,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
      * Registers the transitions and transitions.
      */
     private void buildFSM() {
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State receiveDeactRequest = new ReceiveDeactRequest();
         State sendDeactReply = new SendDeactReply();
         State successEnd = new SuccessEnd();
@@ -67,8 +68,8 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         registerLastState(failureEnd);
         
         // Register the transisions.
-        initialize.registerTransition(Initialize.OK, receiveDeactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, receiveDeactRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
 
@@ -80,26 +81,16 @@ public class Organization_DeactRoleResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-        
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyOrganization().logInfo(String.format(
                 "Responding to the 'Deact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
-            exitValue = OK;
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
+            return OK;
         }
         
         // </editor-fold>
