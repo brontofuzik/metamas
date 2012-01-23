@@ -3,7 +3,13 @@ package example2.organizations.auction.auctioneer;
 import example2.organizations.auction.Auction_Organization.Auctioneer_Role;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
+import jade.core.behaviours.OneShotBehaviour;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
+import jadeorg.proto.SingleReceiverState;
+import jadeorg.proto.SingleSenderState;
+import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import jadeorg.proto.jadeextensions.State;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -110,17 +116,121 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     /**
      * Builds the FSM.
      */
-    private static void buildFSM() {
+    private void buildFSM() {
         // ----- States -----
+        State initialize = new MyInitialize();
+        State sendAuctionCFP = new SendAuctionCFP();
+        State receiveBid = new ReceiveBid();
+        State successEnd = new SuccessEnd();
+        State failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
+        registerFirstState(initialize);
         
-        // REgister the transitions.
+        registerState(sendAuctionCFP);
+        registerState(receiveBid);
+        
+        registerLastState(successEnd);
+        registerLastState(failureEnd);
+        
+        // Register the transitions.
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    /**
+     * The 'Initialize' state.
+     * An (initial) state in which the party is initialized and begins.
+     */
+    private class MyInitialize extends Initialize {
+
+        @Override
+        protected int initialize() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
+    /**
+     * The 'Send auction CFP' (single sender) state.
+     * A state in which the auction call for proposals (CFP) is sent
+     * to the bidders.
+     */
+    private class SendAuctionCFP extends SingleSenderState {
+
+        @Override
+        protected AID getReceiverAID() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected void onSingleSender() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected void onEntry() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected void onExit() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
+    /**
+     * The 'Receive bid' (single sender) state.
+     * A state in which a bid is received from the bidders.
+     */
+    private class ReceiveBid extends SingleReceiverState {
+
+        @Override
+        protected AID getSenderAID() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected int onSingleReceiver() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected void onEntry() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        protected void onExit() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
+    /**
+     * The 'Success end' state.
+     * A (final) state in which the party successfully ends.
+     */
+    private class SuccessEnd extends OneShotBehaviourState {
+
+        @Override
+        public void action() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
+    /**
+     * The 'Failure end' state.
+     * A (final) state in which the party unsuccessfully ends.
+     */
+    private class FailureEnd extends OneShotBehaviourState {
+
+        @Override
+        public void action() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
     // </editor-fold>
 }
