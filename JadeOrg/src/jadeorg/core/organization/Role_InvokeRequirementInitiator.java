@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -77,7 +78,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State sendRequirementRequest = new SendRequirementRequest();
         State receiveRequirementArgumentRequest = new ReceiveRequirementArgumentRequest();
         State sendRequirementArgument = new SendRequirementArgument();
@@ -98,8 +99,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        initialize.registerTransition(Initialize.OK, sendRequirementRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, sendRequirementRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         sendRequirementRequest.registerDefaultTransition(receiveRequirementArgumentRequest);
         
@@ -116,17 +117,12 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-        
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyRole().logInfo(String.format(
                 "Initiating the 'Invoke requirement' (%1$s) protocol.",
                 requirementName));
@@ -134,18 +130,14 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
             if (true) {
                 // The role can invoke the requirement.
                 playerAID = getMyRole().playerAID;
-                exitValue = OK;
+                return OK;
             } else {
                 // The role can not invoke the requirement.
-                String message = String.format("I cannot invoke the requirement '%1$s'.",
+                String message = String.format(
+                    "I cannot invoke the requirement '%1$s'.",
                     requirementName);
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>

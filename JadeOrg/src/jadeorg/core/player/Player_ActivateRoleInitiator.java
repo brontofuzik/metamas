@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
@@ -54,7 +55,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State sendActivateRequest = new SendActivateRequest();
         State receiveActivateReply = new ReceiveActivateReply();
         State successEnd = new SuccessEnd();
@@ -71,8 +72,8 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, sendActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(MyInitialize.OK, sendActivateRequest);
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
         sendActivateRequest.registerDefaultTransition(receiveActivateReply);
 
@@ -84,17 +85,12 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        public int initialize() {
             getMyPlayer().logInfo(String.format(
                 "Initiating the 'Activate role' (%1$s) protocol.",
                 roleName));
@@ -103,18 +99,13 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
             if (getMyPlayer().knowledgeBase.canActivateRole(roleName)) {
                 // The role can be activated.
                 roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
-                exitValue = OK;
+                return OK;
             } else {
                 // The role can not be activated.
                 String message = String.format("Error activating the role '%1$s'. It is not enacted.",
                     roleName);
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>

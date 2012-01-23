@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
@@ -59,7 +60,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
+        State initialize = new MyInitialize();
         State sendDeactRequest = new SendDeactRequest();
         State receiveDeactReply = new ReceiveDeactReply();
         State successEnd = new SuccessEnd();
@@ -89,17 +90,12 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends OneShotBehaviourState {
-        
-        public static final int OK = 0;
-        public static final int FAIL = 1;
-        
-        private int exitValue;
+    private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
+        public int initialize() {
             getMyPlayer().logInfo(String.format(
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
@@ -111,18 +107,14 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
             organizationAID = new AID(organizationName, AID.ISLOCALNAME);
             if (organizationAID != null) {
                 // The organizaiton exists.
-                exitValue = OK;
+                return OK;
             } else {
                 // The organization does not exist.
-                String message = String.format("Error deacting a role. The organization '%1$s' does not exist.",
+                String message = String.format(
+                    "Error deacting a role. The organization '%1$s' does not exist.",
                     organizationName);
-                exitValue = FAIL;
+                return FAIL;
             }
-        }
-        
-        @Override
-        public int onEnd() {
-            return exitValue;
         }
         
         // </editor-fold>
