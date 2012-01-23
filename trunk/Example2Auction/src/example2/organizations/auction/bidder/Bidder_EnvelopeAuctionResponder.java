@@ -4,6 +4,7 @@
  */
 package example2.organizations.auction.bidder;
 
+import example2.organizations.auction.Auction_Organization.Bidder_Role;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -25,13 +26,62 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private AID auctioneer;
     
+    /**
+     * The flag indicating whether the bid has been made.
+     */
+    private boolean bidMade;
+    
+    /**
+     * The bid.
+     */
+    private double bid;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Bidder_EnvelopeAuctionResponder class.
+     * @param message 
+     */
     public Bidder_EnvelopeAuctionResponder(ACLMessage message) {
         super(EnvelopeAuctionProtocol.getInstance(), message);
+        
+        auctioneer = getACLMessage().getSender();
+        
+        buildFSM();
     }
     
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    /**
+     * Gets my 'Bidder' role.
+     * @return my 'Bidder' role.
+     */
+    private Bidder_Role getMyBidder() {
+        return (Bidder_Role)myAgent;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Builds the FSM.
+     */
+    private void buildFSM() {
+        // ----- States -----
+        // ------------------
+        
+        // Register the states.
+        
+        // REgister the transitions.
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
     // </editor-fold>
 }
