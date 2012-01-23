@@ -32,7 +32,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected abstract AID getSenderAID();
+    protected abstract AID[] getSenders();
     
     // </editor-fold>
     
@@ -63,8 +63,8 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return ReceiveAgreeOrRefuse.this.getSenderAID();
+        protected AID[] getSenders() {
+            return ReceiveAgreeOrRefuse.this.getSenders();
         }
         
         // </editor-fold>
@@ -92,8 +92,8 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected AID getSenderAID() {
-            return ReceiveAgreeOrRefuse.this.getSenderAID();
+        protected AID[] getSenders() {
+            return ReceiveAgreeOrRefuse.this.getSenders();
         }
         
         // </editor-fold>

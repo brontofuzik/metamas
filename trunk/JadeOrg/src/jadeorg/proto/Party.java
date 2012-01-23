@@ -47,14 +47,16 @@ public abstract class Party extends FSMBehaviourState {
     /**
      * Sends a JadeOrg message.
      * @param messageClass the message class
-     * @param message the message
+     * @param receivers the receivers. More precisely, their AIDs
      */
-    public void send(Message message, AID receiverAID) {
+    public void send(Message message, AID[] receivers) {
         // Generate the ACL message.
         ACLMessage aclMessage = message.generateACLMessage();      
         aclMessage.setProtocol(protocol.getName());
         aclMessage.setConversationId(protocolId);
-        aclMessage.addReceiver(receiverAID);
+        for (AID receiver : receivers) {
+            aclMessage.addReceiver(receiver);
+        }
         
         //System.out.println("SENDING MESSAGE: " + aclMessage.toString());
        
@@ -67,15 +69,13 @@ public abstract class Party extends FSMBehaviourState {
      * @param messageClass the message class
      * @return the received message
      */
-    public boolean receive(Message message, AID senderAID) {
-        MessageTemplate messageTemplate =
-            MessageTemplate.and(
-                MessageTemplate.MatchPerformative(message.getPerformative()),
-                MessageTemplate.and(
-                    MessageTemplate.MatchProtocol(protocol.getName()),
-                    MessageTemplate.and(
-                        MessageTemplate.MatchConversationId(protocolId),
-                        MessageTemplate.MatchSender(senderAID))));
+    public boolean receive(Message message, AID[] senders) {
+        MessageTemplate protocolTemplate = createProtocolTemplate();
+        MessageTemplate sendersTemplate = createSendersTemplate(senders);
+        
+        MessageTemplate messageTemplate = MessageTemplate.and(
+            MessageTemplate.MatchPerformative(message.getPerformative()),
+            MessageTemplate.and(protocolTemplate, sendersTemplate));        
          
         // Receive the ACL message.
         ACLMessage aclMessage = myAgent.receive(messageTemplate);      
@@ -88,6 +88,37 @@ public abstract class Party extends FSMBehaviourState {
         } else {
             return false;
         }
+    }
+    
+    // ----- PRIVATE -----
+    
+    /**
+     * Creates a message template that matches the protocol.
+     * @return the message template that matches the protocol
+     */
+    private MessageTemplate createProtocolTemplate() {
+        return MessageTemplate.and(
+            MessageTemplate.MatchProtocol(protocol.getName()),
+            MessageTemplate.MatchConversationId(protocolId));
+    }
+    
+    /**
+     * Creates a message template that matches the senders.
+     * @param seners the senders. More precisely, their AIDs
+     * @return the message template that matches the senders
+     */
+    private MessageTemplate createSendersTemplate(AID[] senders) {
+        // ----- Preconditions -----
+        assert senders != null && senders.length > 0;
+        // -------------------------
+        
+        MessageTemplate sendersTemplate = MessageTemplate.MatchSender(senders[0]);
+        for (int i = 1; i < senders.length; i++) {
+            sendersTemplate = MessageTemplate.or(
+                sendersTemplate,
+                MessageTemplate.MatchSender(senders[i]));
+        }
+        return sendersTemplate;
     }
     
     // </editor-fold>

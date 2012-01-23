@@ -11,5 +11,12 @@ import jadeorg.lang.Message;
  */
 public interface SenderState extends State {
    
-    void send(Message message, AID receiverAID);
+    /**
+     * Sends a message.
+     * @param message the message to send
+     * @param receivers the receivers. More precisely, their AIDs
+     */
+    public void send(Message message, AID[] receivers);
+    
+    public void send(Message message, AID receiver);
 }

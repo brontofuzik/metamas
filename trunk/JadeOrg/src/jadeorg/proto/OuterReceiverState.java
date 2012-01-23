@@ -175,7 +175,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             }
         }
         
-        protected abstract AID getSenderAID();
+        protected abstract AID[] getSenders();
         
         // ----- PRIVATE -----
         
@@ -218,7 +218,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-AGREE -----");
             // Receive the 'Agree' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.AGREE),
-                getSenderAID());
+                getSenders());
             
             // Process the message.
             if (messageReceived) {
@@ -263,7 +263,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-REFUSE -----");
             // Receive the 'Refuse' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.REFUSE),
-                getSenderAID());
+                getSenders());
             
             // Process the message.
             if (messageReceived) {
@@ -308,7 +308,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-FAILURE -----");
             // Receive the 'Agree' message.
             boolean messageReceived = receive(new SimpleMessage(ACLMessage.FAILURE),
-                getSenderAID());
+                getSenders());
             
             // Process the message.
             if (messageReceived) {

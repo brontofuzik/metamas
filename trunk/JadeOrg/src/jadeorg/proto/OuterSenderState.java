@@ -134,7 +134,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
-        protected abstract AID getReceiverAID();
+        protected abstract AID[] getReceivers();
         
         // </editor-fold>
     }
@@ -157,7 +157,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
             SimpleMessage agreeMessage = new SimpleMessage(ACLMessage.AGREE);
             
             // Send the message.
-            send(agreeMessage, getReceiverAID());
+            send(agreeMessage, getReceivers());
         }
         
         // ----- PROTECTED -----
@@ -187,7 +187,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
             SimpleMessage refuseMessage = new SimpleMessage(ACLMessage.REFUSE);
             
             // Send the message.
-            send(refuseMessage, getReceiverAID());
+            send(refuseMessage, getReceivers());
         }
         
         // ----- PROTECTED -----
@@ -215,7 +215,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
             SimpleMessage failureMessage = new SimpleMessage(ACLMessage.FAILURE);
             
             // Send the message.
-            send(failureMessage, getReceiverAID());
+            send(failureMessage, getReceivers());
         }
         
         // ----- PROTCTED -----
