@@ -36,6 +36,18 @@ public abstract class Party extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the id of the protocol.
+     * @return the id of the protocol
+     */
+    public String getProtocolId() {
+        return protocolId;
+    }
+    
+    /**
+     * Sets the id of the protocol.
+     * @param protocolId the id of the protocol
+     */
     public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
     }

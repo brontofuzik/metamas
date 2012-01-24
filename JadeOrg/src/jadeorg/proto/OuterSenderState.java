@@ -130,6 +130,9 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // </editor-fold>
     }
     
+    /**
+     * An inner sender state.
+     */
     protected abstract class InnerSenderState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
