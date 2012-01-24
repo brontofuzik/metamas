@@ -1,6 +1,7 @@
 package example1.protocols.calculatefactorialprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.MessageFactory;
 import jadeorg.lang.TextMessage;
 
 /**
@@ -47,6 +48,18 @@ public class ReplyMessage extends TextMessage {
     @Override
     protected void parseContent(String content) { 
         result = new Integer(content).intValue();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<ReplyMessage> {
+
+        @Override
+        public ReplyMessage createMessage() {
+            return new ReplyMessage();
+        }
     }
     
     // </editor-fold>

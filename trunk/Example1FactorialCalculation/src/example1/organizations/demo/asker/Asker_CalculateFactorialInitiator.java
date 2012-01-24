@@ -134,6 +134,14 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     
     private class ReceiveReply extends SingleReceiverState<ReplyMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveReply() {
+            super(new ReplyMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -148,11 +156,6 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         @Override
         protected void onEntry() {
             getMyRole().logInfo("Receiving result.");
-        }
-        
-        @Override
-        protected ReplyMessage createEmptyMessage() {
-            return new ReplyMessage();
         }
 
         @Override
