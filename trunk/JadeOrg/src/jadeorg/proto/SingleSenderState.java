@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 
 /**
  * A single sender state.
@@ -41,7 +42,7 @@ public abstract class SingleSenderState extends OuterSenderState {
         return SINGLE_SENDER;
     }
     
-    protected abstract void onSingleSender();
+    protected abstract Message prepareMessage();
     
     // </editor-fold>
     
@@ -61,10 +62,10 @@ public abstract class SingleSenderState extends OuterSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            onSingleSender();
+        protected Message prepareMessage() {
+            return SingleSenderState.this.prepareMessage();
         }
-        
+            
         // </editor-fold>
     }
     

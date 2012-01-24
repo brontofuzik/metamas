@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.Message;
 import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.jadeextensions.FSMBehaviourReceiverState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -144,7 +145,8 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     /**
      * An inner receiver state.
      */
-    protected abstract class InnerReceiverState extends OneShotBehaviourState {
+    protected abstract class InnerReceiverState<TMessage extends Message>
+        extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -191,10 +193,34 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
+        public void action() {            
+            // Receive the message.
+            TMessage message = createEmptyMessage();
+            boolean messageReceived = receive(message, getSenders());
+            
+            // Process the message.
+            if (messageReceived) {
+                //System.out.println("----- RECEIVED -----");
+                handleMessage(message);
+                setExitValue(RECEIVED);
+            } else {
+                //System.out.println("----- NOT-RECEIVED -----");
+                setExitValue(NOT_RECEIVED);
+            }
+        }
+        
+        @Override
         public int onEnd() {
             return exitValue;
         }
         
+        // ----- PROTECTED -----
+        
+        protected abstract TMessage createEmptyMessage();
+        
+        protected /* virtual */ void handleMessage(TMessage message) {
+        }
+       
         // </editor-fold>
     }
     
@@ -204,7 +230,16 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected abstract class ReceiveAgree extends InnerReceiverState {
+    protected abstract class ReceiveAgree extends InnerReceiverState<SimpleMessage> {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected SimpleMessage createEmptyMessage() {
+            return new SimpleMessage(ACLMessage.AGREE);
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -212,34 +247,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             super(outerReceiverStateExitValue);
         }
         
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-AGREE -----");
-            // Receive the 'Agree' message.
-            boolean messageReceived = receive(new SimpleMessage(ACLMessage.AGREE),
-                getSenders());
-            
-            // Process the message.
-            if (messageReceived) {
-                //System.out.println("----- RECEIVED -----");
-                onReceived();
-                setExitValue(RECEIVED);
-            } else {
-                //System.out.println("----- NOT-RECEIVED -----");
-                setExitValue(NOT_RECEIVED);
-            }
-        }
-        
-        // ----- PROTECTED -----
-        
-        protected void onReceived() {
-            // Do nothing.
-        }
-    
         // </editor-fold>
     }
     
@@ -249,40 +256,21 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected abstract class ReceiveRefuse extends InnerReceiverState {
+    protected abstract class ReceiveRefuse extends InnerReceiverState<SimpleMessage> {
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected SimpleMessage createEmptyMessage() {
+            return new SimpleMessage(ACLMessage.REFUSE);
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         public ReceiveRefuse(int outerReceiverStateExitValue) {
             super(outerReceiverStateExitValue);
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-REFUSE -----");
-            // Receive the 'Refuse' message.
-            boolean messageReceived = receive(new SimpleMessage(ACLMessage.REFUSE),
-                getSenders());
-            
-            // Process the message.
-            if (messageReceived) {
-                //System.out.println("----- RECEIVED -----");
-                onReceived();
-                setExitValue(RECEIVED);
-            } else {
-                //System.out.println("----- NOT-RECEIVED -----");
-                setExitValue(NOT_RECEIVED);
-            }
-        }
-        
-        // ----- PROTECTED -----
-        
-        protected void onReceived() {
-            // Do nothing.
         }
         
         // </editor-fold>
@@ -294,40 +282,21 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-09
      * @version %I% %G%
      */
-    protected abstract class ReceiveFailure extends InnerReceiverState {
+    protected abstract class ReceiveFailure extends InnerReceiverState<SimpleMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected SimpleMessage createEmptyMessage() {
+            return new SimpleMessage(ACLMessage.FAILURE);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
         public ReceiveFailure(int outerReceiverStateExitValue) {
             super(outerReceiverStateExitValue);
-        }
-
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        @Override
-        public void action() {
-            //System.out.println("----- " + getParent().getBehaviourName() + " RECEIVE-FAILURE -----");
-            // Receive the 'Agree' message.
-            boolean messageReceived = receive(new SimpleMessage(ACLMessage.FAILURE),
-                getSenders());
-            
-            // Process the message.
-            if (messageReceived) {
-                //System.out.println("----- RECEIVED -----");
-                onReceived();
-                setExitValue(RECEIVED);
-            } else {
-                //System.out.println("----- NOT-RECEIVED -----");
-                setExitValue(NOT_RECEIVED);
-            }
-        }
-    
-        // ----- PROTECTED -----
-    
-        protected void onReceived() {
-            // Do nothing.
         }
 
         // </editor-fold>

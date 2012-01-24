@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -143,11 +144,10 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             DeactRequestMessage message = new DeactRequestMessage();
             message.setRoleName(roleName);
-
-            send(message, organizationAID);
+            return message;
         }
 
         @Override
@@ -181,7 +181,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onAgree() {
+        protected void handleAgreeMessage() {
             getMyPlayer().knowledgeBase.deactRole(roleName);
         }
 

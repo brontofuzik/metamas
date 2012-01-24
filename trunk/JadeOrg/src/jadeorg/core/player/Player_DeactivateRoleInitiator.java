@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -133,10 +134,9 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
-            DeactivateRequestMessage deactivateRequestMessage = new DeactivateRequestMessage();
-
-            send(deactivateRequestMessage, roleAID);   
+        protected Message prepareMessage() {
+            DeactivateRequestMessage message = new DeactivateRequestMessage();
+            return message;
         }
 
         @Override
@@ -169,7 +169,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onAgree() {
+        protected void handleAgreeMessage() {
             getMyPlayer().knowledgeBase.deactivateRole();
         }
 

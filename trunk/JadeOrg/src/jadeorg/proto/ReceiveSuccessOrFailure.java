@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 
 /**
  * A 'Receive success or failure' (multi receiver) state.
@@ -8,7 +9,8 @@ import jade.core.AID;
  * @since 2011-12-27
  * @version %I% %G%
  */
-public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
+public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
+    extends OuterReceiverState {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -37,14 +39,18 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    protected abstract TMessage createEmptySuccessMessage();
     
-    protected abstract int onSuccessReceiver();
+    protected /* virtual */ void handleSuccessMessage(TMessage message) {
+        // Do nothing.
+    }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyReceiveSuccess extends InnerReceiverState {
+    private class MyReceiveSuccess extends InnerReceiverState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -66,8 +72,13 @@ public abstract class ReceiveSuccessOrFailure extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            setExitValue(onSuccessReceiver());
+        protected TMessage createEmptyMessage() {
+            return createEmptySuccessMessage();
+        }
+         
+        @Override
+        protected void handleMessage(TMessage message) {
+            handleSuccessMessage(message);
         }
         
         // </editor-fold>

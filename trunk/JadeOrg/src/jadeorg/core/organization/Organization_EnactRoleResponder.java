@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -162,13 +163,11 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             // Create the 'Requirements inform' message.
-            RequirementsInformMessage requirementsInformMessage = new RequirementsInformMessage();
-            requirementsInformMessage.setRequirements(getMyOrganization().requirements.get(roleName));
-
-            // Send the message.
-            send(requirementsInformMessage, playerAID);
+            RequirementsInformMessage message = new RequirementsInformMessage();
+            message.setRequirements(getMyOrganization().requirements.get(roleName));
+            return message;
         }
 
         @Override
@@ -224,7 +223,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             getMyOrganization().logInfo("Creating role agent.");
 
             Role role = createRoleAgent(roleName, roleName);
@@ -238,8 +237,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
             roleAIDMessage.setRoleAID(role.getAID());
 
-            // Send the 'RoleAID' JadeOrg message.
-            send(roleAIDMessage, playerAID);        
+            return roleAIDMessage;
         }
 
         @Override

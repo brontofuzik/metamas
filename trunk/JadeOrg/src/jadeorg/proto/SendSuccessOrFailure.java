@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 
 /**
  * A 'Send success or failure' multi sender state.
@@ -38,7 +39,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected abstract void onSuccessSender();
+    protected abstract Message prepareMessage();
     
     // </editor-fold>  
     
@@ -57,9 +58,9 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
-        @Override
-        public void action() {
-            onSuccessSender();
+       @Override
+        protected Message prepareMessage() {
+            return SendSuccessOrFailure.this.prepareMessage();
         }
     
         // </editor-fold>

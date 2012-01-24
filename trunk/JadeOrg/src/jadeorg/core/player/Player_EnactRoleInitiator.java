@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -160,13 +161,11 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             // Create the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             message.setRoleName(roleName);
-
-            // Send the message.
-            send(message, organizationAID);
+            return message;
         }
         
         @Override
@@ -181,7 +180,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
      * The 'Receive requirements info' (multi receiver) state.
      * A state in which the 'Requirements' info is received.
      */
-    private class ReceiveRequirementsInform extends ReceiveSuccessOrFailure {
+    private class ReceiveRequirementsInform extends
+        ReceiveSuccessOrFailure<RequirementsInformMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -200,18 +200,13 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSuccessReceiver() {
-            // Receive the 'Requirements inform' message.
-            RequirementsInformMessage message = new RequirementsInformMessage();
-            boolean messageReceived = receive(message, organizationAID);
+        protected RequirementsInformMessage createEmptySuccessMessage() {
+            return new RequirementsInformMessage();
+        }
 
-            // Process the message.
-            if (messageReceived) {
-                requirements = message.getRequirements();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        @Override
+        protected void handleSuccessMessage(RequirementsInformMessage message) {
+            requirements = message.getRequirements();
         }
 
         @Override
@@ -267,7 +262,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
      * The 'Receive role AID' passive state.
      * A state in which the 'Role AID' requirementsInformMessage is received.
      */
-    private class ReceiveRoleAID extends SingleReceiverState {
+    private class ReceiveRoleAID extends SingleReceiverState<RoleAIDMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -286,17 +281,15 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSingleReceiver() {
-            RoleAIDMessage message = new RoleAIDMessage();
-            boolean messageReceived = receive(message, organizationAID);      
-            
-            if (messageReceived) {
-                AID roleAID = message.getRoleAID();
-                getMyPlayer().knowledgeBase.enactRole(roleName, roleAID, organizationAID.getLocalName(), organizationAID);
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected RoleAIDMessage createEmptyMessage() {
+            return new RoleAIDMessage();
+        }
+        
+        @Override
+        protected void handleMessage(RoleAIDMessage message) {
+            AID roleAID = message.getRoleAID();
+            getMyPlayer().knowledgeBase.enactRole(roleName, roleAID,
+                organizationAID.getLocalName(), organizationAID);
         }
 
         @Override

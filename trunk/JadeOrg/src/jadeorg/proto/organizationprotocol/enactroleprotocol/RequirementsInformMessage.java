@@ -56,7 +56,7 @@ public class RequirementsInformMessage extends TextMessage {
     @Override
     public String generateContent() {
         return String.format("requirements(%1$s)",
-            jadeorg.util.StringUtil.join(requirements, ","));
+            jadeorg.util.StringUtils.join(requirements, ","));
     }
 
     @Override

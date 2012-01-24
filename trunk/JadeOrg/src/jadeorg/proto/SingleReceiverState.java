@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 
 /**
  * A single receiver state.
@@ -8,7 +9,8 @@ import jade.core.AID;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public abstract class SingleReceiverState extends OuterReceiverState {
+public abstract class SingleReceiverState<TMessage extends Message>
+    extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -36,13 +38,18 @@ public abstract class SingleReceiverState extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected abstract int onSingleReceiver();   
+    protected abstract TMessage createEmptyMessage();
+    
+    protected /* virtual */ void handleMessage(TMessage message) {
+        // Do nothing.
+    }   
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SingleReceiver extends InnerReceiverState {
+    private class SingleReceiver
+        extends InnerReceiverState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -61,13 +68,18 @@ public abstract class SingleReceiverState extends OuterReceiverState {
         
         // </editor-fold>
         
+        @Override
+        protected TMessage createEmptyMessage() {
+            return SingleReceiverState.this.createEmptyMessage();
+        }
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            setExitValue(onSingleReceiver());
+        protected void handleMessage(TMessage message) {
+            SingleReceiverState.this.handleMessage(message);
         }
-        
+       
         // </editor-fold>
     }
     
