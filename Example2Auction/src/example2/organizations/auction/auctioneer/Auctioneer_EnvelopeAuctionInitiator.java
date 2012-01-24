@@ -218,6 +218,14 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class ReceiveBid extends SingleReceiverState<BidMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveBid() {
+            super(new BidMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -234,11 +242,6 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
             getMyAuctioneer().logInfo("Receiving bid.");
         }
         
-        @Override
-        protected BidMessage createEmptyMessage() {
-            return new BidMessage();
-        }
-
         @Override
         protected void handleMessage(BidMessage message) {
             // TODO Implement.
