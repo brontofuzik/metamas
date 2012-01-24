@@ -11,6 +11,8 @@ import jadeorg.lang.Message;
  */
 public interface SenderState extends State {
    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
     /**
      * Sends a message.
      * @param message the message to send
@@ -19,4 +21,6 @@ public interface SenderState extends State {
     public void send(Message message, AID[] receivers);
     
     public void send(Message message, AID receiver);
+    
+    // </editor-fold>
 }

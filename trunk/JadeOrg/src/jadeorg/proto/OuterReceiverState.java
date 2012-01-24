@@ -141,6 +141,9 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // </editor-fold>
     }
     
+    /**
+     * An inner receiver state.
+     */
     protected abstract class InnerReceiverState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">

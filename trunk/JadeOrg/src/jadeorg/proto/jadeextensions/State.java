@@ -10,9 +10,15 @@ import jadeorg.proto.Party;
  */
 public interface State {
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
     String getName();
     
     Party getParty();
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
 
     void registerTransition(int event, State targetState);
     
@@ -21,4 +27,6 @@ public interface State {
     void registerDefaultTransition(State targetState);
     
     void registerDefaultTransition(State targetState, String[] statesToReset);
+    
+    // </editor-fold>
 }

@@ -11,6 +11,8 @@ import jadeorg.lang.Message;
  */
 public interface ReceiverState {
     
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
     /**
      * Receives a message.
      * @param message the message to receive
@@ -20,4 +22,6 @@ public interface ReceiverState {
     public boolean receive(Message message, AID[] senders);
     
     public boolean receive(Message message, AID sender);
+    
+    // </editor-fold>
 }
