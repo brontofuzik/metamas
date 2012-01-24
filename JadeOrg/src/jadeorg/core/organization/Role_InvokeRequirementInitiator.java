@@ -1,6 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -162,11 +163,10 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
             message.setRequirement(requirementName);
-            
-            send(message, playerAID);
+            return message;
         }
 
         @Override
@@ -177,7 +177,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class ReceiveRequirementArgumentRequest extends ReceiveSuccessOrFailure {
+    private class ReceiveRequirementArgumentRequest
+        extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -196,15 +197,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSuccessReceiver() {
-            ArgumentRequestMessage message = new ArgumentRequestMessage();
-            boolean messageReceived = receive(message, playerAID);
-            
-            if (messageReceived) {
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected ArgumentRequestMessage createEmptySuccessMessage() {
+            return new ArgumentRequestMessage();
         }
 
         @Override
@@ -243,11 +237,10 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             RequirementArgumentMessage message = new RequirementArgumentMessage();
             message.setArgument(requirementArgument);
-
-            send(message, playerAID);
+            return message;
         }
 
         @Override
@@ -258,7 +251,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class ReceiveRequirementResult extends ReceiveSuccessOrFailure {
+    private class ReceiveRequirementResult
+        extends ReceiveSuccessOrFailure<RequirementResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -277,17 +271,13 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSuccessReceiver() {
-            RequirementResultMessage message = new RequirementResultMessage();
-            boolean messageReceived = receive(message, playerAID);
-
-            if (messageReceived) {
-                requirementResult = message.getResult();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                requirementResult = null;
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected RequirementResultMessage createEmptySuccessMessage() {
+            return new RequirementResultMessage();
+        }
+        
+        @Override
+        protected void handleSuccessMessage(RequirementResultMessage message) {
+            requirementResult = message.getResult();
         }
 
         @Override
@@ -296,6 +286,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
 
         // </editor-fold>
+
+
     }
     
     /**

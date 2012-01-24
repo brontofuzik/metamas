@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.Message;
 import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.jadeextensions.FSMBehaviourSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -140,6 +141,28 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         protected abstract AID[] getReceivers();
         
         // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            onSent();
+            
+            Message message = prepareMessage();
+            
+            // Send the message.
+            send(message, getReceivers());
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected /* virtual */ void onSent() {
+            // Do nothing.
+        }
+        
+        protected abstract Message prepareMessage();
+        
+        // </editor-fold>
     }
     
     /**
@@ -153,23 +176,17 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            onSent();
-            
-            // Create the 'Agree' message.
-            SimpleMessage agreeMessage = new SimpleMessage(ACLMessage.AGREE);
-            
-            // Send the message.
-            send(agreeMessage, getReceivers());
+        protected final Message prepareMessage() {
+            return new SimpleMessage(ACLMessage.AGREE);
         }
         
         // ----- PROTECTED -----
         
-        protected void onSent() {
+        protected /* virtual */ void onSent() {
             // Do nothing.
         }
         
-        // </editor-fold>      
+        // </editor-fold>
     }
     
     /**
@@ -183,19 +200,13 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            onSent();
-            
-            // Create the 'Refuse' message.
-            SimpleMessage refuseMessage = new SimpleMessage(ACLMessage.REFUSE);
-            
-            // Send the message.
-            send(refuseMessage, getReceivers());
+        protected final Message prepareMessage() {
+            return new SimpleMessage(ACLMessage.REFUSE);
         }
         
         // ----- PROTECTED -----
         
-        protected void onSent() {
+        protected /* virtual */ void onSent() {
             // Do nothing.
         }
         
@@ -213,17 +224,13 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
-            // Create the 'Failure' message.
-            SimpleMessage failureMessage = new SimpleMessage(ACLMessage.FAILURE);
-            
-            // Send the message.
-            send(failureMessage, getReceivers());
+        protected final Message prepareMessage() {
+            return new SimpleMessage(ACLMessage.FAILURE);
         }
         
         // ----- PROTCTED -----
         
-        protected void onSent() {
+        protected /* virtual */ void onSent() {
             // Do nothing.
         }
         

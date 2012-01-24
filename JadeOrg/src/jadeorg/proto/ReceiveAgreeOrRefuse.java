@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jadeorg.lang.SimpleMessage;
 
 /**
  * Receive an 'Agree' or 'Refuse' message.
@@ -38,11 +39,11 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected void onAgree() {
+    protected void handleAgreeMessage() {
         // Do nothing.
     }
     
-    protected void onRefuse() {
+    protected void handleRefuseMessage() {
         // Do nothing.
     }
     
@@ -72,8 +73,8 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void onReceived() {
-            onAgree();
+        protected void handleMessage(SimpleMessage message) {
+            handleAgreeMessage();
         }
 
         // </editor-fold>    
@@ -101,8 +102,8 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void onReceived() {
-            onRefuse();
+        protected void handleMessage(SimpleMessage message) {
+            handleRefuseMessage();
         }
 
         // </editor-fold>

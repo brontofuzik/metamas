@@ -3,6 +3,7 @@ package jadeorg.core.player;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.player.requirement.Requirement;
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -208,10 +209,9 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
-            
-            send(message, roleAID);
+            return message;
         }
 
         @Override
@@ -222,7 +222,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class ReceiveRequirementArgument extends SingleReceiverState {
+    private class ReceiveRequirementArgument
+        extends SingleReceiverState<RequirementArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -241,16 +242,13 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         }
         
         @Override
-        protected int onSingleReceiver() {
-            RequirementArgumentMessage message = new RequirementArgumentMessage();
-            boolean messageReceived = receive(message, roleAID);
-            
-            if (messageReceived) {
-                requirement.setArgument(message.getArgument());
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected RequirementArgumentMessage createEmptyMessage() {
+            return new RequirementArgumentMessage();
+        }
+        
+        @Override
+        protected void handleMessage(RequirementArgumentMessage message) {
+            requirement.setArgument(message.getArgument());
         }
 
         @Override
@@ -285,11 +283,10 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             RequirementResultMessage message = new RequirementResultMessage();
             message.setResult(requirement.getResult());
-            
-            send(message, roleAID);
+            return message;
         }
 
         @Override

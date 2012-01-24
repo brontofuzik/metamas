@@ -3,6 +3,7 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -209,10 +210,9 @@ public class Role_InvokePowerResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
-            
-            send(message, playerAID);
+            return message;
         }
 
         @Override
@@ -223,7 +223,8 @@ public class Role_InvokePowerResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class ReceivePowerArgument extends SingleReceiverState {
+    private class ReceivePowerArgument
+        extends SingleReceiverState<PowerArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -242,16 +243,13 @@ public class Role_InvokePowerResponder extends ResponderParty {
         }
         
         @Override
-        protected int onSingleReceiver() {
-            PowerArgumentMessage message = new PowerArgumentMessage();
-            boolean messageReceived = receive(message, playerAID);
-            
-            if (messageReceived) {
-                power.setArgument(message.getArgument());
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected PowerArgumentMessage createEmptyMessage() {
+            return new PowerArgumentMessage();
+        }
+        
+        @Override
+        protected void handleMessage(PowerArgumentMessage message) {
+            power.setArgument(message.getArgument());
         }
 
         @Override
@@ -286,11 +284,10 @@ public class Role_InvokePowerResponder extends ResponderParty {
         }
         
         @Override
-        protected void onSuccessSender() {
+        protected Message prepareMessage() {
             PowerResultMessage message = new PowerResultMessage();
             message.setResult(power.getResult());
-            
-            send(message, playerAID);
+            return message;
         }
 
         @Override

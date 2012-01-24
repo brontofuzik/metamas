@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -159,11 +160,10 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
             message.setPower(powerName);
-            
-            send(message, roleAID);
+            return message;
         }
 
         @Override
@@ -174,7 +174,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class ReceivePowerArgumentRequest extends ReceiveSuccessOrFailure {
+    private class ReceivePowerArgumentRequest
+        extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -193,15 +194,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSuccessReceiver() {
-            ArgumentRequestMessage message = new ArgumentRequestMessage();
-            boolean messageReceived = receive(message, roleAID);
-            
-            if (messageReceived) {
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected ArgumentRequestMessage createEmptySuccessMessage() {
+            return new ArgumentRequestMessage();
         }
 
         @Override
@@ -231,11 +225,10 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             PowerArgumentMessage message = new PowerArgumentMessage();
             message.setArgument(powerArgument);
-            
-            send(message, roleAID);
+            return message;
         }
 
         @Override
@@ -246,7 +239,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class ReceivePowerResult extends ReceiveSuccessOrFailure {
+    private class ReceivePowerResult
+        extends ReceiveSuccessOrFailure<PowerResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -265,18 +259,15 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSuccessReceiver() {
-            PowerResultMessage message = new PowerResultMessage();
-            boolean messageReceived = receive(message, roleAID);
-            
-            if (messageReceived) {
-                powerResult = message.getResult();
-                getMyPlayer().knowledgeBase.getActiveRole()
-                    .savePowerResult(powerName, message.getResult());
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected PowerResultMessage createEmptySuccessMessage() {
+            return new PowerResultMessage();
+        }
+        
+        @Override
+        protected void handleSuccessMessage(PowerResultMessage message) {
+            powerResult = message.getResult();
+            getMyPlayer().knowledgeBase.getActiveRole()
+                .savePowerResult(powerName, message.getResult());
         }
 
         @Override

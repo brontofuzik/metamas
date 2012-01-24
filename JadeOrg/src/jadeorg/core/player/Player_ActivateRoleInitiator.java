@@ -1,6 +1,7 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -134,10 +135,9 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
-            ActivateRequestMessage activateRequestMessage = new ActivateRequestMessage();
-
-            send(activateRequestMessage, roleAID);            
+        protected Message prepareMessage() {
+            ActivateRequestMessage message = new ActivateRequestMessage();
+            return message;
         }
 
         @Override
@@ -171,7 +171,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onAgree() {
+        protected void handleAgreeMessage() {
             getMyPlayer().knowledgeBase.activateRole(roleName);
         }
 

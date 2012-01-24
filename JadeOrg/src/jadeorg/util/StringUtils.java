@@ -7,7 +7,7 @@ import java.util.Iterator;
  *
  * @author hp
  */
-public class StringUtil {
+public class StringUtils {
     public static String join(Iterable objects, String delimiter) {
         Iterator iterator = objects.iterator();       
         if (!iterator.hasNext()) {
@@ -22,6 +22,6 @@ public class StringUtil {
     }
     
     public static String join(Object[] objects, String delimiter) {
-        return jadeorg.util.StringUtil.join(Arrays.asList(objects), delimiter);
+        return jadeorg.util.StringUtils.join(Arrays.asList(objects), delimiter);
     }
 }
