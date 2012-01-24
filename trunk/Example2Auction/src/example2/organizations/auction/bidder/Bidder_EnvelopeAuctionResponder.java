@@ -129,6 +129,14 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private class ReceiveAuctionCFP extends SingleReceiverState<AuctionCFPMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveAuctionCFP() {
+            super(new AuctionCFPMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -146,11 +154,6 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         }
         
         @Override
-        protected AuctionCFPMessage createEmptyMessage() {
-            return new AuctionCFPMessage();
-        }
-
-        @Override
         protected void handleMessage(AuctionCFPMessage message) {
             // TODO Implement.
             throw new UnsupportedOperationException("Not supported yet.");
@@ -162,8 +165,6 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         }
         
         // </editor-fold>
-
-
     }
     
     /**
