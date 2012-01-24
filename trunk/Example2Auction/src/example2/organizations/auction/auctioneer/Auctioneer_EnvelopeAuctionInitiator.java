@@ -1,9 +1,10 @@
 package example2.organizations.auction.auctioneer;
 
 import example2.organizations.auction.Auction_Organization.Auctioneer_Role;
+import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
-import jade.core.behaviours.OneShotBehaviour;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.SingleReceiverState;
@@ -109,6 +110,20 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         return (Auctioneer_Role)myAgent;
     }
     
+    /**
+     * Gets the bidders. More precisely, their AIDs.
+     * @return the AIDs of the bidders
+     */
+    private AID[] getBidders() {
+        AID[] bidders = new AID[this.bidders.size()];
+        int i = 0;
+        for (AID bidder : this.bidders) {
+            bidders[i] = bidder;
+            i++;
+        }
+        return bidders;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -147,10 +162,17 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class MyInitialize extends Initialize {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected int initialize() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyAuctioneer().logInfo(String.format(
+                "Initiating the 'Envelope auction' protocol (id = %1$s)",
+                getProtocolId()));
+            return OK;
         }
+        
+        // </editor-fold>
     }
     
     /**
@@ -160,52 +182,75 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class SendAuctionCFP extends SingleSenderState {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
         @Override
         protected AID[] getReceivers() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getBidders();
         }
-
-        @Override
-        protected void onSingleSender() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
+   
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected void onEntry() {
+            getMyAuctioneer().logInfo("Sending auction CFP.");
+        }
+
+        @Override
+        protected Message prepareMessage() {
+            // TODO Implement.
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
         protected void onExit() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyAuctioneer().logInfo("Auction CFP sent.");
         }
+        
+        // </editor-fold>
     }
     
     /**
      * The 'Receive bid' (single sender) state.
      * A state in which a bid is received from the bidders.
      */
-    private class ReceiveBid extends SingleReceiverState {
+    private class ReceiveBid extends SingleReceiverState<BidMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
         @Override
         protected AID[] getSenders() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getBidders();
         }
-
-        @Override
-        protected int onSingleReceiver() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         protected void onEntry() {
+            getMyAuctioneer().logInfo("Receiving bid.");
+        }
+        
+        @Override
+        protected BidMessage createEmptyMessage() {
+            return new BidMessage();
+        }
+
+        @Override
+        protected void handleMessage(BidMessage message) {
+            // TODO Implement.
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
         protected void onExit() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyAuctioneer().logInfo("Bid received.");
         }
+        
+        // </editor-fold> 
     }
     
     /**
@@ -214,10 +259,14 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyAuctioneer().logInfo("The 'Envelope auction' initiator finished successfully.");
         }
+        
+        // </editor-fold>
     }
     
     /**
@@ -226,10 +275,14 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class FailureEnd extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyAuctioneer().logInfo("The 'Envelope auction' initiator party failed.");
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

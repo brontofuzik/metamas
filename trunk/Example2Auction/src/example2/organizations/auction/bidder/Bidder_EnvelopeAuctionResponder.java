@@ -5,9 +5,11 @@
 package example2.organizations.auction.bidder;
 
 import example2.organizations.auction.Auction_Organization.Bidder_Role;
+import example2.protocols.envelopeauction.AuctionCFPMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleReceiverState;
@@ -107,10 +109,17 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private class MyInitialize extends Initialize {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         protected int initialize() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyBidder().logInfo(String.format(
+                "Responding to the 'Envelope auction' protocol (id = %1$s)",
+                getProtocolId()));
+            return OK;
         }
+        
+        // </editor-fold>
     }
     
     /**
@@ -118,27 +127,43 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      * A state in which the auciton call for proposals (CFP) is received
      * from the auctioneer.
      */
-    private class ReceiveAuctionCFP extends SingleReceiverState {
+    private class ReceiveAuctionCFP extends SingleReceiverState<AuctionCFPMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
         @Override
         protected AID[] getSenders() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return new AID[] { auctioneer };
         }
-
-        @Override
-        protected int onSingleReceiver() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         protected void onEntry() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyBidder().logInfo("Receiving auction CFP.");
+        }
+        
+        @Override
+        protected AuctionCFPMessage createEmptyMessage() {
+            return new AuctionCFPMessage();
         }
 
         @Override
-        protected void onExit() {
+        protected void handleMessage(AuctionCFPMessage message) {
+            // TODO Implement.
             throw new UnsupportedOperationException("Not supported yet.");
         }
+        
+        @Override
+        protected void onExit() {
+            getMyBidder().logInfo("Auction CFP received.");
+        }
+        
+        // </editor-fold>
+
+
     }
     
     /**
@@ -147,25 +172,34 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private class SendBid extends SingleSenderState {
 
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
         @Override
         protected AID[] getReceivers() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return new AID[] { auctioneer };
         }
-
-        @Override
-        protected void onSingleSender() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         protected void onEntry() {
+            getMyBidder().logInfo("Sending bid.");
+        }
+        
+        @Override
+        protected Message prepareMessage() {
+            // TODO Implement.
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
         protected void onExit() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyBidder().logInfo("Bid sent.");
         }
+        
+        // </editor-fold>
     }
     
     /**
@@ -174,10 +208,14 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">     
+        
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyBidder().logInfo("The 'Envelope auction' responder party finished successfully.");
         }
+        
+        // </editor-fold> 
     }
     
     /**
@@ -186,10 +224,14 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      */
     private class FailureEnd extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">     
+        
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            getMyBidder().logInfo("The 'Envelope auction' responder party failed.");
         }
+        
+        // </editor-fold> 
     }
     
     // </editor-fold>
