@@ -226,6 +226,14 @@ public class Role_InvokePowerResponder extends ResponderParty {
     private class ReceivePowerArgument
         extends SingleReceiverState<PowerArgumentMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceivePowerArgument() {
+            super(new PowerArgumentMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -240,11 +248,6 @@ public class Role_InvokePowerResponder extends ResponderParty {
         @Override
         protected void onEntry() {
             getMyRole().logInfo("Receiving power argument.");
-        }
-        
-        @Override
-        protected PowerArgumentMessage createEmptyMessage() {
-            return new PowerArgumentMessage();
         }
         
         @Override

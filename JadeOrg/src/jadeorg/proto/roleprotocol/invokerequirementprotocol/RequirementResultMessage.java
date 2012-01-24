@@ -2,6 +2,7 @@ package jadeorg.proto.roleprotocol.invokerequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.BinaryMessage;
+import jadeorg.lang.MessageFactory;
 import java.io.Serializable;
 
 /**
@@ -49,6 +50,18 @@ public class RequirementResultMessage extends BinaryMessage {
     @Override
     protected void setContentObject(Serializable contentObject) {
         result = contentObject;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<RequirementResultMessage> {
+
+        @Override
+        public RequirementResultMessage createMessage() {
+            return new RequirementResultMessage();
+        }
     }
     
     // </editor-fold>

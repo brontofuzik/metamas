@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jade.core.AID;
 import jadeorg.lang.Message;
+import jadeorg.lang.MessageFactory;
 
 /**
  * A single receiver state.
@@ -22,8 +23,8 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SingleReceiverState() {        
-        addReceiver(new SingleReceiver());
+    public SingleReceiverState(MessageFactory<TMessage> messageFactory) {        
+        addReceiver(new SingleReceiver(messageFactory));
         
         buildFSM();
     }
@@ -38,8 +39,6 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected abstract TMessage createEmptyMessage();
-    
     protected /* virtual */ void handleMessage(TMessage message) {
         // Do nothing.
     }   
@@ -53,8 +52,8 @@ public abstract class SingleReceiverState<TMessage extends Message>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SingleReceiver() {
-            super(RECEIVED);
+        SingleReceiver(MessageFactory<TMessage> messageFactory) {
+            super(messageFactory, RECEIVED);
         }
         
         // </editor-fold>
@@ -67,11 +66,6 @@ public abstract class SingleReceiverState<TMessage extends Message>
         }
         
         // </editor-fold>
-        
-        @Override
-        protected TMessage createEmptyMessage() {
-            return SingleReceiverState.this.createEmptyMessage();
-        }
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

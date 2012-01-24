@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jadeorg.lang.MessageFactory;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
@@ -157,6 +158,8 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
+        private MessageFactory<TMessage> messageFactory;
+        
         private int exitValue;
         
         private int outerReceiverStateExitValue;
@@ -165,7 +168,13 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        protected InnerReceiverState(int outerReceiverStateExitValue) {
+        /**
+         * Initializes a new instance of the InnerReceiverState class.
+         * @param messageFactory the message factory
+         * @param outerReceiverStateExitValue the outer receiver state exit value
+         */
+        protected InnerReceiverState(MessageFactory<TMessage> messageFactory, int outerReceiverStateExitValue) {
+            this.messageFactory = messageFactory;
             this.outerReceiverStateExitValue = outerReceiverStateExitValue;
         } 
         
@@ -195,7 +204,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         @Override
         public void action() {            
             // Receive the message.
-            TMessage message = createEmptyMessage();
+            TMessage message = messageFactory.createMessage();
             boolean messageReceived = receive(message, getSenders());
             
             // Process the message.
@@ -215,9 +224,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         }
         
         // ----- PROTECTED -----
-        
-        protected abstract TMessage createEmptyMessage();
-        
+                
         protected /* virtual */ void handleMessage(TMessage message) {
         }
        
@@ -230,21 +237,17 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @since 2011-12-15
      * @version %I% %G%
      */
-    protected abstract class ReceiveAgree extends InnerReceiverState<SimpleMessage> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected SimpleMessage createEmptyMessage() {
-            return new SimpleMessage(ACLMessage.AGREE);
-        }
-        
-        // </editor-fold>
+    protected abstract class ReceiveAgree extends InnerReceiverState<SimpleMessage> {       
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
+        /**
+         * Initializes a new instance of the ReceiveAgree class.
+         * @param outerReceiverStateExitValue the outer receiver state exit value
+         */
         public ReceiveAgree(int outerReceiverStateExitValue) {
-            super(outerReceiverStateExitValue);
+            super(new SimpleMessage.Factory(ACLMessage.AGREE),
+                outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -257,20 +260,16 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @version %I% %G%
      */
     protected abstract class ReceiveRefuse extends InnerReceiverState<SimpleMessage> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected SimpleMessage createEmptyMessage() {
-            return new SimpleMessage(ACLMessage.REFUSE);
-        }
-        
-        // </editor-fold>
-        
+             
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
+        /**
+         * Initializes a new instance of the ReceiveRefuse class.
+         * @param outerReceiverStateExitValue the outer receiver state exit value
+         */
         public ReceiveRefuse(int outerReceiverStateExitValue) {
-            super(outerReceiverStateExitValue);
+            super(new SimpleMessage.Factory(ACLMessage.REFUSE),
+                outerReceiverStateExitValue);
         }
         
         // </editor-fold>
@@ -283,20 +282,16 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      * @version %I% %G%
      */
     protected abstract class ReceiveFailure extends InnerReceiverState<SimpleMessage> {
-
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected SimpleMessage createEmptyMessage() {
-            return new SimpleMessage(ACLMessage.FAILURE);
-        }
-        
-        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+        /**
+         * Initializes a new instance of the ReceiveFailure class.
+         * @param outerReceiverStateExitValue the outer receiver state exit value
+         */
         public ReceiveFailure(int outerReceiverStateExitValue) {
-            super(outerReceiverStateExitValue);
+            super(new SimpleMessage.Factory(ACLMessage.FAILURE),
+                outerReceiverStateExitValue);
         }
 
         // </editor-fold>

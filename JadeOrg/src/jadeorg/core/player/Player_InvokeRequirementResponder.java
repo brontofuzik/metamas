@@ -225,6 +225,14 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     private class ReceiveRequirementArgument
         extends SingleReceiverState<RequirementArgumentMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRequirementArgument() {
+            super(new RequirementArgumentMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -239,11 +247,6 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         @Override
         protected void onEntry() {
             getMyPlayer().logInfo("Receiving requirement argument.");
-        }
-        
-        @Override
-        protected RequirementArgumentMessage createEmptyMessage() {
-            return new RequirementArgumentMessage();
         }
         
         @Override
