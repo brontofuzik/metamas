@@ -2,6 +2,7 @@ package jadeorg.proto;
 
 import jade.core.AID;
 import jadeorg.lang.Message;
+import jadeorg.lang.MessageFactory;
 
 /**
  * A 'Receive success or failure' (multi receiver) state.
@@ -23,8 +24,8 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveSuccessOrFailure() {
-        addReceiver(new MyReceiveSuccess());
+    protected ReceiveSuccessOrFailure(MessageFactory<TMessage> messageFactory) {
+        addReceiver(new MyReceiveSuccess(messageFactory));
         addReceiver(new MyReceiveFailure());
         
         buildFSM();
@@ -39,8 +40,6 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
-    protected abstract TMessage createEmptySuccessMessage();
     
     protected /* virtual */ void handleSuccessMessage(TMessage message) {
         // Do nothing.
@@ -54,8 +53,8 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        MyReceiveSuccess() {
-            super(SUCCESS);
+        MyReceiveSuccess(MessageFactory<TMessage> messageFactory) {
+            super(messageFactory, SUCCESS);
         }
         
         // </editor-fold>
@@ -70,12 +69,7 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        protected TMessage createEmptyMessage() {
-            return createEmptySuccessMessage();
-        }
-         
+
         @Override
         protected void handleMessage(TMessage message) {
             handleSuccessMessage(message);

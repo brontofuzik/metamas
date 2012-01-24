@@ -2,6 +2,7 @@ package jadeorg.proto.roleprotocol.invokepowerprotocol;
 
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.BinaryMessage;
+import jadeorg.lang.MessageFactory;
 import java.io.Serializable;
 
 /**
@@ -51,5 +52,17 @@ public class PowerResultMessage extends BinaryMessage {
         result = contentObject;
     }
     
-    // </editor-fold> 
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<PowerResultMessage> {
+
+        @Override
+        public PowerResultMessage createMessage() {
+            return new PowerResultMessage();
+        }
+    }
+    
+    // </editor-fold>
 }

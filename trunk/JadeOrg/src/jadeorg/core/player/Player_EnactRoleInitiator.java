@@ -183,6 +183,14 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
     private class ReceiveRequirementsInform extends
         ReceiveSuccessOrFailure<RequirementsInformMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRequirementsInform() {
+            super(new RequirementsInformMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -197,11 +205,6 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         @Override
         protected void onEntry() {
             getMyPlayer().logInfo("Receiving requirements info.");
-        }
-        
-        @Override
-        protected RequirementsInformMessage createEmptySuccessMessage() {
-            return new RequirementsInformMessage();
         }
 
         @Override
@@ -264,6 +267,14 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
      */
     private class ReceiveRoleAID extends SingleReceiverState<RoleAIDMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRoleAID() {
+            super(new RoleAIDMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -278,11 +289,6 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         @Override
         protected void onEntry() {
             getMyPlayer().logInfo("Receiving role AID.");
-        }
-        
-        @Override
-        protected RoleAIDMessage createEmptyMessage() {
-            return new RoleAIDMessage();
         }
         
         @Override

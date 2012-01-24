@@ -180,6 +180,14 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     private class ReceiveRequirementArgumentRequest
         extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRequirementArgumentRequest() {
+            super(new ArgumentRequestMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -194,11 +202,6 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         @Override
         protected void onEntry() {
             getMyRole().logInfo("Receiving argument request.");
-        }
-        
-        @Override
-        protected ArgumentRequestMessage createEmptySuccessMessage() {
-            return new ArgumentRequestMessage();
         }
 
         @Override
@@ -254,6 +257,14 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     private class ReceiveRequirementResult
         extends ReceiveSuccessOrFailure<RequirementResultMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceiveRequirementResult() {
+            super(new RequirementResultMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -271,11 +282,6 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected RequirementResultMessage createEmptySuccessMessage() {
-            return new RequirementResultMessage();
-        }
-        
-        @Override
         protected void handleSuccessMessage(RequirementResultMessage message) {
             requirementResult = message.getResult();
         }
@@ -286,8 +292,6 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
 
         // </editor-fold>
-
-
     }
     
     /**

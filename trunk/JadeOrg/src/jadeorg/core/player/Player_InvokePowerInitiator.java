@@ -177,6 +177,14 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     private class ReceivePowerArgumentRequest
         extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceivePowerArgumentRequest() {
+            super(new ArgumentRequestMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -193,11 +201,6 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
             getMyPlayer().logInfo("Receiving power argument request.");
         }
         
-        @Override
-        protected ArgumentRequestMessage createEmptySuccessMessage() {
-            return new ArgumentRequestMessage();
-        }
-
         @Override
         protected void onExit() {
             getMyPlayer().logInfo("Power argument request received.");
@@ -242,6 +245,14 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     private class ReceivePowerResult
         extends ReceiveSuccessOrFailure<PowerResultMessage> {
         
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ReceivePowerResult() {
+            super(new PowerResultMessage.Factory());
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -256,11 +267,6 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         @Override
         protected void onEntry() {
             getMyPlayer().logInfo("Receiving power result.");
-        }
-        
-        @Override
-        protected PowerResultMessage createEmptySuccessMessage() {
-            return new PowerResultMessage();
         }
         
         @Override

@@ -2,6 +2,7 @@ package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.MessageFactory;
 import jadeorg.lang.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,6 +59,18 @@ public class RoleAIDMessage extends TextMessage {
 
         String roleAID = matcher.group(1);
         this.roleAID = new AID(roleAID, true);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<RoleAIDMessage> {
+
+        @Override
+        public RoleAIDMessage createMessage() {
+            return new RoleAIDMessage();
+        }
     }
     
     // </editor-fold>

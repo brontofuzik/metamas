@@ -1,6 +1,7 @@
 package jadeorg.proto.organizationprotocol.enactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.MessageFactory;
 import jadeorg.lang.TextMessage;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -70,6 +71,18 @@ public class RequirementsInformMessage extends TextMessage {
             requirementsString.split(",") :
             new String[0];
         this.requirements = requirements;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<RequirementsInformMessage> {
+
+        @Override
+        public RequirementsInformMessage createMessage() {
+            return new RequirementsInformMessage();
+        }
     }
     
     // </editor-fold>

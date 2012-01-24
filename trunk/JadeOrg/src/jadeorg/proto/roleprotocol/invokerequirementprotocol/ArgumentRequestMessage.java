@@ -1,6 +1,7 @@
 package jadeorg.proto.roleprotocol.invokerequirementprotocol;
 
 import jade.lang.acl.ACLMessage;
+import jadeorg.lang.MessageFactory;
 import jadeorg.lang.SimpleMessage;
 
 /**
@@ -22,6 +23,18 @@ public class ArgumentRequestMessage extends SimpleMessage {
     public ArgumentRequestMessage() {
         super(ACLMessage.REQUEST);
         setContent(CONTENT);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public static class Factory implements MessageFactory<ArgumentRequestMessage> {
+
+        @Override
+        public ArgumentRequestMessage createMessage() {
+            return new ArgumentRequestMessage();
+        }
     }
     
     // </editor-fold>
