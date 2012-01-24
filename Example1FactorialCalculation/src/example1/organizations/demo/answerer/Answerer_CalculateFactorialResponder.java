@@ -6,6 +6,7 @@ import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
+import jadeorg.lang.Message;
 import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
@@ -139,11 +140,10 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         }
 
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             ReplyMessage message = new ReplyMessage();
             message.setResult(result);
-            
-            send(message, askerAID);
+            return message;
         }
 
         @Override

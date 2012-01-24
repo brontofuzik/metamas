@@ -5,6 +5,7 @@ import example1.protocols.calculatefactorialprotocol.ReplyMessage;
 import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jadeorg.core.organization.Role;
+import jadeorg.lang.Message;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -117,11 +118,10 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void onSingleSender() {
+        protected Message prepareMessage() {
             RequestMessage message = new RequestMessage();
             message.setArgument(argument);
-            
-            send(message, answererAID);
+            return message;
         }
 
         @Override
@@ -132,7 +132,7 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class ReceiveReply extends SingleReceiverState {
+    private class ReceiveReply extends SingleReceiverState<ReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -151,16 +151,13 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         }
         
         @Override
-        protected int onSingleReceiver() {
-            ReplyMessage message = new ReplyMessage();
-            boolean messageReceived = receive(message, answererAID);
-            
-            if (messageReceived) {
-                result = message.getResult();
-                return InnerReceiverState.RECEIVED;
-            } else {
-                return InnerReceiverState.NOT_RECEIVED;
-            }
+        protected ReplyMessage createEmptyMessage() {
+            return new ReplyMessage();
+        }
+
+        @Override
+        protected void handleMessage(ReplyMessage message) {
+            result = message.getResult();
         }
 
         @Override
