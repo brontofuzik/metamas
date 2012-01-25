@@ -1,7 +1,7 @@
 package example1.organizations.demo;
 
-import example1.organizations.demo.answerer.Answerer;
-import example1.organizations.demo.asker.Asker;
+import example1.organizations.demo.answerer.Answerer_Role;
+import example1.organizations.demo.asker.Asker_Role;
 import jadeorg.core.organization.Organization;
 
 /**
@@ -19,8 +19,8 @@ public class Demo_Organization extends Organization {
         super.setup();
         
         // Add roles.
-        addRole(Asker.class);
-        addRole(Answerer.class);
+        addRole(Asker_Role.class);
+        addRole(Answerer_Role.class);
         logInfo("Roles added.");
     }
     

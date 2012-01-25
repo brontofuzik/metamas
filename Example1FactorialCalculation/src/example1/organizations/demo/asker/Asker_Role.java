@@ -2,18 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package example1.organizations.demo.answerer;
+package example1.organizations.demo.asker;
 
-import example1.organizations.demo.answerer.Answerer_Responder;
+import example1.organizations.demo.asker.CalculateFactorial_Power;
 import jadeorg.core.organization.Role;
 
 /**
- * An Answerer role.
+ * An Asker role.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
  */
-public class Answerer extends Role {
+public class Asker_Role extends Role {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -22,11 +22,11 @@ public class Answerer extends Role {
         super.setup();
 
         // Add behaviours.
-        addBehaviour(new Answerer_Responder());
-        logInfo("Behaviours added.");
+        // No behaviours.
 
         // Add powers.
-        // No powers.
+        addPower(CalculateFactorial_Power.class);
+        logInfo("Powers added.");
     }
 
     // </editor-fold>

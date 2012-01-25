@@ -93,7 +93,7 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            answererAID = getMyRole().getMyOrganization().getRoleAID("Answerer");
+            answererAID = getMyRole().getMyOrganization().getRoleAID("Answerer_Role");
         }
         
         // </editor-fold>
