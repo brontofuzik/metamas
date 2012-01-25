@@ -2,6 +2,7 @@ package example2.organizations.auction;
 
 import example2.organizations.auction.bidder.Bidder_Responder;
 import example2.organizations.auction.auctioneer.Auction_Power;
+import jadeorg.core.organization.Multiplicity;
 import jadeorg.core.organization.Organization;
 import jadeorg.core.organization.Role;
 import java.util.logging.Level;
@@ -22,7 +23,7 @@ public class Auction_Organization extends Organization {
         
         // Add roles.
         addRole(Auctioneer_Role.class);
-        addRole(Bidder_Role.class);
+        addRole(Bidder_Role.class, Multiplicity.MULTIPLE);
         log(Level.INFO, "Roles added.");
     }
     
