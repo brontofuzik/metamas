@@ -22,9 +22,6 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    // TODO Check this out.
-    String name;
-    
     Organization myOrganization;
     
     Map<String, Class> powers = new Hashtable<String, Class>();
@@ -60,26 +57,6 @@ public class Role extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    /**
-     * Gets the name of this role.
-     * @return the name of this role
-     */
-    public String getRoleName() {
-        return name;
-    }
-    
-    /**
-     * Sets the name of this role.
-     * @param name the name of this role
-     */
-    public void setRoleName(String name) {
-        // ----- Preconditions -----
-        assert name != null && !name.isEmpty();
-        // -------------------------
-        
-        this.name = name;
-    }
     
     /**
      * Gets my organization
@@ -219,3 +196,5 @@ public class Role extends Agent {
     
     // </editor-fold>
 }
+
+

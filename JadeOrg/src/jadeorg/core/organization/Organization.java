@@ -22,26 +22,35 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The organization roles. */
-    Map<String, Class> roles = new Hashtable<String, Class>();
+    /**
+     * The role definitions.
+     */
+    Map<String, RoleDefinition> roles = new Hashtable<String, RoleDefinition>();
     
-    /** The requirements. */
-    Map<String, String[]> requirements = new Hashtable<String, String[]>();
-    
-    /** The knowledge base. */
+    /**
+     * The knowledge base.
+     */
     OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
     
     // ----- PRIVATE -----
     
-    /** The DF agent description. */
+    /**
+     * The DF agent description.
+     */
     private DFAgentDescription agentDescription;
 
+    /**
+     * The logger.
+     */
     private Logger logger;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Organization class.
+     */
     public Organization() {
         logger = jade.util.Logger.getMyLogger(this.getClass().getName());
     }
@@ -92,9 +101,10 @@ public abstract class Organization extends Agent {
     /**
      * Adds a role.
      * @param roleClass the role class
+     * @param multiplicity the role multiplicity (single or multiple)
      * @param requirements the role requirements
      */
-    protected void addRole(Class roleClass, String[] requirements) {
+    protected void addRole(Class roleClass, Multiplicity multiplicity, String[] requirements) {
         // ----- Preconditions -----
         if (roleClass == null) {
             throw new IllegalArgumentException("roleClass");
@@ -104,22 +114,70 @@ public abstract class Organization extends Agent {
         }
         // -------------------------
         
-        String roleName = roleClass.getSimpleName();
-        roles.put(roleName, roleClass);
-        this.requirements.put(roleName, requirements);
+        RoleDefinition roleDefinition = new RoleDefinition(roleClass, multiplicity, requirements);
+        roles.put(roleDefinition.getName(), roleDefinition);
         
         // TAG YellowPages
         //registerRoleWithDF(roleName);
         
-        logInfo(String.format("Role (%1$s) added.", roleName));
+        logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
+        
+        // Alternative:
+        //addRole(new RoleDefinition(roleClass, requirements, multiplicity));
     }
     
     /**
-     * Adds a role.
-     * @param roleClass the role class 
+     * Adds a role with the default requirements (none).
+     * @param roleClass the role class
+     * @param multiplicity the role multiplicity
      */
-    protected void addRole(Class roleClass) {        
-        addRole(roleClass, new String[0]);
+    protected void addRole(Class roleClass, Multiplicity multiplicity) {
+        addRole(roleClass, multiplicity, new String[] {});
+        
+        // Alternative:
+        //addRole(new RoleDefinition(roleClass, multiplicity));
+    }
+    
+    /**
+     * Adds a role with the default multiplicity (single).
+     * @param roleClass the role class 
+     * @requirements the role requirements
+     */
+    protected void addRole(Class roleClass, String[] requirements) {        
+        addRole(roleClass, Multiplicity.SINGLE, requirements);
+        
+        // Alternative:
+        addRole(new RoleDefinition(roleClass, requirements));
+    }
+    
+    /**
+     * Adds a role with the default requirements (none) and default multiplicity (single).
+     * @param roleClass the role class
+     */
+    protected void addRole(Class roleClass) {
+        addRole(roleClass, Multiplicity.SINGLE, new String[] {});
+        
+        // Alternative:
+        //addRole(new RoleDefinition(roleClass));
+    }
+    
+    /**
+     * Adds a role definition.
+     * @param roleDefinition the role definition
+     */
+    protected void addRole(RoleDefinition roleDefinition) {
+        // ----- Preconditions -----
+        if (roleDefinition == null) {
+            throw new NullPointerException("roleDefinition");
+        }
+        // -------------------------
+        
+        roles.put(roleDefinition.getName(), roleDefinition);
+        
+        // TAG YellowPages
+        //registerRoleWithDF(roleName);
+        
+        logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
     }
 
     // TAG YellowPages
