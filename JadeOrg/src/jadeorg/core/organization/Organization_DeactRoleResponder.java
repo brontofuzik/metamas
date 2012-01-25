@@ -155,7 +155,8 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         protected void onAgree() {
-            getMyOrganization().knowledgeBase.updateRoleIsDeacted(roleName, playerAID);
+            getMyOrganization().knowledgeBase
+                .updateRoleIsDeacted(roleName, playerAID);
         }
 
         @Override

@@ -86,6 +86,23 @@ public class Role extends Agent {
         this.playerAID = playerAID;
     }
     
+    // ----- PACKAGE -----
+    
+    String getNickname() {
+        // ----- Preconditions -----
+        if (getPlayerAID() == null) {
+            throw new IllegalStateException(String.format(
+                "The role agent '%1$s' is not associated with a player.",
+                getName()));
+        }
+        // -------------------------
+        
+        String roleAgentName = getClass().getSimpleName().substring(0, 1).toLowerCase()
+            + getClass().getSimpleName().substring(1);
+        String playerAgentName = getPlayerAID().getLocalName();
+        return String.format("%1$s_%2$s", roleAgentName, playerAgentName);
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">

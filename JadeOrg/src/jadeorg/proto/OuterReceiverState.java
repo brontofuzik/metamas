@@ -136,7 +136,6 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
 
         @Override
         public void action() {
-            //System.out.println("----- " + getParent().getBehaviourName() + " MANAGER -----");
             onManager();
         }
         
@@ -209,11 +208,11 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
             
             // Process the message.
             if (messageReceived) {
-                //System.out.println("----- RECEIVED -----");
+                //System.out.println("----- MESSAGE RECEIVED -----");
                 handleMessage(message);
                 setExitValue(RECEIVED);
             } else {
-                //System.out.println("----- NOT-RECEIVED -----");
+                //System.out.println("----- MESSAGE NOT-RECEIVED -----");
                 setExitValue(NOT_RECEIVED);
             }
         }

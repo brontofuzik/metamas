@@ -98,7 +98,6 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     }
     
     private void selectRequirement(String requirementName) {
-        //System.out.println("----- ADDING REQUIREMENT: " + requirementName + " -----");
         requirement = createRequirement(requirementName);
         
         // Register the requirement-related states.
@@ -107,12 +106,13 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         // Register the requirement-related transitions.
         receiveRequirementArgument.registerDefaultTransition(requirement);
         requirement.registerDefaultTransition(sendRequirementResult);
-        //System.out.println("----- REQUIREMENT ADDED -----");
     }
     
     private Requirement createRequirement(String requirementName) {
-        //System.out.println("----- CREATING REQUIREMENT: " + requirementName + " -----");
+        System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
+        
         Class requirementClass = getMyPlayer().requirements.get(requirementName);
+        System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
         
         // Get the requirement constructor.
         Constructor requirementConstructor = null;
@@ -123,6 +123,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
+        System.out.println("----- REQUIREMENT CONSTRUCTOR: " + requirementConstructor + " -----");
         
         // Instantiate the requirement.
         Requirement requirement = null;
@@ -137,7 +138,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        //System.out.println("----- REQUIREMENT CREATED -----");
+        System.out.println("----- REQUIREMENT: " + requirement + " -----");
         
         return requirement;
     }
