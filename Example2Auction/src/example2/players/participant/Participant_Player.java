@@ -47,7 +47,7 @@ public abstract class Participant_Player extends Player {
      */
     static {
         auctioneerRoleFullName = new RoleFullName("auction_Organization.Auctioneer");
-        bidderRoleFullName = new RoleFullName("auction_Organization.Asker");
+        bidderRoleFullName = new RoleFullName("auction_Organization.Bidder");
         auctionPowerFullName = new PowerFullName("auction_Organization.Auctioneer.Auction");
         
         // Add abilities.
