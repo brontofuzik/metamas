@@ -166,7 +166,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         protected Message prepareMessage() {
             // Create the 'Requirements inform' message.
             RequirementsInformMessage message = new RequirementsInformMessage();
-            message.setRequirements(getMyOrganization().requirements.get(roleName));
+            message.setRequirements(getMyOrganization().roles.get(roleName).getRequirements());
             return message;
         }
 
@@ -250,14 +250,16 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         /**
          * Create a role agent.
          * @param roleClassName the name of the role agent class.
-         * @param roleName the name of the role agent instance.
+         * @param roleInstanceName the name of the role agent instance.
          * @return the role agent.
          */
-        private Role createRoleAgent(String roleClassName, String roleName) {
-            Class roleClass = getMyOrganization().roles.get(roleClassName);
-            Class organizationClass = myAgent.getClass();
-
+        private Role createRoleAgent(String roleClassName, String roleInstanceName) {
+            // Get the role class.
+            Class roleClass = getMyOrganization().roles.get(roleClassName).getRoleClass();
+            System.out.println("----- ROLE CLASS: " + roleClass + " -----");
+            
             // Get the role constructor.
+            Class organizationClass = myAgent.getClass();
             Constructor roleConstructor = null;
             try {
                 roleConstructor = roleClass.getConstructor(organizationClass);
@@ -266,11 +268,12 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             } catch (SecurityException ex) {
                 ex.printStackTrace();
             }
+            System.out.println("----- ROLE CONSTRUCTOR: " + roleConstructor + " -----");
             
             // Instantiate the role.
             Role role = null;
             try {
-                role = (Role)roleConstructor.newInstance(myAgent);
+                role = (Role)roleConstructor.newInstance(getMyOrganization());
             } catch (InstantiationException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
@@ -280,10 +283,10 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             } catch (InvocationTargetException ex) {
                 ex.printStackTrace();
             }
+            System.out.println("----- ROLE: " + role + " -----");
             
             // MyInitialize the role.
-            role.setRoleName(roleName);
-            role.setMyOrganization((Organization)myAgent);
+            role.setMyOrganization(getMyOrganization());
             
             return role;
         }
@@ -291,11 +294,12 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         private void startRoleAgent(Role role) {
             AgentController agentController = null;
             try {
-                agentController = myAgent.getContainerController().acceptNewAgent(roleName, role);
+                agentController = myAgent.getContainerController()
+                    .acceptNewAgent(roleName, role);
                 agentController.start();
             } catch (StaleProxyException ex) {
                 ex.printStackTrace();
-            }
+            }    
         }
         
         // </editor-fold>
