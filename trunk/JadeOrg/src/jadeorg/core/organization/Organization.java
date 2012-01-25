@@ -10,6 +10,7 @@ import jade.domain.FIPAException;
 import jade.util.Logger;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -29,6 +30,7 @@ public abstract class Organization extends Agent {
     
     /**
      * The knowledge base.
+     * The knowledge base stores knowledge acquired at run time.
      */
     OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
     
@@ -58,9 +60,24 @@ public abstract class Organization extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+ 
+    /**
+     * Gets an instance of a specified role.
+     * 
+     * @param roleName the name of the role
+     * @return an instance of the specified role
+     */
+    public AID getRoleInstance(String roleName) {
+        return knowledgeBase.getFirstRoleInstance(roleName);
+    }
     
-    public AID getRoleAID(String roleName) {
-        return knowledgeBase.getRole(roleName);
+    /**
+     * Gets all instances of a specified role.
+     * @param roleName the name of the role.
+     * @return all instances of the specified role
+     */
+    public Set<AID> getAllRoleInstances(String roleName) {
+        return knowledgeBase.getAllRoleInstances(roleName);
     }
     
     // ----- Logging -----

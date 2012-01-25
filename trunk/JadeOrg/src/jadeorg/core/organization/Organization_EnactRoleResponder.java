@@ -225,12 +225,16 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         @Override
         protected Message prepareMessage() {
             getMyOrganization().logInfo("Creating role agent.");
-
-            Role role = createRoleAgent(roleName, roleName);
+            
+            // Create the role agent and associate it with the player.
+            Role role = createRoleAgent(roleName);
             role.setPlayerAID(playerAID);
+            
             startRoleAgent(role);
+            
+            // Update the knowledge base.
             getMyOrganization().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
-
+            
             getMyOrganization().logInfo("Role agent created.");
             
             // Create the 'RoleAID' JadeOrg message.
@@ -253,10 +257,10 @@ public class Organization_EnactRoleResponder extends ResponderParty {
          * @param roleInstanceName the name of the role agent instance.
          * @return the role agent.
          */
-        private Role createRoleAgent(String roleClassName, String roleInstanceName) {
+        private Role createRoleAgent(String roleClassName) {
             // Get the role class.
             Class roleClass = getMyOrganization().roles.get(roleClassName).getRoleClass();
-            System.out.println("----- ROLE CLASS: " + roleClass + " -----");
+            //System.out.println("----- ROLE CLASS: " + roleClass + " -----");
             
             // Get the role constructor.
             Constructor roleConstructor = null;
@@ -267,12 +271,12 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             } catch (SecurityException ex) {
                 ex.printStackTrace();
             }
-            System.out.println("----- ROLE CONSTRUCTOR: " + roleConstructor + " -----");
+            //System.out.println("----- ROLE CONSTRUCTOR: " + roleConstructor + " -----");
             
-            // Instantiate the role.
-            Role role = null;
+            // Instantiate the role agent.
+            Role roleAgent = null;
             try {
-                role = (Role)roleConstructor.newInstance();
+                roleAgent = (Role)roleConstructor.newInstance();
             } catch (InstantiationException ex) {
                 ex.printStackTrace();
             } catch (IllegalAccessException ex) {
@@ -282,19 +286,19 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             } catch (InvocationTargetException ex) {
                 ex.printStackTrace();
             }
-            System.out.println("----- ROLE: " + role + " -----");
+            //System.out.println("----- ROLE: " + roleAgent + " -----");
             
-            // MyInitialize the role.
-            role.setMyOrganization(getMyOrganization());
+            // Associate the role agent with the organization agent.
+            roleAgent.setMyOrganization(getMyOrganization());
             
-            return role;
+            return roleAgent;
         }
 
-        private void startRoleAgent(Role role) {
-            AgentController agentController = null;
+        private void startRoleAgent(Role roleAgent) {
+            //System.out.println("----- STARTING ROLE AGENT: " + roleAgent.getNickname() + " -----");
             try {
-                agentController = myAgent.getContainerController()
-                    .acceptNewAgent(roleName, role);
+                AgentController agentController = myAgent.getContainerController()
+                    .acceptNewAgent(roleAgent.getNickname(), roleAgent);
                 agentController.start();
             } catch (StaleProxyException ex) {
                 ex.printStackTrace();
