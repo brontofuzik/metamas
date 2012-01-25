@@ -15,7 +15,7 @@ public class Demo2_Player extends Demo_Player {
      * @param roleFullName the full name of the role to enact and activate
      */
     public Demo2_Player() {
-        super(new RoleFullName("demo_Organization.Answerer"));
+        super(new RoleFullName("demo_Organization.Answerer_Role"));
     }
     
     // </editor-fold>

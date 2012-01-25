@@ -24,8 +24,8 @@ public class Demo1_Player extends Demo_Player {
      * @param powerFullName the full name of the power to invoke 
      */
     public Demo1_Player() {
-        super(new RoleFullName("demo_Organization.Asker"));
-        powerFullName = new PowerFullName("demo_Organization.Asker.CalculateFactorial_Power");
+        super(new RoleFullName("demo_Organization.Asker_Role"));
+        powerFullName = new PowerFullName("demo_Organization.Asker_Role.CalculateFactorial_Power");
     }
     
     // </editor-fold>
