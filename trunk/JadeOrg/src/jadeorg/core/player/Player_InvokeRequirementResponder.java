@@ -186,7 +186,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendRequirementArgumentRequest extends SendSuccessOrFailure {
+    private class SendRequirementArgumentRequest
+        extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -210,7 +211,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected ArgumentRequestMessage prepareMessage() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
             return message;
         }
@@ -263,7 +264,8 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendRequirementResult extends SendSuccessOrFailure {
+    private class SendRequirementResult
+        extends SendSuccessOrFailure<RequirementResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -287,7 +289,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected RequirementResultMessage prepareMessage() {
             RequirementResultMessage message = new RequirementResultMessage();
             message.setResult(requirement.getResult());
             return message;

@@ -9,7 +9,8 @@ import jadeorg.lang.Message;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public abstract class SingleSenderState extends OuterSenderState {
+public abstract class SingleSenderState<TMessage extends Message>
+    extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -42,13 +43,13 @@ public abstract class SingleSenderState extends OuterSenderState {
         return SINGLE_SENDER;
     }
     
-    protected abstract Message prepareMessage();
+    protected abstract TMessage prepareMessage();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SingleSender extends InnerSenderState {
+    private class SingleSender extends InnerSenderState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -62,7 +63,7 @@ public abstract class SingleSenderState extends OuterSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected Message prepareMessage() {
+        protected TMessage prepareMessage() {
             return SingleSenderState.this.prepareMessage();
         }
             

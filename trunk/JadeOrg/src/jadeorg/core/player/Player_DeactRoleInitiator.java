@@ -126,7 +126,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
      * The 'Send deact request' (single sender) state.
      * A state in which the 'Deact request' message is sent.
      */
-    private class SendDeactRequest extends SingleSenderState {
+    private class SendDeactRequest extends SingleSenderState<DeactRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -145,7 +145,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected DeactRequestMessage prepareMessage() {
             DeactRequestMessage message = new DeactRequestMessage();
             message.setRoleName(roleName);
             return message;

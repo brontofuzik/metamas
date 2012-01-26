@@ -141,7 +141,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class SendInvokePowerRequest extends SingleSenderState {
+    private class SendInvokePowerRequest
+        extends SingleSenderState<InvokePowerRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -160,7 +161,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected InvokePowerRequestMessage prepareMessage() {
             InvokePowerRequestMessage message = new InvokePowerRequestMessage();
             message.setPower(powerName);
             return message;
@@ -209,7 +210,8 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class SendPowerArgument extends SingleSenderState {
+    private class SendPowerArgument
+        extends SingleSenderState<PowerArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -228,7 +230,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected PowerArgumentMessage prepareMessage() {
             PowerArgumentMessage message = new PowerArgumentMessage();
             message.setArgument(powerArgument);
             return message;

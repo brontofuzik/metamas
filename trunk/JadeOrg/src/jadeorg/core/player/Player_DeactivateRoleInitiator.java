@@ -116,7 +116,8 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
     /**
      * 
      */
-    private class SendDeactivateRequest extends SingleSenderState {
+    private class SendDeactivateRequest
+        extends SingleSenderState<DeactivateRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -135,7 +136,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected DeactivateRequestMessage prepareMessage() {
             DeactivateRequestMessage message = new DeactivateRequestMessage();
             return message;
         }

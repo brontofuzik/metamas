@@ -3,6 +3,7 @@ package jadeorg.proto;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
+import jadeorg.lang.SimpleMessage;
 
 /**
  * A 'Send success or FAILURE' (multi-sender) state.
@@ -10,7 +11,8 @@ import jadeorg.lang.Message;
  * @since 2011-12-24
  * @version %I% %G%
  */
-public abstract class SendSuccessOrFailure extends OuterSenderState {
+public abstract class SendSuccessOrFailure<TMessage extends Message>
+    extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -24,7 +26,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected SendSuccessOrFailure() {        
-        addSender(SUCCESS, new MySendSuccess());
+        addSender(SUCCESS, new SendSuccess());
         addSender(FAILURE, new SendFailure());
         
         buildFSM();
@@ -40,7 +42,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected abstract Message prepareMessage();
+    protected abstract TMessage prepareMessage();
     
     /**
      * Handles the FAILURE simple message being sent.
@@ -54,7 +56,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MySendSuccess extends InnerSenderState {
+    private class SendSuccess extends InnerSenderState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -72,7 +74,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         * @return the success message
         */
         @Override
-        protected Message prepareMessage() {
+        protected TMessage prepareMessage() {
             return SendSuccessOrFailure.this.prepareMessage();
         }
     
@@ -115,7 +117,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
          * @return the FAILURE simple message
          */
         @Override
-        protected Message prepareMessage() {
+        protected SimpleMessage prepareMessage() {
             onFailure();
             return super.prepareMessage();
         }

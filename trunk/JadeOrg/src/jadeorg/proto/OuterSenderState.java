@@ -134,7 +134,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     /**
      * An inner sender state.
      */
-    protected abstract class InnerSenderState extends OneShotBehaviourState {
+    protected abstract class InnerSenderState<TMessage extends Message>
+        extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -146,7 +147,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         @Override
         public void action() {            
-            Message message = prepareMessage();
+            TMessage message = prepareMessage();
             
             // Send the message.
             send(message, getReceivers());
@@ -154,7 +155,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // ----- PROTECTED -----
         
-        protected abstract Message prepareMessage();
+        protected abstract TMessage prepareMessage();
         
         // </editor-fold>
     }
@@ -165,7 +166,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
      * @since 2012-01-26
      * @version %I% %G%
      */
-    protected abstract class SendSimpleMessage extends InnerSenderState {
+    protected abstract class SendSimpleMessage
+        extends InnerSenderState<SimpleMessage> {
     
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
@@ -195,7 +197,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
          * @return the simple message
          */
         @Override
-        protected Message prepareMessage() {
+        protected SimpleMessage prepareMessage() {
             return new SimpleMessage(performative);
         }      
         

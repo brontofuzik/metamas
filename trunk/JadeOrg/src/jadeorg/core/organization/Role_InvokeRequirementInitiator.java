@@ -144,7 +144,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class SendRequirementRequest extends SingleSenderState {
+    private class SendRequirementRequest
+        extends SingleSenderState<InvokeRequirementRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -163,7 +164,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected InvokeRequirementRequestMessage prepareMessage() {
             InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
             message.setRequirement(requirementName);
             return message;
@@ -212,7 +213,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class SendRequirementArgument extends SendSuccessOrFailure {
+    private class SendRequirementArgument
+        extends SendSuccessOrFailure<RequirementArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -240,7 +242,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected RequirementArgumentMessage prepareMessage() {
             RequirementArgumentMessage message = new RequirementArgumentMessage();
             message.setArgument(requirementArgument);
             return message;

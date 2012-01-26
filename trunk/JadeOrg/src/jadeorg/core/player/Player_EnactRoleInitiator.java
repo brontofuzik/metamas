@@ -142,7 +142,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
      * The 'Send enact request' active state.
      * A state in which the 'Enact' request is sent.
      */
-    private class SendEnactRequest extends SingleSenderState {
+    private class SendEnactRequest extends SingleSenderState<EnactRequestMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -161,7 +161,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected EnactRequestMessage prepareMessage() {
             // Create the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             message.setRoleName(roleName);
