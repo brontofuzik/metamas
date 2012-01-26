@@ -79,6 +79,11 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
     
     // ----- PRIVATE -----
     
+    // TODO Consider moving this getter to the Party class.
+    /**
+     * Gets my role.
+     * @return my role
+     */
     private Role getMyRole() {
         return (Role)myAgent;
     }
@@ -93,9 +98,12 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         
         @Override
         public void action() {
+            getMyRole().logInfo(String.format(
+                "Initiating the 'Calculate factorial' protocol (id = %1$s)",
+                getProtocolId()));
+            
             answererAID = getMyRole().getMyOrganization()
                 .getRoleInstance("Answerer_Role");
-            System.out.println("----- ANSWERER: " + answererAID + " -----");
         }
         
         // </editor-fold>
@@ -119,6 +127,10 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
             getMyRole().logInfo("Sending calculate factorial request.");
         }
         
+        /**
+         * Prepares the 'Request' message.
+         * @return the 'Request' message
+         */
         @Override
         protected Message prepareMessage() {
             RequestMessage message = new RequestMessage();

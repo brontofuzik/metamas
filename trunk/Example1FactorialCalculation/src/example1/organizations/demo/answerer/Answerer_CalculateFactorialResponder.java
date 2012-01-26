@@ -36,6 +36,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     public Answerer_CalculateFactorialResponder(ACLMessage aclMessage) {
         super(CalculateFactorialProtocol.getInstance(), aclMessage);
         
+        // TODO Consider moving this initialization to the 'MyInitialize' state.
         askerAID = getACLMessage().getSender();
         
         buildFSM();
@@ -56,7 +57,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
     private void buildFSM() {
         // ----- States -----
         State receiveRequest = new ReceiveRequest();
-        State invokeRequirementCalculateFactorial = new InvokeRequirementCalculateFactorial();
+        State invokeRequirement_CalculateFactorial = new InvokeRequirement_CalculateFactorial();
         State sendReply = new SendReply();
         State end = new End();
         // ------------------
@@ -64,15 +65,15 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // Register the states.
         registerFirstState(receiveRequest);
         
-        registerState(invokeRequirementCalculateFactorial);
+        registerState(invokeRequirement_CalculateFactorial);
         registerState(sendReply);
         
         registerLastState(end);
         
         // Register the transitions.
-        receiveRequest.registerDefaultTransition(invokeRequirementCalculateFactorial);
+        receiveRequest.registerDefaultTransition(invokeRequirement_CalculateFactorial);
         
-        invokeRequirementCalculateFactorial.registerDefaultTransition(sendReply);
+        invokeRequirement_CalculateFactorial.registerDefaultTransition(sendReply);
         
         sendReply.registerDefaultTransition(end);  
     }
@@ -87,20 +88,23 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         
         @Override
         public void action() {
+            getMyRole().logInfo("Receiving request.");
             RequestMessage message = new RequestMessage();
             message.parseACLMessage(getACLMessage());
             
             argument = message.getArgument();
+            getMyRole().logInfo("Request received.");
         }
         
         // </editor-fold>
     }
     
-    private class InvokeRequirementCalculateFactorial extends InvokeRequirementState {
+    private class InvokeRequirement_CalculateFactorial
+        extends InvokeRequirementState<Integer, Integer> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        InvokeRequirementCalculateFactorial() {
+        InvokeRequirement_CalculateFactorial() {
             super("example1.players.demo.CalculateFactorial_Requirement");
         }
         
@@ -109,13 +113,13 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected Object getRequirementArgument() {
+        protected Integer getRequirementArgument() {
             return new Integer(argument);
         }
         
         @Override
-        protected void setRequirementResult(Object requirementResult) {
-            result = ((Integer)requirementResult).intValue();
+        protected void setRequirementResult(Integer requirementResult) {
+            result = requirementResult.intValue();
         }
         
         // </editor-fold>
