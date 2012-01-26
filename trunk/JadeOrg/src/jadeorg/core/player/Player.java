@@ -10,9 +10,7 @@ import jadeorg.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -31,11 +29,6 @@ public abstract class Player extends Agent {
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     // ----- PRIVATE -----
-    
-    /**
-     * The abilities.
-     */
-    private static final Set<String> abilities = new HashSet<String>();
 
     // TAG OBSOLETE
 //    private Player_Initiator initiator = new Player_Initiator(this);
@@ -47,6 +40,9 @@ public abstract class Player extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Player class.
+     */
     public Player() {
         logger = jade.util.Logger.getMyLogger(this.getClass().getName());
     }
@@ -273,14 +269,6 @@ public abstract class Player extends Agent {
     
     // ---------- PROTECTED ----------
     
-    /**
-     * Adds an ability (requirement).
-     * @param ability the ability
-     */
-    protected static void addAbility(String ability) {
-        abilities.add(ability);
-    }
-    
     @Override
     protected void setup() {
         super.setup();
@@ -341,7 +329,7 @@ public abstract class Player extends Agent {
      * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise 
      */
     protected /* virtual */ boolean evaluateRequirement(String requirement) {
-        return abilities.contains(requirement);
+        return requirements.containsKey(requirement);
     }
     
     // </editor-fold>
