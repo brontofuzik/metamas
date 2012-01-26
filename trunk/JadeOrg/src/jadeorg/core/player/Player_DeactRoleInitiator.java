@@ -2,6 +2,7 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jadeorg.lang.Message;
+import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -180,8 +181,12 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
             getMyPlayer().logInfo("Receiving deact reply.");
         }
         
+        /**
+         * Handles the received AGREE message
+         * @param message the received AGREE message
+         */
         @Override
-        protected void handleAgreeMessage() {
+        protected void handleAgreeMessage(SimpleMessage message) {
             getMyPlayer().knowledgeBase.deactRole(roleName);
         }
 

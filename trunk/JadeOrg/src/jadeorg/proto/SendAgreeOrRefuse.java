@@ -3,7 +3,7 @@ package jadeorg.proto;
 import jade.core.AID;
 
 /**
- * Sends a 'Agree' or 'Refuse' message.
+ * A 'Send AGREE or REFUSE' (multi-sender) state.
  * @author Lukáš Kúdela
  * @since 2010-12-20
  * @version %I% %G%

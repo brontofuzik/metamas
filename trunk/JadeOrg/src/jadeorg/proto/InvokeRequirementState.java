@@ -11,7 +11,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since
  * @version %I% %G%
  */
-public abstract class InvokeRequirementState extends FSMBehaviourState {
+public abstract class InvokeRequirementState<TArgument, TResult>
+    extends FSMBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -33,9 +34,9 @@ public abstract class InvokeRequirementState extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected abstract Object getRequirementArgument();
+    protected abstract TArgument getRequirementArgument();
     
-    protected abstract void setRequirementResult(Object requirementResult);
+    protected abstract void setRequirementResult(TResult requirementResult);
     
     // </editor-fold>
     
@@ -89,7 +90,7 @@ public abstract class InvokeRequirementState extends FSMBehaviourState {
         
         @Override
         public void action() {
-            setRequirementResult(invokeRequirementInitiator.getRequirementResult());
+            setRequirementResult((TResult)invokeRequirementInitiator.getRequirementResult());
         }
         
         // </editor-fold>

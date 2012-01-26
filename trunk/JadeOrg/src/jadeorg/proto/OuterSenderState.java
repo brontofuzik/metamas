@@ -156,6 +156,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // ----- PROTECTED -----
         
+        // TODO Consider removing this method transferring its responsibilities
+        // to the prepareMessage() method.
         protected /* virtual */ void onSent() {
             // Do nothing.
         }
@@ -165,8 +167,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // </editor-fold>
     }
     
+    // TODO Consider replacing all Send<PERFORMATIVE> abstract classes
+    // with one abstract class.
     /**
-     * A 'Send agree' inner sender state.
+     * A 'Send AGREE' inner sender state.
      * @author Lukáš Kúdela
      * @since 2011-12-15
      * @version %I% %G%
@@ -190,7 +194,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     }
     
     /**
-     * A 'Send refuse' inner sender state.
+     * A 'Send REFUSE' inner sender state.
      * @author Lukáš Kúdela
      * @since 2011-12-15
      * @version %I% %G%
@@ -214,7 +218,55 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     }
     
     /**
-     * A 'Send failure' inner sender state.
+     * A 'Send ACCEPT_PROPOSAL' inner sender state.
+     * @author Lukáš Kúdela
+     * @since 2012-01-26
+     * @version %I% %G%
+     */
+    protected abstract class SendAcceptProposal extends InnerSenderState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected final Message prepareMessage() {
+            return new SimpleMessage(ACLMessage.ACCEPT_PROPOSAL);
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected /* virtual */ void onSent() {
+            // Do nothing.
+        }
+        
+        // </editor-fold>
+    }
+    
+     /**
+     * A 'Send REJECT PROPOSAL' inner sender state.
+     * @author Lukáš Kúdela
+     * @since 2012-01-26
+     * @version %I% %G%
+     */
+    protected abstract class SendRejectProposal extends InnerSenderState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected final Message prepareMessage() {
+            return new SimpleMessage(ACLMessage.REJECT_PROPOSAL);
+        }
+        
+        // ----- PROTECTED -----
+        
+        protected /* virtual */ void onSent() {
+            // Do nothing.
+        }
+        
+        // </editor-fold>
+    }   
+    
+    /**
+     * A 'Send FAILURE' inner sender state.
      * @author Lukáš Kúdela
      * @since 2011-12-09
      * @version %I% %G%

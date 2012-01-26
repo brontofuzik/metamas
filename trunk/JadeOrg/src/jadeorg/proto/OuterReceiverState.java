@@ -59,6 +59,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     protected void buildFSM() {
+        // TODO (priority: high) Remove the indirection.
         registerStatesAndTransitions();
     }
      
@@ -230,8 +231,10 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // </editor-fold>
     }
     
+    // TODO Consider replacing all Receive<PERFORMATIVE> abstract classes
+    // with one abstract class.
     /**
-     * A 'Receive agree' inner receiver state.
+     * A 'Receive AGREE' inner receiver state.
      * @author Lukáš Kúdela
      * @since 2011-12-15
      * @version %I% %G%
@@ -253,7 +256,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     /**
-     * A 'Receive failure' inner receiver state.
+     * A 'Receive REFUSE' inner receiver state.
      * @author Lukáš Kúdela
      * @since 2011-12-15
      * @version %I% %G%
@@ -275,7 +278,45 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     }
     
     /**
-     * A 'Receive failure' inner receiver state.
+     * A 'Receive ACCEPT_PROPOSAL' inner receiver state.
+     * @author Lukáš Kúdela
+     * @since 2012-01-26
+     * @version %I% %G%
+     */
+    protected abstract class ReceiveAcceptProposal
+        extends InnerReceiverState<SimpleMessage> {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public ReceiveAcceptProposal(int outerReceiverStateExitValue) {
+            super(new SimpleMessage.Factory(ACLMessage.ACCEPT_PROPOSAL),
+                outerReceiverStateExitValue);
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * A 'Receive REJECT PROPOSAL' inner receiver state.
+     * @author Lukáš Kúdela
+     * @since 2012-01-26
+     * @version %I% %G%
+     */
+    protected abstract class ReceiveRejectProposal
+        extends InnerReceiverState<SimpleMessage> {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        public ReceiveRejectProposal(int outerReceiverStateExitValue) {
+            super(new SimpleMessage.Factory(ACLMessage.REJECT_PROPOSAL),
+                outerReceiverStateExitValue);
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * A 'Receive FAILURE' inner receiver state.
      * @author Lukáš Kúdela
      * @since 2011-12-09
      * @version %I% %G%

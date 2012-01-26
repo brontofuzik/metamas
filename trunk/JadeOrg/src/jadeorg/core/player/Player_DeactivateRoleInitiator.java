@@ -2,6 +2,7 @@ package jadeorg.core.player;
 
 import jade.core.AID;
 import jadeorg.lang.Message;
+import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -168,8 +169,12 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
             getMyPlayer().logInfo("Receiving deactivate reply.");
         }
         
+        /**
+         * Handles the received AGREE message
+         * @param message the received AGREE message
+         */
         @Override
-        protected void handleAgreeMessage() {
+        protected void handleAgreeMessage(SimpleMessage message) {
             getMyPlayer().knowledgeBase.deactivateRole();
         }
 

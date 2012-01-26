@@ -4,7 +4,7 @@ import jade.core.AID;
 import jadeorg.lang.Message;
 
 /**
- * A 'Send success or failure' multi sender state.
+ * A 'Send success or FAILURE' (multi-sender) state.
  * @author Lukáš Kúdela
  * @since 2011-12-24
  * @version %I% %G%

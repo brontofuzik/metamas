@@ -11,7 +11,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-04
  * @version %I% %G%
  */
-public abstract class InvokePowerState extends FSMBehaviourState {
+public abstract class InvokePowerState<TArgument, TResult>
+    extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -31,9 +32,9 @@ public abstract class InvokePowerState extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    protected abstract Object getPowerArgument();
+    protected abstract TArgument getPowerArgument();
     
-    protected abstract void setPowerResult(Object powerResult);
+    protected abstract void setPowerResult(TResult powerResult);
     
     // </editor-fold>
     
@@ -87,7 +88,7 @@ public abstract class InvokePowerState extends FSMBehaviourState {
         
         @Override
         public void action() {
-            setPowerResult(invokePowerInitiator.getPowerResult());
+            setPowerResult((TResult)invokePowerInitiator.getPowerResult());
         }
         
         // </editor-fold>

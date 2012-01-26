@@ -4,18 +4,18 @@ import jade.core.AID;
 import jadeorg.lang.SimpleMessage;
 
 /**
- * A 'Receive AGREE or REFUSE' (multi-receiver) state.
+ * An 'Receive ACCEPT_PROPOSAL or REJECT_PROPOSAL' (multi-receiver) state. 
  * @author Lukáš Kúdela
- * @since 2011-12-20
+ * @since 2012-01-26
  * @version %I% %G%
  */
-public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
- 
+public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
+
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     // ----- Exit values -----
-    public static final int AGREE = 1;
-    public static final int REFUSE = 2;
+    public static final int ACCEPT_PROPOSAL = 0;
+    public static final int REJECT_PROPOSAL = 1;
     // -----------------------
     
     // </editor-fold>
@@ -23,11 +23,11 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the ReceiveAgreeOrRefuse class.
+     * Initializes a new instance of the ReceiveAcceptOrRejectProposal class.
      */
-    protected ReceiveAgreeOrRefuse() {
-        addReceiver(this.new MyReceiveAgree());
-        addReceiver(this.new MyReceiveRefuse());
+    protected ReceiveAcceptOrRejectProposal() {
+        addReceiver(this.new MyReceiveAcceptProposal());
+        addReceiver(this.new MyReceiveRejectProposal());
         
         buildFSM();
     }
@@ -47,18 +47,18 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Handles the received AGREE message.
-     * @param message the received AGREE message
+     * Handles the received ACCEPT_PROPOSAL message.
+     * @param message the recived ACCEPT_PROPOSAL message
      */
-    protected void handleAgreeMessage(SimpleMessage message) {
+    protected /* virtual */ void handleAcceptProposalMessage(SimpleMessage message) {
         // Do nothing.
     }
     
     /**
-     * Handles the received REFUSE message.
-     * @param message the received REFUSE message
+     * Handles the recevied REJECT_PROPOSAL message.
+     * @param message the received REJECT_PROPOSAL message
      */
-    protected void handleRefuseMessage(SimpleMessage message) {
+    protected /* virtual */ void handleRejectProposalMessage(SimpleMessage message) {
         // Do nothing.
     }
     
@@ -67,17 +67,17 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * My 'Receive AGREE' state. 
+     * My 'Receive ACCEPT_PROPOSAL' state.
      */
-    private class MyReceiveAgree extends OuterReceiverState.ReceiveAgree {
+    private class MyReceiveAcceptProposal extends OuterReceiverState.ReceiveAcceptProposal {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
-         * Initializes a new instance of the MyReceiveAgree class.
+         * Initializes a new instance of the MyReceiveAcceptProposal class.
          */
-        MyReceiveAgree() {
-            super(AGREE);
+        MyReceiveAcceptProposal() {
+            super(ACCEPT_PROPOSAL);
         }
         
         // </editor-fold>
@@ -90,7 +90,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
          */
         @Override
         protected AID[] getSenders() {
-            return ReceiveAgreeOrRefuse.this.getSenders();
+            return ReceiveAcceptOrRejectProposal.this.getSenders();
         }
         
         // </editor-fold>
@@ -99,28 +99,28 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         
         /**
          * Handles the received message.
-         * @param message the received message
+         * @param message the received message 
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleAgreeMessage(message);
+            handleAcceptProposalMessage(message);
         }
 
         // </editor-fold>    
     }
     
     /**
-     * My 'Receive REFUSE' state.
+     * My 'Receive REJECT_PROPOSAL' state.
      */
-    private class MyReceiveRefuse extends OuterReceiverState.ReceiveRefuse {
+    private class MyReceiveRejectProposal extends OuterReceiverState.ReceiveRejectProposal {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
-         * Initializes a new instance of the MyReceiveRefuse class.
+         * Initializes a new instance of the MyReceiveRejectProposal class.
          */
-        MyReceiveRefuse() {
-            super(REFUSE);
+        MyReceiveRejectProposal() {
+            super(REJECT_PROPOSAL);
         }
         
         // </editor-fold>
@@ -128,12 +128,12 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         /**
-         * Handles the received message
-         * @param message the received message
+         * Gets the senders; more precisely, their AIDs.
+         * @return the senders; more precisely, their AIDs.
          */
         @Override
         protected AID[] getSenders() {
-            return ReceiveAgreeOrRefuse.this.getSenders();
+            return ReceiveAcceptOrRejectProposal.this.getSenders();
         }
         
         // </editor-fold>
@@ -141,12 +141,12 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         /**
-         * Handles the received message.
+         * Handles the received message
          * @param message the received message
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleRefuseMessage(message);
+            handleRejectProposalMessage(message);
         }
 
         // </editor-fold>
