@@ -125,7 +125,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendReply extends SingleSenderState {
+    private class SendReply extends SingleSenderState<ReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -144,7 +144,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         }
 
         @Override
-        protected Message prepareMessage() {
+        protected ReplyMessage prepareMessage() {
             ReplyMessage message = new ReplyMessage();
             message.setResult(result);
             return message;
