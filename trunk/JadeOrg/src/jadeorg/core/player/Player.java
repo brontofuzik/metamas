@@ -289,7 +289,7 @@ public abstract class Player extends Agent {
         }
         // -------------------------
         
-        String requirementName = requirementClass.getName();
+        String requirementName = requirementClass.getSimpleName();
         requirements.put(requirementName, requirementClass);
         
         logInfo(String.format("Requirement (%1$s) added.", requirementName));
