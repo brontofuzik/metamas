@@ -109,7 +109,7 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
         // </editor-fold>
     }
     
-    private class SendRequest extends SingleSenderState {
+    private class SendRequest extends SingleSenderState<RequestMessage> {
       
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -132,7 +132,7 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty {
          * @return the 'Request' message
          */
         @Override
-        protected Message prepareMessage() {
+        protected RequestMessage prepareMessage() {
             RequestMessage message = new RequestMessage();
             message.setArgument(argument);
             return message;
