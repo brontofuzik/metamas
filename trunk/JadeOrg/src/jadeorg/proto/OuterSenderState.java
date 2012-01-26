@@ -145,9 +145,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            onSent();
-            
+        public void action() {            
             Message message = prepareMessage();
             
             // Send the message.
@@ -155,12 +153,6 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         }
         
         // ----- PROTECTED -----
-        
-        // TODO Consider removing this method transferring its responsibilities
-        // to the prepareMessage() method.
-        protected /* virtual */ void onSent() {
-            // Do nothing.
-        }
         
         protected abstract Message prepareMessage();
         
@@ -180,14 +172,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected final Message prepareMessage() {
+        protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.AGREE);
-        }
-        
-        // ----- PROTECTED -----
-        
-        protected /* virtual */ void onSent() {
-            // Do nothing.
         }
         
         // </editor-fold>
@@ -204,14 +190,8 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected final Message prepareMessage() {
+        protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.REFUSE);
-        }
-        
-        // ----- PROTECTED -----
-        
-        protected /* virtual */ void onSent() {
-            // Do nothing.
         }
         
         // </editor-fold>      
@@ -228,16 +208,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected final Message prepareMessage() {
+        protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.ACCEPT_PROPOSAL);
         }
-        
-        // ----- PROTECTED -----
-        
-        protected /* virtual */ void onSent() {
-            // Do nothing.
-        }
-        
+
         // </editor-fold>
     }
     
@@ -255,13 +229,7 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         protected final Message prepareMessage() {
             return new SimpleMessage(ACLMessage.REJECT_PROPOSAL);
         }
-        
-        // ----- PROTECTED -----
-        
-        protected /* virtual */ void onSent() {
-            // Do nothing.
-        }
-        
+
         // </editor-fold>
     }   
     
@@ -278,12 +246,6 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         @Override
         protected final Message prepareMessage() {
             return new SimpleMessage(ACLMessage.FAILURE);
-        }
-        
-        // ----- PROTCTED -----
-        
-        protected /* virtual */ void onSent() {
-            // Do nothing.
         }
         
         // </editor-fold>
