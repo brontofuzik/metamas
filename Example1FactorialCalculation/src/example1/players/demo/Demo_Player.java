@@ -22,13 +22,6 @@ public abstract class Demo_Player extends Player {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes the Demo_Player class.
-     */
-    static {
-        addAbility("calculate-factorial"); // For the Answerer role.
-    }
-    
-    /**
      * Creates a new Demo player who will enact the Answerer role.
      * @param roleFullName the full name of the role to enact and activate
      */
