@@ -1,17 +1,22 @@
 package example2.organizations.auction.auctioneer;
 
-import example2.organizations.auction.Auction_Organization.Auctioneer_Role;
+import example2.protocols.envelopeauction.AuctionCFPMessage;
 import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import jadeorg.core.organization.Role;
 import jadeorg.lang.Message;
+import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,15 +46,17 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private Double reservationPrice;
     
+    private Map<AID, Double> bids = new HashMap<AID, Double>();
+    
     /**
      * A flag indicating whether the winner has been determined.
      */
     private boolean winnerDetermined;
     
     /**
-     * The AID of the winner.
+     * The winner; more precisely its AID.
      */
-    private AID winnerAID;
+    private AID winner;
     
     /**
      * The final price.
@@ -97,17 +104,20 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     @Override
     public AuctionResult getAuctionResult() {
-        return new AuctionResult(winnerDetermined, winnerAID, finalPrice);
+        return winnerDetermined ?
+            AuctionResult.createPositiveAuctionResult(winner, finalPrice) :
+            AuctionResult.createNegativeAuctionResult();
     }
     
     // ----- PRIVATE -----
     
+    // TODO Consider moving this getter to the Party class.
     /**
-     * Gets my 'Auctioneer' role.
-     * @return my 'Auctioneer' role
+     * Gets my role.
+     * @return my role
      */
-    private Auctioneer_Role getMyAuctioneer() {
-        return (Auctioneer_Role)myAgent;
+    private Role getMyRole() {
+        return (Role)myAgent;
     }
     
     /**
@@ -136,6 +146,9 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         State initialize = new MyInitialize();
         State sendAuctionCFP = new SendAuctionCFP();
         State receiveBid = new ReceiveBid();
+        State determineWinner = new DetermineWinner();
+        State sendAuctionResultToWinner = new SendAuctionResultToWinner();
+        State sendAuctionResultToLosers = new SendAuctionResultToLosers();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -145,11 +158,28 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         
         registerState(sendAuctionCFP);
         registerState(receiveBid);
+        registerState(determineWinner);
+        registerState(sendAuctionResultToWinner);
+        registerState(sendAuctionResultToLosers);
         
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
+        initialize.registerTransition(Initialize.OK, sendAuctionCFP);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        
+        sendAuctionCFP.registerDefaultTransition(receiveBid);
+        
+        receiveBid.registerTransition(ReceiveBid.ALL_BIDS_RECEIVED, determineWinner);
+        receiveBid.registerTransition(ReceiveBid.SOME_BIDS_NOT_RECEIVED, receiveBid);
+        
+        determineWinner.registerTransition(DetermineWinner.WINNER_DETERMINED, sendAuctionResultToWinner);
+        determineWinner.registerTransition(DetermineWinner.WINNER_NOT_DETERMINED, failureEnd);
+        
+        sendAuctionResultToWinner.registerDefaultTransition(sendAuctionResultToLosers);
+        
+        sendAuctionResultToLosers.registerDefaultTransition(successEnd);
     }
     
     // </editor-fold>
@@ -166,9 +196,12 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         
         @Override
         protected int initialize() {
-            getMyAuctioneer().logInfo(String.format(
+            getMyRole().logInfo(String.format(
                 "Initiating the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
+            
+            bidders = getMyRole().getMyOrganization().getAllRoleInstances("Bidder_Role");
+            
             return OK;
         }
         
@@ -195,18 +228,23 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         
         @Override
         protected void onEntry() {
-            getMyAuctioneer().logInfo("Sending auction CFP.");
+            getMyRole().logInfo("Sending auction CFP.");
         }
 
+        /**
+         * Prepares the 'Auction CFP' message.
+         * @return the 'Auction CFP' message
+         */
         @Override
         protected Message prepareMessage() {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            AuctionCFPMessage message = new AuctionCFPMessage();
+            message.setItemName(itemName);
+            return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAuctioneer().logInfo("Auction CFP sent.");
+            getMyRole().logInfo("Auction CFP sent.");
         }
         
         // </editor-fold>
@@ -218,6 +256,16 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      */
     private class ReceiveBid extends SingleReceiverState<BidMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        /** An situation where all bids have been received. */
+        public static final int ALL_BIDS_RECEIVED = 0;
+        
+        /** A situation where some bids have not been received. */
+        public static final int SOME_BIDS_NOT_RECEIVED = 1;
+              
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveBid() {
@@ -238,27 +286,169 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        protected void onEntry() {
-            getMyAuctioneer().logInfo("Receiving bid.");
+        public int onEnd() {
+            if (bids.size() == bidders.size()) {
+                return ALL_BIDS_RECEIVED;
+            } else {
+                return SOME_BIDS_NOT_RECEIVED;
+            }
         }
         
         @Override
+        protected void onEntry() {
+            getMyRole().logInfo("Receiving bid.");
+        }
+        
+        /**
+         * Hanles the 'Bid' message.
+         * @param message the 'Bid' message
+         */
+        @Override
         protected void handleMessage(BidMessage message) {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            bids.put(message.getSender(), message.getBid());
         }
 
         @Override
         protected void onExit() {
-            getMyAuctioneer().logInfo("Bid received.");
+            getMyRole().logInfo("Bid received.");
         }
         
         // </editor-fold> 
     }
     
     /**
+     * The 'Determine winner' (one-shot) state.
+     * A state in which the winner is determined.
+     */
+    private class DetermineWinner extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        /** The winner has been determined. */
+        public static final int WINNER_DETERMINED = 0;
+        
+        /** The winner has not been determined. */
+        public static final int WINNER_NOT_DETERMINED = 1;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        private int exitValue;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            winner = null;
+            finalPrice = Double.MIN_VALUE;
+            for (Map.Entry<AID, Double> entry : bids.entrySet()) {
+                if (entry.getValue() > finalPrice) {
+                    winner = entry.getKey();
+                    finalPrice = entry.getValue();
+                }
+            }
+            
+            exitValue = (finalPrice > reservationPrice) ?
+                WINNER_DETERMINED :  WINNER_NOT_DETERMINED;
+        }
+ 
+        
+        @Override
+        public int onEnd() {
+            return exitValue;
+        }
+            
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Send auction result to the winner' (single sender) state.
+     * A state in which the positive auction result is sent to the winner.
+     */
+    private class SendAuctionResultToWinner extends SingleSenderState {
+
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID[] getReceivers() {
+            // TODO Implement.
+            return new AID[] { winner };
+        }
+        
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyRole().logInfo("Sending auction result to the winner.");
+        }
+        
+        /**
+         * Creates the simple (AGREE) message.
+         * @return the simple (AGREE) message
+         */
+        @Override
+        protected Message prepareMessage() {
+            // TODO Consider replacing the AGREE performative with ACCEPT_PROPOSAL.
+            return new SimpleMessage(ACLMessage.AGREE);
+        }
+
+        @Override
+        protected void onExit() {
+            getMyRole().logInfo("Auction result sent to the winner.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Send auction result to the losers' (single sender) state.
+     * A state in which the negative auction result is sent to the losers.
+     */
+    private class SendAuctionResultToLosers extends SingleSenderState {
+
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+        
+        @Override
+        protected AID[] getReceivers() {
+            // TODO Implement.
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void onEntry() {
+            getMyRole().logInfo("Sending auction result to the losers.");
+        }
+        
+        /**
+         * Prepares the simple (REFUSE) message.
+         * @return the simple (REFUSE) message
+         */
+        @Override
+        protected Message prepareMessage() {
+            // TODO Consider replacing the REFUSE performative with REJECT_PROPOSAL.
+            return new SimpleMessage(ACLMessage.REFUSE);
+        }
+
+        @Override
+        protected void onExit() {
+            getMyRole().logInfo("Auction result sent to the losers.");
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
      * The 'Success end' state.
-     * A (final) state in which the party successfully ends.
+     * A (final) state in which the party secceeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -266,7 +456,9 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         
         @Override
         public void action() {
-            getMyAuctioneer().logInfo("The 'Envelope auction' initiator finished successfully.");
+            winnerDetermined = true;
+            
+            getMyRole().logInfo("The 'Envelope auction' initiator succeeded.");
         }
         
         // </editor-fold>
@@ -274,7 +466,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     
     /**
      * The 'Failure end' state.
-     * A (final) state in which the party unsuccessfully ends.
+     * A (final) state in which the party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 
@@ -282,7 +474,9 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         
         @Override
         public void action() {
-            getMyAuctioneer().logInfo("The 'Envelope auction' initiator party failed.");
+            winnerDetermined = false;
+            
+            getMyRole().logInfo("The 'Envelope auction' initiator party failed.");
         }
         
         // </editor-fold>

@@ -1,8 +1,10 @@
 package example2.protocols.envelopeauction;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.Message;
 import jadeorg.lang.MessageFactory;
+import jadeorg.lang.TextMessage;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An 'Auction CFP' message.
@@ -11,26 +13,72 @@ import jadeorg.lang.MessageFactory;
  * @since
  * @version %I% %G%
  */
-public class AuctionCFPMessage extends Message {
+public class AuctionCFPMessage extends TextMessage {
 
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    /**
+     * The name of the item.
+     */
+    private String itemName;
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the AuctionCFPMessage class.
+     */
     public AuctionCFPMessage() {
         super(ACLMessage.CFP);
     }
     
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the name of the item.
+     * @return the name of the item
+     */
+    public String getItemName() {
+        return itemName;
+    }
+    
+    /**
+     * Sets the name of the item.
+     * @param itemName the name of the item
+     * @return this 'Auction CFP' message (fluent interface)
+     */
+    public AuctionCFPMessage setItemName(String itemName) {
+        this.itemName = itemName;
+        return this;
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    /**
+     * Generates the ACL message content.
+     * @return the ACL message content
+     */
     @Override
-    public ACLMessage generateACLMessage() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected String generateContent() {
+        return String.format("auction(%1$s)", itemName);
     }
 
+    /**
+     * Parses the ACL message content.
+     * @param content the ACL message content
+     */
     @Override
-    public void parseACLMessage(ACLMessage aclMessage) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected void parseContent(String content) {
+        final Pattern contentPattern = Pattern.compile("auction\\((.*)\\)");
+        Matcher matcher = contentPattern.matcher(content);
+        matcher.matches();
+ 
+        itemName = matcher.group(1);
     }
     
     // </editor-fold>

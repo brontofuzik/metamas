@@ -69,7 +69,9 @@ public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
      */
     @Override
     public AuctionResult getAuctionResult() {
-        return new AuctionResult(winnerDetermined, winnerAID, finalPrice);
+        return winnerDetermined ?
+            AuctionResult.createPositiveAuctionResult(winnerAID, finalPrice) :
+            AuctionResult.createNegativeAuctionResult();
     }
     
     // </editor-fold>

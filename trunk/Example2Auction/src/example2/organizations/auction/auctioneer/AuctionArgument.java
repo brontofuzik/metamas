@@ -49,7 +49,7 @@ public class AuctionArgument {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public AuctionArgument(AuctionType auctionType, String itemName,
+    private AuctionArgument(AuctionType auctionType, String itemName,
         Double startingPrice, Double reservationPrice, Double bidChange) {
         // ---- Preconditions -----
         assert itemName != null && !itemName.isEmpty();

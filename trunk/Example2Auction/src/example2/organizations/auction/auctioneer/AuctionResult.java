@@ -31,7 +31,7 @@ public class AuctionResult {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public AuctionResult(boolean winnerDetermined,
+    private AuctionResult(boolean winnerDetermined,
         AID winnerAID, double finalPrice) {
         // ----- Preconditions -----
         assert !winnerDetermined || winnerAID != null;

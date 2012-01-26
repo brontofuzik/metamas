@@ -24,7 +24,7 @@ public class BidResult {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public BidResult(boolean bidMade, double bid) {
+    private BidResult(boolean bidMade, double bid) {
         // ----- Preconditions -----
         assert !bidMade || bid > 0;
         // -------------------------
