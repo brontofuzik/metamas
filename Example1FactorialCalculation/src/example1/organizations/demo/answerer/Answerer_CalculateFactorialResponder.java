@@ -105,7 +105,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeRequirement_CalculateFactorial() {
-            super("example1.players.demo.CalculateFactorial_Requirement");
+            super("CalculateFactorial_Requirement");
         }
         
         // </editor-fold>
