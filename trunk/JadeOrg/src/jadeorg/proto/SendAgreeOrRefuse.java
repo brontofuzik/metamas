@@ -39,10 +39,18 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Handles the AGREE simple message being sent.
+     * Override this method to handle the AGREE simple message being sent.
+     */
     protected void onAgree() {
         // Do nothing.
     }
     
+    /**
+     * Handles the REFUSE simple message being sent.
+     * Override this method to handle the REFUSE simple message being sent.
+     */
     protected void onRefuse() {
         // Do nothing.
     }
@@ -54,7 +62,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     /**
      * The 'Send AGREE' (inner sender) state.
      */
-    private class MySendAgree extends OuterSenderState.SendAgree {
+    private class MySendAgree extends SendAgree {
             
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -83,7 +91,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     /**
      * The 'Send REFUSE' (sender) (inner sender) state.
      */
-    private class MySendRefuse extends OuterSenderState.SendRefuse {
+    private class MySendRefuse extends SendRefuse {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
