@@ -212,7 +212,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      * The 'Send bid' (single-sender) state.
      * A state in which the bid is sent to the auctioneer.
      */
-    private class SendBid extends SingleSenderState {
+    private class SendBid extends SingleSenderState<BidMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -235,7 +235,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
          * @return the 'Bid' message
          */
         @Override
-        protected Message prepareMessage() {
+        protected BidMessage prepareMessage() {
             BidMessage message = new BidMessage();
             // TODO Also consider the situation when no bid is made.
             message.setBid(bid);
