@@ -231,112 +231,33 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // </editor-fold>
     }
     
-    // TODO Consider replacing all Receive<PERFORMATIVE> abstract classes
-    // with one abstract class.
     /**
-     * A 'Receive AGREE' inner receiver state.
+     * A 'Receive simple message' (inner receiver) state.
      * @author Lukáš Kúdela
-     * @since 2011-12-15
+     * @since 2012-01-26
      * @version %I% %G%
      */
-    protected abstract class ReceiveAgree extends InnerReceiverState<SimpleMessage> {       
+    protected abstract class ReceiveSimpleMessage
+        extends InnerReceiverState<SimpleMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initializes a new instance of the ReceiveAgree class.
+         * @param performative the performative
          * @param outerReceiverStateExitValue the outer receiver state exit value
          */
-        public ReceiveAgree(int outerReceiverStateExitValue) {
-            super(new SimpleMessage.Factory(ACLMessage.AGREE),
+        public ReceiveSimpleMessage(int performative, int outerReceiverStateExitValue) {
+            super(new SimpleMessage.Factory(performative),
                 outerReceiverStateExitValue);
-        }
+        }    
         
         // </editor-fold>
     }
     
     /**
-     * A 'Receive REFUSE' inner receiver state.
-     * @author Lukáš Kúdela
-     * @since 2011-12-15
-     * @version %I% %G%
+     * The 'Blocker' (one-shot) state.
      */
-    protected abstract class ReceiveRefuse extends InnerReceiverState<SimpleMessage> {
-             
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        /**
-         * Initializes a new instance of the ReceiveRefuse class.
-         * @param outerReceiverStateExitValue the outer receiver state exit value
-         */
-        public ReceiveRefuse(int outerReceiverStateExitValue) {
-            super(new SimpleMessage.Factory(ACLMessage.REFUSE),
-                outerReceiverStateExitValue);
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * A 'Receive ACCEPT_PROPOSAL' inner receiver state.
-     * @author Lukáš Kúdela
-     * @since 2012-01-26
-     * @version %I% %G%
-     */
-    protected abstract class ReceiveAcceptProposal
-        extends InnerReceiverState<SimpleMessage> {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public ReceiveAcceptProposal(int outerReceiverStateExitValue) {
-            super(new SimpleMessage.Factory(ACLMessage.ACCEPT_PROPOSAL),
-                outerReceiverStateExitValue);
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * A 'Receive REJECT PROPOSAL' inner receiver state.
-     * @author Lukáš Kúdela
-     * @since 2012-01-26
-     * @version %I% %G%
-     */
-    protected abstract class ReceiveRejectProposal
-        extends InnerReceiverState<SimpleMessage> {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public ReceiveRejectProposal(int outerReceiverStateExitValue) {
-            super(new SimpleMessage.Factory(ACLMessage.REJECT_PROPOSAL),
-                outerReceiverStateExitValue);
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * A 'Receive FAILURE' inner receiver state.
-     * @author Lukáš Kúdela
-     * @since 2011-12-09
-     * @version %I% %G%
-     */
-    protected abstract class ReceiveFailure extends InnerReceiverState<SimpleMessage> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-
-        /**
-         * Initializes a new instance of the ReceiveFailure class.
-         * @param outerReceiverStateExitValue the outer receiver state exit value
-         */
-        public ReceiveFailure(int outerReceiverStateExitValue) {
-            super(new SimpleMessage.Factory(ACLMessage.FAILURE),
-                outerReceiverStateExitValue);
-        }
-
-        // </editor-fold>
-    }
-    
     protected class BlockerState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -351,6 +272,9 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // </editor-fold>
     }
     
+    /**
+     * The 'Exit' (one-shot) state.
+     */
     protected class ExitState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

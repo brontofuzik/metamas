@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 
 /**
@@ -23,8 +24,8 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected SendAgreeOrRefuse() {            
-        addSender(AGREE, this.new MySendAgree());
-        addSender(REFUSE, this.new MySendRefuse());
+        addSender(AGREE, this.new SendAgree());
+        addSender(REFUSE, this.new SendRefuse());
         
         buildFSM();
     }
@@ -62,10 +63,25 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     /**
      * The 'Send AGREE' (inner sender) state.
      */
-    private class MySendAgree extends SendAgree {
-            
+    private class SendAgree extends SendSimpleMessage {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initializes a new instance of the SendAgree class.
+         */
+        SendAgree() {
+            super(ACLMessage.AGREE);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their AIDs.
+         */
         @Override
         protected AID[] getReceivers() {
             return SendAgreeOrRefuse.this.getReceivers();
@@ -89,12 +105,27 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     }
     
     /**
-     * The 'Send REFUSE' (sender) (inner sender) state.
+     * The 'Send REFUSE' (inner sender) state.
      */
-    private class MySendRefuse extends SendRefuse {
+    private class SendRefuse extends SendSimpleMessage {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initializes a new instance of the SendRefuse class.
+         */
+        SendRefuse() {
+            super(ACLMessage.REFUSE);
+        }
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their AIDs.
+         */
         @Override
         protected AID[] getReceivers() {
             return SendAgreeOrRefuse.this.getReceivers();

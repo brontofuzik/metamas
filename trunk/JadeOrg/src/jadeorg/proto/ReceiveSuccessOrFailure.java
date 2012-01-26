@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 import jadeorg.lang.MessageFactory;
 
@@ -78,18 +79,28 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
         // </editor-fold>
     }
     
-    private class MyReceiveFailure extends ReceiveFailure {
+    /**
+     * The 'Receive FAILURE' (inner receiver) state.
+     */
+    private class MyReceiveFailure extends ReceiveSimpleMessage {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
+        /**
+         * Initializes a new instance of the ReceiveFailure class.
+         */
         MyReceiveFailure() {
-            super(FAILURE);
+            super(ACLMessage.FAILURE, FAILURE);
         }
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the senders; more precisely, their AIDs.
+         * @return the senders; more precisely, their AIDs.
+         */
         @Override
         protected AID[] getSenders() {
             return ReceiveSuccessOrFailure.this.getSenders();

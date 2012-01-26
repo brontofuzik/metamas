@@ -159,114 +159,45 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // </editor-fold>
     }
     
-    // TODO Consider replacing all Send<PERFORMATIVE> abstract classes
-    // with one abstract class.
     /**
-     * A 'Send AGREE' inner sender state.
-     * @author Lukáš Kúdela
-     * @since 2011-12-15
-     * @version %I% %G%
-     */
-    protected abstract class SendAgree extends InnerSenderState {  
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Prepares the AGREE simple message
-         * @return the AGREE simple message
-         */
-        @Override
-        protected Message prepareMessage() {
-            return new SimpleMessage(ACLMessage.AGREE);
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * A 'Send REFUSE' inner sender state.
-     * @author Lukáš Kúdela
-     * @since 2011-12-15
-     * @version %I% %G%
-     */
-    protected abstract class SendRefuse extends InnerSenderState {
-                
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Prepares the REFUSE simple message
-         * @return the REFUSE simple message
-         */
-        @Override
-        protected Message prepareMessage() {
-            return new SimpleMessage(ACLMessage.REFUSE);
-        }
-        
-        // </editor-fold>      
-    }
-    
-    /**
-     * A 'Send ACCEPT_PROPOSAL' inner sender state.
+     * A 'Send simple message' (inner sender) state.
      * @author Lukáš Kúdela
      * @since 2012-01-26
      * @version %I% %G%
      */
-    protected abstract class SendAcceptProposal extends InnerSenderState {
+    protected abstract class SendSimpleMessage extends InnerSenderState {
     
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        /**
+         * The performative.
+         */
+        private int performative;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initializes a new instance of the SendSimpleMessage class.
+         * @param performative the performative
+         */
+        protected SendSimpleMessage(int performative) {
+            this.performative = performative;
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         /**
-         * Prepares the ACCEPT_PROPOSAL simple message
-         * @return the ACCEPT_PROPOSAL simple message
+         * Prepares the simple message.
+         * @return the simple message
          */
         @Override
         protected Message prepareMessage() {
-            return new SimpleMessage(ACLMessage.ACCEPT_PROPOSAL);
-        }
-
-        // </editor-fold>
-    }
-    
-     /**
-     * A 'Send REJECT PROPOSAL' inner sender state.
-     * @author Lukáš Kúdela
-     * @since 2012-01-26
-     * @version %I% %G%
-     */
-    protected abstract class SendRejectProposal extends InnerSenderState {
-    
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Prepares the REJECT_PROPOSAL simple message
-         * @return the REJECT_PROPOSAL simple message
-         */
-        @Override
-        protected Message prepareMessage() {
-            return new SimpleMessage(ACLMessage.REJECT_PROPOSAL);
-        }
-
-        // </editor-fold>
-    }   
-    
-    /**
-     * A 'Send FAILURE' inner sender state.
-     * @author Lukáš Kúdela
-     * @since 2011-12-09
-     * @version %I% %G%
-     */
-    protected abstract class SendFailure extends InnerSenderState {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        /**
-         * Prepares the FAILURE simple message
-         * @return the FAILURE simple message
-         */
-        @Override
-        protected Message prepareMessage() {
-            return new SimpleMessage(ACLMessage.FAILURE);
-        }
+            return new SimpleMessage(performative);
+        }      
         
         // </editor-fold>
     }
