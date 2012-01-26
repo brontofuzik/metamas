@@ -171,6 +171,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        /**
+         * Prepares the AGREE simple message
+         * @return the AGREE simple message
+         */
         @Override
         protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.AGREE);
@@ -189,6 +193,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
                 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        /**
+         * Prepares the REFUSE simple message
+         * @return the REFUSE simple message
+         */
         @Override
         protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.REFUSE);
@@ -207,6 +215,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        /**
+         * Prepares the ACCEPT_PROPOSAL simple message
+         * @return the ACCEPT_PROPOSAL simple message
+         */
         @Override
         protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.ACCEPT_PROPOSAL);
@@ -225,8 +237,12 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
+        /**
+         * Prepares the REJECT_PROPOSAL simple message
+         * @return the REJECT_PROPOSAL simple message
+         */
         @Override
-        protected final Message prepareMessage() {
+        protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.REJECT_PROPOSAL);
         }
 
@@ -243,8 +259,12 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Prepares the FAILURE simple message
+         * @return the FAILURE simple message
+         */
         @Override
-        protected final Message prepareMessage() {
+        protected Message prepareMessage() {
             return new SimpleMessage(ACLMessage.FAILURE);
         }
         

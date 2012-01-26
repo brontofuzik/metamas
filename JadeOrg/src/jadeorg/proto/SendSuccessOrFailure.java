@@ -41,6 +41,14 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     protected abstract Message prepareMessage();
     
+    /**
+     * Handles the FAILURE simple message being sent.
+     * Override this method to handle the FAILURE simple message being sent.
+     */
+    protected void onFailure() {
+        // Do nothing.
+    }
+    
     // </editor-fold>  
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -58,7 +66,11 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
-       @Override
+       /**
+        * Prepares the success message
+        * @return the success message
+        */
+        @Override
         protected Message prepareMessage() {
             return SendSuccessOrFailure.this.prepareMessage();
         }
@@ -75,7 +87,21 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
             return SendSuccessOrFailure.this.getReceivers();
         }
         
-        // </editor-fold>     
+        // </editor-fold>    
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Prepares the FAILURE simple message
+         * @return the FAILURE simple message
+         */
+        @Override
+        protected Message prepareMessage() {
+            onFailure();
+            return super.prepareMessage();
+        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold> 
