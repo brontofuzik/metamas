@@ -177,7 +177,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
          * Initializes a new instance of the InvokeRequirement_Bid class.
          */
         InvokeRequirement_Bid() {
-            super("example2.players.participant.Bid_Requirement");
+            super("Bid_Requirement");
         }
         
         // </editor-fold>
