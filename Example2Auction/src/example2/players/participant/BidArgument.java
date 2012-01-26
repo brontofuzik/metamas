@@ -38,7 +38,7 @@ public class BidArgument {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public BidArgument(AuctionType auctionType, String itemName,
+    private BidArgument(AuctionType auctionType, String itemName,
         Double currentPrice, Double bidChange) {
         // ----- Preconditions -----
         assert auctionType != null;

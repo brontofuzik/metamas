@@ -50,9 +50,10 @@ public class Bid_Requirement extends OneShotRequirement<BidArgument, BidResult> 
      */
     private BidResult bidEnglish(BidArgument argument) {
         Item item = getMyParticipant().getItemToBuy(argument.getItemName());
-        double bid = argument.getCurrentPrice() + argument.getBidChange();
-        boolean bidMade = bid <= item.getPrice();
-        return new BidResult(bidMade, bid);
+        double bid = argument.getCurrentPrice() + argument.getBidChange();      
+        return (bid <= item.getPrice()) ?
+            BidResult.createPositiveBidResult(bid) :
+            BidResult.createNegativeBidResult();
     }
     
     /**
@@ -61,9 +62,10 @@ public class Bid_Requirement extends OneShotRequirement<BidArgument, BidResult> 
      * @return the bid result
      */
     private BidResult bidDutch(BidArgument argument) {
-        Item item = getMyParticipant().getItemToBuy(argument.getItemName());
-        boolean bidMade = argument.getCurrentPrice() <= item.getPrice();
-        return new BidResult(bidMade, argument.getCurrentPrice());
+        Item item = getMyParticipant().getItemToBuy(argument.getItemName());      
+        return (argument.getCurrentPrice() <= item.getPrice()) ?
+            BidResult.createPositiveBidResult(argument.getCurrentPrice()) :
+            BidResult.createNegativeBidResult();
     }
     
     /**
@@ -73,7 +75,7 @@ public class Bid_Requirement extends OneShotRequirement<BidArgument, BidResult> 
      */
     private BidResult bidEnvelope(BidArgument argument) {
         Item item = getMyParticipant().getItemToBuy(argument.getItemName());
-        return new BidResult(true, item.getPrice());
+        return BidResult.createPositiveBidResult(item.getPrice());
     }
     
     /**
@@ -83,7 +85,7 @@ public class Bid_Requirement extends OneShotRequirement<BidArgument, BidResult> 
      */
     private BidResult bidVickrey(BidArgument argument) {
         Item item = getMyParticipant().getItemToBuy(argument.getItemName());
-        return new BidResult(true, item.getPrice());
+        return BidResult.createPositiveBidResult(item.getPrice());
     }
       
     // </editor-fold>
