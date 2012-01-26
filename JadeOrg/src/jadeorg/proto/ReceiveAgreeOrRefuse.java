@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
 
 /**
@@ -26,7 +27,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
      * Initializes a new instance of the ReceiveAgreeOrRefuse class.
      */
     protected ReceiveAgreeOrRefuse() {
-        addReceiver(this.new MyReceiveAgree());
+        addReceiver(this.new ReceiveAgree());
         addReceiver(this.new MyReceiveRefuse());
         
         buildFSM();
@@ -67,17 +68,17 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * My 'Receive AGREE' state. 
+     * The 'Receive AGREE' (inner receiver) state. 
      */
-    private class MyReceiveAgree extends OuterReceiverState.ReceiveAgree {
+    private class ReceiveAgree extends ReceiveSimpleMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initializes a new instance of the MyReceiveAgree class.
          */
-        MyReceiveAgree() {
-            super(AGREE);
+        ReceiveAgree() {
+            super(ACLMessage.AGREE, AGREE);
         }
         
         // </editor-fold>
@@ -110,9 +111,9 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     }
     
     /**
-     * My 'Receive REFUSE' state.
+     * The 'Receive REFUSE' (inner receiver) state.
      */
-    private class MyReceiveRefuse extends OuterReceiverState.ReceiveRefuse {
+    private class MyReceiveRefuse extends ReceiveSimpleMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -120,7 +121,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
          * Initializes a new instance of the MyReceiveRefuse class.
          */
         MyReceiveRefuse() {
-            super(REFUSE);
+            super(ACLMessage.REFUSE, REFUSE);
         }
         
         // </editor-fold>

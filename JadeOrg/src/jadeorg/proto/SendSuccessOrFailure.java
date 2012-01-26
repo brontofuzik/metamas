@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
 
 /**
@@ -24,7 +25,7 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
     
     protected SendSuccessOrFailure() {        
         addSender(SUCCESS, new MySendSuccess());
-        addSender(FAILURE, new MySendFailure());
+        addSender(FAILURE, new SendFailure());
         
         buildFSM();
     }
@@ -78,10 +79,28 @@ public abstract class SendSuccessOrFailure extends OuterSenderState {
         // </editor-fold>
     }
     
-    private class MySendFailure extends SendFailure {
+    /**
+     * The 'Send FAILURE' (inner sender) state.
+     */
+    private class SendFailure extends SendSimpleMessage {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initializes a new instance of the SendFailure class.
+         */
+        SendFailure() {
+            super(ACLMessage.FAILURE);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their AIDs.
+         */
         @Override
         protected AID[] getReceivers() {
             return SendSuccessOrFailure.this.getReceivers();

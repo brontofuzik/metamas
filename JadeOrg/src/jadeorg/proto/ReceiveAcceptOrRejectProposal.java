@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import jadeorg.lang.SimpleMessage;
 
 /**
@@ -26,7 +27,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
      * Initializes a new instance of the ReceiveAcceptOrRejectProposal class.
      */
     protected ReceiveAcceptOrRejectProposal() {
-        addReceiver(this.new MyReceiveAcceptProposal());
+        addReceiver(this.new ReceiveAcceptProposal());
         addReceiver(this.new MyReceiveRejectProposal());
         
         buildFSM();
@@ -67,17 +68,17 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * My 'Receive ACCEPT_PROPOSAL' state.
+     * The 'Receive ACCEPT_PROPOSAL' (inner receiver) state.
      */
-    private class MyReceiveAcceptProposal extends OuterReceiverState.ReceiveAcceptProposal {
+    private class ReceiveAcceptProposal extends ReceiveSimpleMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initializes a new instance of the MyReceiveAcceptProposal class.
          */
-        MyReceiveAcceptProposal() {
-            super(ACCEPT_PROPOSAL);
+        ReceiveAcceptProposal() {
+            super(ACLMessage.ACCEPT_PROPOSAL, ACCEPT_PROPOSAL);
         }
         
         // </editor-fold>
@@ -110,9 +111,9 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     }
     
     /**
-     * My 'Receive REJECT_PROPOSAL' state.
+     * The 'Receive REJECT_PROPOSAL' (inner receiver) state.
      */
-    private class MyReceiveRejectProposal extends OuterReceiverState.ReceiveRejectProposal {
+    private class MyReceiveRejectProposal extends ReceiveSimpleMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -120,7 +121,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
          * Initializes a new instance of the MyReceiveRejectProposal class.
          */
         MyReceiveRejectProposal() {
-            super(REJECT_PROPOSAL);
+            super(ACLMessage.REJECT_PROPOSAL, REJECT_PROPOSAL);
         }
         
         // </editor-fold>
