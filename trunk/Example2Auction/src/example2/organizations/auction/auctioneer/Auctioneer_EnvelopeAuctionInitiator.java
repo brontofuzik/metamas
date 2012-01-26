@@ -213,7 +213,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      * A state in which the auction call for proposals (CFP) is sent
      * to the bidders.
      */
-    private class SendAuctionCFP extends SingleSenderState {
+    private class SendAuctionCFP extends SingleSenderState<AuctionCFPMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -236,7 +236,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
          * @return the 'Auction CFP' message
          */
         @Override
-        protected Message prepareMessage() {
+        protected AuctionCFPMessage prepareMessage() {
             AuctionCFPMessage message = new AuctionCFPMessage();
             message.setItemName(itemName);
             return message;
@@ -368,7 +368,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      * The 'Send auction result to the winner' (single sender) state.
      * A state in which the positive auction result is sent to the winner.
      */
-    private class SendAuctionResultToWinner extends SingleSenderState {
+    private class SendAuctionResultToWinner extends SingleSenderState<SimpleMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -392,9 +392,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
          * @return the simple (AGREE) message
          */
         @Override
-        protected Message prepareMessage() {
-            // TODO Consider replacing the AGREE performative with ACCEPT_PROPOSAL.
-            return new SimpleMessage(ACLMessage.AGREE);
+        protected SimpleMessage prepareMessage() {
+            return new SimpleMessage(ACLMessage.ACCEPT_PROPOSAL);
         }
 
         @Override
@@ -409,7 +408,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
      * The 'Send auction result to the losers' (single sender) state.
      * A state in which the negative auction result is sent to the losers.
      */
-    private class SendAuctionResultToLosers extends SingleSenderState {
+    private class SendAuctionResultToLosers extends SingleSenderState<SimpleMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -433,9 +432,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
          * @return the simple (REFUSE) message
          */
         @Override
-        protected Message prepareMessage() {
-            // TODO Consider replacing the REFUSE performative with REJECT_PROPOSAL.
-            return new SimpleMessage(ACLMessage.REFUSE);
+        protected SimpleMessage prepareMessage() {
+            return new SimpleMessage(ACLMessage.REJECT_PROPOSAL);
         }
 
         @Override
