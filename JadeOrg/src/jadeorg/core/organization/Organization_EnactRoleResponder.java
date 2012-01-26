@@ -127,7 +127,8 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         // </editor-fold>        
     }
     
-    private class SendRequirementsInform extends SendSuccessOrFailure {
+    private class SendRequirementsInform
+        extends SendSuccessOrFailure<RequirementsInformMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -163,7 +164,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected RequirementsInformMessage prepareMessage() {
             // Create the 'Requirements inform' message.
             RequirementsInformMessage message = new RequirementsInformMessage();
             message.setRequirements(getMyOrganization().roles.get(roleName).getRequirements());
@@ -204,7 +205,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendRoleAID extends SingleSenderState {
+    private class SendRoleAID extends SingleSenderState<RoleAIDMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -223,7 +224,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected RoleAIDMessage prepareMessage() {
             getMyOrganization().logInfo("Creating role agent.");
             
             // Create the role agent and associate it with the player.

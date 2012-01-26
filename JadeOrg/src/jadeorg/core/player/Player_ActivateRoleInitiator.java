@@ -117,7 +117,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
      * The 'Send activate request' (single sender) state.
      * A state in which the 'Activate request' message is sent.
      */
-    private class SendActivateRequest extends SingleSenderState {
+    private class SendActivateRequest extends SingleSenderState<ActivateRequestMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -136,7 +136,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected ActivateRequestMessage prepareMessage() {
             ActivateRequestMessage message = new ActivateRequestMessage();
             return message;
         }

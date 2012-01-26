@@ -3,6 +3,7 @@ package jadeorg.proto;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.lang.Message;
+import jadeorg.lang.SimpleMessage;
 
 /**
  * A 'Send AGREE or REFUSE' (multi-sender) state.
@@ -96,7 +97,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
          * @return the AGREE message
          */
         @Override
-        protected Message prepareMessage() {
+        protected SimpleMessage prepareMessage() {
             onAgree();
             return super.prepareMessage();
         }
@@ -140,7 +141,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
          * @return the REFUSE message
          */
         @Override
-        protected Message prepareMessage() {
+        protected SimpleMessage prepareMessage() {
             onRefuse();
             return super.prepareMessage();
         }

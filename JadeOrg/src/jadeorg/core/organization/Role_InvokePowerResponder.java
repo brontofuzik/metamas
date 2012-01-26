@@ -186,7 +186,8 @@ public class Role_InvokePowerResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendPowerArgumentRequest extends SendSuccessOrFailure {
+    private class SendPowerArgumentRequest
+        extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -210,7 +211,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected ArgumentRequestMessage prepareMessage() {
             ArgumentRequestMessage message = new ArgumentRequestMessage();
             return message;
         }
@@ -263,7 +264,8 @@ public class Role_InvokePowerResponder extends ResponderParty {
         // </editor-fold>
     }
     
-    private class SendPowerResult extends SendSuccessOrFailure {
+    private class SendPowerResult
+        extends SendSuccessOrFailure<PowerResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -287,7 +289,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         }
         
         @Override
-        protected Message prepareMessage() {
+        protected PowerResultMessage prepareMessage() {
             PowerResultMessage message = new PowerResultMessage();
             message.setResult(power.getResult());
             return message;
