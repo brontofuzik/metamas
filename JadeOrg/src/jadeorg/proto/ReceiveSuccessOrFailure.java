@@ -5,7 +5,7 @@ import jadeorg.lang.Message;
 import jadeorg.lang.MessageFactory;
 
 /**
- * A 'Receive success or failure' (multi receiver) state.
+ * A 'Receive success or FAILURE' (multi-receiver) state.
  * @author Lukáš Kúdela
  * @since 2011-12-27
  * @version %I% %G%

@@ -1,5 +1,6 @@
 package jadeorg.lang;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 /**
@@ -13,6 +14,8 @@ public abstract class Message {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private int performative;
+    
+    private AID sender;
     
     // </editor-fold>
     
@@ -31,9 +34,20 @@ public abstract class Message {
         return performative;
     }
     
-    // TODO Remove.
-    public void setPerformative(int performative) {
-        this.performative = performative;
+    /**
+     * Gets the sender; more precisely its AID.
+     * @return the sender; more precisely its AID
+     */
+    public AID getSender() {
+        return sender;
+    }
+    
+    /**
+     * Sets the sender; more precisely its AID.
+     * @param sender the sender; more precsely its AID
+     */
+    public void setSender(AID sender) {
+        this.sender = sender;
     }
     
     // </editor-fold>

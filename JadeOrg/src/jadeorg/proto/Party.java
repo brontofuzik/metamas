@@ -95,6 +95,7 @@ public abstract class Party extends FSMBehaviourState {
             //System.out.println("RECEIVED MESSAGE: " + aclMessage.toString());
             
             // Parse the ACL message.
+            message.setSender(aclMessage.getSender());
             message.parseACLMessage(aclMessage);
             return true;
         } else {
