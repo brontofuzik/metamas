@@ -87,6 +87,9 @@ public class AuctionCFPMessage extends TextMessage {
     
     /**
      * A 'Auction CFP' message factory.
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory implements MessageFactory<AuctionCFPMessage> {
 
