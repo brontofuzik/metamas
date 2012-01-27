@@ -83,9 +83,12 @@ public class BidMessage extends TextMessage {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     /**
      * A 'Bid' message factory.
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory implements MessageFactory<BidMessage> {
 
