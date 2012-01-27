@@ -84,7 +84,7 @@ public class PowerResultMessage<TResult extends Serializable>
         implements MessageFactory<PowerResultMessage<TResult>> {
 
         @Override
-        public PowerResultMessage createMessage() {
+        public PowerResultMessage<TResult> createMessage() {
             return new PowerResultMessage<TResult>();
         }
     }

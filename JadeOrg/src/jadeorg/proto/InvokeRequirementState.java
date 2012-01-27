@@ -4,6 +4,7 @@ import jadeorg.core.organization.Role_InvokeRequirementInitiator;
 import jadeorg.proto.jadeextensions.FSMBehaviourState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
+import java.io.Serializable;
 
 /**
  * A 'Invoke requirement' (party) state.
@@ -11,8 +12,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since
  * @version %I% %G%
  */
-public abstract class InvokeRequirementState<TArgument, TResult>
-    extends FSMBehaviourState {
+public abstract class InvokeRequirementState<TArgument extends Serializable,
+    TResult extends Serializable> extends FSMBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

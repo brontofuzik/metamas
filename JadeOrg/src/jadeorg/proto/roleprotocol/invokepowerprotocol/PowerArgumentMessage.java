@@ -80,11 +80,12 @@ public class PowerArgumentMessage<TArgument extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<PowerArgumentMessage> {
+    public static class Factory<TArgument extends Serializable>
+        implements MessageFactory<PowerArgumentMessage<TArgument>> {
 
         @Override
-        public PowerArgumentMessage createMessage() {
-            return new PowerArgumentMessage();
+        public PowerArgumentMessage<TArgument> createMessage() {
+            return new PowerArgumentMessage<TArgument>();
         }    
     }
     

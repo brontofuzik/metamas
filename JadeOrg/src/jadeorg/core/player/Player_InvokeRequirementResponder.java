@@ -15,6 +15,7 @@ import jadeorg.proto.roleprotocol.invokerequirementprotocol.ArgumentRequestMessa
 import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
 import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementRequestMessage;
 import jadeorg.proto.roleprotocol.invokerequirementprotocol.RequirementResultMessage;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,28 +25,48 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokeRequirementResponder extends ResponderParty {
+public class Player_InvokeRequirementResponder<TArgument extends Serializable,
+    TResult extends Serializable> extends ResponderParty {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID roleAID;
+    /**
+     * The role; more precisely, its AID.
+     */
+    private AID role;
     
+    /**
+     * The name of the requirement.
+     */
     private String requirementName;
     
+    /**
+     * The 'Receive requirement argument' state.
+     */
     private State receiveRequirementArgument;
     
-    private Requirement requirement;
+    /**
+     * The requirement state.
+     */
+    private Requirement<TArgument, TResult> requirement;
     
+    /**
+     * The 'Send requirement result' state.
+     */
     private State sendRequirementResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Player_InvokeRequirementResponder class.
+     * @param aclMessage the ACL message
+     */
     public Player_InvokeRequirementResponder(ACLMessage aclMessage) {
         super(InvokeRequirementProtocol.getInstance(), aclMessage);
 
-        roleAID = getACLMessage().getSender();
+        role = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -54,6 +75,10 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
+    /**
+     * Gets my player.
+     * @return my player
+     */
     private Player getMyPlayer() {
         return (Player)myAgent;
     }
@@ -62,6 +87,9 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the finite state machine, i. e. registers the states and transitions.
+     */
     private void buildFSM() {        
          // ----- States -----
         State initialize = new MyInitialize();
@@ -97,6 +125,10 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
     }
     
+    /**
+     * Selets a requirement specified by its name
+     * @param requirementName the name of the requirement to select
+     */
     private void selectRequirement(String requirementName) {
         requirement = createRequirement(requirementName);
         
@@ -108,6 +140,11 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         requirement.registerDefaultTransition(sendRequirementResult);
     }
     
+    /**
+     * Creates a requirement specified by its name
+     * @param requirementName the name of the requirement
+     * @return the requirement
+     */
     private Requirement createRequirement(String requirementName) {
         System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
         
@@ -157,7 +194,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
                 "Responding to the 'Invoke requirement' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (roleAID.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
+            if (role.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
                 return OK;
             } else {
@@ -193,7 +230,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -225,12 +262,12 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
     }
     
     private class ReceiveRequirementArgument
-        extends SingleReceiverState<RequirementArgumentMessage> {
+        extends SingleReceiverState<RequirementArgumentMessage<TArgument>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementArgument() {
-            super(new RequirementArgumentMessage.Factory());
+            super(new RequirementArgumentMessage.Factory<TArgument>());
         }
         
         // </editor-fold>
@@ -239,7 +276,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -251,8 +288,12 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
             getMyPlayer().logInfo("Receiving requirement argument.");
         }
         
+        /**
+         * Handles the received 'Requirement argument' message.
+         * @param message the received 'Requirement argument' message
+         */
         @Override
-        protected void handleMessage(RequirementArgumentMessage message) {
+        protected void handleMessage(RequirementArgumentMessage<TArgument> message) {
             requirement.setArgument(message.getArgument());
         }
 
@@ -271,7 +312,7 @@ public class Player_InvokeRequirementResponder extends ResponderParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>

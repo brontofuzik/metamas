@@ -1,6 +1,7 @@
 package jadeorg.core.player.requirement;
 
 import jadeorg.proto.jadeextensions.State;
+import java.io.Serializable;
 
 /**
  * A requirement.
@@ -8,7 +9,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public interface Requirement<TArgument, TResult> extends State {
+public interface Requirement<TArgument extends Serializable,
+    TResult extends Serializable> extends State {
         
     void setArgument(TArgument argument);
     
