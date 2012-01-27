@@ -53,9 +53,12 @@ public class ReplyMessage extends TextMessage {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     /**
      * A 'Reply' message factory.
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory implements MessageFactory<ReplyMessage> {
 
