@@ -1,6 +1,7 @@
 package example2.organizations.auction.auctioneer;
 
 import jade.core.AID;
+import java.io.Serializable;
 
 /**
  * An 'Auction' power result.
@@ -8,7 +9,7 @@ import jade.core.AID;
  * @since 2012-01-218
  * @version %I% %G%
  */
-public class AuctionResult {
+public class AuctionResult implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

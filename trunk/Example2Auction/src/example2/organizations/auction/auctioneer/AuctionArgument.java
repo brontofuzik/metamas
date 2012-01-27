@@ -1,12 +1,14 @@
 package example2.organizations.auction.auctioneer;
 
+import java.io.Serializable;
+
 /**
  * An 'Auction' power argument.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class AuctionArgument {
+public class AuctionArgument implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

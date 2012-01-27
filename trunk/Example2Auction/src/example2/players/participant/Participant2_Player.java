@@ -1,7 +1,6 @@
 package example2.players.participant;
 
 import example2.organizations.auction.auctioneer.AuctionArgument;
-import example2.organizations.auction.auctioneer.AuctionType;
 
 /**
  * The 'Participant2' player.
@@ -16,7 +15,7 @@ public class Participant2_Player extends Participant_Player {
     /**
      * Initializes the 'Participant2' player.
      */
-    Participant2_Player() {
+    public Participant2_Player() {
         addItemToBuy(new Item(POLLOCK, 156.8)); // Highest bid.
         addItemToBuy(new Item(KLIMT, 149.2));
         
