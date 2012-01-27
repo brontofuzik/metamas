@@ -46,9 +46,9 @@ public abstract class Participant_Player extends Player {
      * Initializes the Participant_Player class.
      */
     static {
-        auctioneerRoleFullName = new RoleFullName("auction_Organization.Auctioneer");
-        bidderRoleFullName = new RoleFullName("auction_Organization.Bidder");
-        auctionPowerFullName = new PowerFullName("auction_Organization.Auctioneer.Auction");
+        auctioneerRoleFullName = new RoleFullName("auction_Organization.Auctioneer_Role");
+        bidderRoleFullName = new RoleFullName("auction_Organization.Bidder_Role");
+        auctionPowerFullName = new PowerFullName("auction_Organization.Auctioneer_Role.Auction_Power");
     }
     
     // </editor-fold>
@@ -72,11 +72,11 @@ public abstract class Participant_Player extends Player {
         
         timeout += 8000;
         
-        timeout = doScheduleKooningAuction(timeout);
-        
-        timeout += 8000;
-        
-        timeout = doScheduleKlimtAuction(timeout);
+//        timeout = doScheduleKooningAuction(timeout);
+//        
+//        timeout += 8000;
+//        
+//        timeout = doScheduleKlimtAuction(timeout);
         
         // Deact the 'Auctioneer' and 'Bidder' roles.
         timeout = scheduleDeactRole(auctioneerRoleFullName, timeout);

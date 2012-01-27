@@ -21,7 +21,7 @@ public class Auction_Organization extends Organization {
         super.setup();
         
         // Add roles.
-        addRole(Auctioneer_Role.class);
+        addRole(Auctioneer_Role.class, Multiplicity.MULTIPLE);
         addRole(Bidder_Role.class, Multiplicity.MULTIPLE);
         log(Level.INFO, "Roles added.");
     }

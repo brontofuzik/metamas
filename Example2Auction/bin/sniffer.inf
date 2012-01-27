@@ -1,3 +1,7 @@
-englishAuction1_Organization
+auction_Organization
 participant1_Player
 participant2_Player
+participant3_Player
+auctioneer_Role_participant1_Player
+bidder_Role_participant2_Player
+bidder_Role_participant3_Player
