@@ -7,7 +7,6 @@ import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.ReceiveAcceptOrRejectProposal;
@@ -53,7 +52,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
     
     /**
      * Initializes a new instance of the Bidder_EnvelopeAuctionResponder class.
-     * @param message 
+     * @param message the ACL message
      */
     public Bidder_EnvelopeAuctionResponder(ACLMessage message) {
         super(EnvelopeAuctionProtocol.getInstance(), message);
@@ -81,7 +80,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the FSM.
+     * Builds the finite state machine, i. e. registers the states and transitions.
      */
     private void buildFSM() {
         // ----- States -----
@@ -169,7 +168,8 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
      * The 'Invoke requirement - Bid' state.
      * A state in which the 'Bid' requirement is invoked.
      */
-    private class InvokeRequirement_Bid extends InvokeRequirementState<BidArgument, BidResult> {
+    private class InvokeRequirement_Bid
+        extends InvokeRequirementState<BidArgument, BidResult> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         

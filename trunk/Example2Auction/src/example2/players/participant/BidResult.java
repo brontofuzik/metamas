@@ -1,12 +1,16 @@
 package example2.players.participant;
 
+import java.io.Serializable;
+
 /**
  * A 'Bid' requirement result.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class BidResult {
+public class BidResult implements Serializable {
+    
+    // TODO Implement the Serializable interface.
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
