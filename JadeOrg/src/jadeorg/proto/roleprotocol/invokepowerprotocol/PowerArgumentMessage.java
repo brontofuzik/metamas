@@ -11,16 +11,23 @@ import java.io.Serializable;
  * @since
  * @version %I% %G%
  */
-public class PowerArgumentMessage extends BinaryMessage {
+public class PowerArgumentMessage<TArgument extends Serializable>
+    extends BinaryMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object argument;
+    /**
+     * The (serializable) power argument.
+     */
+    private TArgument argument;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the PowerArgumentMessage class.
+     */
     public PowerArgumentMessage() {
         super(ACLMessage.INFORM);
     }
@@ -29,11 +36,20 @@ public class PowerArgumentMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public Object getArgument() {
+    /**
+     * Gets the power argument.
+     * @return the power argument
+     */
+    public TArgument getArgument() {
         return argument;
     }
     
-    public PowerArgumentMessage setArgument(Object argument) {
+    /**
+     * Sets the power argument
+     * @param argument the power argument
+     * @return this 'Power argument' message (fluent interface)
+     */
+    public PowerArgumentMessage setArgument(TArgument argument) {
         this.argument = argument;
         return this;
     }
@@ -42,14 +58,22 @@ public class PowerArgumentMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Gets the (serializable) content object.
+     * @return the (serializable) content object
+     */
     @Override
     protected Serializable getContentObject() {
-        return (Serializable)argument;
+        return argument;
     }
 
+    /**
+     * Sets the (serializable) content object
+     * @param contentObject the (serializable) content object
+     */
     @Override
     protected void setContentObject(Serializable contentObject) {
-        argument = contentObject;
+        argument = (TArgument)contentObject;
     }
     
     // </editor-fold>    

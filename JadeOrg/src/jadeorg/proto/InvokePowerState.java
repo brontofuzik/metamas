@@ -4,6 +4,7 @@ import jadeorg.core.player.Player_InvokePowerInitiator;
 import jadeorg.proto.jadeextensions.FSMBehaviourState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
+import java.io.Serializable;
 
 /**
  * An 'Invoke power' (party) state.
@@ -11,8 +12,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-04
  * @version %I% %G%
  */
-public abstract class InvokePowerState<TArgument, TResult>
-    extends FSMBehaviourState {
+public abstract class InvokePowerState<TArgument extends Serializable,
+    TResult extends Serializable> extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

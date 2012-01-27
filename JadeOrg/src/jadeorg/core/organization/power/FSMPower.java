@@ -2,6 +2,7 @@ package jadeorg.core.organization.power;
 
 import jadeorg.core.organization.Role;
 import jadeorg.proto.jadeextensions.FSMBehaviourState;
+import java.io.Serializable;
 
 /**
  * A FSM power.
@@ -9,8 +10,8 @@ import jadeorg.proto.jadeextensions.FSMBehaviourState;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public abstract class FSMPower<TArgument, TResult> extends FSMBehaviourState
-    implements Power<TArgument, TResult> {
+public abstract class FSMPower<TArgument extends Serializable, TResult extends Serializable>
+    extends FSMBehaviourState implements Power<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

@@ -1,7 +1,6 @@
 package jadeorg.core.player;
 
 import jade.core.AID;
-import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -13,6 +12,7 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
+import java.io.Serializable;
 
 /**
  * An 'Invoke power' protocol initiator party (new version).
@@ -20,23 +20,41 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokePowerInitiator extends InitiatorParty {
+public class Player_InvokePowerInitiator<TArgument extends Serializable,
+    TResult extends Serializable> extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID roleAID;
+    /**
+     * The role; more precisely its AID.
+     */
+    private AID role;
     
+    /**
+     * The name of the power.
+     */
     private String powerName;
     
-    private Object powerArgument;
+    /**
+     * The power argument.
+     */
+    private TArgument powerArgument;
     
-    private Object powerResult;
+    /**
+     * The power result.
+     */
+    private TResult powerResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_InvokePowerInitiator(String powerName, Object powerArgument) {
+    /**
+     * Initialize a new instance of the Player_InvokePowerInitiator class.
+     * @param powerName the name of the power
+     * @param powerArgument the power argument
+     */
+    public Player_InvokePowerInitiator(String powerName, TArgument powerArgument) {
         super(InvokePowerProtocol.getInstance());
         // ----- Preconditions -----
         assert powerName != null && !powerName.isEmpty();
@@ -48,6 +66,10 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         buildFSM();
     }
     
+    /**
+     * Initializes a new instance of the Player_InvokePowerInitiator class.
+     * @param powerName the name of the power.
+     */
     public Player_InvokePowerInitiator(String powerName) {
         this(powerName, null);
     }
@@ -56,16 +78,28 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public void setPowerArgument(Object powerArgument) {
+    /**
+     * Sets the power argument.
+     * @param powerArgument the power argument
+     */
+    public void setPowerArgument(TArgument powerArgument) {
         this.powerArgument = powerArgument;
     }
     
-    public Object getPowerResult() {
+    /**
+     * Gets the power rsult.
+     * @return the power result
+     */
+    public TResult getPowerResult() {
         return powerResult;
     }
     
     // ----- PRIVATE -----
     
+    /**
+     * Gets my player.
+     * @return my player
+     */
     private Player getMyPlayer() {
         return (Player)myAgent;
     }
@@ -74,6 +108,9 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the finite state machine, i. e. registers the states and transitions.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
@@ -127,7 +164,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
 
             if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
                 // The player can invoke the power.
-                roleAID = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
+                role = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
                 return OK;
             } else {
                 // The player can not invoke the power.
@@ -148,7 +185,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -190,7 +227,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -217,7 +254,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -231,7 +268,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         
         @Override
         protected PowerArgumentMessage prepareMessage() {
-            PowerArgumentMessage message = new PowerArgumentMessage();
+            PowerArgumentMessage<TArgument> message = new PowerArgumentMessage<TArgument>();
             message.setArgument(powerArgument);
             return message;
         }
@@ -245,12 +282,12 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
     }
     
     private class ReceivePowerResult
-        extends ReceiveSuccessOrFailure<PowerResultMessage> {
+        extends ReceiveSuccessOrFailure<PowerResultMessage<TResult>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceivePowerResult() {
-            super(new PowerResultMessage.Factory());
+            super(new PowerResultMessage.Factory<TResult>());
         }
         
         // </editor-fold>
@@ -259,7 +296,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -272,7 +309,7 @@ public class Player_InvokePowerInitiator extends InitiatorParty {
         }
         
         @Override
-        protected void handleSuccessMessage(PowerResultMessage message) {
+        protected void handleSuccessMessage(PowerResultMessage<TResult> message) {
             powerResult = message.getResult();
             getMyPlayer().knowledgeBase.getActiveRole()
                 .savePowerResult(powerName, message.getResult());

@@ -10,6 +10,7 @@ import jadeorg.core.player.Player_InvokePowerInitiator;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
+import java.io.Serializable;
 
 /**
  * The 'Invoke power' protocol.
@@ -53,7 +54,7 @@ public class InvokePowerProtocol extends Protocol {
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String powerName = (String)arguments[0];
-        Object argument = arguments[1];
+        Serializable argument = (Serializable)arguments[1];
         return new Player_InvokePowerInitiator(powerName, argument);
     }
 

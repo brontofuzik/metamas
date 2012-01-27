@@ -2,6 +2,7 @@ package jadeorg.core.organization.power;
 
 import jadeorg.core.organization.Role;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import java.io.Serializable;
 
 /**
  * A one-shot power.
@@ -9,8 +10,8 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public abstract class OneShotPower<TArgument, TResult> extends OneShotBehaviourState
-    implements Power<TArgument, TResult> {
+public abstract class OneShotPower<TArgument extends Serializable, TResult extends Serializable>
+    extends OneShotBehaviourState implements Power<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
