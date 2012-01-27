@@ -80,13 +80,25 @@ public class RequirementResultMessage<TResult extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Requirement result' message factory.
+     * @param <TResult> the requirement result type
+     */
     public static class Factory<TResult extends Serializable>
         implements MessageFactory<RequirementResultMessage<TResult>> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Requirement result' message.
+         * @return an empty 'Requirement result' message
+         */
         @Override
         public RequirementResultMessage<TResult> createMessage() {
             return new RequirementResultMessage<TResult>();
         }
+        
+        // </editor-fold> 
     }
     
     // </editor-fold>

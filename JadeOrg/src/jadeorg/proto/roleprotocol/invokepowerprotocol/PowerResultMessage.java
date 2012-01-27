@@ -7,10 +7,12 @@ import java.io.Serializable;
 
 /**
  * A 'Power result' (binary) message.
+ * @param <TResult> the power result type
  * @author Lukáš Kúdela
  * @since 2011-12-28
  * @version %I% %G%
  */
+
 public class PowerResultMessage<TResult extends Serializable>
     extends BinaryMessage {
 
@@ -80,13 +82,25 @@ public class PowerResultMessage<TResult extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Power result' message factory.
+     * @param <TResult> the power result type
+     */
     public static class Factory<TResult extends Serializable>
         implements MessageFactory<PowerResultMessage<TResult>> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Power result' message.
+         * @return an empty 'Power result' message
+         */
         @Override
         public PowerResultMessage<TResult> createMessage() {
             return new PowerResultMessage<TResult>();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
