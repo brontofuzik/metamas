@@ -1,6 +1,7 @@
 package example2.players.participant;
 
 import example2.organizations.auction.auctioneer.AuctionType;
+import java.io.Serializable;
 
 /**
  * A 'Bid' requirement arguemnt.
@@ -8,7 +9,9 @@ import example2.organizations.auction.auctioneer.AuctionType;
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class BidArgument {
+public class BidArgument implements Serializable {
+    
+    // TODO Implement the Serializable interface.
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
