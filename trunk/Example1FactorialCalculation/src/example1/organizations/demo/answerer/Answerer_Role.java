@@ -14,8 +14,19 @@ import jadeorg.core.organization.Role;
  */
 public class Answerer_Role extends Role {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    /**
+     * Initializes the Answerer_Role class.
+     */
+    static {
+        addRequirement("CalculateRequirement_Bid");
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
+    
     @Override
     protected void setup() {
         super.setup();
