@@ -80,13 +80,25 @@ public class PowerArgumentMessage<TArgument extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Power argument' message factory.
+     * @param <TArgument> the power argument type
+     */
     public static class Factory<TArgument extends Serializable>
         implements MessageFactory<PowerArgumentMessage<TArgument>> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Power argument' message.
+         * @return an empty 'Power argument' message
+         */
         @Override
         public PowerArgumentMessage<TArgument> createMessage() {
             return new PowerArgumentMessage<TArgument>();
-        }    
+        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

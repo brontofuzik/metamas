@@ -65,12 +65,23 @@ public class RoleAIDMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Role AID' message factory.
+     */
     public static class Factory implements MessageFactory<RoleAIDMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Role AID' message.
+         * @return an empty 'Role AID' message
+         */
         @Override
         public RoleAIDMessage createMessage() {
             return new RoleAIDMessage();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

@@ -77,12 +77,23 @@ public class RequirementsInformMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Requiremenets inform' message factory. 
+     */
     public static class Factory implements MessageFactory<RequirementsInformMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Requirements inform' message.
+         * @return an empty 'Requirements inform' message
+         */
         @Override
         public RequirementsInformMessage createMessage() {
             return new RequirementsInformMessage();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

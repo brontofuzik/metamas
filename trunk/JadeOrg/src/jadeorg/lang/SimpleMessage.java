@@ -50,18 +50,44 @@ public class SimpleMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A simple message factory.
+     */
     public static class Factory implements MessageFactory {
 
+        // <editor-fold defaultstate="collapsed" desc="Fields">
+        
+        /**
+         * The performative.
+         */
         private int performative;
         
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initializes a new instance of the Factory class.
+         * @param performative the performative
+         */
         public Factory(int performative) {
             this.performative = performative;
         }
-         
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty simple message.
+         * @return an empty simple message
+         */
         @Override
         public Object createMessage() {
             return new SimpleMessage(performative);
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

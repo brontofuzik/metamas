@@ -29,8 +29,15 @@ public class ArgumentRequestMessage extends SimpleMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Argument request' message factory.
+     */
     public static class Factory implements MessageFactory<ArgumentRequestMessage> {
 
+        /**
+         * Creates an empty 'Argument request' message.
+         * @return an empty 'Argument request' message
+         */
         @Override
         public ArgumentRequestMessage createMessage() {
             return new ArgumentRequestMessage();

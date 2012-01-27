@@ -77,13 +77,25 @@ public class RequirementArgumentMessage<TArgument extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Requirement argument' message factory.
+     * @param <TArgument> the requirement argument type
+     */
     public static class Factory<TArgument extends Serializable>
         implements MessageFactory<RequirementArgumentMessage<TArgument>> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Requirement argument' message.
+         * @return an empty 'Requirement argument' message
+         */
         @Override
         public RequirementArgumentMessage<TArgument> createMessage() {
             return new RequirementArgumentMessage<TArgument>();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
