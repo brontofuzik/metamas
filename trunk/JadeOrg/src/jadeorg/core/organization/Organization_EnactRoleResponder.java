@@ -4,7 +4,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
@@ -18,6 +17,7 @@ import jadeorg.proto.SendSuccessOrFailure;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * An 'Enact role' protocol responder party.

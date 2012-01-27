@@ -11,16 +11,23 @@ import java.io.Serializable;
  * @since 2011-12-28
  * @version %I% %G%
  */
-public class PowerResultMessage extends BinaryMessage {
+public class PowerResultMessage<TResult extends Serializable>
+    extends BinaryMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object result;
+    /**
+     * The (serializable) power result.
+     */
+    private TResult result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the PowerResultMessage class.
+     */
     public PowerResultMessage() {
         super(ACLMessage.INFORM);
     }
@@ -29,11 +36,20 @@ public class PowerResultMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public Object getResult() {
+    /**
+     * Gets the power result.
+     * @return the power result
+     */
+    public TResult getResult() {
         return result;
     }
     
-    public PowerResultMessage setResult(Object result) {
+    /**
+     * Sets the power result.
+     * @param result the power result
+     * @return this 'Power result' message (fluent interface)
+     */
+    public PowerResultMessage setResult(TResult result) {
         this.result = result;
         return this;
     }
@@ -42,25 +58,34 @@ public class PowerResultMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Gets the (serializable) content object.
+     * @return the (serializable) content object
+     */
     @Override
     protected Serializable getContentObject() {
         return (Serializable)result;
     }
 
+    /**
+     * Sets the (serializable) content object
+     * @param contentObject the (serializable) content object
+     */
     @Override
     protected void setContentObject(Serializable contentObject) {
-        result = contentObject;
+        result = (TResult)contentObject;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<PowerResultMessage> {
+    public static class Factory<TResult extends Serializable>
+        implements MessageFactory<PowerResultMessage<TResult>> {
 
         @Override
         public PowerResultMessage createMessage() {
-            return new PowerResultMessage();
+            return new PowerResultMessage<TResult>();
         }
     }
     

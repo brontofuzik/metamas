@@ -3,7 +3,6 @@ package jadeorg.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.power.Power;
-import jadeorg.lang.Message;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SendSuccessOrFailure;
@@ -15,6 +14,7 @@ import jadeorg.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
 import jadeorg.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,28 +24,49 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Role_InvokePowerResponder extends ResponderParty {
+public class Role_InvokePowerResponder<TArgument extends Serializable,
+    TResult extends Serializable> extends ResponderParty {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
     
+    /**
+     * The player; more precisely its AID.
+     */
+    private AID player;
+    
+    /**
+     * The name of the power.
+     */
     private String powerName;
     
+    /**
+     * The 'Receive power argument' state.
+     */
     private State receivePowerArgument;
     
+    /**
+     * The power state.
+     */
     private Power power;
     
+    /**
+     * The 'Send power result' state.
+     */
     private State sendPowerResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Role_InvokePowerResponder class.
+     * @param aclMessage the received ACL message
+     */
     public Role_InvokePowerResponder(ACLMessage aclMessage) {
         super(InvokePowerProtocol.getInstance(), aclMessage);
         
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -54,6 +75,10 @@ public class Role_InvokePowerResponder extends ResponderParty {
 
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
+    /**
+     * Gets my role.
+     * @return my role
+     */
     private Role getMyRole() {
         return (Role)myAgent;
     }
@@ -62,6 +87,9 @@ public class Role_InvokePowerResponder extends ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the finite state machine.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
@@ -97,6 +125,10 @@ public class Role_InvokePowerResponder extends ResponderParty {
         sendPowerResult.registerTransition(SendPowerResult.FAILURE, failureEnd);
     }
     
+    /**
+     * Selects a power specified by its name.
+     * @param powerName the name of the power to select.
+     */
     private void selectPower(String powerName) {
         //System.out.println("----- ADDING POWER: " + powerName + " -----");
         power = createPower(powerName);
@@ -110,6 +142,11 @@ public class Role_InvokePowerResponder extends ResponderParty {
         //System.out.println("----- POWER ADDED -----");
     }
     
+    /**
+     * Create a power specified by its name.
+     * @param powerName the name of the power
+     * @return the power
+     */
     private Power createPower(String powerName) {
         //System.out.println("----- CREATING POWER: " + powerName + " -----");
         Class powerClass = getMyRole().powers.get(powerName);
@@ -157,7 +194,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
                 "Responding to the 'Invoke power' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (playerAID.equals(getMyRole().playerAID)) {
+            if (player.equals(getMyRole().playerAID)) {
                 // The sender player is enacting this role.
                 return OK;
             } else {
@@ -193,7 +230,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -239,7 +276,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -271,7 +308,7 @@ public class Role_InvokePowerResponder extends ResponderParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
