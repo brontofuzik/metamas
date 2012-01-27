@@ -1,1 +1,1 @@
-cd Example1CalculateFactorial\bin
+cd Example1FactorialCalculation\bin
