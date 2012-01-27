@@ -54,12 +54,23 @@ public class ReplyMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Reply' message factory.
+     */
     public static class Factory implements MessageFactory<ReplyMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Reply' message.
+         * @return an empty 'Reply' message
+         */
         @Override
         public ReplyMessage createMessage() {
             return new ReplyMessage();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
