@@ -81,10 +81,13 @@ public class PowerResultMessage<TResult extends Serializable>
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     /**
      * A 'Power result' message factory.
      * @param <TResult> the power result type
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory<TResult extends Serializable>
         implements MessageFactory<PowerResultMessage<TResult>> {

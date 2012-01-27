@@ -83,6 +83,9 @@ public class RequirementResultMessage<TResult extends Serializable>
     /**
      * A 'Requirement result' message factory.
      * @param <TResult> the requirement result type
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory<TResult extends Serializable>
         implements MessageFactory<RequirementResultMessage<TResult>> {

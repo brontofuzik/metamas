@@ -31,6 +31,9 @@ public class ArgumentRequestMessage extends SimpleMessage {
     
     /**
      * A 'Argument request' message factory.
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory implements MessageFactory<ArgumentRequestMessage> {
 

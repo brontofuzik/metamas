@@ -76,10 +76,13 @@ public class RequirementArgumentMessage<TArgument extends Serializable>
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     /**
      * A 'Requirement argument' message factory.
      * @param <TArgument> the requirement argument type
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory<TArgument extends Serializable>
         implements MessageFactory<RequirementArgumentMessage<TArgument>> {

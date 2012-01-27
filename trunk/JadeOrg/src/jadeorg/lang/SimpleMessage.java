@@ -49,9 +49,12 @@ public class SimpleMessage extends TextMessage {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     /**
      * A simple message factory.
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
      */
     public static class Factory implements MessageFactory {
 
