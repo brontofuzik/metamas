@@ -79,7 +79,10 @@ public class RequirementsInformMessage extends TextMessage {
     
     /**
      * A 'Requiremenets inform' message factory. 
-     */
+     * @author Lukáš Kúdela
+     * @since
+     * @version %I% %G%
+     */ 
     public static class Factory implements MessageFactory<RequirementsInformMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
