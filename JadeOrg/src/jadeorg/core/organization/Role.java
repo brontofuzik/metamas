@@ -8,7 +8,9 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
 import jadeorg.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -22,9 +24,11 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private static final List<String> requirements = new ArrayList<String>();
+    
     Organization myOrganization;
     
-    Map<String, Class> powers = new Hashtable<String, Class>();
+    final Map<String, Class> powers = new Hashtable<String, Class>();
     
     RoleState state = RoleState.INACTIVE;
     
@@ -158,6 +162,26 @@ public class Role extends Agent {
     }
     
     // ----- PROTECTED -----
+    
+    /**
+     * Adds a requirement.
+     * @param requirement the requirement to add
+     */
+    protected static void addRequirement(String requirement) {
+        // ----- Preconditions -----
+        assert requirement != null && !requirement.isEmpty();
+        // -------------------------
+        
+        requirements.add(requirement);
+    }
+    
+    /**
+     * Gets the requirements (as an array)
+     * @return the requirements (as an array)
+     */
+    protected static String[] getRequirements() {
+        return requirements.toArray(new String[requirements.size()]);
+    }
     
     @Override
     protected void setup() {
