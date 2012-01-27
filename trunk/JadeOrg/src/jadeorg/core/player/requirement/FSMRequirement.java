@@ -2,6 +2,7 @@ package jadeorg.core.player.requirement;
 
 import jadeorg.core.player.Player;
 import jadeorg.proto.jadeextensions.FSMBehaviourState;
+import java.io.Serializable;
 
 /**
  * A FSM requirement.
@@ -9,7 +10,8 @@ import jadeorg.proto.jadeextensions.FSMBehaviourState;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class FSMRequirement<TArgument, TResult> extends FSMBehaviourState
+public class FSMRequirement<TArgument extends Serializable,
+    TResult extends Serializable> extends FSMBehaviourState
     implements Requirement<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">

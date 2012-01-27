@@ -22,22 +22,41 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_InvokeRequirementInitiator extends InitiatorParty {
+public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
+    TResult extends Serializable> extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player; more precisely its AID.
+     */
+    private AID player;
     
+    /**
+     * The name of the requirement.
+     */
     private String requirementName;
     
-    private Object requirementArgument;
+    /**
+     * The (serializable) requirement argument.
+     */
+    private TArgument requirementArgument;
     
-    private Object requirementResult;
+    /**
+     * The serializable requirement argument.
+     */
+    private TResult requirementResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    
+    
+    /**
+     * Initializes a new instance of the Role_InvokeRequirementInitiator class.
+     * @param requirementName the name of the requirement
+     */
     public Role_InvokeRequirementInitiator(String requirementName) {
         super(InvokeRequirementProtocol.getInstance());
         // ----- Preconditions -----
@@ -49,7 +68,8 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         buildFSM();
     }
     
-    public Role_InvokeRequirementInitiator(String requirementName, Object requirementArgument) {
+    // TODO Make this constructor the default one.
+    public Role_InvokeRequirementInitiator(String requirementName, TArgument requirementArgument) {
         this(requirementName);
         
         this.requirementArgument = requirementArgument;
@@ -59,10 +79,18 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public void setRequirementArgument(Object requirementArgument) {
+    /**
+     * Sets the requirement argument.
+     * @param requirementArgument the requirement argument
+     */
+    public void setRequirementArgument(TArgument requirementArgument) {
         this.requirementArgument = requirementArgument;
     }
     
+    /**
+     * Gets the requirement result.
+     * @return the requirement result
+     */
     public Object getRequirementResult() {
         return requirementResult;
     }
@@ -130,7 +158,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
 
             if (true) {
                 // The role can invoke the requirement.
-                playerAID = getMyRole().playerAID;
+                player = getMyRole().playerAID;
                 return OK;
             } else {
                 // The role can not invoke the requirement.
@@ -151,7 +179,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -193,7 +221,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -220,7 +248,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -257,12 +285,12 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
     }
     
     private class ReceiveRequirementResult
-        extends ReceiveSuccessOrFailure<RequirementResultMessage> {
+        extends ReceiveSuccessOrFailure<RequirementResultMessage<TResult>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveRequirementResult() {
-            super(new RequirementResultMessage.Factory());
+            super(new RequirementResultMessage.Factory<TResult>());
         }
         
         // </editor-fold>
@@ -271,7 +299,7 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -283,8 +311,12 @@ public class Role_InvokeRequirementInitiator extends InitiatorParty {
             getMyRole().logInfo("Receiving requirement result.");
         }
         
+        /**
+         * Handles the received 'Requirement result' message.
+         * @param message the received 'Requirement result' message
+         */
         @Override
-        protected void handleSuccessMessage(RequirementResultMessage message) {
+        protected void handleSuccessMessage(RequirementResultMessage<TResult> message) {
             requirementResult = message.getResult();
         }
 

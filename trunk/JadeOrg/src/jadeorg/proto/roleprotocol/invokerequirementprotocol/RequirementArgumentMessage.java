@@ -11,11 +11,15 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class RequirementArgumentMessage extends BinaryMessage {
+public class RequirementArgumentMessage<TArgument extends Serializable>
+    extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Object argument;
+    /**
+     * The requirement argument.
+     */
+    private TArgument argument;
     
     // </editor-fold>
     
@@ -29,11 +33,20 @@ public class RequirementArgumentMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
-    public Object getArgument() {
+    /**
+     * Gets the requirement argument.
+     * @return the requirement argument
+     */
+    public TArgument getArgument() {
         return argument;
     }
     
-    public RequirementArgumentMessage setArgument(Object argument) {
+    /**
+     * Sets the requirement argument.
+     * @param argument the requirement argument
+     * @return this 'Requirement argument' message (fluent interface)
+     */
+    public RequirementArgumentMessage setArgument(TArgument argument) {
         this.argument = argument;
         return this; 
     }
@@ -42,25 +55,34 @@ public class RequirementArgumentMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-     @Override
+    /**
+     * Gets the (serializable) content object.
+     * @return the (serializable) content object
+     */
+    @Override
     protected Serializable getContentObject() {
         return (Serializable)argument;
     }
 
+    /**
+     * Sets the (serializable) content object
+     * @param contentObject the (serializable) content object
+     */
     @Override
     protected void setContentObject(Serializable contentObject) {
-        argument = contentObject;
+        argument = (TArgument)contentObject;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<RequirementArgumentMessage> {
+    public static class Factory<TArgument extends Serializable>
+        implements MessageFactory<RequirementArgumentMessage<TArgument>> {
 
         @Override
-        public RequirementArgumentMessage createMessage() {
-            return new RequirementArgumentMessage();
+        public RequirementArgumentMessage<TArgument> createMessage() {
+            return new RequirementArgumentMessage<TArgument>();
         }
     }
     

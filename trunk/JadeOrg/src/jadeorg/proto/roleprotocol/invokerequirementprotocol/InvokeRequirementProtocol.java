@@ -10,6 +10,7 @@ import jadeorg.core.player.Player_InvokeRequirementResponder;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 import jadeorg.proto.ResponderParty;
+import java.io.Serializable;
 
 /**
  * The 'Invoke requirement' protocol.
@@ -47,7 +48,7 @@ public class InvokeRequirementProtocol extends Protocol {
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String requirementName = (String)arguments[0];
-        Object argument = (Object)arguments[1];
+        Serializable argument = (Serializable)arguments[1];
         return new Role_InvokeRequirementInitiator(requirementName, argument);
     }
 

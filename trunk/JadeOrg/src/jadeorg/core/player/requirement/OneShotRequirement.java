@@ -2,6 +2,7 @@ package jadeorg.core.player.requirement;
 
 import jadeorg.core.player.Player;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
+import java.io.Serializable;
 
 /**
  * A one-shot requirement.
@@ -9,7 +10,8 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public abstract class OneShotRequirement<TArgument, TResult> extends OneShotBehaviourState
+public abstract class OneShotRequirement<TArgument extends Serializable,
+    TResult extends Serializable> extends OneShotBehaviourState
     implements Requirement<TArgument, TResult> {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
