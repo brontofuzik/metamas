@@ -84,12 +84,23 @@ public class BidMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Bid' message factory.
+     */
     public static class Factory implements MessageFactory<BidMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Bid' message.
+         * @return an empty 'Bid' message
+         */
         @Override
         public BidMessage createMessage() {
             return new BidMessage();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>

@@ -85,12 +85,23 @@ public class AuctionCFPMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * A 'Auction CFP' message factory.
+     */
     public static class Factory implements MessageFactory<AuctionCFPMessage> {
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Creates an empty 'Auction CFP' message.
+         * @return an empty 'Auction CFP' message
+         */
         @Override
         public AuctionCFPMessage createMessage() {
             return new AuctionCFPMessage();
         }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
