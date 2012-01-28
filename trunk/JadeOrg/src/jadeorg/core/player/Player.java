@@ -235,8 +235,7 @@ public abstract class Player extends Agent {
         {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().invokePower(powerFullName.getPowerName(),
-                    argument);
+                getMyPlayer().invokePower(powerFullName.getPowerName(), argument);
             }
         });
         return timeout + duration;
