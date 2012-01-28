@@ -10,9 +10,9 @@ import java.io.Serializable;
  */
 public class BidResult implements Serializable {
     
-    // TODO Implement the Serializable interface.
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final long serialVersionUID = 1L;
     
     /**
      * A flag indicating wheter a bid has been made.

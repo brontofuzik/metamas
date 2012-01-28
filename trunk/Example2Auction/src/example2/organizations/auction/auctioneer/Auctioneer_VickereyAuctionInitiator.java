@@ -1,7 +1,6 @@
 package example2.organizations.auction.auctioneer;
 
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
-import jadeorg.proto.InitiatorParty;
 
 /**
  * The 'Vickerey auction' protocol initiator party.
@@ -10,8 +9,7 @@ import jadeorg.proto.InitiatorParty;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Auctioneer_VickereyAuctionInitiator extends InitiatorParty
-    implements AuctionInitiator {
+public class Auctioneer_VickereyAuctionInitiator extends AuctionInitiator {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -24,8 +22,8 @@ public class Auctioneer_VickereyAuctionInitiator extends InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the type of the auction.
-     * @return the type of the auction
+     * Gets the auction type.
+     * @return the auction type
      */
     @Override
     public AuctionType getAuctionType() {
