@@ -25,20 +25,36 @@ public abstract class Responder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected void addResponder(Protocol protocol) {
+    /**
+     * Adds a single responder responding to a given protocol and performative.
+     * @param protocol the protocol
+     * @param performative the performative
+     */
+    protected void addResponder(Protocol protocol, int performative) {
         // ----- Preconditions -----
         if (protocol == null) {
             throw new IllegalArgumentException("protocol");
         }
         // -------------------------
         
-        ResponderState responder = new ResponderState(protocol);     
+        ResponderState responder = new ResponderState(protocol, performative);     
         ResponderStateHolder responders = (ResponderStateHolder)getState(ResponderStateHolder.NAME);
         responders.addSubBehaviour(responder);
     }
     
+    /**
+     * Adds a responder responding to a given protocol and the REQUEST performative.
+     * @param protocol the protocol
+     */
+    protected void addResponder(Protocol protocol) {
+        addResponder(protocol, ACLMessage.REQUEST);
+    }
+    
     // ----- PRIVATE -----
     
+    /**
+     * Builds the finite state machine, i. e. registers the states and transitions.
+     */
     private void buildFSM() {
         // Register the states.
         registerFirstState(new ResponderStateHolder(), ResponderStateHolder.NAME);
@@ -53,7 +69,10 @@ public abstract class Responder extends FSMBehaviour {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-       
+    
+    /**
+     * The 'Responder state holder' (parallel) behaviour. 
+     */
     private class ResponderStateHolder extends ParallelBehaviour {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -63,6 +82,9 @@ public abstract class Responder extends FSMBehaviour {
         // </editor-fold>
     }
     
+    /**
+     * The 'Responder' (one-shot) state.
+     */
     private class ResponderState extends OneShotBehaviour {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -85,12 +107,10 @@ public abstract class Responder extends FSMBehaviour {
             this.performative = performative;
         }
         
-        private ResponderState(Protocol protocol) {
-            this(protocol, ACLMessage.REQUEST);
-        }
-        
         // </editor-fold>
 
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
         @Override
         public void action() {
             MessageTemplate template = MessageTemplate.and(
@@ -102,6 +122,8 @@ public abstract class Responder extends FSMBehaviour {
                 myAgent.addBehaviour(protocol.createResponderParty(message));
             }
         }
+        
+        // </editor-fold>
     }
     
     /**
