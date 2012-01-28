@@ -4,6 +4,7 @@ import example2.protocols.dutchauction.DutchAuctionProtocol;
 import example2.protocols.englishauction.EnglishAuctionProtocol;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
+import jade.lang.acl.ACLMessage;
 import jadeorg.core.Responder;
 
 /**
@@ -18,10 +19,10 @@ public class Bidder_Responder extends Responder {
     
     public Bidder_Responder() {
         // Add responder.
-        addResponder(EnglishAuctionProtocol.getInstance());
-        addResponder(DutchAuctionProtocol.getInstance());
-        addResponder(EnvelopeAuctionProtocol.getInstance());
-        addResponder(VickreyAuctionProtocol.getInstance());
+        addResponder(EnvelopeAuctionProtocol.getInstance(), ACLMessage.CFP);
+        addResponder(VickreyAuctionProtocol.getInstance(), ACLMessage.CFP);
+        addResponder(EnglishAuctionProtocol.getInstance(), ACLMessage.CFP);
+        addResponder(DutchAuctionProtocol.getInstance(), ACLMessage.CFP);
     }
      
     // </editor-fold>

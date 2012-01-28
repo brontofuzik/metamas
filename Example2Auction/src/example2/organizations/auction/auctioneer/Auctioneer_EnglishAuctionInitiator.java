@@ -2,7 +2,6 @@ package example2.organizations.auction.auctioneer;
 
 import example2.protocols.englishauction.EnglishAuctionProtocol;
 import jade.core.AID;
-import jadeorg.proto.InitiatorParty;
 
 /**
  * The 'English auction' protocol initiator party.
@@ -11,8 +10,7 @@ import jadeorg.proto.InitiatorParty;
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
-    implements AuctionInitiator {
+public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -43,8 +41,8 @@ public class Auctioneer_EnglishAuctionInitiator extends InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the type of the auction.
-     * @return the type of the auction
+     * Gets the auction type.
+     * @return the auction type
      */
     @Override
     public AuctionType getAuctionType() {

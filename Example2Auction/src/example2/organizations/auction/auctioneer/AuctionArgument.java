@@ -10,11 +10,9 @@ import java.io.Serializable;
  */
 public class AuctionArgument implements Serializable {
     
-    // TODO Implement the Serializable interface.
-    // http://java.sun.com/developer/technicalArticles/Programming/serialization/
-    // http://www.javapractices.com/topic/TopicAction.do?Id=45
-    
     // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final long serialVersionUID = 1L;
     
     /**
      * The type of the auction.

@@ -6,10 +6,8 @@ import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
-import jadeorg.lang.Message;
 import jadeorg.lang.SimpleMessage;
 import jadeorg.proto.Initialize;
-import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
@@ -26,8 +24,7 @@ import java.util.Set;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
-    implements AuctionInitiator {
+public class Auctioneer_EnvelopeAuctionInitiator extends AuctionInitiator {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -80,8 +77,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the type of the auction.
-     * @return the type of the auction
+     * Gets the auction type.
+     * @return the auction type
      */
     @Override
     public AuctionType getAuctionType() {
@@ -121,17 +118,21 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     }
     
     /**
-     * Gets the bidders. More precisely, their AIDs.
-     * @return the AIDs of the bidders
+     * Gets the bidders; more precisely, their AIDs.
+     * @return the bidders; more precisely, their AIDs
      */
     private AID[] getBidders() {
-        AID[] bidders = new AID[this.bidders.size()];
-        int i = 0;
-        for (AID bidder : this.bidders) {
-            bidders[i] = bidder;
-            i++;
-        }
-        return bidders;
+        return bidders.toArray(new AID[bidders.size()]);
+    }
+    
+    /**
+     * Gets the losers; more precisely, their AIDs.
+     * @return the losers; more precisely, their AIDs.
+     */
+    private AID[] getLosers() {        
+        Set<AID> losers = new HashSet<AID>(bidders);
+        losers.remove(winner);
+        return losers.toArray(new AID[losers.size()]);
     }
     
     // </editor-fold>
@@ -139,7 +140,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the FSM.
+     * Builds the finite state machine, i. e. registers the states and transitions.
      */
     private void buildFSM() {
         // ----- States -----
@@ -172,7 +173,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         sendAuctionCFP.registerDefaultTransition(receiveBid);
         
         receiveBid.registerTransition(ReceiveBid.ALL_BIDS_RECEIVED, determineWinner);
-        receiveBid.registerTransition(ReceiveBid.SOME_BIDS_NOT_RECEIVED, receiveBid);
+        receiveBid.registerTransition(ReceiveBid.SOME_BIDS_NOT_RECEIVED, receiveBid,
+            new String[] { receiveBid.getName() });
         
         determineWinner.registerTransition(DetermineWinner.WINNER_DETERMINED, sendAuctionResultToWinner);
         determineWinner.registerTransition(DetermineWinner.WINNER_NOT_DETERMINED, failureEnd);
@@ -200,7 +202,10 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
                 "Initiating the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
             
+            // TODO Replace the following two lines of code with something like
+            // bidders = getMyRole().getMyOrganization().getAllActiveRoleInstances("Bidder_Role");
             bidders = getMyRole().getMyOrganization().getAllRoleInstances("Bidder_Role");
+            bidders.remove(new AID("bidder_Role_participant1_Player", false));
             
             return OK;
         }
@@ -217,6 +222,10 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their AIDs.
+         */
         @Override
         protected AID[] getReceivers() {
             return getBidders();
@@ -293,6 +302,8 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
                 return SOME_BIDS_NOT_RECEIVED;
             }
         }
+        
+        // ----- PROTECTED -----
         
         @Override
         protected void onEntry() {
@@ -372,9 +383,12 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their ADIs.
+         */
         @Override
         protected AID[] getReceivers() {
-            // TODO Implement.
             return new AID[] { winner };
         }
         
@@ -388,7 +402,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
         }
         
         /**
-         * Creates the simple (AGREE) message.
+         * Prepares the simple (AGREE) message.
          * @return the simple (AGREE) message
          */
         @Override
@@ -412,10 +426,13 @@ public class Auctioneer_EnvelopeAuctionInitiator extends InitiatorParty
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
+        /**
+         * Gets the receivers; more precisely, their AIDs.
+         * @return the receivers; more precisely, their ADIs.
+         */
         @Override
         protected AID[] getReceivers() {
-            // TODO Implement.
-            throw new UnsupportedOperationException("Not supported yet.");
+            return getLosers();
         }
         
         // </editor-fold>
