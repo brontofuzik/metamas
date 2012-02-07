@@ -1,5 +1,6 @@
 package example2.organizations.auction.auctioneer;
 
+import jadeorg.core.organization.Role;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
 
@@ -9,7 +10,7 @@ import jadeorg.proto.Protocol;
  * @since 2012-01-19
  * @version %I% %G%
  */
-public abstract class AuctionInitiator extends InitiatorParty {
+public abstract class AuctionInitiator extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
