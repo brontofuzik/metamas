@@ -18,7 +18,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_DeactRoleInitiator extends InitiatorParty {
+public class Player_DeactRoleInitiator extends InitiatorParty<Player> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -46,14 +46,6 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         this.roleName = roleName;
 
         buildFSM();
-    }
-
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Player getMyPlayer() {
-        return (Player)myAgent;
     }
 
     // </editor-fold>
@@ -98,7 +90,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
 
@@ -141,7 +133,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending deact request.");
+            getMyAgent().logInfo("Sending deact request.");
         }
         
         @Override
@@ -153,7 +145,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Deact request sent.");
+            getMyAgent().logInfo("Deact request sent.");
         }
         
         // </editor-fold>
@@ -178,7 +170,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving deact reply.");
+            getMyAgent().logInfo("Receiving deact reply.");
         }
         
         /**
@@ -187,12 +179,12 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyPlayer().knowledgeBase.deactRole(roleName);
+            getMyAgent().knowledgeBase.deactRole(roleName);
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Deact reply received.");
+            getMyAgent().logInfo("Deact reply received.");
         }
         
         // </editor-fold>
@@ -208,7 +200,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("Deact role initiator party succeeded.");
+            getMyAgent().logInfo("Deact role initiator party succeeded.");
         }
         
         // </editor-fold>
@@ -224,7 +216,7 @@ public class Player_DeactRoleInitiator extends InitiatorParty {
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("Deact role initiator party failed.");
+            getMyAgent().logInfo("Deact role initiator party failed.");
         }
         
         // </editor-fold>

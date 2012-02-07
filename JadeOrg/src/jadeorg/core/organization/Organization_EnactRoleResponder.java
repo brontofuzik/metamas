@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public class Organization_EnactRoleResponder extends ResponderParty {
+public class Organization_EnactRoleResponder extends ResponderParty<Organization> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -43,14 +43,6 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         playerAID = getACLMessage().getSender();
         
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Organization getMyOrganization() {
-        return (Organization)myAgent;
     }
     
     // </editor-fold>
@@ -104,7 +96,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         
         @Override
         public int initialize() {
-            getMyOrganization().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Enact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
             return OK;
@@ -143,14 +135,14 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         
         @Override
         protected void onEntry() {
-            getMyOrganization().logInfo("Sending requirements inform.");
+            getMyAgent().logInfo("Sending requirements inform.");
         }
         
         @Override
         protected int onManager() {
-            if (getMyOrganization().roles.containsKey(roleName)) {
+            if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organizaiton.
-                if (!getMyOrganization().knowledgeBase.isRoleEnacted(roleName)) {
+                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)) {
                     // The role is not yet enacted.
                     return SUCCESS;
                 } else {
@@ -167,13 +159,13 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         protected RequirementsInformMessage prepareMessage() {
             // Create the 'Requirements inform' message.
             RequirementsInformMessage message = new RequirementsInformMessage();
-            message.setRequirements(getMyOrganization().roles.get(roleName).getRequirements());
+            message.setRequirements(getMyAgent().roles.get(roleName).getRequirements());
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyOrganization().logInfo("Requirements inform sent.");
+            getMyAgent().logInfo("Requirements inform sent.");
         }
       
         // </editor-fold>
@@ -194,12 +186,12 @@ public class Organization_EnactRoleResponder extends ResponderParty {
         
         @Override
         protected void onEntry() {
-            getMyOrganization().logInfo("Receiving requirements reply.");
+            getMyAgent().logInfo("Receiving requirements reply.");
         }
 
         @Override
         protected void onExit() {
-            getMyOrganization().logInfo("Requirements reply received.");
+            getMyAgent().logInfo("Requirements reply received.");
         }
         
         // </editor-fold>
@@ -220,12 +212,12 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
         @Override
         protected void onEntry() {
-            getMyOrganization().logInfo("Sending role AID.");
+            getMyAgent().logInfo("Sending role AID.");
         }
         
         @Override
         protected RoleAIDMessage prepareMessage() {
-            getMyOrganization().logInfo("Creating role agent.");
+            getMyAgent().logInfo("Creating role agent.");
             
             // Create the role agent and associate it with the player.
             Role role = createRoleAgent(roleName);
@@ -234,9 +226,9 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             startRoleAgent(role);
             
             // Update the knowledge base.
-            getMyOrganization().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
+            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
             
-            getMyOrganization().logInfo("Role agent created.");
+            getMyAgent().logInfo("Role agent created.");
             
             // Create the 'RoleAID' JadeOrg message.
             RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
@@ -247,7 +239,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
         @Override
         protected void onExit() {
-            getMyOrganization().logInfo("Role AID sent.");
+            getMyAgent().logInfo("Role AID sent.");
         }
         
         // ---------- PRIVATE ----------
@@ -260,7 +252,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
          */
         private Role createRoleAgent(String roleClassName) {
             // Get the role class.
-            Class roleClass = getMyOrganization().roles.get(roleClassName).getRoleClass();
+            Class roleClass = getMyAgent().roles.get(roleClassName).getRoleClass();
             //System.out.println("----- ROLE CLASS: " + roleClass + " -----");
             
             // Get the role constructor.
@@ -290,7 +282,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
             //System.out.println("----- ROLE: " + roleAgent + " -----");
             
             // Associate the role agent with the organization agent.
-            roleAgent.setMyOrganization(getMyOrganization());
+            roleAgent.setMyOrganization(getMyAgent());
             
             return roleAgent;
         }
@@ -318,7 +310,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyOrganization().logInfo("Enact role responder party succeeded.");
+            getMyAgent().logInfo("Enact role responder party succeeded.");
         }
 
         // </editor-fold>           
@@ -333,7 +325,7 @@ public class Organization_EnactRoleResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyOrganization().logInfo("Enact role responder party failed.");
+            getMyAgent().logInfo("Enact role responder party failed.");
         }
 
         // </editor-fold>        

@@ -1,5 +1,6 @@
 package jadeorg.proto;
 
+import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
 /**
@@ -8,7 +9,8 @@ import jade.lang.acl.ACLMessage;
  * @since 2012-01-09
  * @version %I% %G%
  */
-public abstract class ResponderParty extends Party {
+public abstract class ResponderParty<TAgent extends Agent>
+    extends Party<TAgent> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

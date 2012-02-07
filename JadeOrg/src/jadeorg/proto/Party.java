@@ -1,6 +1,7 @@
 package jadeorg.proto;
 
 import jade.core.AID;
+import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jadeorg.lang.Message;
@@ -12,7 +13,7 @@ import jadeorg.proto.jadeextensions.FSMBehaviourState;
  * @since 2011-10-20
  * @version %I% %G%
  */
-public abstract class Party extends FSMBehaviourState {
+public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -50,6 +51,16 @@ public abstract class Party extends FSMBehaviourState {
      */
     public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
+    }
+    
+    // ----- PROTECTED -----
+    
+    /**
+     * Gets my agent.
+     * @return my agent
+     */
+    protected TAgent getMyAgent() {
+        return (TAgent)myAgent;
     }
     
     // </editor-fold>

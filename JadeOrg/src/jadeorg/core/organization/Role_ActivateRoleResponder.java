@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-10
  * @version %I% %G%
  */
-public class Role_ActivateRoleResponder extends ResponderParty {
+public class Role_ActivateRoleResponder extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -32,14 +32,6 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         playerAID = getACLMessage().getSender();
         
         buildFSM();
-    }
-
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    private Role getMyRole() {
-        return (Role)myAgent;
     }
 
     // </editor-fold>
@@ -84,11 +76,11 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         
         @Override
         public int initialize() {
-            getMyRole().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Activate role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (playerAID.equals(getMyRole().playerAID)) {
+            if (playerAID.equals(getMyAgent().playerAID)) {
                 // The sender player is enacting this role.
                 return OK;
             } else {
@@ -137,12 +129,12 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending activate reply.");
+            getMyAgent().logInfo("Sending activate reply.");
         }
 
         @Override
         protected int onManager() {
-            if (getMyRole().isActivable()) {            
+            if (getMyAgent().isActivable()) {            
                 return SendAgreeOrRefuse.AGREE;
             } else {
                 return SendAgreeOrRefuse.REFUSE;
@@ -151,12 +143,12 @@ public class Role_ActivateRoleResponder extends ResponderParty {
         
         @Override
         protected void onAgree() {
-            getMyRole().activate();
+            getMyAgent().activate();
         }
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Activate reply sent.");
+            getMyAgent().logInfo("Activate reply sent.");
         }
         
         // </editor-fold>
@@ -172,7 +164,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyRole().logInfo("Activate role responder party succeeded.");
+            getMyAgent().logInfo("Activate role responder party succeeded.");
         }
 
         // </editor-fold>
@@ -188,7 +180,7 @@ public class Role_ActivateRoleResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyRole().logInfo("Activate role responder party failed.");
+            getMyAgent().logInfo("Activate role responder party failed.");
         }
 
         // </editor-fold>

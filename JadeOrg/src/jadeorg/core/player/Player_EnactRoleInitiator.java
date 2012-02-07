@@ -21,7 +21,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public class Player_EnactRoleInitiator extends InitiatorParty {
+public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -52,14 +52,6 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         this.roleName = roleName;
 
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Player getMyPlayer() {
-        return (Player)myAgent;
     }
     
     // </editor-fold>
@@ -113,7 +105,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Enact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
             
@@ -157,7 +149,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending enact request.");
+            getMyAgent().logInfo("Sending enact request.");
         }
         
         @Override
@@ -170,7 +162,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Enact request sent.");
+            getMyAgent().logInfo("Enact request sent.");
         }
 
         // </editor-fold>
@@ -204,7 +196,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving requirements info.");
+            getMyAgent().logInfo("Receiving requirements info.");
         }
 
         @Override
@@ -214,7 +206,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Requirements info received.");
+            getMyAgent().logInfo("Requirements info received.");
         }
 
         // </editor-fold>
@@ -239,12 +231,12 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending requirements reply.");
+            getMyAgent().logInfo("Sending requirements reply.");
         }
         
         @Override
         protected int onManager() {
-            if (getMyPlayer().evaluateRequirements(requirements)) {
+            if (getMyAgent().evaluateRequirements(requirements)) {
                 // The player invokes the requirements.
                 return AGREE;
             } else {
@@ -255,7 +247,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Requirements reply sent.");
+            getMyAgent().logInfo("Requirements reply sent.");
         }
 
         // </editor-fold>
@@ -288,19 +280,19 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving role AID.");
+            getMyAgent().logInfo("Receiving role AID.");
         }
         
         @Override
         protected void handleMessage(RoleAIDMessage message) {
             AID roleAID = message.getRoleAID();
-            getMyPlayer().knowledgeBase.enactRole(roleName, roleAID,
+            getMyAgent().knowledgeBase.enactRole(roleName, roleAID,
                 organizationAID.getLocalName(), organizationAID);
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Role AID received.");
+            getMyAgent().logInfo("Role AID received.");
         }
 
         // </editor-fold>
@@ -316,7 +308,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Enact role initiator party succeeded.");
+            getMyAgent().logInfo("Enact role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -332,7 +324,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Enact role initiator party failed.");
+            getMyAgent().logInfo("Enact role initiator party failed.");
         }
 
         // </editor-fold>

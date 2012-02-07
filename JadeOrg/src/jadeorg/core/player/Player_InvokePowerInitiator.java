@@ -21,7 +21,7 @@ import java.io.Serializable;
  * @version %I% %G%
  */
 public class Player_InvokePowerInitiator<TArgument extends Serializable,
-    TResult extends Serializable> extends InitiatorParty {
+    TResult extends Serializable> extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -94,16 +94,6 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         return powerResult;
     }
     
-    // ----- PRIVATE -----
-    
-    /**
-     * Gets my player.
-     * @return my player
-     */
-    private Player getMyPlayer() {
-        return (Player)myAgent;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -158,13 +148,13 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Invoke power' (%1$s) protocol.",
                 powerName));
 
-            if (getMyPlayer().knowledgeBase.canInvokePower(powerName)) {
+            if (getMyAgent().knowledgeBase.canInvokePower(powerName)) {
                 // The player can invoke the power.
-                role = getMyPlayer().knowledgeBase.getActiveRole().getRoleAID();
+                role = getMyAgent().knowledgeBase.getActiveRole().getRoleAID();
                 return OK;
             } else {
                 // The player can not invoke the power.
@@ -194,7 +184,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending invoke power request.");
+            getMyAgent().logInfo("Sending invoke power request.");
         }
         
         @Override
@@ -206,7 +196,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Invoke power requets sent.");
+            getMyAgent().logInfo("Invoke power requets sent.");
         }
         
         // </editor-fold>
@@ -236,12 +226,12 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving power argument request.");
+            getMyAgent().logInfo("Receiving power argument request.");
         }
         
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Power argument request received.");
+            getMyAgent().logInfo("Power argument request received.");
         }
         
         // </editor-fold>
@@ -263,7 +253,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
        
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending power argument.");
+            getMyAgent().logInfo("Sending power argument.");
         }
         
         @Override
@@ -275,7 +265,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Power argument sent.");
+            getMyAgent().logInfo("Power argument sent.");
         }
         
         // </editor-fold>
@@ -305,19 +295,19 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving power result.");
+            getMyAgent().logInfo("Receiving power result.");
         }
         
         @Override
         protected void handleSuccessMessage(PowerResultMessage<TResult> message) {
             powerResult = message.getResult();
-            getMyPlayer().knowledgeBase.getActiveRole()
+            getMyAgent().knowledgeBase.getActiveRole()
                 .savePowerResult(powerName, message.getResult());
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Power result received.");
+            getMyAgent().logInfo("Power result received.");
         }
         
         // </editor-fold>
@@ -329,7 +319,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Invoke power' initiator party succeeded.");
+            getMyAgent().logInfo("The 'Invoke power' initiator party succeeded.");
         }
         
         // </editor-fold>
@@ -341,7 +331,7 @@ public class Player_InvokePowerInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Invoke power' initiator party failed.");
+            getMyAgent().logInfo("The 'Invoke power' initiator party failed.");
         }
         
         // </editor-fold>

@@ -18,7 +18,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-09
  * @version %I% %G%
  */
-public class Player_ActivateRoleInitiator extends InitiatorParty {
+public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -41,14 +41,6 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         this.roleName = roleName;
         
         registerStatesAndtransitions();
-    }
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Player getMyPlayer() {
-        return (Player)myAgent;
     }
 
     // </editor-fold>
@@ -93,14 +85,14 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
         
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Activate role' (%1$s) protocol.",
                 roleName));
 
             // Check if the role can be activated.
-            if (getMyPlayer().knowledgeBase.canActivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.canActivateRole(roleName)) {
                 // The role can be activated.
-                roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
                 return OK;
             } else {
                 // The role can not be activated.
@@ -132,7 +124,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending activate request.");
+            getMyAgent().logInfo("Sending activate request.");
         }
         
         @Override
@@ -143,7 +135,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Activate request sent.");
+            getMyAgent().logInfo("Activate request sent.");
         }
 
         // </editor-fold>
@@ -168,7 +160,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving activate reply.");
+            getMyAgent().logInfo("Receiving activate reply.");
         }
         
         /**
@@ -177,12 +169,12 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyPlayer().knowledgeBase.activateRole(roleName);
+            getMyAgent().knowledgeBase.activateRole(roleName);
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Activate reply received.");
+            getMyAgent().logInfo("Activate reply received.");
         }
 
         // </editor-fold>
@@ -198,7 +190,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Activate role initiator party succeeded.");
+            getMyAgent().logInfo("Activate role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -214,7 +206,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Activate role initiator party failed.");
+            getMyAgent().logInfo("Activate role initiator party failed.");
         }
 
         // </editor-fold>

@@ -18,7 +18,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-20
  * @version %I% %G%
  */
-public class Player_DeactivateRoleInitiator extends InitiatorParty {
+public class Player_DeactivateRoleInitiator extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
@@ -41,14 +41,6 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         this.roleName = roleName;
         
         registerStatesAndtransitions();
-    }
-
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Player getMyPlayer() {
-        return (Player)myAgent;
     }
 
     // </editor-fold>
@@ -93,13 +85,13 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
-            if (getMyPlayer().knowledgeBase.canDeactivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyPlayer().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
                 return OK;
             } else {
                 // The role can not be deactivated.
@@ -132,7 +124,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending deactivate request.");
+            getMyAgent().logInfo("Sending deactivate request.");
         }
         
         @Override
@@ -143,7 +135,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Deactivate request sent.");
+            getMyAgent().logInfo("Deactivate request sent.");
         }
         
         // </editor-fold>
@@ -167,7 +159,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving deactivate reply.");
+            getMyAgent().logInfo("Receiving deactivate reply.");
         }
         
         /**
@@ -176,12 +168,12 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyPlayer().knowledgeBase.deactivateRole();
+            getMyAgent().knowledgeBase.deactivateRole();
         }
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Deactivate reply received.");
+            getMyAgent().logInfo("Deactivate reply received.");
         }    
         
         // </editor-fold>
@@ -197,7 +189,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Deactivate role initiator party succeeded.");
+            getMyAgent().logInfo("Deactivate role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -213,7 +205,7 @@ public class Player_DeactivateRoleInitiator extends InitiatorParty {
 
         @Override
         public void action() {
-            getMyPlayer().logInfo("Deactivate role initiator party failed.");
+            getMyAgent().logInfo("Deactivate role initiator party failed.");
         }
 
         // </editor-fold>

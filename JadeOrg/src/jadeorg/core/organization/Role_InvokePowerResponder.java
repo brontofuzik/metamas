@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * @version %I% %G%
  */
 public class Role_InvokePowerResponder<TArgument extends Serializable,
-    TResult extends Serializable> extends ResponderParty {
+    TResult extends Serializable> extends ResponderParty<Role> {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -69,18 +69,6 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         player = getACLMessage().getSender();
         
         buildFSM();
-    }
-    
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-
-    /**
-     * Gets my role.
-     * @return my role
-     */
-    private Role getMyRole() {
-        return (Role)myAgent;
     }
     
     // </editor-fold>
@@ -149,7 +137,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
      */
     private Power createPower(String powerName) {
         //System.out.println("----- CREATING POWER: " + powerName + " -----");
-        Class powerClass = getMyRole().powers.get(powerName);
+        Class powerClass = getMyAgent().powers.get(powerName);
         //System.out.println("----- POWER CLASS: " + powerClass + " -----");
         
         // Get the power constructor.
@@ -190,11 +178,11 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         public int initialize() {
-            getMyRole().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke power' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (player.equals(getMyRole().playerAID)) {
+            if (player.equals(getMyAgent().playerAID)) {
                 // The sender player is enacting this role.
                 return OK;
             } else {
@@ -239,7 +227,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Send power argument request.");
+            getMyAgent().logInfo("Send power argument request.");
         }
 
         @Override
@@ -255,7 +243,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Power argument request sent.");
+            getMyAgent().logInfo("Power argument request sent.");
         }
         
         // </editor-fold>
@@ -285,7 +273,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving power argument.");
+            getMyAgent().logInfo("Receiving power argument.");
         }
         
         @Override
@@ -295,7 +283,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Power argument received.");
+            getMyAgent().logInfo("Power argument received.");
         }
         
         // </editor-fold>
@@ -317,7 +305,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending power result.");
+            getMyAgent().logInfo("Sending power result.");
         }
 
         @Override
@@ -334,7 +322,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Power result sent.");
+            getMyAgent().logInfo("Power result sent.");
         }
         
         // </editor-fold>
@@ -346,7 +334,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Invoke power' responder party succeeded.");
+            getMyAgent().logInfo("The 'Invoke power' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -358,7 +346,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Invoke power' responder party failed.");
+            getMyAgent().logInfo("The 'Invoke power' responder party failed.");
         }
         
         // </editor-fold>
