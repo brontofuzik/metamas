@@ -6,7 +6,6 @@ import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jadeorg.core.organization.Role;
-import jadeorg.lang.Message;
 import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
@@ -19,7 +18,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class Answerer_CalculateFactorialResponder extends ResponderParty {
+public class Answerer_CalculateFactorialResponder extends ResponderParty<Answerer_Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -40,14 +39,6 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         askerAID = getACLMessage().getSender();
         
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    private Role getMyRole() {
-        return (Role)myAgent;
     }
     
     // </editor-fold>
@@ -88,12 +79,12 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyRole().logInfo("Receiving request.");
+            getMyAgent().logInfo("Receiving request.");
             RequestMessage message = new RequestMessage();
             message.parseACLMessage(getACLMessage());
             
             argument = message.getArgument();
-            getMyRole().logInfo("Request received.");
+            getMyAgent().logInfo("Request received.");
         }
         
         // </editor-fold>
@@ -140,7 +131,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending result.");
+            getMyAgent().logInfo("Sending result.");
         }
 
         @Override
@@ -152,7 +143,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Result sent.");
+            getMyAgent().logInfo("Result sent.");
         }
         
         // </editor-fold>
@@ -164,7 +155,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyRole().logInfo("'Calculate factorial' responder party ended.");
+            getMyAgent().logInfo("'Calculate factorial' responder party ended.");
         }
         
         // </editor-fold>
