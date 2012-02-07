@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package example2.organizations.auction.bidder;
 
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
@@ -15,7 +11,7 @@ import jadeorg.proto.ResponderParty;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Bidder_VickereyAuctionResponder extends ResponderParty {
+public class Bidder_VickereyAuctionResponder extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

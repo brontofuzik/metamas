@@ -108,7 +108,6 @@ public class Auctioneer_EnvelopeAuctionInitiator extends AuctionInitiator {
     
     // ----- PRIVATE -----
     
-    // TODO Consider moving this getter to the Party class.
     /**
      * Gets my role.
      * @return my role

@@ -7,6 +7,7 @@ import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jadeorg.core.organization.Role;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.ReceiveAcceptOrRejectProposal;
@@ -22,7 +23,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
+public class Bidder_EnvelopeAuctionResponder extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -61,18 +62,6 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         auctioneer = getACLMessage().getSender();
         
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    /**
-     * Gets my 'Bidder' role.
-     * @return my 'Bidder' role.
-     */
-    private Bidder_Role getMyBidder() {
-        return (Bidder_Role)myAgent;
     }
     
     // </editor-fold>
@@ -132,7 +121,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         
         @Override
         protected int initialize() {
-            getMyBidder().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
             
@@ -153,12 +142,12 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
 
         @Override
         public void action() {
-            getMyBidder().logInfo("Receiving auction CFP.");
+            getMyAgent().logInfo("Receiving auction CFP.");
             AuctionCFPMessage message = new AuctionCFPMessage();
             message.parseACLMessage(getACLMessage());
             
             itemName = message.getItemName();
-            getMyBidder().logInfo("Auction CFP received.");
+            getMyAgent().logInfo("Auction CFP received.");
         }
        
         // </editor-fold>
@@ -227,7 +216,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
 
         @Override
         protected void onEntry() {
-            getMyBidder().logInfo("Sending bid.");
+            getMyAgent().logInfo("Sending bid.");
         }
         
         /**
@@ -244,7 +233,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
 
         @Override
         protected void onExit() {
-            getMyBidder().logInfo("Bid sent.");
+            getMyAgent().logInfo("Bid sent.");
         }
         
         // </editor-fold>
@@ -270,12 +259,12 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         
         @Override
         protected void onEntry() {
-            getMyBidder().logInfo("Receiving auction result.");
+            getMyAgent().logInfo("Receiving auction result.");
         }
 
         @Override
         protected void onExit() {
-            getMyBidder().logInfo("Auction result received.");
+            getMyAgent().logInfo("Auction result received.");
         }
         
         // </editor-fold>
@@ -291,7 +280,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyBidder().logInfo("The 'Envelope auction' responder party succeeded.");
+            getMyAgent().logInfo("The 'Envelope auction' responder party succeeded.");
         }
         
         // </editor-fold> 
@@ -307,7 +296,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyBidder().logInfo("The 'Envelope auction' responder party failed.");
+            getMyAgent().logInfo("The 'Envelope auction' responder party failed.");
         }
         
         // </editor-fold> 

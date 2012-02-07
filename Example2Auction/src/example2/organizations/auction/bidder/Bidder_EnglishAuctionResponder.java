@@ -11,7 +11,7 @@ import jadeorg.proto.ResponderParty;
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Bidder_EnglishAuctionResponder extends ResponderParty {
+public class Bidder_EnglishAuctionResponder extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
