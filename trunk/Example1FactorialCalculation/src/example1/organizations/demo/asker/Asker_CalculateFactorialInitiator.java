@@ -5,7 +5,6 @@ import example1.protocols.calculatefactorialprotocol.ReplyMessage;
 import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jadeorg.core.organization.Role;
-import jadeorg.lang.Message;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.SingleReceiverState;
 import jadeorg.proto.SingleSenderState;
@@ -18,7 +17,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class Asker_CalculateFactorialInitiator extends InitiatorParty {
+public class Asker_CalculateFactorialInitiator extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
