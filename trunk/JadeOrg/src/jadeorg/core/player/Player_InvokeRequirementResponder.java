@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
  * @version %I% %G%
  */
 public class Player_InvokeRequirementResponder<TArgument extends Serializable,
-    TResult extends Serializable> extends ResponderParty {
+    TResult extends Serializable> extends ResponderParty<Player> {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -69,18 +69,6 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         role = getACLMessage().getSender();
         
         buildFSM();
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    /**
-     * Gets my player.
-     * @return my player
-     */
-    private Player getMyPlayer() {
-        return (Player)myAgent;
     }
     
     // </editor-fold>
@@ -148,7 +136,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
     private Requirement createRequirement(String requirementName) {
         System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
         
-        Class requirementClass = getMyPlayer().requirements.get(requirementName);
+        Class requirementClass = getMyAgent().requirements.get(requirementName);
         System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
         
         // Get the requirement constructor.
@@ -190,11 +178,11 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         public int initialize() {
-            getMyPlayer().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke requirement' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (role.equals(getMyPlayer().knowledgeBase.getActiveRole().getRoleAID())) {
+            if (role.equals(getMyAgent().knowledgeBase.getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
                 return OK;
             } else {
@@ -239,7 +227,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Send requirement argument request.");
+            getMyAgent().logInfo("Send requirement argument request.");
         }
 
         @Override
@@ -255,7 +243,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Requirement argument request sent.");
+            getMyAgent().logInfo("Requirement argument request sent.");
         }
         
         // </editor-fold>
@@ -285,7 +273,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Receiving requirement argument.");
+            getMyAgent().logInfo("Receiving requirement argument.");
         }
         
         /**
@@ -299,7 +287,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Requirement argument received.");
+            getMyAgent().logInfo("Requirement argument received.");
         }
         
         // </editor-fold>
@@ -321,7 +309,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyPlayer().logInfo("Sending requirement result.");
+            getMyAgent().logInfo("Sending requirement result.");
         }
 
         @Override
@@ -338,7 +326,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyPlayer().logInfo("Requirement result sent.");
+            getMyAgent().logInfo("Requirement result sent.");
         }
         
         // </editor-fold>
@@ -350,7 +338,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Invoke requirement' responder party succeeded.");
+            getMyAgent().logInfo("The 'Invoke requirement' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -362,7 +350,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyPlayer().logInfo("The 'Invoke requirement' responder party failed.");
+            getMyAgent().logInfo("The 'Invoke requirement' responder party failed.");
         }
         
         // </editor-fold>

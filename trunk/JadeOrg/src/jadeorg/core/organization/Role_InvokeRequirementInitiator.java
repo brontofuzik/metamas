@@ -1,7 +1,7 @@
 package jadeorg.core.organization;
 
 import jade.core.AID;
-import jadeorg.lang.Message;
+import jadeorg.core.player.Player;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @version %I% %G%
  */
 public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
-    TResult extends Serializable> extends InitiatorParty {
+    TResult extends Serializable> extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -95,12 +95,6 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         return requirementResult;
     }
     
-    // ----- PRIVATE -----
-    
-    private Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -152,13 +146,13 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         public int initialize() {
-            getMyRole().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Invoke requirement' (%1$s) protocol.",
                 requirementName));
 
             if (true) {
                 // The role can invoke the requirement.
-                player = getMyRole().playerAID;
+                player = getMyAgent().playerAID;
                 return OK;
             } else {
                 // The role can not invoke the requirement.
@@ -188,7 +182,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending requirement request.");
+            getMyAgent().logInfo("Sending requirement request.");
         }
         
         @Override
@@ -200,7 +194,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Requirement request sent.");
+            getMyAgent().logInfo("Requirement request sent.");
         }
         
         // </editor-fold>
@@ -230,12 +224,12 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving argument request.");
+            getMyAgent().logInfo("Receiving argument request.");
         }
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Argument request received.");
+            getMyAgent().logInfo("Argument request received.");
         }
         
         // </editor-fold>
@@ -257,7 +251,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending requirement argument.");
+            getMyAgent().logInfo("Sending requirement argument.");
         }
         
         @Override
@@ -278,7 +272,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Requirement argument sent.");
+            getMyAgent().logInfo("Requirement argument sent.");
         }
         
         // </editor-fold>
@@ -308,7 +302,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving requirement result.");
+            getMyAgent().logInfo("Receiving requirement result.");
         }
         
         /**
@@ -322,7 +316,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Requirement result received.");
+            getMyAgent().logInfo("Requirement result received.");
         }
 
         // </editor-fold>
@@ -337,7 +331,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Invoke requirement' initiator party suceeded.");
+            getMyAgent().logInfo("The 'Invoke requirement' initiator party suceeded.");
         }
         
         // </editor-fold>
@@ -352,7 +346,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyRole().logInfo("The 'Invoke requirement' initiator party failed.");
+            getMyAgent().logInfo("The 'Invoke requirement' initiator party failed.");
         }
         
         // </editor-fold>

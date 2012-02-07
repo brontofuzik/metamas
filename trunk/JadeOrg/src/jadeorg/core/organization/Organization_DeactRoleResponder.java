@@ -16,7 +16,7 @@ import jadeorg.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Organization_DeactRoleResponder extends ResponderParty {
+public class Organization_DeactRoleResponder extends ResponderParty<Organization> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -36,14 +36,6 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         buildFSM();
     }
     
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    private Organization getMyOrganization() {
-        return (Organization)myAgent;
-    }
-
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -87,7 +79,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         public int initialize() {
-            getMyOrganization().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Responding to the 'Deact role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
             return OK;
@@ -133,14 +125,14 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         protected void onEntry() {
-            getMyOrganization().logInfo("Sending deact reply.");
+            getMyAgent().logInfo("Sending deact reply.");
         }
         
         @Override
         protected int onManager() {
-            if (getMyOrganization().roles.containsKey(roleName)) {
+            if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
-                if (getMyOrganization().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
+                if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
                     // The is enacted by the player.
                     return SendAgreeOrRefuse.AGREE;
                 } else {
@@ -155,13 +147,13 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         protected void onAgree() {
-            getMyOrganization().knowledgeBase
+            getMyAgent().knowledgeBase
                 .updateRoleIsDeacted(roleName, playerAID);
         }
 
         @Override
         protected void onExit() {
-            getMyOrganization().logInfo("Deact reply sent.");
+            getMyAgent().logInfo("Deact reply sent.");
         }
         
         // </editor-fold>
@@ -177,7 +169,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyOrganization().logInfo("Deact role responder party succeeded.");
+            getMyAgent().logInfo("Deact role responder party succeeded.");
         }
         
         // </editor-fold>
@@ -193,7 +185,7 @@ public class Organization_DeactRoleResponder extends ResponderParty {
         
         @Override
         public void action() {
-            getMyOrganization().logInfo("Deact role responder party failed.");
+            getMyAgent().logInfo("Deact role responder party failed.");
         }
         
         // </editor-fold>

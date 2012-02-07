@@ -14,6 +14,9 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the FSMBehaviourState class.
+     */
     protected FSMBehaviourState() {
         setBehaviourName(getClass().getName());
     }
@@ -22,21 +25,32 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the name of the state.
+     * @return the name of the state.
+     */
     public String getName() {
         return getBehaviourName();
     }
     
+    /**
+     * Gets the state code.
+     * @return the state code
+     */
     public int getCode() {
         return getName().hashCode();
     }
     
+    /**
+     * Gets the parent party.
+     * @return the parent party
+     */
     public Party getParty() {
         return (Party)getParent();
     }
     
     // ----- PRIVATE -----
     
-    // TODO Replace with the getParty() getter.
     private FSMBehaviour getParentFSM() {
         return (FSMBehaviour)getParent();
     }
