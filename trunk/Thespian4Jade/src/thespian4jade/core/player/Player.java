@@ -228,7 +228,7 @@ public abstract class Player extends Agent {
      * @param timeout the start timeout
      * @return the end timeout
      */
-    protected final <T> int scheduleInvokePower(final PowerFullName powerFullName,
+    protected final <T> int scheduleInvokeCompetence(final CompetenceFullName powerFullName,
         final T argument, final int timeout, final int duration) {
         // Initiate the 'Invoke power' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
@@ -394,7 +394,7 @@ public abstract class Player extends Agent {
         // </editor-fold>
     }
     
-    protected static class PowerFullName {
+    protected static class CompetenceFullName {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
@@ -406,11 +406,11 @@ public abstract class Player extends Agent {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public PowerFullName(String organizationName, String roleName, String powerName) {
+        public CompetenceFullName(String organizationName, String roleName, String powerName) {
             roleFullName = new RoleFullName(organizationName, roleName);
         }
         
-        public PowerFullName(String powerFullName) {
+        public CompetenceFullName(String powerFullName) {
             String[] nameParts = powerFullName.split("\\.");
             roleFullName = new RoleFullName(nameParts[0], nameParts[1]);
             powerName = nameParts[2];
