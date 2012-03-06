@@ -71,11 +71,11 @@ public class Participant3_Player extends Participant_Player {
         // Activate the 'Auctioneer' role.
         timeout = scheduleActivateRole(auctioneerRoleFullName, timeout);
         
-        // Invoke the 'Auction' power.
+        // Invoke the 'Auction' competence.
         Item klimt = getItemToSell(KLIMT);
         AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
             klimt.getName(), klimt.getPrice());
-        timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
+        timeout = scheduleInvokeCompetence(auctionCompetenceFullName, auctionArgument,
             timeout, 4000);
        
         // Deactivate the 'Auctioneer' role.

@@ -26,7 +26,7 @@ public abstract class Participant_Player extends Player {
     
     protected static final RoleFullName bidderRoleFullName;
     
-    protected static final PowerFullName auctionPowerFullName;
+    protected static final CompetenceFullName auctionCompetenceFullName;
     
     /**
      * The items to be bought.
@@ -48,7 +48,7 @@ public abstract class Participant_Player extends Player {
     static {
         auctioneerRoleFullName = new RoleFullName("auction_Organization.Auctioneer_Role");
         bidderRoleFullName = new RoleFullName("auction_Organization.Bidder_Role");
-        auctionPowerFullName = new PowerFullName("auction_Organization.Auctioneer_Role.Auction_Power");
+        auctionCompetenceFullName = new CompetenceFullName("auction_Organization.Auctioneer_Role.Auction_Competence");
     }
     
     // </editor-fold>
@@ -60,7 +60,7 @@ public abstract class Participant_Player extends Player {
         super.setup();
         
         // Add the responsibilites.
-        addRequirement(Bid_Requirement.class);
+        addRequirement(Bid_Responsibility.class);
         
         int timeout = 4000;
         

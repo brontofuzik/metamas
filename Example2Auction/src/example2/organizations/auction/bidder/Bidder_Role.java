@@ -16,7 +16,7 @@ public class Bidder_Role extends Role {
      * Initializes the Biider_Role class.
      */
     static {
-        addRequirement("Bid_Requirement");
+        addRequirement("Bid_Responsibility");
     }
     
     // </editor-fold>
@@ -31,8 +31,8 @@ public class Bidder_Role extends Role {
         addBehaviour(new Bidder_Responder());
         logInfo("Behaviours added.");
 
-        // Add powers.
-        // No powers.
+        // Add competences.
+        // No competences.
     }
 
     // </editor-fold>

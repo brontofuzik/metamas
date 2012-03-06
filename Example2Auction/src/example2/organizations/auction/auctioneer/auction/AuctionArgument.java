@@ -3,7 +3,7 @@ package example2.organizations.auction.auctioneer.auction;
 import java.io.Serializable;
 
 /**
- * An 'Auction' power argument.
+ * An 'Auction' competence argument.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%

@@ -54,11 +54,11 @@ public class Participant2_Player extends Participant_Player {
         // Activate the 'Auctioneer' role.
         timeout = scheduleActivateRole(auctioneerRoleFullName, timeout);
         
-        // Invoke the 'Auction' power.
+        // Invoke the 'Auction' competence.
         Item kooning = getItemToSell(KOONING);
         AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
             kooning.getName(), kooning.getPrice());
-        timeout = scheduleInvokePower(auctionPowerFullName, auctionArgument,
+        timeout = scheduleInvokeCompetence(auctionCompetenceFullName, auctionArgument,
             timeout, 4000);
        
         // Deactivate the 'Auctioneer' role.

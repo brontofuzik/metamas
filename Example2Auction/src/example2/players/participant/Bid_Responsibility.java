@@ -1,20 +1,16 @@
 package example2.players.participant;
 
-import example2.players.participant.Item;
-import example2.players.participant.Participant_Player;
 import example2.players.participant.bid.BidArgument;
-import example2.players.participant.bid.BidArgument;
-import example2.players.participant.bid.BidResult;
 import example2.players.participant.bid.BidResult;
 import thespian4jade.core.player.requirement.OneShotRequirement;
 
 /**
- * The 'Bid' (one-shot) requirement.
+ * The 'Bid' (one-shot) responsibility.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Bid_Requirement extends OneShotRequirement<BidArgument, BidResult> {
+public class Bid_Responsibility extends OneShotRequirement<BidArgument, BidResult> {
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     

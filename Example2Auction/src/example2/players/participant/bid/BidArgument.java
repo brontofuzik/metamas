@@ -4,7 +4,7 @@ import example2.organizations.auction.auctioneer.auction.AuctionType;
 import java.io.Serializable;
 
 /**
- * A 'Bid' requirement arguemnt.
+ * A 'Bid' responsibility arguemnt.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
