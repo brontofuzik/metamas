@@ -6,7 +6,7 @@ SET SOLUTION_DIR=C:\DATA\projects\MAS\MetaMAS
 REM Solution directory for Prestigio
 REM SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
 
-SET PROJECT_NAME=Example1FactorialCalculation
+SET PROJECT_NAME=Example1FunctionInvocation
 SET PROJECT_DIR=%SOLUTION_DIR%\%PROJECT_NAME%
 SET JADE_VERSION=4.1.1
 
