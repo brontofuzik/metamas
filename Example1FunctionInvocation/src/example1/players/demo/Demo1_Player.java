@@ -13,7 +13,7 @@ public class Demo1_Player extends Demo_Player {
     /**
      * The full name of the power to invoke. 
      */
-    private PowerFullName powerFullName; 
+    private CompetenceFullName powerFullName; 
     
     // </editor-fold>
     
@@ -25,7 +25,7 @@ public class Demo1_Player extends Demo_Player {
      */
     public Demo1_Player() {
         super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));
-        powerFullName = new PowerFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
+        powerFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
     }
     
     // </editor-fold>
@@ -39,7 +39,7 @@ public class Demo1_Player extends Demo_Player {
     @Override
     protected int doScheduleBehaviours(int timeout) {
         Integer invokeFunctionArgument = new Integer(10);
-        return scheduleInvokePower(powerFullName, invokeFunctionArgument,
+        return scheduleInvokeCompetence(powerFullName, invokeFunctionArgument,
             timeout, 2000);
     }
     
