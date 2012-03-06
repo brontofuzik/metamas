@@ -1,18 +1,18 @@
 package example1metamodel;
 
-import metamas.semanticmodel.MultiAgentSystem;
-import metamas.semanticmodel.fsm.FSM;
-import metamas.semanticmodel.organization.Organization;
-import metamas.semanticmodel.organization.OrganizationClass;
-import metamas.semanticmodel.organization.Power;
-import metamas.semanticmodel.organization.RoleClass;
-import metamas.semanticmodel.player.Player;
-import metamas.semanticmodel.player.PlayerClass;
-import metamas.semanticmodel.player.Requirement;
-import metamas.semanticmodel.protocol.Message;
-import metamas.semanticmodel.protocol.Message.MessageType;
-import metamas.semanticmodel.protocol.Party;
-import metamas.semanticmodel.protocol.Protocol;
+import thespian.semanticmodel.MultiAgentSystem;
+import thespian.semanticmodel.fsm.FSM;
+import thespian.semanticmodel.organization.Organization;
+import thespian.semanticmodel.organization.OrganizationClass;
+import thespian.semanticmodel.organization.Power;
+import thespian.semanticmodel.organization.RoleClass;
+import thespian.semanticmodel.player.Player;
+import thespian.semanticmodel.player.PlayerClass;
+import thespian.semanticmodel.player.Requirement;
+import thespian.semanticmodel.protocol.Message;
+import thespian.semanticmodel.protocol.Message.MessageType;
+import thespian.semanticmodel.protocol.Party;
+import thespian.semanticmodel.protocol.Protocol;
 
 /**
  * @author Lukáš Kúdela
