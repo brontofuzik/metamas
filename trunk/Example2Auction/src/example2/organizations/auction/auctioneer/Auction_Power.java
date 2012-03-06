@@ -4,9 +4,9 @@ import example2.organizations.auction.auctioneer.Auction_InitiatorParty;
 import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 import example2.organizations.auction.auctioneer.auction.AuctionResult;
 import example2.organizations.auction.auctioneer.auction.AuctionType;
-import jadeorg.core.organization.power.FSMPower;
-import jadeorg.proto.jadeextensions.OneShotBehaviourState;
-import jadeorg.proto.jadeextensions.State;
+import thespian4jade.core.organization.power.FSMPower;
+import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.proto.jadeextensions.State;
 
 /**
  * The 'Auction' power.

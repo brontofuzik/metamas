@@ -1,6 +1,6 @@
 package example2.organizations.auction.auctioneer;
 
-import jadeorg.core.organization.Role;
+import thespian4jade.core.organization.Role;
 
 /**
  * An 'Auctioneer' role.

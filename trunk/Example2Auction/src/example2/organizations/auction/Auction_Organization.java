@@ -2,8 +2,8 @@ package example2.organizations.auction;
 
 import example2.organizations.auction.auctioneer.Auctioneer_Role;
 import example2.organizations.auction.bidder.Bidder_Role;
-import jadeorg.core.organization.Multiplicity;
-import jadeorg.core.organization.Organization;
+import thespian4jade.core.organization.Multiplicity;
+import thespian4jade.core.organization.Organization;
 import java.util.logging.Level;
 
 /**

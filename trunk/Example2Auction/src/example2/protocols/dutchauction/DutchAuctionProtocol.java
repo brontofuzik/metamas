@@ -3,9 +3,9 @@ package example2.protocols.dutchauction;
 import example2.organizations.auction.auctioneer.DutchAuction_InitiatorParty;
 import example2.organizations.auction.bidder.DutchAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
+import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.Protocol;
+import thespian4jade.proto.ResponderParty;
 
 /**
  * The 'Dutch auction' protocol.

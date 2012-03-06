@@ -1,6 +1,6 @@
 package example2.players.participant;
 
-import jadeorg.core.player.Player;
+import thespian4jade.core.player.Player;
 import java.util.HashMap;
 import java.util.Map;
 

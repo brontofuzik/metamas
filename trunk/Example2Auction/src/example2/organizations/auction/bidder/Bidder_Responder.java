@@ -5,7 +5,7 @@ import example2.protocols.englishauction.EnglishAuctionProtocol;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import jadeorg.core.Responder;
+import thespian4jade.core.Responder;
 
 /**
  * The Bidder role responder.

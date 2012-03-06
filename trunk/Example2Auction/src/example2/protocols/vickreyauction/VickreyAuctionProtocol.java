@@ -3,9 +3,9 @@ package example2.protocols.vickreyauction;
 import example2.organizations.auction.auctioneer.VickereyAuction_InitiatorParty;
 import example2.organizations.auction.bidder.VickereyAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
+import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.Protocol;
+import thespian4jade.proto.ResponderParty;
 
 /**
  * The 'Vickerey auction' protocol.
