@@ -1,5 +1,5 @@
-demo_Organization
+functionInvocation_Organization
 demo1_Player
 demo2_Player
-asker_Role_demo1_Player
-answerer_Role_demo2_Player
+invoker_Role_demo1_Player
+executer_Role_demo2_Player

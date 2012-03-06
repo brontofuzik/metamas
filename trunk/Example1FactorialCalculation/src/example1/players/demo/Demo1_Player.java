@@ -1,7 +1,7 @@
 package example1.players.demo;
 
 /**
- * The Demo1_Player player. The player playing the Asker role.
+ * The Demo1_Player player. The player playing the Invoker role.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
@@ -20,12 +20,12 @@ public class Demo1_Player extends Demo_Player {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Asker role.
+     * Creates a new Demo player who will enact the Invoker role.
      * @param powerFullName the full name of the power to invoke 
      */
     public Demo1_Player() {
-        super(new RoleFullName("demo_Organization.Asker_Role"));
-        powerFullName = new PowerFullName("demo_Organization.Asker_Role.CalculateFactorial_Power");
+        super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));
+        powerFullName = new PowerFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
     }
     
     // </editor-fold>
@@ -38,8 +38,8 @@ public class Demo1_Player extends Demo_Player {
      */
     @Override
     protected int doScheduleBehaviours(int timeout) {
-        Integer calculateFactorialArgument = new Integer(10);
-        return scheduleInvokePower(powerFullName, calculateFactorialArgument,
+        Integer invokeFunctionArgument = new Integer(10);
+        return scheduleInvokePower(powerFullName, invokeFunctionArgument,
             timeout, 2000);
     }
     
