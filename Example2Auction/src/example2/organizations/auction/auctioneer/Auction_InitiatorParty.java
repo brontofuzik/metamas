@@ -1,5 +1,8 @@
 package example2.organizations.auction.auctioneer;
 
+import example2.organizations.auction.auctioneer.auction.AuctionResult;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 import jadeorg.core.organization.Role;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -10,7 +13,7 @@ import jadeorg.proto.Protocol;
  * @since 2012-01-19
  * @version %I% %G%
  */
-public abstract class AuctionInitiator extends InitiatorParty<Role> {
+public abstract class Auction_InitiatorParty extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -18,7 +21,7 @@ public abstract class AuctionInitiator extends InitiatorParty<Role> {
      * Initializes a new instance of the AuctionInitiator class.
      * @param protocol 
      */
-    protected AuctionInitiator(Protocol protocol) {
+    protected Auction_InitiatorParty(Protocol protocol) {
         super(protocol);
     }
     
@@ -53,22 +56,22 @@ public abstract class AuctionInitiator extends InitiatorParty<Role> {
      * @param auctionType the auction type
      * @return the auction initiator party of the given type
      */
-    public static AuctionInitiator createAuctionInitiator(AuctionType auctionType) {
+    public static Auction_InitiatorParty createAuctionInitiator(AuctionType auctionType) {
         switch (auctionType) {
             case ENVELOPE:
-                return new Auctioneer_EnvelopeAuctionInitiator();
+                return new EnvelopeAuction_InitiatorParty();
 
             case VICKREY:
-                return new Auctioneer_VickereyAuctionInitiator();
+                return new VickereyAuction_InitiatorParty();
 
             case ENGLISH:
-                return new Auctioneer_EnglishAuctionInitiator();
+                return new EnglishAuction_InitiatorParty();
 
             case DUTCH:
-                return new Auctioneer_DutchAuctionInitiator();
+                return new DutchAuction_InitiatorParty();
 
             default:
-                return new Auctioneer_EnvelopeAuctionInitiator();
+                return new EnvelopeAuction_InitiatorParty();
         }
     }
     

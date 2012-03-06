@@ -1,4 +1,4 @@
-package example2.players.participant;
+package example2.players.participant.bid;
 
 import java.io.Serializable;
 

@@ -1,5 +1,11 @@
 package example2.players.participant;
 
+import example2.players.participant.Item;
+import example2.players.participant.Participant_Player;
+import example2.players.participant.bid.BidArgument;
+import example2.players.participant.bid.BidArgument;
+import example2.players.participant.bid.BidResult;
+import example2.players.participant.bid.BidResult;
 import jadeorg.core.player.requirement.OneShotRequirement;
 
 /**

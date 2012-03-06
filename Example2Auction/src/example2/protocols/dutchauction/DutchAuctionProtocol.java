@@ -1,7 +1,7 @@
 package example2.protocols.dutchauction;
 
-import example2.organizations.auction.auctioneer.Auctioneer_DutchAuctionInitiator;
-import example2.organizations.auction.bidder.Bidder_DutchAuctionResponder;
+import example2.organizations.auction.auctioneer.DutchAuction_InitiatorParty;
+import example2.organizations.auction.bidder.DutchAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -49,7 +49,7 @@ public class DutchAuctionProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
-        return new Auctioneer_DutchAuctionInitiator();
+        return new DutchAuction_InitiatorParty();
     }
 
     /**
@@ -59,7 +59,7 @@ public class DutchAuctionProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Bidder_DutchAuctionResponder(message);
+        return new DutchAuction_ResponderParty(message);
     }
 
     // </editor-fold>

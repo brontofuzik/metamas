@@ -1,7 +1,7 @@
 package example2.protocols.englishauction;
 
-import example2.organizations.auction.auctioneer.Auctioneer_EnglishAuctionInitiator;
-import example2.organizations.auction.bidder.Bidder_EnglishAuctionResponder;
+import example2.organizations.auction.auctioneer.EnglishAuction_InitiatorParty;
+import example2.organizations.auction.bidder.EnglishAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -49,7 +49,7 @@ public class EnglishAuctionProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
-        return new Auctioneer_EnglishAuctionInitiator();
+        return new EnglishAuction_InitiatorParty();
     }
 
     /**
@@ -59,7 +59,7 @@ public class EnglishAuctionProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Bidder_EnglishAuctionResponder(message);
+        return new EnglishAuction_ResponderParty(message);
     }
 
     // </editor-fold>

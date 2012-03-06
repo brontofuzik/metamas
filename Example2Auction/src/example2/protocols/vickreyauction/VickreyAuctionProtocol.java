@@ -1,7 +1,7 @@
 package example2.protocols.vickreyauction;
 
-import example2.organizations.auction.auctioneer.Auctioneer_VickereyAuctionInitiator;
-import example2.organizations.auction.bidder.Bidder_VickereyAuctionResponder;
+import example2.organizations.auction.auctioneer.VickereyAuction_InitiatorParty;
+import example2.organizations.auction.bidder.VickereyAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -44,12 +44,12 @@ public class VickreyAuctionProtocol extends Protocol {
     
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
-        return new Auctioneer_VickereyAuctionInitiator();
+        return new VickereyAuction_InitiatorParty();
     }
 
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Bidder_VickereyAuctionResponder(message);
+        return new VickereyAuction_ResponderParty(message);
     }
     
     // </editor-fold>

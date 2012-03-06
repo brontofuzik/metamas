@@ -11,11 +11,11 @@ import jadeorg.proto.ResponderParty;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Bidder_VickereyAuctionResponder extends ResponderParty<Bidder_Role> {
+public class VickereyAuction_ResponderParty extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Bidder_VickereyAuctionResponder(ACLMessage message) {
+    public VickereyAuction_ResponderParty(ACLMessage message) {
         super(VickreyAuctionProtocol.getInstance(), message);
     }
     

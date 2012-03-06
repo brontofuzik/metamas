@@ -1,5 +1,8 @@
 package example2.organizations.auction.auctioneer;
 
+import example2.organizations.auction.auctioneer.auction.AuctionResult;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
 
 /**
@@ -9,11 +12,11 @@ import example2.protocols.vickreyauction.VickreyAuctionProtocol;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Auctioneer_VickereyAuctionInitiator extends AuctionInitiator {
+public class VickereyAuction_InitiatorParty extends Auction_InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Auctioneer_VickereyAuctionInitiator() {
+    public VickereyAuction_InitiatorParty() {
         super(VickreyAuctionProtocol.getInstance());
     }    
     

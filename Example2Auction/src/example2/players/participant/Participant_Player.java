@@ -59,7 +59,7 @@ public abstract class Participant_Player extends Player {
     protected void setup() {
         super.setup();
         
-        // Add the requirements.
+        // Add the responsibilites.
         addRequirement(Bid_Requirement.class);
         
         int timeout = 4000;
