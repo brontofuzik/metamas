@@ -1,6 +1,6 @@
 package example2.players.participant;
 
-import example2.organizations.auction.auctioneer.AuctionArgument;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 
 /**
  * The 'Participant3' player.

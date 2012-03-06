@@ -11,11 +11,11 @@ import jadeorg.proto.ResponderParty;
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Bidder_EnglishAuctionResponder extends ResponderParty<Bidder_Role> {
+public class EnglishAuction_ResponderParty extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Bidder_EnglishAuctionResponder(ACLMessage message) {
+    public EnglishAuction_ResponderParty(ACLMessage message) {
         super(EnglishAuctionProtocol.getInstance(), message);
     }
     

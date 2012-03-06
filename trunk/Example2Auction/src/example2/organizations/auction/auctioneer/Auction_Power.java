@@ -1,5 +1,9 @@
 package example2.organizations.auction.auctioneer;
 
+import example2.organizations.auction.auctioneer.Auction_InitiatorParty;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
+import example2.organizations.auction.auctioneer.auction.AuctionResult;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
 import jadeorg.core.organization.power.FSMPower;
 import jadeorg.proto.jadeextensions.OneShotBehaviourState;
 import jadeorg.proto.jadeextensions.State;
@@ -22,7 +26,7 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
     /**
      * The 'Auction initiator' party/state.
      */
-    private AuctionInitiator auctionInitiator;
+    private Auction_InitiatorParty auctionInitiator;
     
     /**
      * The 'Get power result' state.
@@ -110,7 +114,7 @@ public class Auction_Power extends FSMPower<AuctionArgument, AuctionResult> {
         @Override
         public void action() {
             AuctionType auctionType = getArgument().getAuctionType();
-            auctionInitiator = AuctionInitiator.createAuctionInitiator(auctionType);
+            auctionInitiator = Auction_InitiatorParty.createAuctionInitiator(auctionType);
             
             // Register the auction initiator related states.
             registerState(auctionInitiator);

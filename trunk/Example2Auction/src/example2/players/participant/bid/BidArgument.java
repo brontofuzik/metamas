@@ -1,6 +1,6 @@
-package example2.players.participant;
+package example2.players.participant.bid;
 
-import example2.organizations.auction.auctioneer.AuctionType;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
 import java.io.Serializable;
 
 /**

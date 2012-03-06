@@ -1,7 +1,7 @@
 package example2.organizations.auction.bidder;
 
-import example2.players.participant.BidArgument;
-import example2.players.participant.BidResult;
+import example2.players.participant.bid.BidArgument;
+import example2.players.participant.bid.BidResult;
 import example2.protocols.envelopeauction.AuctionCFPMessage;
 import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
@@ -23,7 +23,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Bidder_EnvelopeAuctionResponder extends ResponderParty<Bidder_Role> {
+public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -55,7 +55,7 @@ public class Bidder_EnvelopeAuctionResponder extends ResponderParty<Bidder_Role>
      * Initializes a new instance of the Bidder_EnvelopeAuctionResponder class.
      * @param message the ACL message
      */
-    public Bidder_EnvelopeAuctionResponder(ACLMessage message) {
+    public EnvelopeAuction_ResponderParty(ACLMessage message) {
         super(EnvelopeAuctionProtocol.getInstance(), message);
         
         // TODO Consider moving this initialization to the 'MyInitialize' state.

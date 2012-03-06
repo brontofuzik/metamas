@@ -1,4 +1,4 @@
-package example2.organizations.auction.auctioneer;
+package example2.organizations.auction.auctioneer.auction;
 
 import jade.core.AID;
 import java.io.Serializable;

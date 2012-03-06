@@ -1,5 +1,8 @@
 package example2.organizations.auction.auctioneer;
 
+import example2.organizations.auction.auctioneer.auction.AuctionResult;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 import example2.protocols.envelopeauction.AuctionCFPMessage;
 import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
@@ -24,7 +27,7 @@ import java.util.Set;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class Auctioneer_EnvelopeAuctionInitiator extends AuctionInitiator {
+public class EnvelopeAuction_InitiatorParty extends Auction_InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -67,7 +70,7 @@ public class Auctioneer_EnvelopeAuctionInitiator extends AuctionInitiator {
     /**
      * Initializes a new instance of the Auctioneer_EnvelopeAuctionInitiator class.
      */
-    public Auctioneer_EnvelopeAuctionInitiator() {
+    public EnvelopeAuction_InitiatorParty() {
         super(EnvelopeAuctionProtocol.getInstance());
         buildFSM();
     }    

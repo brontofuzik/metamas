@@ -1,7 +1,7 @@
 package example2.protocols.envelopeauction;
 
-import example2.organizations.auction.auctioneer.Auctioneer_EnvelopeAuctionInitiator;
-import example2.organizations.auction.bidder.Bidder_EnvelopeAuctionResponder;
+import example2.organizations.auction.auctioneer.EnvelopeAuction_InitiatorParty;
+import example2.organizations.auction.bidder.EnvelopeAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -60,7 +60,7 @@ public class EnvelopeAuctionProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
-        return new Auctioneer_EnvelopeAuctionInitiator();
+        return new EnvelopeAuction_InitiatorParty();
     }
 
     /**
@@ -70,7 +70,7 @@ public class EnvelopeAuctionProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Bidder_EnvelopeAuctionResponder(message);
+        return new EnvelopeAuction_ResponderParty(message);
     }
     
     // </editor-fold>

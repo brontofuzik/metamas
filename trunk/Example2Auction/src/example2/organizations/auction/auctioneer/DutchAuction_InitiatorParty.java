@@ -1,16 +1,19 @@
 package example2.organizations.auction.auctioneer;
 
-import example2.protocols.englishauction.EnglishAuctionProtocol;
+import example2.organizations.auction.auctioneer.auction.AuctionResult;
+import example2.organizations.auction.auctioneer.auction.AuctionType;
+import example2.organizations.auction.auctioneer.auction.AuctionArgument;
+import example2.protocols.dutchauction.DutchAuctionProtocol;
 import jade.core.AID;
 
 /**
- * The 'English auction' protocol initiator party.
+ * The 'Dutch auction' protocol initiator party.
  * Design pattern: Abstract factory, Role: Concrete product
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
+public class DutchAuction_InitiatorParty extends Auction_InitiatorParty {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -20,7 +23,7 @@ public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
     
     private double reservationPrice;
     
-    private double bidIncrement;
+    private double bidDecrement;
     
     private boolean winnerDetermined;
     
@@ -32,10 +35,10 @@ public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Auctioneer_EnglishAuctionInitiator() {
-        super(EnglishAuctionProtocol.getInstance());
+    public DutchAuction_InitiatorParty() {
+        super(DutchAuctionProtocol.getInstance());
     }
-      
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -46,7 +49,7 @@ public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
      */
     @Override
     public AuctionType getAuctionType() {
-        return AuctionType.ENGLISH;
+        return AuctionType.DUTCH;
     }
     
     /**
@@ -58,7 +61,7 @@ public class Auctioneer_EnglishAuctionInitiator extends AuctionInitiator {
         itemName = argument.getItemName();
         startingPrice = argument.getStartingPrice();
         reservationPrice = argument.getReservationPrice();
-        bidIncrement = argument.getBidChange();
+        bidDecrement = argument.getBidChange();
     }
 
     /**

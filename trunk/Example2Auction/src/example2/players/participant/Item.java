@@ -6,7 +6,7 @@ package example2.players.participant;
  * @since 2012-01-20
  * @version %I% %G%
  */
-class Item {
+public class Item {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
