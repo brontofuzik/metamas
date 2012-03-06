@@ -119,19 +119,19 @@ public abstract class Organization extends Agent {
      * Adds a role.
      * @param roleClass the role class
      * @param multiplicity the role multiplicity (single or multiple)
-     * @param requirements the role requirements
+     * @param responsibilities the role responsibilities
      */
-    protected void addRole(Class roleClass, Multiplicity multiplicity, String[] requirements) {
+    protected void addRole(Class roleClass, Multiplicity multiplicity, String[] responsibilities) {
         // ----- Preconditions -----
         if (roleClass == null) {
             throw new IllegalArgumentException("roleClass");
         }
-        if (requirements == null) {
-            throw new IllegalArgumentException("requirements");
+        if (responsibilities == null) {
+            throw new IllegalArgumentException("responsibilities");
         }
         // -------------------------
         
-        RoleDefinition roleDefinition = new RoleDefinition(roleClass, multiplicity, requirements);
+        RoleDefinition roleDefinition = new RoleDefinition(roleClass, multiplicity, responsibilities);
         roles.put(roleDefinition.getName(), roleDefinition);
         
         // TAG YellowPages
@@ -140,11 +140,11 @@ public abstract class Organization extends Agent {
         logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
         
         // Alternative:
-        //addRole(new RoleDefinition(roleClass, requirements, multiplicity));
+        //addRole(new RoleDefinition(roleClass, responsibilities, multiplicity));
     }
     
     /**
-     * Adds a role with the default requirements (none).
+     * Adds a role with the default responsibilities (none).
      * @param roleClass the role class
      * @param multiplicity the role multiplicity
      */
@@ -158,17 +158,17 @@ public abstract class Organization extends Agent {
     /**
      * Adds a role with the default multiplicity (single).
      * @param roleClass the role class 
-     * @requirements the role requirements
+     * @responsibilities the role responsibilities
      */
-    protected void addRole(Class roleClass, String[] requirements) {        
-        addRole(roleClass, Multiplicity.SINGLE, requirements);
+    protected void addRole(Class roleClass, String[] responsibilities) {        
+        addRole(roleClass, Multiplicity.SINGLE, responsibilities);
         
         // Alternative:
-        addRole(new RoleDefinition(roleClass, requirements));
+        addRole(new RoleDefinition(roleClass, responsibilities));
     }
     
     /**
-     * Adds a role with the default requirements (none) and default multiplicity (single).
+     * Adds a role with the default responsibilities (none) and default multiplicity (single).
      * @param roleClass the role class
      */
     protected void addRole(Class roleClass) {

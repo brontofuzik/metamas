@@ -4,7 +4,7 @@ package jadeorg.core.organization;
  * A role definition.
  * A role definition consists of:
  * - the role class,
- * - the role requirements and
+ * - the role responsibilites and
  * - the role multiplicity.
  */
 class RoleDefinition {
@@ -22,35 +22,35 @@ class RoleDefinition {
     private Multiplicity multiplicity;
 
     /**
-     * The role requirements.
+     * The role responsibilites.
      */
-    private String[] requirements;
+    private String[] responsibilites;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    RoleDefinition(Class roleClass, Multiplicity multiplicity, String[] requirements) {
+    RoleDefinition(Class roleClass, Multiplicity multiplicity, String[] responsibilites) {
         // ----- Preconditions -----
         if (roleClass == null) {
             throw new IllegalArgumentException("roleClass");
         }
-        if (requirements == null) {
-            throw new IllegalArgumentException("requirements");
+        if (responsibilites == null) {
+            throw new IllegalArgumentException("responsibilities");
         }
         // -------------------------
 
         this.roleClass = roleClass;
         this.multiplicity = multiplicity;
-        this.requirements = requirements;
+        this.responsibilites = responsibilites;
     }
 
     RoleDefinition(Class roleClass, Multiplicity multiplicity) {
         this(roleClass, multiplicity, new String[] {});
     }
 
-    RoleDefinition(Class roleClass, String[] requirements) {
-        this(roleClass, Multiplicity.SINGLE, requirements);
+    RoleDefinition(Class roleClass, String[] responsibilities) {
+        this(roleClass, Multiplicity.SINGLE, responsibilities);
     }
 
     RoleDefinition(Class roleClass) {
@@ -86,11 +86,11 @@ class RoleDefinition {
     }
 
     /**
-     * Gets the role requirements.
-     * @return the role requirements
+     * Gets the role responsibilities.
+     * @return the role responsibilities
      */
-    String[] getRequirements() {
-        return requirements;
+    String[] getResponsibilities() {
+        return responsibilites;
     }
 
     // </editor-fold>

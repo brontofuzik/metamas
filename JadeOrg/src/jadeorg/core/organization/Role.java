@@ -24,7 +24,7 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final List<String> requirements = new ArrayList<String>();
+    private static final List<String> responsibilities = new ArrayList<String>();
     
     Organization myOrganization;
     
@@ -172,15 +172,15 @@ public class Role extends Agent {
         assert requirement != null && !requirement.isEmpty();
         // -------------------------
         
-        requirements.add(requirement);
+        responsibilities.add(requirement);
     }
     
     /**
-     * Gets the requirements (as an array)
-     * @return the requirements (as an array)
+     * Gets the responsibilities (as an array)
+     * @return the responsibilities (as an array)
      */
     protected static String[] getRequirements() {
-        return requirements.toArray(new String[requirements.size()]);
+        return responsibilities.toArray(new String[responsibilities.size()]);
     }
     
     @Override

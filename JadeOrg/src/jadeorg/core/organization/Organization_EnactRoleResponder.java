@@ -7,7 +7,7 @@ import jade.wrapper.StaleProxyException;
 import jadeorg.proto.Initialize;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
-import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.SingleSenderState;
@@ -120,7 +120,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
     }
     
     private class SendRequirementsInform
-        extends SendSuccessOrFailure<RequirementsInformMessage> {
+        extends SendSuccessOrFailure<ResponsibilitiesInformMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -135,7 +135,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending requirements inform.");
+            getMyAgent().logInfo("Sending responsibilities inform.");
         }
         
         @Override
@@ -156,10 +156,10 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         }
         
         @Override
-        protected RequirementsInformMessage prepareMessage() {
+        protected ResponsibilitiesInformMessage prepareMessage() {
             // Create the 'Requirements inform' message.
-            RequirementsInformMessage message = new RequirementsInformMessage();
-            message.setRequirements(getMyAgent().roles.get(roleName).getRequirements());
+            ResponsibilitiesInformMessage message = new ResponsibilitiesInformMessage();
+            message.setResponsibilities(getMyAgent().roles.get(roleName).getResponsibilities());
             return message;
         }
 
@@ -186,7 +186,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving requirements reply.");
+            getMyAgent().logInfo("Receiving responsibilities reply.");
         }
 
         @Override

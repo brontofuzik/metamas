@@ -8,24 +8,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A 'Requirements' message.
- * A 'Requirements' message is a message send from an organization to a player
- * containing information about requirements to enact a certain role.
+ * A 'Responsibilities' message.
+ * A 'Responsibilities' message is a message send from an organization to a player
+ * containing information about responsibilities to enact a certain role.
  * @author Lukáš Kúdela
  * @since 2011-10-20
  * @version %I% %G%
  */
-public class RequirementsInformMessage extends TextMessage {
+public class ResponsibilitiesInformMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String[] requirements;
+    private String[] responsibilities;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RequirementsInformMessage() {
+    public ResponsibilitiesInformMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -34,19 +34,19 @@ public class RequirementsInformMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the requirements.
-     * @return the requirements
+     * Gets the responsibilities.
+     * @return the responsibilities
      */
-    public String[] getRequirements() {
-        return Arrays.copyOf(requirements, requirements.length);
+    public String[] getResponsibilities() {
+        return Arrays.copyOf(responsibilities, responsibilities.length);
     }
     
     /**
-     * Sets the requirements.
-     * @requirements the requirements
+     * Sets the responsibilities.
+     * @responsibilities the responsibilities
      */
-    public RequirementsInformMessage setRequirements(String[] requirements) {
-        this.requirements = Arrays.copyOf(requirements, requirements.length);
+    public ResponsibilitiesInformMessage setResponsibilities(String[] responsibilities) {
+        this.responsibilities = Arrays.copyOf(responsibilities, responsibilities.length);
         return this;
     }
     
@@ -56,21 +56,21 @@ public class RequirementsInformMessage extends TextMessage {
 
     @Override
     public String generateContent() {
-        return String.format("requirements(%1$s)",
-            jadeorg.util.StringUtils.join(requirements, ","));
+        return String.format("responsibilities(%1$s)",
+            jadeorg.util.StringUtils.join(responsibilities, ","));
     }
 
     @Override
     public void parseContent(String content) {
-        final Pattern contentPattern = Pattern.compile("requirements\\((.*)\\)");
+        final Pattern contentPattern = Pattern.compile("responsibilities\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
 
-        String requirementsString = matcher.group(1);
-        String[] requirements = !requirementsString.isEmpty() ?
-            requirementsString.split(",") :
+        String responsibilitiesString = matcher.group(1);
+        String[] responsibilities = !responsibilitiesString.isEmpty() ?
+            responsibilitiesString.split(",") :
             new String[0];
-        this.requirements = requirements;
+        this.responsibilities = responsibilities;
     }
     
     // </editor-fold>
@@ -83,7 +83,7 @@ public class RequirementsInformMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */ 
-    public static class Factory implements MessageFactory<RequirementsInformMessage> {
+    public static class Factory implements MessageFactory<ResponsibilitiesInformMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -92,8 +92,8 @@ public class RequirementsInformMessage extends TextMessage {
          * @return an empty 'Requirements inform' message
          */
         @Override
-        public RequirementsInformMessage createMessage() {
-            return new RequirementsInformMessage();
+        public ResponsibilitiesInformMessage createMessage() {
+            return new ResponsibilitiesInformMessage();
         }
         
         // </editor-fold>

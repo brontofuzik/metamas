@@ -7,7 +7,7 @@ import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.ReceiveSuccessOrFailure;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
-import jadeorg.proto.organizationprotocol.enactroleprotocol.RequirementsInformMessage;
+import jadeorg.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import jadeorg.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import jadeorg.proto.jadeextensions.State;
 import jadeorg.proto.SingleReceiverState;
@@ -34,8 +34,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     /** The role name */
     private String roleName;
     
-    /** The role requirements. */
-    private String[] requirements;
+    /** The role responsibilities. */
+    private String[] responsibilities;
 
     // </editor-fold>
     
@@ -62,8 +62,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         // ----- States -----
         State initialize = new MyInitialize();
         State sendEnactRequest = new SendEnactRequest();
-        State receiveRequirementsInform = new ReceiveRequirementsInform();
-        State sendRequirementsReply = new SendRequirementsReply();
+        State receiveRequirementsInform = new ReceiveResponsibilitiesInform();
+        State sendRequirementsReply = new SendResponsibilitiesReply();
         State receiveRoleAID = new ReceiveRoleAID();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
@@ -86,11 +86,11 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         
         sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
 
-        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.SUCCESS, sendRequirementsReply);
-        receiveRequirementsInform.registerTransition(ReceiveRequirementsInform.FAILURE, failureEnd);
+        receiveRequirementsInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendRequirementsReply);
+        receiveRequirementsInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);
         
-        sendRequirementsReply.registerTransition(SendRequirementsReply.AGREE, receiveRoleAID);
-        sendRequirementsReply.registerTransition(SendRequirementsReply.REFUSE, failureEnd);
+        sendRequirementsReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
+        sendRequirementsReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
 
         receiveRoleAID.registerDefaultTransition(successEnd);
     }
@@ -169,16 +169,16 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Receive requirements info' (multi receiver) state.
-     * A state in which the 'Requirements' info is received.
+     * The 'Receive responsibilities info' (multi receiver) state.
+     * A state in which the 'Responsibilities' info is received.
      */
-    private class ReceiveRequirementsInform extends
-        ReceiveSuccessOrFailure<RequirementsInformMessage> {
+    private class ReceiveResponsibilitiesInform extends
+        ReceiveSuccessOrFailure<ResponsibilitiesInformMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveRequirementsInform() {
-            super(new RequirementsInformMessage.Factory());
+        ReceiveResponsibilitiesInform() {
+            super(new ResponsibilitiesInformMessage.Factory());
         }
         
         // </editor-fold>
@@ -196,12 +196,12 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving requirements info.");
+            getMyAgent().logInfo("Receiving responsibilities info.");
         }
 
         @Override
-        protected void handleSuccessMessage(RequirementsInformMessage message) {
-            requirements = message.getRequirements();
+        protected void handleSuccessMessage(ResponsibilitiesInformMessage message) {
+            responsibilities = message.getResponsibilities();
         }
 
         @Override
@@ -213,10 +213,10 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Send requirements reply' (multi sender) state.
+     * The 'Send responsibilities reply' (multi sender) state.
      * A state in which the 'Agree' or 'Refuse' message is sent.
      */
-    private class SendRequirementsReply extends SendAgreeOrRefuse {
+    private class SendResponsibilitiesReply extends SendAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -231,16 +231,16 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
 
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending requirements reply.");
+            getMyAgent().logInfo("Sending responsibilities reply.");
         }
         
         @Override
         protected int onManager() {
-            if (getMyAgent().evaluateRequirements(requirements)) {
-                // The player invokes the requirements.
+            if (getMyAgent().evaluateResponsibilities(responsibilities)) {
+                // The player meets the responsibilities.
                 return AGREE;
             } else {
-                // The player does not invoke the requirements.
+                // The player does not meet the responsibilities.
                 return REFUSE;
             }
         }
@@ -255,7 +255,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     
     /**
      * The 'Receive role AID' passive state.
-     * A state in which the 'Role AID' requirementsInformMessage is received.
+     * A state in which the 'Role AID' message is received.
      */
     private class ReceiveRoleAID extends SingleReceiverState<RoleAIDMessage> {
 

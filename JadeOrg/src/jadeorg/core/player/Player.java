@@ -23,7 +23,7 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    Map<String, Class> requirements = new HashMap<String, Class>();
+    Map<String, Class> responsibilities = new HashMap<String, Class>();
     
     /** The knowledge base. */
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
@@ -52,12 +52,12 @@ public abstract class Player extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
-     * Evaluates a set of requirements.
-     * @param requirements the set of requirements to evaluate
-     * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise
+     * Evaluates a set of responsibilities.
+     * @param responsibilities the set of responsibilities to evaluate
+     * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise
      */
-    public /* virtual */ boolean evaluateRequirements(String[] requirements) {
-        return evaluateAllRequirements(requirements);
+    public boolean evaluateResponsibilities(String[] responsibilities) {
+        return evaluateAllResponsibilities(responsibilities);
     }
     
     // TAG OBSOLETE
@@ -244,9 +244,9 @@ public abstract class Player extends Agent {
     // ----- Logging -----
     
     /**
-     * Logs a requirementsInformMessage.
-     * @param level the level
-     * @param requirementsInformMessage the requirementsInformMessage
+     * Logs a message.
+     * @param level the log level
+     * @param message the message to log
      */
     public void log(Level level, String message) {
         if (logger.isLoggable(level)) {
@@ -255,8 +255,8 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Logs an INFO-level requirementsInformMessage.
-     * @param requirementsInformMessage the INFO-level requirementsInformMessage
+     * Logs an INFO-level message.
+     * @param message the message to log
      */
     public void logInfo(String message) {
         log(Level.INFO, message);
@@ -289,19 +289,19 @@ public abstract class Player extends Agent {
         // -------------------------
         
         String requirementName = requirementClass.getSimpleName();
-        requirements.put(requirementName, requirementClass);
+        responsibilities.put(requirementName, requirementClass);
         
         logInfo(String.format("Requirement (%1$s) added.", requirementName));
     }
     
     /**
-     * Evaluates a set of requirements.
-     * @param requirements the set of requirements to evaluate
+     * Evaluates a set of responsibilities.
+     * @param responsibilities the set of responsibilities to evaluate
      * @return <c>true</c> if all requirement can be met; <c>false</c> otherwise
      */
-    protected final boolean evaluateAllRequirements(String[] requirements) {
-        for (String requirement : requirements) {
-            if (evaluateRequirement(requirement)) {
+    protected final boolean evaluateAllResponsibilities(String[] responsibilities) {
+        for (String requirement : responsibilities) {
+            if (evaluateReponsibility(requirement)) {
                 return false;
             }
         }
@@ -309,13 +309,13 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Evaluates a set of requirements.
-     * @param requirements the set of requirements to evaluate
+     * Evaluates a set of responsibilities.
+     * @param responsibilities the set of responsibilities to evaluate
      * @return <c>true</c> if any requirement can be met; <c>false</c> otherwise
      */
-    protected final boolean evaluteAnyRequirement(String[] requirements) {
-        for (String requirement : requirements) {
-            if (evaluateRequirement(requirement)) {
+    protected final boolean evaluteAnyRequirement(String[] responsibilities) {
+        for (String requirement : responsibilities) {
+            if (evaluateReponsibility(requirement)) {
                 return true;
             }
         }
@@ -325,10 +325,10 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a requirement.
      * @param requirement the requirement to evaluate
-     * @return <c>true</c> if all requirements can be met; <c>false</c> otherwise 
+     * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise 
      */
-    protected /* virtual */ boolean evaluateRequirement(String requirement) {
-        return requirements.containsKey(requirement);
+    protected /* virtual */ boolean evaluateReponsibility(String responsibility) {
+        return responsibilities.containsKey(responsibility);
     }
     
     // </editor-fold>
