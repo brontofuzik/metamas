@@ -136,7 +136,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
     private Requirement createRequirement(String requirementName) {
         System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
         
-        Class requirementClass = getMyAgent().requirements.get(requirementName);
+        Class requirementClass = getMyAgent().responsibilities.get(requirementName);
         System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
         
         // Get the requirement constructor.
