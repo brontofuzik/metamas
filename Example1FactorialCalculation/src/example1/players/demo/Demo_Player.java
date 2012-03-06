@@ -22,7 +22,7 @@ public abstract class Demo_Player extends Player {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Answerer role.
+     * Creates a new Demo player who will enact the Executer role.
      * @param roleFullName the full name of the role to enact and activate
      */
     Demo_Player(RoleFullName roleFullName) {
@@ -42,7 +42,7 @@ public abstract class Demo_Player extends Player {
         super.setup();
         
         // Add the responsibilities.
-        addRequirement(CalculateFactorial_Requirement.class);
+        addRequirement(ExecuteFunction_Responsibility.class);
         
         int timeout = 2000;
         timeout = scheduleEnactRole(roleFullName, timeout);

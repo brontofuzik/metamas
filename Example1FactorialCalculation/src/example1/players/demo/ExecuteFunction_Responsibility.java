@@ -3,12 +3,12 @@ package example1.players.demo;
 import jadeorg.core.player.requirement.OneShotRequirement;
 
 /**
- * The 'Calculate factorial' (simple) requirement.
+ * The 'Execute function' (simple) responsibility.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
  */
-public class CalculateFactorial_Requirement extends OneShotRequirement<Integer, Integer> {
+public class ExecuteFunction_Responsibility extends OneShotRequirement<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
