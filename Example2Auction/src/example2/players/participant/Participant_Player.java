@@ -64,10 +64,6 @@ public abstract class Participant_Player extends Player {
         
         int timeout = 4000;
         
-        // Enact the 'Auctioneer' and 'Bidder' roles.
-        timeout = scheduleEnactRole(auctioneerRoleFullName, timeout);
-        timeout = scheduleEnactRole(bidderRoleFullName, timeout);
-        
         timeout = doSchedulePollockAuction(timeout);
         
         timeout += 8000;
@@ -77,10 +73,6 @@ public abstract class Participant_Player extends Player {
 //        timeout += 8000;
 //        
 //        timeout = doScheduleKlimtAuction(timeout);
-        
-        // Deact the 'Auctioneer' and 'Bidder' roles.
-        timeout = scheduleDeactRole(auctioneerRoleFullName, timeout);
-        scheduleDeactRole(bidderRoleFullName, timeout);
     }
     
     /**

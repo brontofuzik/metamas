@@ -34,6 +34,11 @@ public class Participant1_Player extends Participant_Player {
      */
     @Override
     protected int doSchedulePollockAuction(int timeout) {
+        // Enact the 'Auctioneer' role.
+        timeout = scheduleEnactRole(auctioneerRoleFullName, timeout);
+                
+        timeout += 2000;
+        
         // Activate the 'Auctioneer' role.
         timeout = scheduleActivateRole(auctioneerRoleFullName, timeout);
         
@@ -45,7 +50,12 @@ public class Participant1_Player extends Participant_Player {
             timeout, 4000);
        
         // Deactivate the 'Auctioneer' role.
-        return scheduleDeactivateRole(auctioneerRoleFullName, timeout);
+        timeout = scheduleDeactivateRole(auctioneerRoleFullName, timeout);
+        
+        timeout += 2000;
+        
+        // Deact the 'Auctioneer' role.
+        return scheduleDeactRole(auctioneerRoleFullName, timeout);
     }
 
     /**
@@ -56,13 +66,23 @@ public class Participant1_Player extends Participant_Player {
      */
     @Override
     protected int doScheduleKooningAuction(int timeout) {
+        // Enact the 'Bidder' role.
+        timeout = scheduleEnactRole(bidderRoleFullName, timeout);
+        
+        timeout += 2000;
+        
         // Activate the 'Bidder' role.
         timeout = scheduleActivateRole(bidderRoleFullName, timeout);
         
         timeout += 4000;
         
         // Deactivate the 'Bidder' role.
-        return scheduleDeactivateRole(bidderRoleFullName, timeout);
+        timeout = scheduleDeactivateRole(bidderRoleFullName, timeout);
+        
+        timeout += 2000;
+        
+        // Deact the 'Bidder' role.
+        return scheduleDeactRole(bidderRoleFullName, timeout);
     }
 
     /**
@@ -73,13 +93,23 @@ public class Participant1_Player extends Participant_Player {
      */
     @Override
     protected int doScheduleKlimtAuction(int timeout) {
+        // Enact the 'Bidder' role.
+        timeout = scheduleEnactRole(bidderRoleFullName, timeout);
+        
+        timeout += 2000;
+        
         // Activate the 'Bidder' role.
         timeout = scheduleActivateRole(bidderRoleFullName, timeout);
         
         timeout += 4000;
         
         // Deactivate the 'Bidder' role.
-        return scheduleDeactivateRole(bidderRoleFullName, timeout);
+        timeout = scheduleDeactivateRole(bidderRoleFullName, timeout);
+        
+        timeout += 2000;
+        
+        // Deact the 'Bidder' role.
+        return scheduleDeactRole(bidderRoleFullName, timeout);
     }
     
     // </editor-fold>
