@@ -14,7 +14,7 @@ public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Asker_CalculateFactorialInitiator calculateFactorialInitiator;
+    private CalculateFactorial_InitiatorParty calculateFactorialInitiator;
     
     // </editor-fold>
     
@@ -31,7 +31,7 @@ public class CalculateFactorial_Power extends FSMPower<Integer, Integer> {
     private void buildFSM() {
         // ----- States -----
         State setPowerArgument = new SetPowerArgument();
-        calculateFactorialInitiator = new Asker_CalculateFactorialInitiator();
+        calculateFactorialInitiator = new CalculateFactorial_InitiatorParty();
         State getPowerResult = new GetPowerResult(); 
         // ------------------
         
