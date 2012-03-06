@@ -3,7 +3,7 @@ package example2.players.participant.bid;
 import java.io.Serializable;
 
 /**
- * A 'Bid' requirement result.
+ * A 'Bid' responsibility result.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%

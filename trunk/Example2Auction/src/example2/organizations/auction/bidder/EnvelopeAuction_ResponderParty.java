@@ -7,7 +7,6 @@ import example2.protocols.envelopeauction.BidMessage;
 import example2.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Role;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InvokeRequirementState;
 import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
@@ -75,7 +74,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         // ----- States -----
         State initialize = new MyInitialize();
         State receiveAuctionCFP = new ReceiveAuctionCFP();
-        State invokeRequirement_Bid = new InvokeRequirement_Bid();
+        State invokeResponsibility_Bid = new InvokeResponsibility_Bid();
         State sendBid = new SendBid();
         State receiveAuctionResult = new ReceiveAuctionResult();
         State successEnd = new SuccessEnd();
@@ -86,7 +85,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         registerFirstState(initialize);
         
         registerState(receiveAuctionCFP);
-        registerState(invokeRequirement_Bid);
+        registerState(invokeResponsibility_Bid);
         registerState(sendBid);
         registerState(receiveAuctionResult);
         
@@ -97,9 +96,9 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         initialize.registerTransition(Initialize.OK, receiveAuctionCFP);
         initialize.registerTransition(Initialize.FAIL, failureEnd);
 
-        receiveAuctionCFP.registerDefaultTransition(invokeRequirement_Bid);
+        receiveAuctionCFP.registerDefaultTransition(invokeResponsibility_Bid);
         
-        invokeRequirement_Bid.registerDefaultTransition(sendBid);
+        invokeResponsibility_Bid.registerDefaultTransition(sendBid);
         
         sendBid.registerDefaultTransition(receiveAuctionResult);
         
@@ -154,19 +153,19 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Invoke requirement - Bid' state.
-     * A state in which the 'Bid' requirement is invoked.
+     * The 'Invoke responsibility - Bid' state.
+     * A state in which the 'Bid' responsibility is invoked.
      */
-    private class InvokeRequirement_Bid
+    private class InvokeResponsibility_Bid
         extends InvokeRequirementState<BidArgument, BidResult> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
-         * Initializes a new instance of the InvokeRequirement_Bid class.
+         * Initializes a new instance of the InvokeResponsibility_Bid class.
          */
-        InvokeRequirement_Bid() {
-            super("Bid_Requirement");
+        InvokeResponsibility_Bid() {
+            super("Bid_Responsibility");
         }
         
         // </editor-fold>
@@ -174,8 +173,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 
         /**
-         * Gets the 'Bid' requirement argument.
-         * @return the 'Bid' requirement argument
+         * Gets the 'Bid' responsibility argument.
+         * @return the 'Bid' responsibility argument
          */
         @Override
         protected BidArgument getRequirementArgument() {
@@ -183,14 +182,14 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         }
 
         /**
-         * Sets the 'Bid' requirement result.
-         * @param requirementResult the 'Bid' requirement result
+         * Sets the 'Bid' responsibility result.
+         * @param responsibilityResult the 'Bid' responsibility result
          */
         @Override
-        protected void setRequirementResult(BidResult requirementResult) {
-            bidMade = requirementResult.isBidMade();
+        protected void setRequirementResult(BidResult responsibilityResult) {
+            bidMade = responsibilityResult.isBidMade();
             if (bidMade) {
-                bid = requirementResult.getBid();
+                bid = responsibilityResult.getBid();
             }
         }
         

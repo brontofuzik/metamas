@@ -4,7 +4,7 @@ import jade.core.AID;
 import java.io.Serializable;
 
 /**
- * An 'Auction' power result.
+ * An 'Auction' competence result.
  * @author Lukáš Kúdela
  * @since 2012-01-218
  * @version %I% %G%

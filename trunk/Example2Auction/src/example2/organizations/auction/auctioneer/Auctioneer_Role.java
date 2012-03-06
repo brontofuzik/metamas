@@ -19,9 +19,9 @@ public class Auctioneer_Role extends Role {
         // Add behaviours.
         // No behaviours.
 
-        // Add powers.
-        addPower(Auction_Power.class);
-        logInfo("Powers added.");
+        // Add competences.
+        addPower(Auction_Competence.class);
+        logInfo("Competences added.");
     }
 
     // </editor-fold>
