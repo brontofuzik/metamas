@@ -1,6 +1,6 @@
 package example1.players.demo;
 
-import jadeorg.core.player.Player;
+import thespian4jade.core.player.Player;
 
 /**
  * A Demo player.

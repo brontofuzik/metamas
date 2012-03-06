@@ -2,7 +2,7 @@ package example1.organizations.functioninvocation;
 
 import example1.organizations.functioninvocation.executer.Executer_Role;
 import example1.organizations.functioninvocation.invoker.Invoker_Role;
-import jadeorg.core.organization.Organization;
+import thespian4jade.core.organization.Organization;
 
 /**
  * An English auction organization.
