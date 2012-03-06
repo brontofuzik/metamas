@@ -16,7 +16,7 @@ public class PlayerClass {
 
     private String name;
     
-    private Map<String, Requirement> requirements = new HashMap<String, Requirement>();
+    private Map<String, Requirement> responsibilities = new HashMap<String, Requirement>();
 
     // </editor-fold>
 
@@ -47,7 +47,7 @@ public class PlayerClass {
         Assert.isNotNull(requirement, "requirement");
         // -------------------------
         
-        requirements.put(requirement.getName(), requirement);
+        responsibilities.put(requirement.getName(), requirement);
     }
     
     public Player createPlayer(String name) {
