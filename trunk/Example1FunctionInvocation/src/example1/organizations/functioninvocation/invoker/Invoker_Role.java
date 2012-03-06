@@ -4,7 +4,7 @@
  */
 package example1.organizations.functioninvocation.invoker;
 
-import jadeorg.core.organization.Role;
+import thespian4jade.core.organization.Role;
 
 /**
  * An Invoker role.

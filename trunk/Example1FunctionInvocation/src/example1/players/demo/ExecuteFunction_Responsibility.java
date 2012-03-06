@@ -1,6 +1,6 @@
 package example1.players.demo;
 
-import jadeorg.core.player.requirement.OneShotRequirement;
+import thespian4jade.core.player.requirement.OneShotRequirement;
 
 /**
  * The 'Execute function' (simple) responsibility.

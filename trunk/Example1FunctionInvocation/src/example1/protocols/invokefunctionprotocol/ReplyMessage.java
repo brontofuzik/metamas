@@ -1,8 +1,8 @@
 package example1.protocols.invokefunctionprotocol;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.MessageFactory;
-import jadeorg.lang.TextMessage;
+import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.TextMessage;
 
 /**
  * An 'Invoke function reply' message.

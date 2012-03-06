@@ -1,7 +1,7 @@
 package example1.organizations.functioninvocation.executer;
 
 import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
-import jadeorg.core.Responder;
+import thespian4jade.core.Responder;
 
 /**
  * The Executer role responder.
