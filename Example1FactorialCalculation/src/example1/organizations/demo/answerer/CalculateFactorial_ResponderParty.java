@@ -5,7 +5,6 @@ import example1.protocols.calculatefactorialprotocol.ReplyMessage;
 import example1.protocols.calculatefactorialprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import jadeorg.core.organization.Role;
 import jadeorg.proto.InvokeRequirementState;
 import jadeorg.proto.ResponderParty;
 import jadeorg.proto.SingleSenderState;
@@ -18,7 +17,7 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class Answerer_CalculateFactorialResponder extends ResponderParty<Answerer_Role> {
+public class CalculateFactorial_ResponderParty extends ResponderParty<Answerer_Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -32,7 +31,7 @@ public class Answerer_CalculateFactorialResponder extends ResponderParty<Answere
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Answerer_CalculateFactorialResponder(ACLMessage aclMessage) {
+    public CalculateFactorial_ResponderParty(ACLMessage aclMessage) {
         super(CalculateFactorialProtocol.getInstance(), aclMessage);
         
         // TODO Consider moving this initialization to the 'MyInitialize' state.

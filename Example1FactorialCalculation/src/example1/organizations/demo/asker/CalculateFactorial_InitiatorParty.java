@@ -17,7 +17,8 @@ import jadeorg.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class Asker_CalculateFactorialInitiator extends InitiatorParty<Role> {
+// TODO Change the type argument from Role to Asker_Role.
+public class CalculateFactorial_InitiatorParty extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -31,7 +32,7 @@ public class Asker_CalculateFactorialInitiator extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Asker_CalculateFactorialInitiator() {
+    public CalculateFactorial_InitiatorParty() {
         super(CalculateFactorialProtocol.getInstance());
         buildFSM();
     }

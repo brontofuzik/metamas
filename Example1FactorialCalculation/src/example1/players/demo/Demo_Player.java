@@ -41,7 +41,7 @@ public abstract class Demo_Player extends Player {
     protected void setup() {
         super.setup();
         
-        // Add the requirements.
+        // Add the responsibilities.
         addRequirement(CalculateFactorial_Requirement.class);
         
         int timeout = 2000;

@@ -1,7 +1,7 @@
 package example1.protocols.calculatefactorialprotocol;
 
-import example1.organizations.demo.answerer.Answerer_CalculateFactorialResponder;
-import example1.organizations.demo.asker.Asker_CalculateFactorialInitiator;
+import example1.organizations.demo.answerer.CalculateFactorial_ResponderParty;
+import example1.organizations.demo.asker.CalculateFactorial_InitiatorParty;
 import jade.lang.acl.ACLMessage;
 import jadeorg.proto.InitiatorParty;
 import jadeorg.proto.Protocol;
@@ -42,7 +42,7 @@ public class CalculateFactorialProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
-        return new Asker_CalculateFactorialInitiator();
+        return new CalculateFactorial_InitiatorParty();
     }
 
     /**
@@ -52,7 +52,7 @@ public class CalculateFactorialProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Answerer_CalculateFactorialResponder(message);
+        return new CalculateFactorial_ResponderParty(message);
     }
     
     // </editor-fold> 
