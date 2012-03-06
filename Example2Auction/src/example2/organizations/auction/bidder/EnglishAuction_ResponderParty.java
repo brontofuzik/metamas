@@ -2,7 +2,7 @@ package example2.organizations.auction.bidder;
 
 import example2.protocols.englishauction.EnglishAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.ResponderParty;
+import thespian4jade.proto.ResponderParty;
 
 /**
  * The 'English auction' protocol responder party.

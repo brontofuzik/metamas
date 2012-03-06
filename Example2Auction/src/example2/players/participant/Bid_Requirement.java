@@ -6,7 +6,7 @@ import example2.players.participant.bid.BidArgument;
 import example2.players.participant.bid.BidArgument;
 import example2.players.participant.bid.BidResult;
 import example2.players.participant.bid.BidResult;
-import jadeorg.core.player.requirement.OneShotRequirement;
+import thespian4jade.core.player.requirement.OneShotRequirement;
 
 /**
  * The 'Bid' (one-shot) requirement.

@@ -1,8 +1,8 @@
 package example2.protocols.envelopeauction;
 
 import jade.lang.acl.ACLMessage;
-import jadeorg.lang.MessageFactory;
-import jadeorg.lang.TextMessage;
+import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

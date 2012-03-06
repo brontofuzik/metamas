@@ -3,9 +3,9 @@ package example2.protocols.envelopeauction;
 import example2.organizations.auction.auctioneer.EnvelopeAuction_InitiatorParty;
 import example2.organizations.auction.bidder.EnvelopeAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
-import jadeorg.proto.ResponderParty;
+import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.Protocol;
+import thespian4jade.proto.ResponderParty;
 
 /**
  * The 'Envelope auction' protocol.

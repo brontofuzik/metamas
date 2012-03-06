@@ -2,7 +2,7 @@ package example2.organizations.auction.bidder;
 
 import example2.protocols.vickreyauction.VickreyAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import jadeorg.proto.ResponderParty;
+import thespian4jade.proto.ResponderParty;
 
 /**
  * The 'Vickerey auction' protocol responder party.

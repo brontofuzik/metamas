@@ -3,9 +3,9 @@ package example2.organizations.auction.auctioneer;
 import example2.organizations.auction.auctioneer.auction.AuctionResult;
 import example2.organizations.auction.auctioneer.auction.AuctionType;
 import example2.organizations.auction.auctioneer.auction.AuctionArgument;
-import jadeorg.core.organization.Role;
-import jadeorg.proto.InitiatorParty;
-import jadeorg.proto.Protocol;
+import thespian4jade.core.organization.Role;
+import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.Protocol;
 
 /**
  * An auction initiator.
