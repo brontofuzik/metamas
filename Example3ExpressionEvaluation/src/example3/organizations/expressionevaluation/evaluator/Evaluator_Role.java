@@ -10,4 +10,20 @@ import thespian4jade.core.organization.Role;
  */
 public class Evaluator_Role extends Role {
     
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    @Override
+    protected void setup() {
+        super.setup();
+
+        // Add behaviours.
+        addBehaviour(new Evaluator_Responder());
+        logInfo("Behaviours added.");
+
+        // Add competences.
+        addPower(Evaluate_Competence.class);
+        logInfo("Competences added.");
+    }
+
+    // </editor-fold>
 }
