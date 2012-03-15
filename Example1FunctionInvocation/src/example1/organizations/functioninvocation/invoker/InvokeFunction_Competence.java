@@ -3,6 +3,7 @@ package example1.organizations.functioninvocation.invoker;
 import thespian4jade.core.organization.power.FSMPower;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
  * The 'Invoke function' (FSM) power.
@@ -39,47 +40,64 @@ public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
      */
     private void buildFSM() {
         // ----- States -----
-        State setInitiatorArgument = new SetInitiatorArgument();
-        invokeFunctionInitiator = new InvokeFunction_InitiatorParty();
-        State getInitiatorResult = new GetInitiatorResult(); 
+        State invokeFunctionInitiatorWrapper = new InvokeFunctionInitiatorWrapper();
+        State end = new End();
         // ------------------
         
         // Register the states.
-        registerFirstState(setInitiatorArgument);
-        
-        registerState(invokeFunctionInitiator);
-        
-        registerLastState(getInitiatorResult);
+        registerFirstState(invokeFunctionInitiatorWrapper);       
+        registerLastState(end);
         
         // Register the transitions.
-        setInitiatorArgument.registerDefaultTransition(invokeFunctionInitiator);
-        
-        invokeFunctionInitiator.registerDefaultTransition(getInitiatorResult);
+        invokeFunctionInitiatorWrapper.registerDefaultTransition(end);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SetInitiatorArgument extends OneShotBehaviourState {
+    /**
+     * The 'Invoke function initiator party' (state wrapper) state. 
+     */
+    private class InvokeFunctionInitiatorWrapper
+        extends StateWrapperState<InvokeFunction_InitiatorParty> {
+
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            invokeFunctionInitiator.setArgument(getArgument());
+        /**
+         * Initializes a new instance of the InvokeFunctionInitiatorWrapper class.
+         */
+        InvokeFunctionInitiatorWrapper() {
+            super(new InvokeFunction_InitiatorParty());
         }
         
         // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void setWrappedStateArgument(InvokeFunction_InitiatorParty wrappedState) {
+            wrappedState.setArgument(getArgument());
+        }
+
+        @Override
+        protected void getWrappedStateResult(InvokeFunction_InitiatorParty wrappedState) {
+            setResult(wrappedState.getResult());
+        }
+    
+        // </editor-fold>    
     }
     
-    private class GetInitiatorResult extends OneShotBehaviourState {
+    /**
+     * The 'End' (one-shot) state.
+     */
+    private class End extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            setResult(invokeFunctionInitiator.getResult());
+            // Do nothing.
         }
         
         // </editor-fold>
