@@ -14,12 +14,18 @@ public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The 'Invoke function' (initiator party) state.
+     */
     private InvokeFunction_InitiatorParty invokeFunctionInitiator;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the InvokeFunction_Competence class.
+     */
     public InvokeFunction_Competence() {       
         buildFSM();
     }
@@ -28,6 +34,9 @@ public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the competence FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State setInitiatorArgument = new SetInitiatorArgument();
