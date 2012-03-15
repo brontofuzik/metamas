@@ -13,7 +13,7 @@ public class Bidder_Role extends Role {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes the Biider_Role class.
+     * Initializes the Bidder_Role class.
      */
     static {
         addRequirement("Bid_Responsibility");

@@ -62,6 +62,7 @@ public abstract class Participant_Player extends Player {
         // Add the responsibilites.
         addRequirement(Bid_Responsibility.class);
         
+        // Four seconds before any interaction begins.
         int timeout = 4000;
         
         timeout = doSchedulePollockAuction(timeout);

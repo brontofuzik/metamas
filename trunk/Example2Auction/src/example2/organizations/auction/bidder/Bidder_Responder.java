@@ -13,12 +13,11 @@ import thespian4jade.core.Responder;
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Bidder_Responder extends Responder {
+class Bidder_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Bidder_Responder() {
-        // Add responder.
+    Bidder_Responder() {
         addResponder(EnvelopeAuctionProtocol.getInstance(), ACLMessage.CFP);
         addResponder(VickreyAuctionProtocol.getInstance(), ACLMessage.CFP);
         addResponder(EnglishAuctionProtocol.getInstance(), ACLMessage.CFP);
