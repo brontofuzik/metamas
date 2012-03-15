@@ -1,7 +1,9 @@
 package example3.organizations.expressionevaluation.evaluator;
 
-import jade.core.AID;
 import thespian4jade.core.organization.power.FSMPower;
+import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
  * The 'Evaluate' (FSM) competence.
@@ -10,33 +12,86 @@ import thespian4jade.core.organization.power.FSMPower;
  * @version %I% %G%
  */
 public class Evaluate_Competence extends FSMPower<String, Integer> {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /**
-     * The AID of the binary evaluator initiating the protocol.
-     */
-    private AID binaryEvaluatorAID;
-    
-    /**
-     * The expression to evaluate.
-     */
-    private String expression;
-    
-    /**
-     * The value of the expression.
-     */
-    private int value;
-    
-    // </editor-fold>
-    
+        
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
      * Initializes a new instance of the Evaluate_Competence class.
      */
     public Evaluate_Competence() {
+        buildFSM();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Builds competence FSM.
+     */
+    private void buildFSM() {
+        // ----- States -----
+        State evaluateExpressionWrapper = new EvaluateExpressionWrapper();
+        State end = new End();
+        // ------------------
         
+        // Register the states.
+        registerFirstState(evaluateExpressionWrapper);
+        registerLastState(end);
+        
+        // Register the transitions.
+        evaluateExpressionWrapper.registerDefaultTransition(end);
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    /**
+     * The 'Evaluate expression' (state wrapper) state.
+     */
+    private class EvaluateExpressionWrapper
+        extends StateWrapperState<EvaluateExpression> {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        /**
+         * Initialize a nex instance of the EvaluateExpressionWrapper class.
+         */
+        public EvaluateExpressionWrapper() {
+            super(new EvaluateExpression());
+        }
+        
+        // </editor-fold>
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void setWrappedStateArgument(EvaluateExpression wrappedState) {
+            wrappedState.setExpression(getArgument());
+        }
+
+        @Override
+        protected void getWrappedStateResult(EvaluateExpression wrappedState) {
+            setResult(new Integer(wrappedState.getValue()));
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'End' (one-shot) state.
+     */
+    private class End extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // Do nothing.
+        }
+        
+        // </editor-fold>
     }
     
     // </editor-fold>
