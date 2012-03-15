@@ -23,9 +23,9 @@ public class Invoker_Role extends Role {
         // Add behaviours.
         // No behaviours.
 
-        // Add powers.
+        // Add competences.
         addPower(InvokeFunction_Competence.class);
-        logInfo("Powers added.");
+        logInfo("Competences added.");
     }
 
     // </editor-fold>

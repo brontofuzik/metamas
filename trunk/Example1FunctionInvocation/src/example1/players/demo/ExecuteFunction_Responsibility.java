@@ -3,7 +3,7 @@ package example1.players.demo;
 import thespian4jade.core.player.requirement.OneShotRequirement;
 
 /**
- * The 'Execute function' (simple) responsibility.
+ * The 'Execute function' (one-shot) responsibility.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%

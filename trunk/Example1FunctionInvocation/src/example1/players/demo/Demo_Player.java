@@ -22,7 +22,7 @@ public abstract class Demo_Player extends Player {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Executer role.
+     * Creates a new instance of the Demo_Player class.
      * @param roleFullName the full name of the role to enact and activate
      */
     Demo_Player(RoleFullName roleFullName) {
@@ -41,25 +41,29 @@ public abstract class Demo_Player extends Player {
     protected void setup() {
         super.setup();
         
-        // Add the responsibilities.
+        // Add responsibilities.
         addRequirement(ExecuteFunction_Responsibility.class);
         
-        int timeout = 2000;
+        // Four seconds before any interaction begins.
+        int timeout = 4000;
+        
+        // Enact and activate the role.
         timeout = scheduleEnactRole(roleFullName, timeout);
         timeout = scheduleActivateRole(roleFullName, timeout);
         
-        // Schedule individual behaviours.
-        timeout = doScheduleBehaviours(timeout);
+        // Schedule competence invocations.
+        timeout = doScheduleCompetenceInvocations(timeout);
 
+        // Deact and deactivate the role.
         timeout = scheduleDeactivateRole(roleFullName, timeout);
         scheduleDeactRole(roleFullName, timeout);
     }
     
     /**
-     * Schedule individual behaviours.
+     * Schedule competence invocations.
      * Design pattern: Template method, Role: Primitive operation
      */
-    protected abstract int doScheduleBehaviours(int timeout);
+    protected abstract int doScheduleCompetenceInvocations(int timeout);
 
     // </editor-fold>
 }

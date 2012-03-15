@@ -5,7 +5,7 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
 
 /**
- * The 'Invoke function' (complex) power.
+ * The 'Invoke function' (FSM) power.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
@@ -30,29 +30,29 @@ public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
     
     private void buildFSM() {
         // ----- States -----
-        State setPowerArgument = new SetPowerArgument();
+        State setInitiatorArgument = new SetInitiatorArgument();
         invokeFunctionInitiator = new InvokeFunction_InitiatorParty();
-        State getPowerResult = new GetPowerResult(); 
+        State getInitiatorResult = new GetInitiatorResult(); 
         // ------------------
         
         // Register the states.
-        registerFirstState(setPowerArgument);
+        registerFirstState(setInitiatorArgument);
         
         registerState(invokeFunctionInitiator);
         
-        registerLastState(getPowerResult);
+        registerLastState(getInitiatorResult);
         
         // Register the transitions.
-        setPowerArgument.registerDefaultTransition(invokeFunctionInitiator);
+        setInitiatorArgument.registerDefaultTransition(invokeFunctionInitiator);
         
-        invokeFunctionInitiator.registerDefaultTransition(getPowerResult);
+        invokeFunctionInitiator.registerDefaultTransition(getInitiatorResult);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class SetPowerArgument extends OneShotBehaviourState {
+    private class SetInitiatorArgument extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -64,7 +64,7 @@ public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
         // </editor-fold>
     }
     
-    private class GetPowerResult extends OneShotBehaviourState {
+    private class GetInitiatorResult extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
