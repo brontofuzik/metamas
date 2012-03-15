@@ -1,12 +1,12 @@
 package example2.organizations.auction.auctioneer;
 
-import example2.organizations.auction.auctioneer.Auction_InitiatorParty;
 import example2.organizations.auction.auctioneer.auction.AuctionArgument;
 import example2.organizations.auction.auctioneer.auction.AuctionResult;
 import example2.organizations.auction.auctioneer.auction.AuctionType;
 import thespian4jade.core.organization.power.FSMPower;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
  * The 'Auction' competence.
@@ -19,24 +19,22 @@ public class Auction_Competence extends FSMPower<AuctionArgument, AuctionResult>
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The 'Set competence argument' state.
+     * The 'Initialize' state.
      */
-    private State setCompetenceArgument;
+    private State initialize;
     
     /**
-     * The 'Auction initiator' party/state.
+     * The 'End' state.
      */
-    private Auction_InitiatorParty auctionInitiator;
-    
-    /**
-     * The 'Get competence result' state.
-     */
-    private State getCompetenceResult;
+    private State end;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Auction_Competence class.
+     */
     public Auction_Competence() {       
         buildFSM();
     }
@@ -45,68 +43,27 @@ public class Auction_Competence extends FSMPower<AuctionArgument, AuctionResult>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the competence FSM.
+     */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        setCompetenceArgument = new SetCompetenceArgument();
-//        State selectAuctionType = new SelectAuctionType();
-//        Auctioneer_EnglishAuctionInitiator englishAuctionInitiator =
-//            new Auctioneer_EnglishAuctionInitiator();
-//        Auctioneer_DutchAuctionInitiator dutchAuctionInitiator =
-//            new Auctioneer_DutchAuctionInitiator();
-//        Auctioneer_EnvelopeAuctionInitiator envelopeAuctionInitiator =
-//            new Auctioneer_EnvelopeAuctionInitiator();
-//        Auctioneer_VickereyAuctionInitiator vickreyAuctionInitiator =
-//            new Auctioneer_VickereyAuctionInitiator();
-        getCompetenceResult = new GetCompetenceResult(); 
+        initialize = new Initialize();
+        end = new End();
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
-        registerState(setCompetenceArgument);
-//        registerState(selectAuctionType);
-//        registerState(englishAuctionInitiator);
-//        registerState(dutchAuctionInitiator);
-//        registerState(envelopeAuctionInitiator);
-//        registerState(vickreyAuctionInitiator);
-        
-        registerLastState(getCompetenceResult);
-        
-        // Register the transitions.
-        // The 'Initialize' state
-        initialize.registerDefaultTransition(setCompetenceArgument);
-        
-//        // The 'Set competence argument' state
-//        setCompetenceArgument.registerDefaultTransition(selectAuctionType);
-//        
-//        // The 'Select auction type' state
-//        selectAuctionType.registerTransition(englishAuctionInitiator
-//            .getAuctionType().getValue(), englishAuctionInitiator);
-//        selectAuctionType.registerTransition(dutchAuctionInitiator
-//            .getAuctionType().getValue(), dutchAuctionInitiator);
-//        selectAuctionType.registerTransition(envelopeAuctionInitiator
-//            .getAuctionType().getValue(), envelopeAuctionInitiator);
-//        selectAuctionType.registerTransition(vickreyAuctionInitiator
-//            .getAuctionType().getValue(), vickreyAuctionInitiator);
-//        
-//        // The 'English auction initiator' state
-//        englishAuctionInitiator.registerDefaultTransition(getCompetenceResult);
-//        
-//        // The 'Dutch auction initiator' state
-//        dutchAuctionInitiator.registerDefaultTransition(getCompetenceResult);
-//        
-//        // The 'Envelope auction initiator' state
-//        envelopeAuctionInitiator.registerDefaultTransition(getCompetenceResult);
-//        
-//        // The 'Vickrey auction initiator' state
-//        vickreyAuctionInitiator.registerDefaultTransition(getCompetenceResult);
+        registerFirstState(initialize); 
+        registerLastState(end);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' (one-shot) state.
+     */
     private class Initialize extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -114,39 +71,63 @@ public class Auction_Competence extends FSMPower<AuctionArgument, AuctionResult>
         @Override
         public void action() {
             AuctionType auctionType = getArgument().getAuctionType();
-            auctionInitiator = Auction_InitiatorParty.createAuctionInitiator(auctionType);
+            Auction_InitiatorParty auctionInitiator = Auction_InitiatorParty.createAuctionInitiator(auctionType);
+            AuctionInitiatorWrapper auctionInitiatorWrapper = new AuctionInitiatorWrapper(auctionInitiator);
             
             // Register the auction initiator related states.
-            registerState(auctionInitiator);
+            registerState(auctionInitiatorWrapper);
             
             // Register the auction initiator related transitions.
-            setCompetenceArgument.registerDefaultTransition(auctionInitiator);
-            
-            auctionInitiator.registerDefaultTransition(getCompetenceResult);
+            initialize.registerDefaultTransition(auctionInitiatorWrapper);
+            auctionInitiatorWrapper.registerDefaultTransition(end);
         }
         
         // </editor-fold>
     }
     
-    private class SetCompetenceArgument extends OneShotBehaviourState {
+    /**
+     * The 'Auction initiator party' (state wrapper) state.
+     */
+    private class AuctionInitiatorWrapper
+        extends StateWrapperState<Auction_InitiatorParty> {
 
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        /**
+         * Initliazes a new instance of the AuctionInitiatorWrapper class.
+         * @param auctionInitiator the auction initiator party
+         */
+        AuctionInitiatorWrapper(Auction_InitiatorParty auctionInitiator) {
+            super(auctionInitiator);
+        }
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            auctionInitiator.setAuctionArgument(getArgument());
+        protected void setWrappedStateArgument(Auction_InitiatorParty wrappedState) {
+            wrappedState.setAuctionArgument(getArgument());
+        }
+
+        @Override
+        protected void getWrappedStateResult(Auction_InitiatorParty wrappedState) {
+            setResult(wrappedState.getAuctionResult());
         }
         
         // </editor-fold>
     }
     
-    private class GetCompetenceResult extends OneShotBehaviourState {
+    /**
+     * The 'End' (one-shot) state.
+     */
+    private static class End extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            setResult(auctionInitiator.getAuctionResult());
+            // Do nothing.
         }
         
         // </editor-fold>
