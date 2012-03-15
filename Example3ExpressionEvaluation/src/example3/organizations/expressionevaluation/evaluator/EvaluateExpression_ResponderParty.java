@@ -5,12 +5,11 @@ import example3.protocols.evaluateexpression.ReplyMessage;
 import example3.protocols.evaluateexpression.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
  * The 'Evaluate expression' protocol responder party.
@@ -22,20 +21,19 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The AID of the binary evaluator initiating the protocol.
+     */
     private AID binaryEvaluatorAID;
     
-    private State setInitiatorArgument;
-    
-    private EvaluateBinaryOperation_InitiatorParty evaluateBinaryOperationInitiator;
-    
-    private State getInitiatorResult;
-    
+    /**
+     * The expression to evaluate.
+     */
     private String expression;
     
-    private String operand1;
-    
-    private String operand2;
-    
+    /**
+     * The value of the expression.
+     */
     private int value;
     
     // </editor-fold>
@@ -62,31 +60,20 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     private void buildFSM() {
         // ----- States -----
         State receiveRequest = new ReceiveRequest();
-        State process = new Process();
-        setInitiatorArgument = new SetInitiatorArgument();
-        getInitiatorResult = new GetInitiatorResult();
+        State evaluateExpressionWrapper = new EvaluteExpressionWrapper();
         State sendReply = new SendReply();
         State end = new End();
         // ------------------
         
         // Register the states.
-        registerFirstState(receiveRequest);
-        
-        registerState(process);
-        registerState(setInitiatorArgument);
-        registerState(getInitiatorResult);
+        registerFirstState(receiveRequest); 
+        registerState(evaluateExpressionWrapper);
         registerState(sendReply);
-        
         registerLastState(end);
         
         // Register the transitions.
-        receiveRequest.registerDefaultTransition(process);
-        
-        process.registerTransition(Process.NUMBER, sendReply);
-        process.registerTransition(Process.BINARY_OPERATION, setInitiatorArgument);
-        
-        getInitiatorResult.registerDefaultTransition(sendReply);
-        
+        receiveRequest.registerDefaultTransition(evaluateExpressionWrapper);
+        evaluateExpressionWrapper.registerDefaultTransition(sendReply);
         sendReply.registerDefaultTransition(end);
     }
     
@@ -118,96 +105,32 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     }
     
     /**
-     * The 'Process' (one-shot) state.
+     * The 'Evaluate expression' (wrapper) state.
      */
-    private class Process extends OneShotBehaviourState {
+    private class EvaluteExpressionWrapper
+        extends StateWrapperState<EvaluateExpression> {
 
-        // <editor-fold defaultstate="collapsed" desc="Fields">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        // ----- Exit values -----
-        static final int NUMBER = 1;
-        static final int UNARY_OPERATION = 2;
-        static final int BINARY_OPERATION = 3;
-        // -----------------------
-        
-        private int exitValue;
+        private EvaluteExpressionWrapper() {
+            super(new EvaluateExpression());
+        }
         
         // </editor-fold>
-        
-        @Override
-        public void action() {
-            // TODO Try to change the operator order.
-            final Pattern pattern = Pattern.compile("\\(([^)]*)\\)([*+-/])\\(([^)]*)\\)");
-            Matcher matcher = pattern.matcher(expression);
-            boolean matches = matcher.matches();
-            
-            if (matches) {
-                // Binary operation
-                operand1 = matcher.group(1);
-                operand2 = matcher.group(3);
-                switch (matcher.group(2).charAt(0)) {
-                    case '+':
-                        evaluateBinaryOperationInitiator = new EvaluateAddition_InitiatorParty();
-                        break;
-                        
-                    case '-':
-                        evaluateBinaryOperationInitiator = new EvaluateSubtraction_InitiatorParty();
-                        break;
-                        
-                    case '*':
-                        evaluateBinaryOperationInitiator = new EvaluateMultiplication_InitiatorParty();
-                        break;
-                        
-                    case '/':
-                        evaluateBinaryOperationInitiator = new EvaluateDivision_InitiatorParty();
-                        break;
-                }
-                registerState(evaluateBinaryOperationInitiator);
-                setInitiatorArgument.registerDefaultTransition(evaluateBinaryOperationInitiator);
-                evaluateBinaryOperationInitiator.registerDefaultTransition(getInitiatorResult);
-                exitValue = BINARY_OPERATION;
-            } else {
-                // Number
-                value = new Integer(expression).intValue();
-                exitValue = NUMBER;
-            }
-        }
-
-        @Override
-        public int onEnd() {
-            return exitValue;
-        }    
-    }
-    
-    /**
-     * The 'Set initiator argument' (one-shot) state.
-     */
-    private class SetInitiatorArgument extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            evaluateBinaryOperationInitiator.setOperand1(operand1);
-            evaluateBinaryOperationInitiator.setOperand2(operand2);
-        }
-    
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Get initiator result' (one-shot) state.
-     */
-    private class GetInitiatorResult extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+
         @Override
-        public void action() {
-            value = evaluateBinaryOperationInitiator.getResult();
+        protected void setWrappedStateArgument(EvaluateExpression wrappedState) {
+            wrappedState.setExpression(expression);
+        }
+
+        @Override
+        protected void getWrappedStateResult(EvaluateExpression wrappedState) {
+            int value = wrappedState.getValue();
         }
         
-        // </editor-fold>
+        // </editor-fold> 
     }
     
     /**
