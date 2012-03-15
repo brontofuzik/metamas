@@ -7,7 +7,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import thespian4jade.lang.Message;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
