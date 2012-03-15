@@ -27,8 +27,8 @@ public class Demo2_Player extends Demo_Player {
      * Design pattern: Template method, Role: Primitive operation
      */
     @Override
-    protected int doScheduleBehaviours(int timeout) {
-        // No behaviours.
+    protected int doScheduleCompetenceInvocations(int timeout) {
+        // No competence invocations.
         return timeout + 2000;
     }
     

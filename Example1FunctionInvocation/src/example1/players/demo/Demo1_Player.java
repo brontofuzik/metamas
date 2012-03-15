@@ -10,10 +10,11 @@ public class Demo1_Player extends Demo_Player {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    // TODO Consider moving this to the doScheduleCompetenceInvocations() method.
     /**
-     * The full name of the power to invoke. 
+     * The full name of the competence to invoke.
      */
-    private CompetenceFullName powerFullName; 
+    private CompetenceFullName competenceFullName; 
     
     // </editor-fold>
     
@@ -25,7 +26,7 @@ public class Demo1_Player extends Demo_Player {
      */
     public Demo1_Player() {
         super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));
-        powerFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
+        competenceFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
     }
     
     // </editor-fold>
@@ -37,10 +38,9 @@ public class Demo1_Player extends Demo_Player {
      * Design pattern: Template method, Role: Primitive operation
      */
     @Override
-    protected int doScheduleBehaviours(int timeout) {
+    protected int doScheduleCompetenceInvocations(int timeout) {
         Integer invokeFunctionArgument = new Integer(10);
-        return scheduleInvokeCompetence(powerFullName, invokeFunctionArgument,
-            timeout, 2000);
+        return scheduleInvokeCompetence(competenceFullName, invokeFunctionArgument, timeout, 2000);
     }
     
     // </editor-fold>

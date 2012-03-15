@@ -17,7 +17,7 @@ public class Executer_Role extends Role {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes the AnswExecutererer_Role class.
+     * Initializes the Executer_Role class.
      */
     static {
         addRequirement("ExecuteFunction_Responsibility");
@@ -35,8 +35,8 @@ public class Executer_Role extends Role {
         addBehaviour(new Executer_Responder());
         logInfo("Behaviours added.");
 
-        // Add powers.
-        // No powers.
+        // Add competences.
+        // No competences.
     }
 
     // </editor-fold>

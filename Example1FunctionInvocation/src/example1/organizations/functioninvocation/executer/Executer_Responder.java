@@ -9,11 +9,11 @@ import thespian4jade.core.Responder;
  * @since 2012-01-05
  * @version %I% %G%
  */
-public class Executer_Responder extends Responder {
+class Executer_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Executer_Responder() {
+    Executer_Responder() {
         addResponder(InvokeFunctionProtocol.getInstance());
     }
      

@@ -31,10 +31,14 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the InvokeFunction_ResponderParty class.
+     * @param message the received ACL message
+     */
     public InvokeFunction_ResponderParty(ACLMessage aclMessage) {
         super(InvokeFunctionProtocol.getInstance(), aclMessage);
         
-        // TODO Consider moving this initialization to the 'MyInitialize' state.
+        // TODO Consider moving this initialization to the Initialize' state.
         invokerAID = getACLMessage().getSender();
         
         buildFSM();
@@ -72,23 +76,32 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Receive request' (one-shot) state.
+     */
     private class ReceiveRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
+            // LOG
             getMyAgent().logInfo("Receiving request.");
-            RequestMessage message = new RequestMessage();
-            message.parseACLMessage(getACLMessage());
             
+            RequestMessage message = new RequestMessage();
+            message.parseACLMessage(getACLMessage());          
             argument = message.getArgument();
+            
+            // LOG
             getMyAgent().logInfo("Request received.");
         }
         
         // </editor-fold>
     }
     
+    /**
+     * The 'Invoke responsibility - Execute function' (invoke responsibility) state.
+     */
     private class InvokeResponsibility_ExecuteFunction
         extends InvokeRequirementState<Integer, Integer> {
         
@@ -115,6 +128,9 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         // </editor-fold>
     }
     
+    /**
+     * The 'Send reply' (sinle sender) state.
+     */
     private class SendReply extends SingleSenderState<ReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -148,6 +164,9 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         // </editor-fold>
     }
     
+    /**
+     * The 'End' (one-shot) state.
+     */
     private class End extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

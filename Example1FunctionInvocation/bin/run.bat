@@ -17,7 +17,13 @@ SET THESPIAN4JADE_JAR=%SOLUTION_DIR%\Thespian4Jade\dist\Thespian4Jade.jar
 SET PROJECT_JAR=%PROJECT_DIR%\dist\%PROJECT_NAME%.jar
 SET CLASSPATH=%JADE_JAR%;%COMMONS_CODEC_JAR%;%THESPIAN4JADE_JAR%;%PROJECT_JAR%
 
+REM ----- Options -----
+SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
+SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JADE_OPTIONS=-gui
+
 REM ----- Agents -----
+SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
 SET ROOT_NAMESPACE=example1
 
 REM ----- Organizations -----
@@ -31,12 +37,6 @@ SET DEMO1_PLAYER=demo1_Player:%PLAYER_PACKAGE%.demo.Demo1_Player
 SET DEMO2_PLAYER=demo2_Player:%PLAYER_PACKAGE%.demo.Demo2_Player
 SET PLAYERS=%DEMO1_PLAYER%;%DEMO2_PLAYER%
 
-Rem ----- Options -----
-SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
-SET JADE_OPTIONS=-gui
-
-SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
 SET AGENTS=%SNIFFER%;%ORGANIZATIONS%;%PLAYERS%
 
 @ECHO ON
