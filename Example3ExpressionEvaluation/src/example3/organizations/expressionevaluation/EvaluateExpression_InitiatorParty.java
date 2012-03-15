@@ -1,5 +1,6 @@
 package example3.organizations.expressionevaluation;
 
+import example3.organizations.expressionevaluation.evaluator.Evaluator_Role;
 import example3.protocols.evaluateexpression.EvaluateExpressionProtocol;
 import example3.protocols.evaluateexpression.ReplyMessage;
 import example3.protocols.evaluateexpression.RequestMessage;
@@ -96,7 +97,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
                 getProtocolId()));
             
             evaluatorAID = getMyAgent().getMyOrganization()
-                .getRoleInstance("Evaluator_Role");
+                .getRoleInstance(Evaluator_Role.NAME);
         }
         
         // </editor-fold>

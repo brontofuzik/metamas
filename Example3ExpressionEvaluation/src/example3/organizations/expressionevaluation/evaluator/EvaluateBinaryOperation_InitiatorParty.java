@@ -21,9 +21,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
     
     private AID binaryEvaluatorAID;
     
-    private String operandExpression1;
+    private String operand1;
     
-    private String operandExpression2;
+    private String operand2;
     
     private int result;
     
@@ -40,6 +40,20 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    void setOperand1(String operand1) {
+        this.operand1 = operand1;
+    }
+    
+    void setOperand2(String operand2) {
+        this.operand2 = operand2;
+    }
+    
+    int getResult() {
+        return result;
+    }
+    
+    // ----- PROTECTED -----
     
     protected abstract String getBinaryEvaluatorRoleName();
     
@@ -109,8 +123,8 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         @Override
         protected EvaluateRequestMessage prepareMessage() {
             EvaluateRequestMessage message = new EvaluateRequestMessage();
-            message.setOperand1(operandExpression1);
-            message.setOperand2(operandExpression2);
+            message.setOperand1(operand1);
+            message.setOperand2(operand2);
             return message;
         }
 
