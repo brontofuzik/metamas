@@ -19,7 +19,8 @@ SET CLASSPATH=%JADE_JAR%;%COMMONS_CODEC_JAR%;%THESPIAN4JADE_JAR%;%PROJECT_JAR%
 
 Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JAVA_OPTIONS=-classpath %CLASSPATH%
+REM -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
 SET JADE_OPTIONS=-gui
 
 REM ----- Agents -----
@@ -30,16 +31,16 @@ SET ROOT_NAMESPACE=example3
 REM ----- Organizations -----
 SET ORGANIZATION_PACKAGE=%ROOT_NAMESPACE%.organizations
 SET EXPRESSION_EVALUATION_ORGANIZATION=expressionEvaluation_Organization:%ORGANIZATION_PACKAGE%.expressionevaluation.ExpressionEvaluation_Organization
-SET ORGANIZATIONS=%AUCTION_ORGANIZATION%
+SET ORGANIZATIONS=%EXPRESSION_EVALUATION_ORGANIZATION%
 
 REM ----- Players -----
 SET PLAYER_PACKAGE=%ROOT_NAMESPACE%.players
-SET CALCULATOR1_PLAYER=calcualtor1_Player:%PLAYER_PACKAGE%.calculator.Calculator1_Player
-SET CALCULATOR2_PLAYER=calcualtor2_Player:%PLAYER_PACKAGE%.calculator.Calculator2_Player
-SET CALCULATOR3_PLAYER=calcualtor3_Player:%PLAYER_PACKAGE%.calculator.Calculator3_Player
-SET CALCULATOR4_PLAYER=calcualtor4_Player:%PLAYER_PACKAGE%.calculator.Calculator4_Player
-SET CALCULATOR5_PLAYER=calcualtor5_Player:%PLAYER_PACKAGE%.calculator.Calculator5_Player
-SET PLAYERS=%PARTICIPANT1_PLAYER%;%PARTICIPANT2_PLAYER%;%PARTICIPANT3_PLAYER%
+SET CALCULATOR1_PLAYER=calculator1_Player:%PLAYER_PACKAGE%.calculator.Calculator1_Player
+SET CALCULATOR2_PLAYER=calculator2_Player:%PLAYER_PACKAGE%.calculator.Calculator2_Player
+SET CALCULATOR3_PLAYER=calculator3_Player:%PLAYER_PACKAGE%.calculator.Calculator3_Player
+SET CALCULATOR4_PLAYER=calculator4_Player:%PLAYER_PACKAGE%.calculator.Calculator4_Player
+SET CALCULATOR5_PLAYER=calculator5_Player:%PLAYER_PACKAGE%.calculator.Calculator5_Player
+SET PLAYERS=%CALCULATOR1_PLAYER%;%CALCULATOR2_PLAYER%;%CALCULATOR3_PLAYER%;%CALCULATOR4_PLAYER%;%CALCULATOR5_PLAYER%
 
 SET AGENTS=%SNIFFER%;%ORGANIZATIONS%;%PLAYERS%
 

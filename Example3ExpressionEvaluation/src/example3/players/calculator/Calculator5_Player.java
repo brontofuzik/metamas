@@ -12,7 +12,7 @@ public class Calculator5_Player extends Calculator_Player {
     /**
      * The full name of the Divider role.
      */
-    private static String DIVIDER_ROLE_FULL_NAME = "evaluateExpression_Organization.Divider_Role";
+    private static String DIVIDER_ROLE_FULL_NAME = "expressionEvaluation_Organization.Divider_Role";
     
     // </editor-fold>
     
@@ -21,7 +21,7 @@ public class Calculator5_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator5_Player class.
      */
-    Calculator5_Player() {
+    public Calculator5_Player() {
         super(new RoleFullName(DIVIDER_ROLE_FULL_NAME));
     }
     

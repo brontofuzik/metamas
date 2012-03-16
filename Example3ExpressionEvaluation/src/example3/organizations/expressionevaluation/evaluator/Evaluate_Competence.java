@@ -27,7 +27,7 @@ public class Evaluate_Competence extends FSMPower<String, Integer> {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds competence FSM.
+     * Builds the competence FSM.
      */
     private void buildFSM() {
         // ----- States -----

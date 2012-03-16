@@ -17,7 +17,7 @@ public class Calculator1_Player extends Calculator_Player {
     /**
      * The full name of the Evaluate competence.
      */
-    private static String EVALUATE_COMPETENCE_FULL_NAME = "expressionEvaluation_Organization.Evaluator_Role.Evaluate_Compatence";
+    private static String EVALUATE_COMPETENCE_FULL_NAME = "expressionEvaluation_Organization.Evaluator_Role.Evaluate_Competence";
     
     private CompetenceFullName competenceFullName;
     
@@ -28,7 +28,7 @@ public class Calculator1_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator1_Player class.
      */
-    Calculator1_Player() {
+    public Calculator1_Player() {
         super(new RoleFullName(EVALUATOR_ROLE_FULL_NAME));
         competenceFullName = new CompetenceFullName(EVALUATE_COMPETENCE_FULL_NAME);
     }

@@ -12,7 +12,7 @@ public class Calculator3_Player extends Calculator_Player {
     /**
      * The full name of the Subtractor role.
      */
-    private static String SUBTRACTOR_ROLE_FULL_NAME = "evaluateExpression_Organization.Subtractor_Role";
+    private static String SUBTRACTOR_ROLE_FULL_NAME = "expressionEvaluation_Organization.Subtractor_Role";
     
     // </editor-fold>
     
@@ -21,7 +21,7 @@ public class Calculator3_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator3_Player class.
      */
-    Calculator3_Player() {
+    public Calculator3_Player() {
         super(new RoleFullName(SUBTRACTOR_ROLE_FULL_NAME));
     }
     
