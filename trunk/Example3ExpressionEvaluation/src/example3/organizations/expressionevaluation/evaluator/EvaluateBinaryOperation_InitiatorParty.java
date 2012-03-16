@@ -61,6 +61,23 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    static EvaluateBinaryOperation_InitiatorParty createInitiatorParty(Operation operation) {
+        switch (operation) {
+            case ADDITION:
+                return new EvaluateAddition_InitiatorParty();
+            case SUBTRACTION:
+                return new EvaluateSubtraction_InitiatorParty();
+            case MULTIPLICATION:
+                return new EvaluateMultiplication_InitiatorParty();
+            case DIVISION:
+                return new EvaluateDivision_InitiatorParty();
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+    
+    // ----- PRIVATE -----
+    
     private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();

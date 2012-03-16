@@ -12,7 +12,7 @@ public class Calculator2_Player extends Calculator_Player {
     /**
      * The full name of the Adder role.
      */
-    private static String ADDER_ROLE_FULL_NAME = "evaluateExpression_Organization.Adder_Role";
+    private static String ADDER_ROLE_FULL_NAME = "expressionEvaluation_Organization.Adder_Role";
     
     // </editor-fold>
     
@@ -21,7 +21,7 @@ public class Calculator2_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator2_Player class.
      */
-    Calculator2_Player() {
+    public Calculator2_Player() {
         super(new RoleFullName(ADDER_ROLE_FULL_NAME));
     }
     

@@ -12,7 +12,7 @@ public class Calculator4_Player extends Calculator_Player {
     /**
      * The full name of the Multiplier role.
      */
-    private static String MULTIPLIER_ROLE_FULL_NAME = "evaluateExpression_Organization.Multiplier_Role";
+    private static String MULTIPLIER_ROLE_FULL_NAME = "expressionEvaluation_Organization.Multiplier_Role";
     
     // </editor-fold>
     
@@ -21,7 +21,7 @@ public class Calculator4_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator4_Player class.
      */
-    Calculator4_Player() {
+    public Calculator4_Player() {
         super(new RoleFullName(MULTIPLIER_ROLE_FULL_NAME));
     }
     

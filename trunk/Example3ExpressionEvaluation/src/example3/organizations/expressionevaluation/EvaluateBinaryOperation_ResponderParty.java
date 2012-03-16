@@ -71,30 +71,22 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         // ------------------
         
         // Register the states.
-        registerFirstState(receiveEvaluateRequest);
-        
+        registerFirstState(receiveEvaluateRequest);       
         registerState(setInitiatorArgument);
         registerState(evaluateExpressionInitiator1);
         registerState(evaluateExpressionInitiator2);
         registerState(getInitiatorResult);
         registerState(invokeResponsibility_EvaluateBinaryOperation);
-        registerState(sendEvaluateReply);
-        
+        registerState(sendEvaluateReply); 
         registerLastState(end);
         
         // Register the transitions.
-        receiveEvaluateRequest.registerDefaultTransition(setInitiatorArgument);
-        
-        setInitiatorArgument.registerDefaultTransition(evaluateExpressionInitiator1);
-        
-        evaluateExpressionInitiator1.registerDefaultTransition(evaluateExpressionInitiator2);
-        
-        evaluateExpressionInitiator2.registerDefaultTransition(getInitiatorResult);
-        
-        getInitiatorResult.registerDefaultTransition(invokeResponsibility_EvaluateBinaryOperation);
-        
-        invokeResponsibility_EvaluateBinaryOperation.registerDefaultTransition(sendEvaluateReply);
-        
+        receiveEvaluateRequest.registerDefaultTransition(setInitiatorArgument);        
+        setInitiatorArgument.registerDefaultTransition(evaluateExpressionInitiator1);       
+        evaluateExpressionInitiator1.registerDefaultTransition(evaluateExpressionInitiator2);      
+        evaluateExpressionInitiator2.registerDefaultTransition(getInitiatorResult);      
+        getInitiatorResult.registerDefaultTransition(invokeResponsibility_EvaluateBinaryOperation);       
+        invokeResponsibility_EvaluateBinaryOperation.registerDefaultTransition(sendEvaluateReply);       
         sendEvaluateReply.registerDefaultTransition(end);
     }
     
