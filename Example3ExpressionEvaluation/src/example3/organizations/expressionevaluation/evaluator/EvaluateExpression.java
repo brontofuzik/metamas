@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import thespian4jade.proto.jadeextensions.FSMBehaviourState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
  * The 'Evaluate expression' (FSM) behaviour.
@@ -17,9 +18,8 @@ public class EvaluateExpression extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     // ----- States -----
-    private State setInitiatorArgument;
-    private EvaluateBinaryOperation_InitiatorParty evaluateBinaryOperationInitiator;
-    private State getInitiatorResult;
+    private State initialize;
+    private State end;
     // ------------------
     
     private String expression;
@@ -57,24 +57,21 @@ public class EvaluateExpression extends FSMBehaviourState {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the behaviour FSM. 
+     */
     private void buildFSM() {
         // ----- States -----     
-        State initialize = new Initialize();
-        setInitiatorArgument = new SetInitiatorArgument();
-        getInitiatorResult = new GetInitiatorResult();
-        State end = new End();
+        initialize = new Initialize();
+        end = new End();
         // ------------------
         
         // Register the states.        
-        registerFirstState(initialize);      
-        registerState(setInitiatorArgument);
-        registerState(getInitiatorResult);     
+        registerFirstState(initialize);   
         registerLastState(end);
         
         // Register the transitions.        
         initialize.registerTransition(Initialize.NUMBER, end);
-        initialize.registerTransition(Initialize.BINARY_OPERATION, setInitiatorArgument);      
-        getInitiatorResult.registerDefaultTransition(end);
     }
     
     // </editor-fold>
@@ -108,12 +105,18 @@ public class EvaluateExpression extends FSMBehaviourState {
                 // Binary operation
                 operand1 = parser.getOperand1();
                 operand2 = parser.getOperand2();
-                evaluateBinaryOperationInitiator = EvaluateBinaryOperation_InitiatorParty
-                    .createInitiatorParty(parser.getOperation());
-                        
-                registerState(evaluateBinaryOperationInitiator);
-                setInitiatorArgument.registerDefaultTransition(evaluateBinaryOperationInitiator);
-                evaluateBinaryOperationInitiator.registerDefaultTransition(getInitiatorResult);
+                
+                EvaluateBinaryOperation_InitiatorParty evaluateBinaryOperationInitiator
+                    = EvaluateBinaryOperation_InitiatorParty.createInitiatorParty(parser.getOperation());
+                EvaluateBinaryOperationInitiatorWrapper evaluateBinaryOperationInitiatorWrapper
+                    = new EvaluateBinaryOperationInitiatorWrapper(evaluateBinaryOperationInitiator);
+                
+                // Register the state.
+                registerState(evaluateBinaryOperationInitiatorWrapper);
+                
+                // Register the transitions.
+                initialize.registerTransition(Initialize.BINARY_OPERATION, evaluateBinaryOperationInitiatorWrapper);
+                evaluateBinaryOperationInitiatorWrapper.registerDefaultTransition(end);
                 
                 exitValue = BINARY_OPERATION;
             } else {
@@ -132,31 +135,30 @@ public class EvaluateExpression extends FSMBehaviourState {
     }
     
     /**
-     * The 'Set initiator argument' (one-shot) state.
+     * The 'Evaluate binary operation initiator party' (wrapper) state.
      */
-    private class SetInitiatorArgument extends OneShotBehaviourState {
+    private class EvaluateBinaryOperationInitiatorWrapper
+        extends StateWrapperState<EvaluateBinaryOperation_InitiatorParty> {
 
-        // <editor-fold defaultstate="collapsed" desc="Methods">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        @Override
-        public void action() {
-            evaluateBinaryOperationInitiator.setOperand1(operand1);
-            evaluateBinaryOperationInitiator.setOperand2(operand2);
+        EvaluateBinaryOperationInitiatorWrapper(EvaluateBinaryOperation_InitiatorParty evaluateBinaryInitiator) {
+            super(evaluateBinaryInitiator);
         }
-    
+        
         // </editor-fold>
-    }
-    
-    /**
-     * The 'Get initiator result' (one-shot) state.
-     */
-    private class GetInitiatorResult extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            value = evaluateBinaryOperationInitiator.getResult();
+        protected void setWrappedStateArgument(EvaluateBinaryOperation_InitiatorParty wrappedState) {
+            wrappedState.setOperand1(operand1);
+            wrappedState.setOperand2(operand2);
+        }
+
+        @Override
+        protected void getWrappedStateResult(EvaluateBinaryOperation_InitiatorParty wrappedState) {
+            value = wrappedState.getResult();
         }
         
         // </editor-fold>
