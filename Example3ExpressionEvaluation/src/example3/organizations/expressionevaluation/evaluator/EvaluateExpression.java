@@ -118,8 +118,7 @@ public class EvaluateExpression extends FSMBehaviourState {
                 exitValue = BINARY_OPERATION;
             } else {
                 // Number
-                value = parser.getNumber();
-                
+                value = parser.getNumber();             
                 exitValue = NUMBER;
             }
         }

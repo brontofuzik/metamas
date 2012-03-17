@@ -6,22 +6,28 @@ import thespian4jade.lang.BinaryMessage;
 import thespian4jade.lang.MessageFactory;
 
 /**
- * A 'Evaluate reply' (binary) message.
+ * A 'Evaluate binary operation reply' (binary) message.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class EvaluateReplyMessage extends BinaryMessage {
+public class EvaluateBinaryOperationReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The result.
+     */
     private int result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public EvaluateReplyMessage() {
+    /**
+     * Initializes a new instance of the EvaluateBinaryOperationReplyMessage class.
+     */
+    public EvaluateBinaryOperationReplyMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -29,11 +35,20 @@ public class EvaluateReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the result.
+     * @return the result
+     */
     public int getResult() {
         return result;
     }
     
-    public EvaluateReplyMessage setResult(int result) {
+    /**
+     * Sets the result.
+     * @param result the result
+     * @return this 'Evaluate binary operation reply' message
+     */
+    public EvaluateBinaryOperationReplyMessage setResult(int result) {
         this.result = result;
         return this;
     }
@@ -56,13 +71,13 @@ public class EvaluateReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<EvaluateReplyMessage> {
+    public static class Factory implements MessageFactory<EvaluateBinaryOperationReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public EvaluateReplyMessage createMessage() {
-            return new EvaluateReplyMessage();
+        public EvaluateBinaryOperationReplyMessage createMessage() {
+            return new EvaluateBinaryOperationReplyMessage();
         }
         
         // </editor-fold>

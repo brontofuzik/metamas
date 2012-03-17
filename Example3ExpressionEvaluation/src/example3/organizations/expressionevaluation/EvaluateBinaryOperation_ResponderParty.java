@@ -1,8 +1,8 @@
 package example3.organizations.expressionevaluation;
 
 import example3.players.calculator.OperandPair;
-import example3.protocols.EvaluateReplyMessage;
-import example3.protocols.EvaluateRequestMessage;
+import example3.protocols.EvaluateBinaryOperationReplyMessage;
+import example3.protocols.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role;
@@ -130,7 +130,7 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         public void action() {
             getMyAgent().logInfo("Receiving evaluate request.");
             
-            EvaluateRequestMessage message = new EvaluateRequestMessage();
+            EvaluateBinaryOperationRequestMessage message = new EvaluateBinaryOperationRequestMessage();
             message.parseACLMessage(getACLMessage()); 
             operandExpression1 = message.getOperand1();
             operandExpression2 = message.getOperand2();
@@ -147,8 +147,11 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         
         @Override
         public void action() {
+            System.out.println("----- SETTING ARGUMENTS -----");
             evaluateExpressionInitiator1.setExpression(operandExpression1);
             evaluateExpressionInitiator2.setExpression(operandExpression2);
+            System.out.println("----- EVALUATE EXPRESSION 1 ARGUMENT: " + evaluateExpressionInitiator1.expression + " -----");
+            System.out.println("----- EVALUATE EXPRESSION 2 ARGUMENT: " + evaluateExpressionInitiator2.expression + " -----");
         }
         
         // </editor-fold>
@@ -160,6 +163,7 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         
         @Override
         public void action() {
+            System.out.println("----- GETTING RESULTS -----");
             operand1 = evaluateExpressionInitiator1.getValue();
             operand2 = evaluateExpressionInitiator2.getValue();
         }
@@ -167,7 +171,7 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         // </editor-fold>
     }
 
-    private class SendEvaluateReply extends SingleSenderState<EvaluateReplyMessage> {
+    private class SendEvaluateReply extends SingleSenderState<EvaluateBinaryOperationReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -186,8 +190,8 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         }
         
         @Override
-        protected EvaluateReplyMessage prepareMessage() {
-            EvaluateReplyMessage message = new EvaluateReplyMessage();
+        protected EvaluateBinaryOperationReplyMessage prepareMessage() {
+            EvaluateBinaryOperationReplyMessage message = new EvaluateBinaryOperationReplyMessage();
             message.setResult(result);
             return message;
         }

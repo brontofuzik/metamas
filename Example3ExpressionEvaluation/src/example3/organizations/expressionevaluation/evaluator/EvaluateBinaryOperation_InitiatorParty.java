@@ -1,7 +1,7 @@
 package example3.organizations.expressionevaluation.evaluator;
 
-import example3.protocols.EvaluateReplyMessage;
-import example3.protocols.EvaluateRequestMessage;
+import example3.protocols.EvaluateBinaryOperationReplyMessage;
+import example3.protocols.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
@@ -119,7 +119,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         // </editor-fold>
     }
     
-    private class SendEvaluateRequest extends SingleSenderState<EvaluateRequestMessage> {
+    private class SendEvaluateRequest extends SingleSenderState<EvaluateBinaryOperationRequestMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -138,8 +138,8 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         }
         
         @Override
-        protected EvaluateRequestMessage prepareMessage() {
-            EvaluateRequestMessage message = new EvaluateRequestMessage();
+        protected EvaluateBinaryOperationRequestMessage prepareMessage() {
+            EvaluateBinaryOperationRequestMessage message = new EvaluateBinaryOperationRequestMessage();
             message.setOperand1(operand1);
             message.setOperand2(operand2);
             return message;
@@ -153,12 +153,12 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         // </editor-fold>
     }
     
-    private class ReceiveEvaluateReply extends SingleReceiverState<EvaluateReplyMessage> {
+    private class ReceiveEvaluateReply extends SingleReceiverState<EvaluateBinaryOperationReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveEvaluateReply() {
-            super(new EvaluateReplyMessage.Factory());
+            super(new EvaluateBinaryOperationReplyMessage.Factory());
         }
         
         // </editor-fold>
@@ -180,7 +180,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         }
         
         @Override
-        protected void handleMessage(EvaluateReplyMessage message) {
+        protected void handleMessage(EvaluateBinaryOperationReplyMessage message) {
             result = message.getResult();
         }
 
