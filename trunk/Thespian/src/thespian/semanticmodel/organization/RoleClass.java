@@ -17,7 +17,7 @@ public class RoleClass {
 
     private String name;
     
-    private Map<String, Power> powers = new HashMap<String, Power>();
+    private Map<String, Competence> competences = new HashMap<String, Competence>();
     
     /** The FSM representing the role*/
     private FSM fsm;
@@ -55,12 +55,12 @@ public class RoleClass {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void addPower(Power power) {
+    public void addCompetence(Competence competence) {
         // ----- Preconditions -----
-        Assert.isNotNull(power, "power");
+        Assert.isNotNull(competence, "competence");
         // -------------------------
         
-        powers.put(power.getName(), power);
+        competences.put(competence.getName(), competence);
     }
     
     // </editor-fold>

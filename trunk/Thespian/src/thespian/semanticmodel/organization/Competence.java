@@ -4,18 +4,18 @@ import thespian.semanticmodel.fsm.FSM;
 import thespian.utilities.Assert;
 
 /**
- * A power.
+ * A competence.
  * @author Lukáš Kúdela
  * @since 2012-01-11
  * @version %I% %G%
  */
-public class Power {
+public class Competence {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private final String name;
     
-    private final PowerType type;
+    private final CompetenceType type;
     
     private final String argumentType;
     
@@ -27,7 +27,7 @@ public class Power {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Power(String name, PowerType type, String argumentType,
+    public Competence(String name, CompetenceType type, String argumentType,
         String resultType) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
@@ -45,10 +45,10 @@ public class Power {
     
     // <editor-fold defaultstate="collapsed" desc="Enums">
     
-    public enum PowerType
+    public enum CompetenceType
     {
-        OneShotPower,
-        FSMPower
+        OneShotCompetence,
+        FSMCompetence
     }
     
     // </editor-fold>  
@@ -59,7 +59,7 @@ public class Power {
         return name;
     }
     
-    public PowerType getType() {
+    public CompetenceType getType() {
         return type;
     }
     
@@ -67,7 +67,7 @@ public class Power {
         return fsm;
     }
     
-    public void setFSM(FSM calculateFactorialPowerFSM) {
+    public void setFSM(FSM calculateFactorialCompetenceFSM) {
         // TODO
         throw new UnsupportedOperationException("Not yet implemented");
     }
