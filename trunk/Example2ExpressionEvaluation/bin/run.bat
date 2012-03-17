@@ -6,7 +6,7 @@ SET SOLUTION_DIR=C:\DATA\projects\MAS\MetaMAS
 REM Solution directory for Prestigio
 REM SET SOLUTION_DIR=D:\projects\MAS\MetaMAS
 
-SET PROJECT_NAME=Example3ExpressionEvaluation
+SET PROJECT_NAME=Example2ExpressionEvaluation
 SET PROJECT_DIR=%SOLUTION_DIR%\%PROJECT_NAME%
 SET JADE_VERSION=4.1.1
 
@@ -25,7 +25,7 @@ SET JADE_OPTIONS=-gui
 REM ----- Agents -----
 SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
 
-SET ROOT_NAMESPACE=example3
+SET ROOT_NAMESPACE=example2
 
 REM ----- Organizations -----
 SET ORGANIZATION_PACKAGE=%ROOT_NAMESPACE%.organizations
