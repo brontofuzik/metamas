@@ -16,7 +16,7 @@ public class PlayerClass {
 
     private String name;
     
-    private Map<String, Requirement> responsibilities = new HashMap<String, Requirement>();
+    private Map<String, Responsibility> responsibilities = new HashMap<String, Responsibility>();
 
     // </editor-fold>
 
@@ -42,12 +42,12 @@ public class PlayerClass {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    public void addRequirement(Requirement requirement) {
+    public void addResponsibility(Responsibility responsibility) {
         // ----- Preconditions -----
-        Assert.isNotNull(requirement, "requirement");
+        Assert.isNotNull(responsibility, "responsibility");
         // -------------------------
         
-        responsibilities.put(requirement.getName(), requirement);
+        responsibilities.put(responsibility.getName(), responsibility);
     }
     
     public Player createPlayer(String name) {

@@ -3,18 +3,18 @@ package thespian.semanticmodel.player;
 import thespian.utilities.Assert;
 
 /**
- * A requirement.
+ * A responsibility.
  * @author Lukáš Kúdela
  * @since 2012-01-11
  * @version %I% %G%
  */
-public class Requirement {
+public class Responsibility {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private final String name;
     
-    private final RequirementType type;
+    private final ResponsibilityType type;
     
     private final String argumentType;
     
@@ -24,7 +24,7 @@ public class Requirement {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Requirement(String name, RequirementType type, String argumentType,
+    public Responsibility(String name, ResponsibilityType type, String argumentType,
         String resultType) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
@@ -42,10 +42,10 @@ public class Requirement {
     
     // <editor-fold defaultstate="collapsed" desc="Enums">
     
-    public enum RequirementType
+    public enum ResponsibilityType
     {
-        OneShotRequirement,
-        FSMRequirement
+        OneShotResponsibility,
+        FSMResponsibility
     }
     
     // </editor-fold>  
@@ -56,7 +56,7 @@ public class Requirement {
         return name;
     }
     
-    public RequirementType getType() {
+    public ResponsibilityType getType() {
         return type;
     }
     
