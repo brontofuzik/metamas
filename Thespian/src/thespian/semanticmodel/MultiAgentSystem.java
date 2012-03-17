@@ -3,9 +3,9 @@ package thespian.semanticmodel;
 import java.util.HashMap;
 import java.util.Map;
 import thespian.semanticmodel.organization.Organization;
-import thespian.semanticmodel.organization.OrganizationClass;
+import thespian.semanticmodel.organization.OrganizationType;
 import thespian.semanticmodel.player.Player;
-import thespian.semanticmodel.player.PlayerClass;
+import thespian.semanticmodel.player.PlayerType;
 import thespian.semanticmodel.protocol.Protocol;
 import thespian.utilities.Assert;
 
@@ -23,11 +23,11 @@ public class MultiAgentSystem {
     
     private String rootNamespace;
     
-    private Map<String, OrganizationClass> organizationClasses = new HashMap<String, OrganizationClass>();
+    private Map<String, OrganizationType> organizationTypes = new HashMap<String, OrganizationType>();
     
     private Map<String, Organization> organizations = new HashMap<String, Organization>();
     
-    private Map<String, PlayerClass> playerClasses = new HashMap<String, PlayerClass>();
+    private Map<String, PlayerType> playerTypes = new HashMap<String, PlayerType>();
     
     private Map<String, Player> players = new HashMap<String, Player>();
     
@@ -63,12 +63,12 @@ public class MultiAgentSystem {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void addOrganizationClass(OrganizationClass organizationClass) {
+    public void addOrganizationType(OrganizationType organizationType) {
         // ----- Preconditions -----
-        assert organizationClass != null;
+        assert organizationType != null;
         // -------------------------
         
-        organizationClasses.put(organizationClass.getName(), organizationClass);
+        organizationTypes.put(organizationType.getName(), organizationType);
     }
     
     public void addOrganization(Organization organization) {
@@ -79,12 +79,12 @@ public class MultiAgentSystem {
         organizations.put(organization.getName(), organization);
     }
     
-    public void addPlayerClass(PlayerClass playerClass) {
+    public void addPlayerType(PlayerType playerType) {
         // ----- Preconditions -----
-        assert playerClass != null;
+        assert playerType != null;
         // -------------------------
         
-        playerClasses.put(playerClass.getName(), playerClass);
+        playerTypes.put(playerType.getName(), playerType);
     }
     
     public void addPlayer(Player player) {

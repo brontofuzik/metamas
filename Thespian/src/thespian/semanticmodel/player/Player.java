@@ -14,18 +14,18 @@ public class Player {
 
     private String name;
 
-    private PlayerClass klass;
+    private PlayerType type;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player(String name, PlayerClass klass) {
+    public Player(String name, PlayerType klass) {
         Assert.isNotEmpty(name, "name");
         Assert.isNotNull(klass, "klass");
 
         this.name = name;
-        this.klass = klass;
+        this.type = klass;
     }
 
     // </editor-fold>
@@ -36,8 +36,8 @@ public class Player {
         return name;
     }
 
-    public PlayerClass getKlass() {
-        return klass;
+    public PlayerType getType() {
+        return type;
     }
 
     // </editor-fold>

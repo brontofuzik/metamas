@@ -2,7 +2,7 @@ package thespian.semanticmodel.protocol;
 
 import thespian.semanticmodel.fsm.FSM;
 import thespian.semanticmodel.fsm.State;
-import thespian.semanticmodel.organization.Role;
+import thespian.semanticmodel.organization.Position;
 import thespian.utilities.Assert;
 
 /**
@@ -15,7 +15,7 @@ public class Party {
     
     private String name;
     
-    private Role role;
+    private Position role;
     
     private FSM fsm;
     
@@ -39,7 +39,7 @@ public class Party {
         return name;
     }
 
-    public Role getRole() {
+    public Position getRole() {
         return role;
     }
     
