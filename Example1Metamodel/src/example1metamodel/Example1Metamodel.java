@@ -2,12 +2,10 @@ package example1metamodel;
 
 import thespian.semanticmodel.MultiAgentSystem;
 import thespian.semanticmodel.fsm.FSM;
-import thespian.semanticmodel.organization.Organization;
-import thespian.semanticmodel.organization.OrganizationClass;
+import thespian.semanticmodel.organization.OrganizationType;
 import thespian.semanticmodel.organization.Competence;
-import thespian.semanticmodel.organization.RoleClass;
-import thespian.semanticmodel.player.Player;
-import thespian.semanticmodel.player.PlayerClass;
+import thespian.semanticmodel.organization.Role;
+import thespian.semanticmodel.player.PlayerType;
 import thespian.semanticmodel.player.Responsibility;
 import thespian.semanticmodel.protocol.Message;
 import thespian.semanticmodel.protocol.Message.MessageType;
@@ -32,15 +30,34 @@ public class Example1Metamodel {
     // ----- PRIVATE -----
     
     private static MultiAgentSystem createModel() {
-        MultiAgentSystem example1Mas = new MultiAgentSystem("Example1", "example1");
+        MultiAgentSystem example1Mas = new MultiAgentSystem("Example1FunctionInvocation", "example1");
         
         // ---------- Protocols ----------
         
-        // The 'Invoke function' protocol.
+        example1Mas.addProtocol(createInvokeFunctionProtocol());
+      
+        // ---------- Organizations ----------
+        
+        OrganizationType invokeFunctionOrganizationType = createInvokeFunctionOrganizationType();
+        example1Mas.addOrganizationType(invokeFunctionOrganizationType);
+        example1Mas.addOrganization(invokeFunctionOrganizationType.createOrganization("invokeFunction_Organization"));  
+        
+        // ---------- Players ----------
+        
+        PlayerType demoPlayerType = createDemoPlayerType();
+        example1Mas.addPlayerType(demoPlayerType);
+        example1Mas.addPlayer(demoPlayerType.createPlayer("demo1_Player"));
+        example1Mas.addPlayer(demoPlayerType.createPlayer("demo2_Player"));
+        
+        return example1Mas;
+    }
+    
+    // ---------- Protocols ----------
+
+    private static Protocol createInvokeFunctionProtocol() {
         Protocol invokeFunctionProtocol = new Protocol("InvokeFunctionProtocol");
-        example1Mas.addProtocol(invokeFunctionProtocol);
-        invokeFunctionProtocol.addMessage(new Message("RequestMessage", MessageType.TextMessage));
-        invokeFunctionProtocol.addMessage(new Message("ReplyMessage", MessageType.TextMessage));
+        
+        // ---------- Parties ---------- 
         
         // The 'Invoke function' initiator party.
         Party invokeFunctionProtocolInitiatorParty = new Party("InvokeFunction_InitiatorParty");
@@ -48,61 +65,16 @@ public class Example1Metamodel {
         invokeFunctionProtocol.setInitiatorParty(invokeFunctionProtocolInitiatorParty);
         
         // The 'Invoke function' responder party.
-        Party invokeFunctionResponderParty = new Party("InvokeFunctionResponder");
+        Party invokeFunctionResponderParty = new Party("InvokeFunction_ResponderParty");
         invokeFunctionResponderParty.setFSM(createInvokeFunctionResponderFMS());
         invokeFunctionProtocol.setResponderParty(invokeFunctionResponderParty);
-      
-        // ---------- Organizations ----------
         
-        // The 'Invoke function' organization class.
-        OrganizationClass invokeFunctionOrganizationClass = new OrganizationClass("Demo_Organization");
-        example1Mas.addOrganizationClass(invokeFunctionOrganizationClass);
-             
-        // The 'invoke function' organization.
-        Organization invokeFunctionOrganization = invokeFunctionOrganizationClass.createOrganization("demo_Organization");
-        example1Mas.addOrganization(invokeFunctionOrganization);
+        // ---------- Messages ----------
         
-        // ---------- Roles ----------
+        invokeFunctionProtocol.addMessage(new Message("RequestMessage", MessageType.TextMessage));
+        invokeFunctionProtocol.addMessage(new Message("ReplyMessage", MessageType.TextMessage));
         
-        // The 'Invoker' role class.
-        RoleClass invokerRoleClass = new RoleClass("Invoker_Role");
-        invokeFunctionOrganizationClass.addRole(invokerRoleClass);
-        
-        // The 'Invoke function' competence.
-        Competence invokeFunctionCompetence = new Competence("InvokeFunction_Competence",
-            Competence.CompetenceType.FSMCompetence, "Integer", "Integer");
-        invokeFunctionCompetence.setFSM(createInvokeFunctionCompetenceFSM());
-        invokerRoleClass.addCompetence(invokeFunctionCompetence);
-        
-        // The 'Executer' role.
-        RoleClass executerRoleClass = new RoleClass("Executer_Role");
-        invokeFunctionOrganizationClass.addRole(executerRoleClass);
-        
-        // ---------- Players ----------
-        
-        // The 'Demo' player class.
-        PlayerClass demoPlayerClass = new PlayerClass("Demo_Player");
-        example1Mas.addPlayerClass(demoPlayerClass);
-        
-        // The 'Execute function' responsibility.
-        Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
-            Responsibility.ResponsibilityType.OneShotResponsibility, "Integer", "Integer");
-        demoPlayerClass.addResponsibility(executeFunctionResponsibility);
-        
-        // The 'demo1' player.
-        Player demo1Player = demoPlayerClass.createPlayer("demo1_Player");
-        example1Mas.addPlayer(demo1Player);
-        
-        // The 'demo2' player.
-        Player demo2Player = demoPlayerClass.createPlayer("demo2_Player");
-        example1Mas.addPlayer(demo2Player);
-        
-        return example1Mas;
-    }
-
-    private static FSM createInvokeFunctionCompetenceFSM() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return invokeFunctionProtocol;
     }
     
     private static FSM createInvokeFunctionInitiatorFSM() {
@@ -114,4 +86,51 @@ public class Example1Metamodel {
         // TODO Implement.
         throw new UnsupportedOperationException("Not yet implemented");
     }
+    
+    // ---------- Organizations ----------
+
+    private static OrganizationType createInvokeFunctionOrganizationType() {
+        OrganizationType invokeFunctionOrganizationType = new OrganizationType("InvokeFunction_Organization");
+        
+        // ---------- Roles ----------
+        invokeFunctionOrganizationType.addRole(createInvokerRole());
+        invokeFunctionOrganizationType.addRole(createExecuterRole());
+        
+        return invokeFunctionOrganizationType;
+    }
+    
+    private static Role createInvokerRole() {
+        Role invokerRole = new Role("Invoker_Role");
+        
+        // The 'Invoke function' competence.
+        Competence invokeFunctionCompetence = new Competence("InvokeFunction_Competence",
+            Competence.CompetenceType.FSMCompetence, "Integer", "Integer");
+        invokeFunctionCompetence.setFSM(createInvokeFunctionCompetenceFSM());
+        invokerRole.addCompetence(invokeFunctionCompetence);
+        
+        return invokerRole;
+    }
+    
+    private static FSM createInvokeFunctionCompetenceFSM() {
+        // TODO Implement.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    private static Role createExecuterRole() {
+        Role executerRole = new Role("Executer_Role");
+        return executerRole;
+    }
+    
+    // ---------- Players ----------
+    
+    private static PlayerType createDemoPlayerType() {
+        PlayerType demoPlayerType = new PlayerType("Demo_Player");
+        
+        // The 'Execute function' responsibility.
+        Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
+            Responsibility.ResponsibilityType.OneShotResponsibility, "Integer", "Integer");
+        demoPlayerType.addResponsibility(executeFunctionResponsibility);
+        
+        return demoPlayerType;
+    } 
 }
