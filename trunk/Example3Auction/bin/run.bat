@@ -25,7 +25,7 @@ SET JADE_OPTIONS=-gui
 REM ----- Agents -----
 SET SNIFFER=sniffer:jade.tools.sniffer.Sniffer
 
-SET ROOT_NAMESPACE=example2
+SET ROOT_NAMESPACE=example3
 
 REM ----- Organizations -----
 SET ORGANIZATION_PACKAGE=%ROOT_NAMESPACE%.organizations
