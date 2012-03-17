@@ -4,11 +4,11 @@ import thespian.semanticmodel.MultiAgentSystem;
 import thespian.semanticmodel.fsm.FSM;
 import thespian.semanticmodel.organization.Organization;
 import thespian.semanticmodel.organization.OrganizationClass;
-import thespian.semanticmodel.organization.Power;
+import thespian.semanticmodel.organization.Competence;
 import thespian.semanticmodel.organization.RoleClass;
 import thespian.semanticmodel.player.Player;
 import thespian.semanticmodel.player.PlayerClass;
-import thespian.semanticmodel.player.Requirement;
+import thespian.semanticmodel.player.Responsibility;
 import thespian.semanticmodel.protocol.Message;
 import thespian.semanticmodel.protocol.Message.MessageType;
 import thespian.semanticmodel.protocol.Party;
@@ -69,10 +69,10 @@ public class Example1Metamodel {
         invokeFunctionOrganizationClass.addRole(invokerRoleClass);
         
         // The 'Invoke function' competence.
-        Power invokeFunctionCompetence = new Power("InvokeFunction_Competence",
-            Power.PowerType.FSMPower, "Integer", "Integer");
+        Competence invokeFunctionCompetence = new Competence("InvokeFunction_Competence",
+            Competence.CompetenceType.FSMCompetence, "Integer", "Integer");
         invokeFunctionCompetence.setFSM(createInvokeFunctionCompetenceFSM());
-        invokerRoleClass.addPower(invokeFunctionCompetence);
+        invokerRoleClass.addCompetence(invokeFunctionCompetence);
         
         // The 'Executer' role.
         RoleClass executerRoleClass = new RoleClass("Executer_Role");
@@ -85,9 +85,9 @@ public class Example1Metamodel {
         example1Mas.addPlayerClass(demoPlayerClass);
         
         // The 'Execute function' responsibility.
-        Requirement executeFunctionResponsibility = new Requirement("InvokeFunction_Responsibility",
-            Requirement.RequirementType.OneShotRequirement, "Integer", "Integer");
-        demoPlayerClass.addRequirement(executeFunctionResponsibility);
+        Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
+            Responsibility.ResponsibilityType.OneShotResponsibility, "Integer", "Integer");
+        demoPlayerClass.addResponsibility(executeFunctionResponsibility);
         
         // The 'demo1' player.
         Player demo1Player = demoPlayerClass.createPlayer("demo1_Player");
