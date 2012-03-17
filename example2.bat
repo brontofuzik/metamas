@@ -1,1 +1,2 @@
-cd Example2Auction\bin
+cd Example2ExpressionEvaluation\bin
+run.bat
