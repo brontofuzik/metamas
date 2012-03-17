@@ -1,101 +1,40 @@
 package thespian4jade.proto;
 
-import thespian4jade.core.organization.Role_InvokeRequirementInitiator;
-import thespian4jade.proto.jadeextensions.FSMBehaviourState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
 import java.io.Serializable;
+import thespian4jade.core.organization.Role_InvokeRequirementInitiator;
+import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
- * A 'Invoke requirement' (party) state.
  * @author Lukáš Kúdela
- * @since
+ * @since 2012-03-17
  * @version %I% %G%
- */
-public abstract class InvokeRequirementState<TArgument extends Serializable,
-    TResult extends Serializable> extends FSMBehaviourState {
+ */  
+public abstract class InvokeRequirementState<TArgument extends Serializable, TResult extends Serializable>
+    extends StateWrapperState<Role_InvokeRequirementInitiator> {
 
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private String requirementName;
-    
-    private Role_InvokeRequirementInitiator invokeRequirementInitiator;
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected InvokeRequirementState(String requirementName) {        
-        this.requirementName = requirementName;
-        
-        buildFSM();
+    public InvokeRequirementState(String requirementName) {
+        super(new Role_InvokeRequirementInitiator(requirementName));
     }
-            
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    protected abstract TArgument getRequirementArgument();
-    
-    protected abstract void setRequirementResult(TResult requirementResult);
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    private void buildFSM() {
-        // ----- States -----
-        State setPowerArgument = new SetRequirementArgument();
-        invokeRequirementInitiator = new Role_InvokeRequirementInitiator(requirementName);
-        State setResultState = new GetRequirementResult();
-        // ------------------
-        
-        // Register the states.
-        registerFirstState(setPowerArgument);
-        
-        registerState(invokeRequirementInitiator);
-        
-        registerLastState(setResultState);
-        
-        // Register the transitions.
-        setPowerArgument.registerDefaultTransition(invokeRequirementInitiator);
-        
-        invokeRequirementInitiator.registerDefaultTransition(setResultState);
+    @Override
+    protected void setWrappedStateArgument(Role_InvokeRequirementInitiator wrappedState) {
+        wrappedState.setRequirementArgument(getRequirementArgument());
     }
     
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Set requirement argument' (one-shot) state.
-     */
-    private class SetRequirementArgument extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            invokeRequirementInitiator.setRequirementArgument(getRequirementArgument());
-        }
-        
-        // </editor-fold>
+    protected abstract TArgument getRequirementArgument();
+
+    @Override
+    protected void getWrappedStateResult(Role_InvokeRequirementInitiator wrappedState) {
+        setRequirementResult((TResult)wrappedState.getRequirementResult());
     }
     
-    /**
-     * The 'Get requirement result' (one-shot) state.
-     */
-    private class GetRequirementResult extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            setRequirementResult((TResult)invokeRequirementInitiator.getRequirementResult());
-        }
-        
-        // </editor-fold>
-    }
+    protected abstract void setRequirementResult(TResult powerResult);
     
     // </editor-fold>
 }

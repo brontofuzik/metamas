@@ -12,10 +12,21 @@ import thespian4jade.proto.Party;
  */
 public abstract class OneShotBehaviourState extends OneShotBehaviour implements State {
     
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static int count = 0;
+    
+    private static final Object countLock = new Object();
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     protected OneShotBehaviourState() {
-        setBehaviourName(getClass().getName());
+        synchronized (countLock) {
+            count++;
+            setBehaviourName(getClass().getName() + count);
+        }
     }
     
     // </editor-fold>
