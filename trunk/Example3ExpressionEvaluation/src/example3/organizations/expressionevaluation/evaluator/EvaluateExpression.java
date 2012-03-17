@@ -59,21 +59,21 @@ public class EvaluateExpression extends FSMBehaviourState {
     
     private void buildFSM() {
         // ----- States -----     
-        State process = new Process();
+        State initialize = new Initialize();
         setInitiatorArgument = new SetInitiatorArgument();
         getInitiatorResult = new GetInitiatorResult();
         State end = new End();
         // ------------------
         
         // Register the states.        
-        registerFirstState(process);      
+        registerFirstState(initialize);      
         registerState(setInitiatorArgument);
         registerState(getInitiatorResult);     
         registerLastState(end);
         
         // Register the transitions.        
-        process.registerTransition(Process.NUMBER, end);
-        process.registerTransition(Process.BINARY_OPERATION, setInitiatorArgument);      
+        initialize.registerTransition(Initialize.NUMBER, end);
+        initialize.registerTransition(Initialize.BINARY_OPERATION, setInitiatorArgument);      
         getInitiatorResult.registerDefaultTransition(end);
     }
     
@@ -84,7 +84,7 @@ public class EvaluateExpression extends FSMBehaviourState {
     /**
      * The 'Process' (one-shot) state.
      */
-    private class Process extends OneShotBehaviourState {
+    private class Initialize extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
