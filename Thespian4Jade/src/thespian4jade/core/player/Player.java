@@ -301,7 +301,7 @@ public abstract class Player extends Agent {
      */
     protected final boolean evaluateAllResponsibilities(String[] responsibilities) {
         for (String requirement : responsibilities) {
-            if (evaluateReponsibility(requirement)) {
+            if (!evaluateReponsibility(requirement)) {
                 return false;
             }
         }
@@ -327,7 +327,7 @@ public abstract class Player extends Agent {
      * @param requirement the requirement to evaluate
      * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise 
      */
-    protected /* virtual */ boolean evaluateReponsibility(String responsibility) {
+    protected boolean evaluateReponsibility(String responsibility) {
         return responsibilities.containsKey(responsibility);
     }
     

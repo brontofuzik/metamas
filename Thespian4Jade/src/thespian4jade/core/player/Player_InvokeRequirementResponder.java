@@ -134,10 +134,10 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
      * @return the requirement
      */
     private Requirement createRequirement(String requirementName) {
-        System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
+        //System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
         
         Class requirementClass = getMyAgent().responsibilities.get(requirementName);
-        System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
+        //System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
         
         // Get the requirement constructor.
         Constructor requirementConstructor = null;
@@ -148,7 +148,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
-        System.out.println("----- REQUIREMENT CONSTRUCTOR: " + requirementConstructor + " -----");
+        //System.out.println("----- REQUIREMENT CONSTRUCTOR: " + requirementConstructor + " -----");
         
         // Instantiate the requirement.
         Requirement requirement = null;
@@ -163,7 +163,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        System.out.println("----- REQUIREMENT: " + requirement + " -----");
+        //System.out.println("----- REQUIREMENT: " + requirement + " -----");
         
         return requirement;
     }
