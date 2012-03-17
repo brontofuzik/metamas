@@ -13,15 +13,6 @@ import thespian4jade.proto.jadeextensions.StateWrapperState;
  */
 public class InvokeFunction_Competence extends FSMPower<Integer, Integer> {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /**
-     * The 'Invoke function' (initiator party) state.
-     */
-    private InvokeFunction_InitiatorParty invokeFunctionInitiator;
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
