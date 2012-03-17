@@ -24,8 +24,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     
     private AID evaluatorAID;
     
-    // TODO! Change back to private.
-    public String expression;
+    private String expression;
     
     private int value;
     
@@ -64,18 +63,14 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);     
         registerState(sendRequest);
-        registerState(receiveReply);
-        
+        registerState(receiveReply);       
         registerLastState(end);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendRequest);
-        
-        sendRequest.registerDefaultTransition(receiveReply);
-        
+        initialize.registerDefaultTransition(sendRequest);      
+        sendRequest.registerDefaultTransition(receiveReply);       
         receiveReply.registerDefaultTransition(end);
     }
     
@@ -96,8 +91,6 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Evaluate expression' protocol (id = %1$s)",
                 getProtocolId()));
-            
-            System.out.println("----- EXPRESSION: " + expression + " -----");
             
             evaluatorAID = getMyAgent().getMyOrganization()
                 .getRoleInstance(Evaluator_Role.NAME);

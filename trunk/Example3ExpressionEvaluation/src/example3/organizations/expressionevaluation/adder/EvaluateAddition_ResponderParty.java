@@ -10,7 +10,8 @@ import jade.lang.acl.ACLMessage;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class EvaluateAddition_ResponderParty extends EvaluateBinaryOperation_ResponderParty {
+public class EvaluateAddition_ResponderParty
+    extends EvaluateBinaryOperation_ResponderParty {
   
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -37,7 +38,7 @@ public class EvaluateAddition_ResponderParty extends EvaluateBinaryOperation_Res
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeResponsibility_EvaluateAddition() {
-            super("EvaluateAddition_Responsibility");
+            super("Add_Responsibility");
         }
         
         // </editor-fold>

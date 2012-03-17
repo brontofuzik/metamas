@@ -19,8 +19,7 @@ SET CLASSPATH=%JADE_JAR%;%COMMONS_CODEC_JAR%;%THESPIAN4JADE_JAR%;%PROJECT_JAR%
 
 Rem ----- Options -----
 SET LOGGING_CONFIG_FILE=%PROJECT_DIR%\logging.properties
-SET JAVA_OPTIONS=-classpath %CLASSPATH%
-REM -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
+SET JAVA_OPTIONS=-classpath %CLASSPATH% -Djava.util.logging.config.file=%LOGGING_CONFIG_FILE%
 SET JADE_OPTIONS=-gui
 
 REM ----- Agents -----

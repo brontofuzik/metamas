@@ -147,11 +147,8 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         
         @Override
         public void action() {
-            System.out.println("----- SETTING ARGUMENTS -----");
             evaluateExpressionInitiator1.setExpression(operandExpression1);
             evaluateExpressionInitiator2.setExpression(operandExpression2);
-            System.out.println("----- EVALUATE EXPRESSION 1 ARGUMENT: " + evaluateExpressionInitiator1.expression + " -----");
-            System.out.println("----- EVALUATE EXPRESSION 2 ARGUMENT: " + evaluateExpressionInitiator2.expression + " -----");
         }
         
         // </editor-fold>
@@ -163,7 +160,6 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         
         @Override
         public void action() {
-            System.out.println("----- GETTING RESULTS -----");
             operand1 = evaluateExpressionInitiator1.getValue();
             operand2 = evaluateExpressionInitiator2.getValue();
         }
