@@ -1,4 +1,4 @@
-package example3.protocols;
+package example3.protocols.evaluateexpression;
 
 import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
@@ -6,24 +6,22 @@ import java.util.regex.Pattern;
 import thespian4jade.lang.TextMessage;
 
 /**
- * An 'Evaluate request' (text) message.
+ * A 'Evaluate expression request' (text) message.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class EvaluateRequestMessage extends TextMessage {
-    
+public class EvaluateExpressionRequestMessage extends TextMessage {
+
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String operand1;
-    
-    private String operand2;
+    private String expression;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public EvaluateRequestMessage() {
+    public EvaluateExpressionRequestMessage() {
         super(ACLMessage.REQUEST);
     }
     
@@ -31,42 +29,32 @@ public class EvaluateRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public String getOperand1() {
-        return operand1;
+    public String getExpression() {
+        return expression;
     }
     
-    public EvaluateRequestMessage setOperand1(String operand1) {
-        this.operand1 = operand1;
-        return this;
-    }
-    
-    public String getOperand2() {
-        return operand2;
-    }
-    
-    public EvaluateRequestMessage setOperand2(String operand2) {
-        this.operand2 = operand2;
+    public EvaluateExpressionRequestMessage setExpression(String expression) {
+        this.expression = expression;
         return this;
     }
     
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
     protected String generateContent() {
-        return String.format("evaluate(%1$s,%2$s)", operand1, operand2);
+        return String.format("evaluate-expression(%1$s)", expression);
     }
 
     @Override
     protected void parseContent(String content) {
-        final Pattern contentPattern = Pattern.compile("evaluate\\(([^,]*),([^)]*)\\)");
+        final Pattern contentPattern = Pattern.compile("evaluate-expression\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  
-        operand1 = matcher.group(1);
-        operand2 = matcher.group(2);
+        expression = matcher.group(1);
     }
     
-    // </editor-fold>    
+    // </editor-fold>
 }

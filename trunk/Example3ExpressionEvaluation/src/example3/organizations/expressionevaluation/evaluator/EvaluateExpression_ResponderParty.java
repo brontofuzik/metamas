@@ -1,8 +1,8 @@
 package example3.organizations.expressionevaluation.evaluator;
 
 import example3.protocols.evaluateexpression.EvaluateExpressionProtocol;
-import example3.protocols.evaluateexpression.ReplyMessage;
-import example3.protocols.evaluateexpression.RequestMessage;
+import example3.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
+import example3.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.ResponderParty;
@@ -93,7 +93,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
             // LOG
             getMyAgent().logInfo("Receiving request.");
             
-            RequestMessage message = new RequestMessage();
+            EvaluateExpressionRequestMessage message = new EvaluateExpressionRequestMessage();
             message.parseACLMessage(getACLMessage());          
             expression = message.getExpression();
             
@@ -136,7 +136,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     /**
      * The 'Send reply' (single sender) state.
      */
-    private class SendReply extends SingleSenderState<ReplyMessage> {
+    private class SendReply extends SingleSenderState<EvaluateExpressionReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -156,8 +156,8 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
         }
         
         @Override
-        protected ReplyMessage prepareMessage() {
-            ReplyMessage message = new ReplyMessage();
+        protected EvaluateExpressionReplyMessage prepareMessage() {
+            EvaluateExpressionReplyMessage message = new EvaluateExpressionReplyMessage();
             message.setValue(value);
             return message;
         }

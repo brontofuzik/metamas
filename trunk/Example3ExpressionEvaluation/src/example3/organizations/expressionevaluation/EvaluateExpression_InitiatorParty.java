@@ -2,8 +2,8 @@ package example3.organizations.expressionevaluation;
 
 import example3.organizations.expressionevaluation.evaluator.Evaluator_Role;
 import example3.protocols.evaluateexpression.EvaluateExpressionProtocol;
-import example3.protocols.evaluateexpression.ReplyMessage;
-import example3.protocols.evaluateexpression.RequestMessage;
+import example3.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
+import example3.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
 import thespian4jade.proto.InitiatorParty;
@@ -24,7 +24,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     
     private AID evaluatorAID;
     
-    private String expression;
+    // TODO! Change back to private.
+    public String expression;
     
     private int value;
     
@@ -96,6 +97,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
                 "Initiating the 'Evaluate expression' protocol (id = %1$s)",
                 getProtocolId()));
             
+            System.out.println("----- EXPRESSION: " + expression + " -----");
+            
             evaluatorAID = getMyAgent().getMyOrganization()
                 .getRoleInstance(Evaluator_Role.NAME);
         }
@@ -106,7 +109,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     /**
      * The 'Send request' (single sender) state.
      */
-    private class SendRequest extends SingleSenderState<RequestMessage> {
+    private class SendRequest extends SingleSenderState<EvaluateExpressionRequestMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -125,8 +128,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
         }
         
         @Override
-        protected RequestMessage prepareMessage() {
-            RequestMessage message = new RequestMessage();
+        protected EvaluateExpressionRequestMessage prepareMessage() {
+            EvaluateExpressionRequestMessage message = new EvaluateExpressionRequestMessage();
             message.setExpression(expression);
             return message;
         }
@@ -142,12 +145,12 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     /**
      * The 'Receive request' (single receiver) state.
      */
-    private class ReceiveReply extends SingleReceiverState<ReplyMessage> {
+    private class ReceiveReply extends SingleReceiverState<EvaluateExpressionReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveReply() {
-            super(new ReplyMessage.Factory());
+            super(new EvaluateExpressionReplyMessage.Factory());
         }
         
         // </editor-fold>
@@ -169,7 +172,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
         }
 
         @Override
-        protected void handleMessage(ReplyMessage message) {
+        protected void handleMessage(EvaluateExpressionReplyMessage message) {
             value = message.getValue();
         }
         

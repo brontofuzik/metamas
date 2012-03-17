@@ -6,12 +6,12 @@ import thespian4jade.lang.BinaryMessage;
 import thespian4jade.lang.MessageFactory;
 
 /**
- * A 'Reply' (binary) message.
+ * An 'Evaluate expression reply' (binary) message.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class ReplyMessage extends BinaryMessage {
+public class EvaluateExpressionReplyMessage extends BinaryMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -21,7 +21,7 @@ public class ReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ReplyMessage() {
+    public EvaluateExpressionReplyMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -33,7 +33,7 @@ public class ReplyMessage extends BinaryMessage {
         return value;
     }
     
-    public ReplyMessage setValue(int value) {
+    public EvaluateExpressionReplyMessage setValue(int value) {
         this.value = value;
         return this;
     }
@@ -56,13 +56,13 @@ public class ReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<ReplyMessage> {
+    public static class Factory implements MessageFactory<EvaluateExpressionReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public ReplyMessage createMessage() {
-            return new ReplyMessage();
+        public EvaluateExpressionReplyMessage createMessage() {
+            return new EvaluateExpressionReplyMessage();
         }        
         
         // </editor-fold>

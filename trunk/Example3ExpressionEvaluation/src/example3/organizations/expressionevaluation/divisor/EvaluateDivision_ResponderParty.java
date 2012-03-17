@@ -37,7 +37,7 @@ public class EvaluateDivision_ResponderParty extends EvaluateBinaryOperation_Res
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeResponsibility_EvaluateDivision() {
-            super("EvaluateDivision_Responsibility");
+            super("Divide_Responsibility");
         }
         
         // </editor-fold>
