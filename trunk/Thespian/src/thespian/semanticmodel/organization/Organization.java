@@ -14,20 +14,20 @@ public class Organization {
     
     private String name;
     
-    private OrganizationClass klass;
+    private OrganizationType type;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Organization(String name, OrganizationClass klass) {
+    public Organization(String name, OrganizationType klass) {
         // ----- Preconditions -----
         Assert.isNotEmpty(name, "name");
         Assert.isNotNull(klass, "klass");
         // -------------------------
         
         this.name = name;
-        this.klass = klass;
+        this.type = klass;
     }
     
     // </editor-fold>
@@ -38,8 +38,8 @@ public class Organization {
         return name;
     }
 
-    public OrganizationClass getKlass() {
-        return klass;
+    public OrganizationType getType() {
+        return type;
     }   
     
     // </editor-fold>
