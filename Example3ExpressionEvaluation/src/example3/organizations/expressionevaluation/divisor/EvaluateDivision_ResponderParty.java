@@ -10,7 +10,8 @@ import jade.lang.acl.ACLMessage;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class EvaluateDivision_ResponderParty extends EvaluateBinaryOperation_ResponderParty {
+public class EvaluateDivision_ResponderParty
+    extends EvaluateBinaryOperation_ResponderParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
