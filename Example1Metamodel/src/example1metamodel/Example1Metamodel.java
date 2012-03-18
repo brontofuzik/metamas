@@ -59,15 +59,15 @@ public class Example1Metamodel {
         
         // ---------- Parties ---------- 
         
-        // The 'Invoke function' initiator party.
-        Party invokeFunctionProtocolInitiatorParty = new Party("InvokeFunction_InitiatorParty");
-        invokeFunctionProtocolInitiatorParty.setFSM(createInvokeFunctionInitiatorFSM());
-        invokeFunctionProtocol.setInitiatorParty(invokeFunctionProtocolInitiatorParty);
+        // The initiator party.
+        Party initiatorParty = new Party("InvokeFunction_InitiatorParty");
+        initiatorParty.setFSM(createInvokeFunctionInitiatorFSM());
+        invokeFunctionProtocol.setInitiatorParty(initiatorParty);
         
-        // The 'Invoke function' responder party.
-        Party invokeFunctionResponderParty = new Party("InvokeFunction_ResponderParty");
-        invokeFunctionResponderParty.setFSM(createInvokeFunctionResponderFMS());
-        invokeFunctionProtocol.setResponderParty(invokeFunctionResponderParty);
+        // The responder party.
+        Party responderParty = new Party("InvokeFunction_ResponderParty");
+        responderParty.setFSM(createInvokeFunctionResponderFMS());
+        invokeFunctionProtocol.setResponderParty(responderParty);
         
         // ---------- Messages ----------
         
