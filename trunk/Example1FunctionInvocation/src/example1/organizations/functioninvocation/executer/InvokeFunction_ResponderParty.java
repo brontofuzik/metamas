@@ -5,7 +5,7 @@ import example1.protocols.invokefunctionprotocol.ReplyMessage;
 import example1.protocols.invokefunctionprotocol.RequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InvokeRequirementState;
+import thespian4jade.proto.InvokeResponsibilityState;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -103,7 +103,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
      * The 'Invoke responsibility - Execute function' (invoke responsibility) state.
      */
     private class InvokeResponsibility_ExecuteFunction
-        extends InvokeRequirementState<Integer, Integer> {
+        extends InvokeResponsibilityState<Integer, Integer> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -116,12 +116,12 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected Integer getRequirementArgument() {
+        protected Integer getResponsibilityArgument() {
             return new Integer(argument);
         }
         
         @Override
-        protected void setRequirementResult(Integer responsibilityResult) {
+        protected void setResponsibilityResult(Integer responsibilityResult) {
             result = responsibilityResult.intValue();
         }
         

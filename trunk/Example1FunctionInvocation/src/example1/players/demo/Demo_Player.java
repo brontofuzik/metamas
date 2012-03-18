@@ -42,7 +42,7 @@ public abstract class Demo_Player extends Player {
         super.setup();
         
         // Add responsibilities.
-        addRequirement(ExecuteFunction_Responsibility.class);
+        addResponsibility(ExecuteFunction_Responsibility.class);
         
         // Four seconds before any interaction begins.
         int timeout = 4000;

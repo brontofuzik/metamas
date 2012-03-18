@@ -20,7 +20,7 @@ public class Executer_Role extends Role {
      * Initializes the Executer_Role class.
      */
     static {
-        addRequirement("ExecuteFunction_Responsibility");
+        addResponsibility("ExecuteFunction_Responsibility");
     }
     
     // </editor-fold>
