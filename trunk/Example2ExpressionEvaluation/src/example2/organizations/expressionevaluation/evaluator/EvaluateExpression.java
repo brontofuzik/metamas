@@ -1,7 +1,5 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import thespian4jade.proto.jadeextensions.FSMBehaviourState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;

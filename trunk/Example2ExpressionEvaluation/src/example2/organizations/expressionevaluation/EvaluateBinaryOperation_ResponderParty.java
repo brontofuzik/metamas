@@ -54,10 +54,9 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected abstract InvokeResponsibility_EvaluateBinaryOperation createInvokeResponsibility_EvaluateBinaryOperation();
-    
-    // ---------- PRIVATE ----------
-    
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State receiveEvaluateRequest = new ReceiveEvaluateRequest();
@@ -90,6 +89,8 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         sendEvaluateReply.registerDefaultTransition(end);
     }
     
+    protected abstract InvokeResponsibility_EvaluateBinaryOperation createInvokeResponsibility_EvaluateBinaryOperation();
+        
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
