@@ -22,7 +22,7 @@ public class Adder_Role extends Role {
      * Initializes the Adder_Role class.
      */
     static {
-        addRequirement("Add_Responsibility");
+        addResponsibility("Add_Responsibility");
     }
     
     // </editor-fold>

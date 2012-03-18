@@ -1,6 +1,6 @@
 package example2.players.calculator;
 
-import thespian4jade.core.player.requirement.OneShotRequirement;
+import thespian4jade.core.player.responsibility.OneShotResponsibility;
 
 /**
  * The 'Subtract' (one-shot) responsibility.
@@ -8,7 +8,7 @@ import thespian4jade.core.player.requirement.OneShotRequirement;
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Subtract_Responsibility extends OneShotRequirement<OperandPair, Integer> {
+public class Subtract_Responsibility extends OneShotResponsibility<OperandPair, Integer> {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
