@@ -8,7 +8,7 @@ import example3.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InvokeRequirementState;
+import thespian4jade.proto.InvokeResponsibilityState;
 import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
@@ -157,7 +157,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * A state in which the 'Bid' responsibility is invoked.
      */
     private class InvokeResponsibility_Bid
-        extends InvokeRequirementState<BidArgument, BidResult> {
+        extends InvokeResponsibilityState<BidArgument, BidResult> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -177,7 +177,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * @return the 'Bid' responsibility argument
          */
         @Override
-        protected BidArgument getRequirementArgument() {
+        protected BidArgument getResponsibilityArgument() {
             return BidArgument.createEnvelopeBidArgument(itemName);
         }
 
@@ -186,7 +186,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * @param responsibilityResult the 'Bid' responsibility result
          */
         @Override
-        protected void setRequirementResult(BidResult responsibilityResult) {
+        protected void setResponsibilityResult(BidResult responsibilityResult) {
             bidMade = responsibilityResult.isBidMade();
             if (bidMade) {
                 bid = responsibilityResult.getBid();
