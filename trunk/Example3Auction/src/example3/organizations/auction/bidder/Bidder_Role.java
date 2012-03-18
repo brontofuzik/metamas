@@ -16,7 +16,7 @@ public class Bidder_Role extends Role {
      * Initializes the Bidder_Role class.
      */
     static {
-        addRequirement("Bid_Responsibility");
+        addResponsibility("Bid_Responsibility");
     }
     
     // </editor-fold>

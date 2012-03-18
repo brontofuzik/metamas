@@ -20,7 +20,7 @@ public class Auctioneer_Role extends Role {
         // No behaviours.
 
         // Add competences.
-        addPower(Auction_Competence.class);
+        addCompetence(Auction_Competence.class);
         logInfo("Competences added.");
     }
 

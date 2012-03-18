@@ -60,7 +60,7 @@ public abstract class Participant_Player extends Player {
         super.setup();
         
         // Add the responsibilites.
-        addRequirement(Bid_Responsibility.class);
+        addResponsibility(Bid_Responsibility.class);
         
         // Four seconds before any interaction begins.
         int timeout = 4000;
