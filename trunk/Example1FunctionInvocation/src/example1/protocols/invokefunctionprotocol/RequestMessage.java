@@ -48,7 +48,6 @@ public class RequestMessage extends TextMessage {
 
     @Override
     protected void parseContent(String content) {
-        // TODO Replace .* with [^)]*.
         final Pattern contentPattern = Pattern.compile("invoke-function\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
