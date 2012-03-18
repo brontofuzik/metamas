@@ -67,7 +67,7 @@ public class Competence {
         return fsm;
     }
     
-    public void setFSM(FSM calculateFactorialCompetenceFSM) {
+    public void setFSM(FSM fsm) {
         // TODO
         throw new UnsupportedOperationException("Not yet implemented");
     }
