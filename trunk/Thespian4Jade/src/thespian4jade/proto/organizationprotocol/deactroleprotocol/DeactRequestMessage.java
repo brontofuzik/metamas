@@ -54,12 +54,12 @@ public class DeactRequestMessage extends TextMessage {
 
     @Override
     public String generateContent() {
-        return String.format("deact(%1$s)", roleName);
+        return String.format("deact-role(%1$s)", roleName);
     }
 
     @Override
     public void parseContent(String content) {
-        final Pattern contentPattern = Pattern.compile("deact\\((.*)\\)");
+        final Pattern contentPattern = Pattern.compile("deact-role\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  

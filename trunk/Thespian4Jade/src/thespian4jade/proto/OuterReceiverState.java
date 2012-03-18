@@ -58,25 +58,10 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         receivers.add(receiver);
     }
     
-    protected void buildFSM() {
-        // TODO (priority: high) Remove the indirection.
-        registerStatesAndTransitions();
-    }
-     
-    protected abstract void onEntry();
-    
-    protected void onManager() {
-        // Do nothing.
-    }
-    
-    protected abstract void onExit();
-    
-    // ---------- PRIVATE ----------
-
     /**
-     * Registers the states and trasitions of this multi-receiver.
+     * Builds the state FSM.
      */
-    private void registerStatesAndTransitions() {
+    protected void buildFSM() {
         // ----- States -----
         State entry = new EntryState();
         State manager = new ManagerState();
@@ -114,6 +99,14 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // blocker ---[Default]---> manager
         blocker.registerDefaultTransition(manager/*, new String[] { manager.getName() }*/);
     }
+     
+    protected abstract void onEntry();
+    
+    protected void onManager() {
+        // Do nothing.
+    }
+    
+    protected abstract void onExit();
     
     // </editor-fold>
     

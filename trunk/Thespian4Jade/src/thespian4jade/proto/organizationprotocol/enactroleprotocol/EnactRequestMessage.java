@@ -48,16 +48,14 @@ public class EnactRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TODO Replace the 'enact' keyword with 'enact-role'.
     @Override
     public String generateContent() {
-        return String.format("enact(%1$s)", roleName);
+        return String.format("enact-role(%1$s)", roleName);
     }
 
-    // TODO Replace the 'enact' keyword with 'enact-role'.
     @Override
     public void parseContent(String content) {
-        final Pattern contentPattern = Pattern.compile("enact\\((.*)\\)");
+        final Pattern contentPattern = Pattern.compile("enact-role\\((.*)\\)");
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  

@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- *
- * @author hp
+ * String utilities.
+ * A static class containing string utility methods.
+ * @author Lukáš Kúdela
+ * @since 2012-03-18
+ * @version %I% %G%
  */
-public class StringUtils {
+public /* static */ class StringUtils {
     public static String join(Iterable objects, String delimiter) {
         Iterator iterator = objects.iterator();       
         if (!iterator.hasNext()) {

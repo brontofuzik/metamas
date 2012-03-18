@@ -6,11 +6,12 @@ import java.util.ArrayList;
 
 /**
  * The generics helper.
+ * A static class containing generics helper methods.
  * @author Lukáš Kúdela
  * @since 2012-01-24
  * @version %I% %G%
  */
-public class GenericsHelper {
+public /* static */ class GenericsHelper {
     
     /**
      * @param object instance of a class that is a subclass of a generic class
@@ -50,7 +51,7 @@ public class GenericsHelper {
 }
 
 /**
- * The generics class.
+ * A generic class. The GenericsHelper class test class.
  * @author Lukáš Kúdela
  * @since 2011-01-24
  * @version %I% %G%

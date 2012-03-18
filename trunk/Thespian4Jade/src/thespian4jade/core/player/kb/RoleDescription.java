@@ -64,8 +64,8 @@ public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public Iterable<String> getCompetence() {
-        // TODO Implement.
+    public Iterable<String> getCompetences() {
+        // TODO (priority: medium) Implement.
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
