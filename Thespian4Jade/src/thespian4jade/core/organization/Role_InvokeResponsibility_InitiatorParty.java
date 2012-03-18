@@ -100,6 +100,9 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
@@ -112,27 +115,21 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);       
         registerState(sendResponsibilityRequest);   
         registerState(receiveResponsibilityArgumentRequest);
         registerState(sendResponsibilityArgument);
-        registerState(receiveResponsibilityResult);
-        
+        registerState(receiveResponsibilityResult);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Regster the transitions.
         initialize.registerTransition(MyInitialize.OK, sendResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);        
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.SUCCESS, sendResponsibilityArgument);
-        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);
-        
+        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);       
         sendResponsibilityArgument.registerDefaultTransition(receiveResponsibilityResult);
-        
         receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.SUCCESS, successEnd);
         receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.FAILURE, failureEnd);
     }

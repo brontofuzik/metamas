@@ -99,7 +99,7 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the finite state machine, i. e. registers the states and transitions.
+     * Builds the party FSM.
      */
     private void buildFSM() {
         // ----- States -----
@@ -113,27 +113,21 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);     
         registerState(sendInvokeCompetenceRequest);
         registerState(receiveCompetenceArgumentRequest);
         registerState(sendCompetenceArgument);
-        registerState(receiveCompetenceResult);
-        
+        registerState(receiveCompetenceResult);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
         initialize.registerTransition(MyInitialize.OK, sendInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        sendInvokeCompetenceRequest.registerDefaultTransition(receiveCompetenceArgumentRequest);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        sendInvokeCompetenceRequest.registerDefaultTransition(receiveCompetenceArgumentRequest);       
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.SUCCESS, sendCompetenceArgument);
-        receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, failureEnd);
-        
-        sendCompetenceArgument.registerDefaultTransition(receiveCompetenceResult);
-        
+        receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, failureEnd);       
+        sendCompetenceArgument.registerDefaultTransition(receiveCompetenceResult);        
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.SUCCESS, successEnd);       
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.FAILURE, failureEnd);
     }

@@ -38,6 +38,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
@@ -48,20 +51,16 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         // ------------------
 
         // Register states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);        
         registerState(receiveActivateRequest);
-        registerState(sendActivateReply);
-        
+        registerState(sendActivateReply);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register transitions.
         initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        receiveActivateRequest.registerDefaultTransition(sendActivateReply);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
         sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
         sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
     }

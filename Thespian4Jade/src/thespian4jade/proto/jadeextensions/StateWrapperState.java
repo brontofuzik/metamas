@@ -49,7 +49,7 @@ public abstract class StateWrapperState<TState extends State>
     // ---------- PRIVATE ----------
     
     /**
-     * Builds the FSM.
+     * Builds the state FSM.
      */
     private void buildFSM() {
         // ----- States -----

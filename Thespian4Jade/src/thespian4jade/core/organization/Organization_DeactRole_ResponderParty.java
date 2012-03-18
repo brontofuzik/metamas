@@ -41,7 +41,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
-     * Registers the transitions and transitions.
+     * Builds the party FSM.
      */
     private void buildFSM() {
         State initialize = new MyInitialize();

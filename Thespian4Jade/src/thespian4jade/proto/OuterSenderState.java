@@ -55,19 +55,10 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         senders.put(event, sender);
     }
     
+    /**
+     * Builds the state FSM.
+     */
     protected void buildFSM() {
-        registerStatesAndTransitions();
-    }
-    
-    protected abstract void onEntry();
-    
-    protected abstract int onManager();
-    
-    protected abstract void onExit();
-    
-    // ---------- PRIVATE ----------
-    
-    private void registerStatesAndTransitions() {
         // ----- States -----
         EntryState entry = new EntryState();
         ManagerState manager = new ManagerState();
@@ -84,18 +75,22 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         
         // Register the transitions.
         // entry ---[Default]---> manager
-        entry.registerDefaultTransition(manager);
-             
+        entry.registerDefaultTransition(manager);           
         for (Map.Entry<Integer, InnerSenderState> eventSenderPair : senders.entrySet()) {
             // manager ---[<Performative>]---> sender
             manager.registerTransition(eventSenderPair.getKey(), eventSenderPair.getValue());
-        }
-        
+        }      
         for (InnerSenderState sender : senders.values()) {
             // sender ---[Default]---> exit
             sender.registerDefaultTransition(exit);
         }
     }
+    
+    protected abstract void onEntry();
+    
+    protected abstract int onManager();
+    
+    protected abstract void onExit();
     
     // </editor-fold>
     
