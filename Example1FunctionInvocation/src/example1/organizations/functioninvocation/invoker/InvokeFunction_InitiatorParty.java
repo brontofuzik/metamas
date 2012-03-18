@@ -17,8 +17,7 @@ import thespian4jade.proto.jadeextensions.State;
  * @since 2012-01-02
  * @version %I% %G%
  */
-// TODO Change the type argument from Role to Invoker_Role.
-public class InvokeFunction_InitiatorParty extends InitiatorParty<Role> {
+public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -75,17 +74,6 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Role> {
         sendRequest.registerDefaultTransition(receiveReply);
         
         receiveReply.registerDefaultTransition(end);
-    }
-    
-    // ----- PRIVATE -----
-    
-    // TODO Consider moving this getter to the Party class.
-    /**
-     * Gets my role.
-     * @return my role
-     */
-    private Role getMyRole() {
-        return (Role)myAgent;
     }
     
     // </editor-fold>

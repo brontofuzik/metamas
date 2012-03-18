@@ -38,7 +38,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
     public InvokeFunction_ResponderParty(ACLMessage aclMessage) {
         super(InvokeFunctionProtocol.getInstance(), aclMessage);
         
-        // TODO Consider moving this initialization to the Initialize' state.
+        // TODO (priority: low) Consider moving this initialization to the Initialize' state.
         invokerAID = getACLMessage().getSender();
         
         buildFSM();

@@ -8,16 +8,6 @@ package example1.players.demo;
  */
 public class Demo1_Player extends Demo_Player {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    // TODO Consider moving this to the doScheduleCompetenceInvocations() method.
-    /**
-     * The full name of the competence to invoke.
-     */
-    private CompetenceFullName competenceFullName; 
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
@@ -26,7 +16,6 @@ public class Demo1_Player extends Demo_Player {
      */
     public Demo1_Player() {
         super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));
-        competenceFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
     }
     
     // </editor-fold>
@@ -39,8 +28,9 @@ public class Demo1_Player extends Demo_Player {
      */
     @Override
     protected int doScheduleCompetenceInvocations(int timeout) {
-        Integer invokeFunctionArgument = new Integer(10);
-        return scheduleInvokeCompetence(competenceFullName, invokeFunctionArgument, timeout, 2000);
+        CompetenceFullName competenceFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
+        Integer competenceArgument = new Integer(10);
+        return scheduleInvokeCompetence(competenceFullName, competenceArgument, timeout, 2000);
     }
     
     // </editor-fold>
