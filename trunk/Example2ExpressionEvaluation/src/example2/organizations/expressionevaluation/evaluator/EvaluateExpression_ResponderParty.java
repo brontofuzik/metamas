@@ -47,7 +47,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     public EvaluateExpression_ResponderParty(ACLMessage message) {
         super(EvaluateExpressionProtocol.getInstance(), message);
         
-        // TODO Consider moving this initialization to the 'Initialize' state.
+        // TODO (priority: low) Consider moving this initialization to the 'Initialize' state.
         binaryEvaluatorAID = message.getSender();
         
         buildFSM();
