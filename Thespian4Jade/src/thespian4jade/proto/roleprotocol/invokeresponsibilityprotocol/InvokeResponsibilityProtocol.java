@@ -5,8 +5,8 @@
 package thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Role_InvokeResponsibilityInitiator;
-import thespian4jade.core.player.Player_InvokeResponsibilityResponder;
+import thespian4jade.core.organization.Role_InvokeResponsibility_InitiatorParty;
+import thespian4jade.core.player.Player_InvokeResponsibility_ResponderParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
@@ -49,7 +49,7 @@ public class InvokeResponsibilityProtocol extends Protocol {
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String responsibilityName = (String)arguments[0];
         Serializable argument = (Serializable)arguments[1];
-        return new Role_InvokeResponsibilityInitiator(responsibilityName, argument);
+        return new Role_InvokeResponsibility_InitiatorParty(responsibilityName, argument);
     }
 
     /**
@@ -59,7 +59,7 @@ public class InvokeResponsibilityProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Player_InvokeResponsibilityResponder(message);
+        return new Player_InvokeResponsibility_ResponderParty(message);
     }
     
     // </editor-fold>   

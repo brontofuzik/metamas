@@ -1,8 +1,8 @@
 package thespian4jade.proto.roleprotocol.activateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Role_ActivateRoleResponder;
-import thespian4jade.core.player.Player_ActivateRoleInitiator;
+import thespian4jade.core.organization.Role_ActivateRole_ResponderParty;
+import thespian4jade.core.player.Player_ActivateRole_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
@@ -44,7 +44,7 @@ public class ActivateRoleProtocol extends Protocol {
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String roleName = (String)arguments[0];
-        return new Player_ActivateRoleInitiator(roleName);
+        return new Player_ActivateRole_InitiatorParty(roleName);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ActivateRoleProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Role_ActivateRoleResponder(message);
+        return new Role_ActivateRole_ResponderParty(message);
     }
     
     // </editor-fold>

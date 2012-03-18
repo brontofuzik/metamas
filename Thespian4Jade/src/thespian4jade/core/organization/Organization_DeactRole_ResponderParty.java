@@ -16,7 +16,7 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Organization_DeactRoleResponder extends ResponderParty<Organization> {
+public class Organization_DeactRole_ResponderParty extends ResponderParty<Organization> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -28,7 +28,7 @@ public class Organization_DeactRoleResponder extends ResponderParty<Organization
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Organization_DeactRoleResponder(ACLMessage aclMessage) {
+    public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
         super(DeactRoleProtocol.getInstance(), aclMessage);
 
         playerAID = getACLMessage().getSender();

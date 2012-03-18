@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public class Organization_EnactRoleResponder extends ResponderParty<Organization> {
+public class Organization_EnactRole_ResponderParty extends ResponderParty<Organization> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -37,7 +37,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Organization_EnactRoleResponder(ACLMessage aclMessage) {
+    public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
         super(EnactRoleProtocol.getInstance(), aclMessage);
        
         playerAID = getACLMessage().getSender();

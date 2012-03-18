@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_InvokeResponsibilityInitiator<TArgument extends Serializable,
+public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializable,
     TResult extends Serializable> extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -57,7 +57,7 @@ public class Role_InvokeResponsibilityInitiator<TArgument extends Serializable,
      * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
      * @param responsibilityName the name of the responsibility
      */
-    public Role_InvokeResponsibilityInitiator(String responsibilityName) {
+    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
         super(InvokeResponsibilityProtocol.getInstance());
         // ----- Preconditions -----
         assert responsibilityName != null && !responsibilityName.isEmpty();
@@ -69,7 +69,7 @@ public class Role_InvokeResponsibilityInitiator<TArgument extends Serializable,
     }
     
     // TODO Make this constructor the default one.
-    public Role_InvokeResponsibilityInitiator(String responsibilityName, TArgument responsibilityArgument) {
+    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
         this(responsibilityName);
         
         this.responsibilityArgument = responsibilityArgument;

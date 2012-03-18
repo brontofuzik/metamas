@@ -1,8 +1,8 @@
 package thespian4jade.proto.organizationprotocol.deactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Organization_DeactRoleResponder;
-import thespian4jade.core.player.Player_DeactRoleInitiator;
+import thespian4jade.core.organization.Organization_DeactRole_ResponderParty;
+import thespian4jade.core.player.Player_DeactRole_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
@@ -45,7 +45,7 @@ public class DeactRoleProtocol extends Protocol {
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String organizationName = (String)arguments[0];
         String roleName = (String)arguments[1];
-        return new Player_DeactRoleInitiator(organizationName, roleName);
+        return new Player_DeactRole_InitiatorParty(organizationName, roleName);
     }
     
     /**
@@ -55,7 +55,7 @@ public class DeactRoleProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Organization_DeactRoleResponder(message);
+        return new Organization_DeactRole_ResponderParty(message);
     }
     
     // </editor-fold>
