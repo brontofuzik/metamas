@@ -1,6 +1,6 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import competence.FSMCompetence;
+import thespian4jade.core.organization.competence.FSMCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
