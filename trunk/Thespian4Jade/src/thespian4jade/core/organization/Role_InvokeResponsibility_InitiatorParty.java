@@ -54,24 +54,30 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     /**
      * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
      * @param responsibilityName the name of the responsibility
+     * @param responsibilityArgument the responsibility argument
      */
-    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
+    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
         super(InvokeResponsibilityProtocol.getInstance());
         // ----- Preconditions -----
         assert responsibilityName != null && !responsibilityName.isEmpty();
         // -------------------------
         
         this.responsibilityName = responsibilityName;
+        this.responsibilityArgument = responsibilityArgument;
         
         buildFSM();
     }
     
-    // TODO Make this constructor the default one.
-    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
-        this(responsibilityName);
-        
-        this.responsibilityArgument = responsibilityArgument;
+    /**
+     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * @param responsibilityName the name of the responsibility
+     */
+    public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
+        this(responsibilityName, null);
     }
+    
+    // TODO Make this constructor the default one.
+
     
     // </editor-fold>
     
