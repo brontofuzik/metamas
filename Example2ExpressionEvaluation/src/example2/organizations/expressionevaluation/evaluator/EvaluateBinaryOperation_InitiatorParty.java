@@ -78,6 +78,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
     
     // ----- PRIVATE -----
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();
@@ -86,15 +89,12 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
-        registerState(sendEvaluteRequest);
-        
+        registerFirstState(initialize);      
+        registerState(sendEvaluteRequest);       
         registerLastState(receiveEvaluateReply);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendEvaluteRequest);
-        
+        initialize.registerDefaultTransition(sendEvaluteRequest);        
         sendEvaluteRequest.registerDefaultTransition(receiveEvaluateReply);
     }
     
