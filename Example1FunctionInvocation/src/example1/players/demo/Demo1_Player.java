@@ -22,7 +22,7 @@ public class Demo1_Player extends Demo_Player {
     
     /**
      * Creates a new Demo player who will enact the Invoker role.
-     * @param powerFullName the full name of the power to invoke 
+     * @param competenceFullName the full name of the competence to invoke 
      */
     public Demo1_Player() {
         super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));

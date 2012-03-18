@@ -1,6 +1,6 @@
 package example1.players.demo;
 
-import thespian4jade.core.player.requirement.OneShotRequirement;
+import thespian4jade.core.player.responsibility.OneShotResponsibility;
 
 /**
  * The 'Execute function' (one-shot) responsibility.
@@ -8,7 +8,7 @@ import thespian4jade.core.player.requirement.OneShotRequirement;
  * @since
  * @version %I% %G%
  */
-public class ExecuteFunction_Responsibility extends OneShotRequirement<Integer, Integer> {
+public class ExecuteFunction_Responsibility extends OneShotResponsibility<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
