@@ -82,26 +82,20 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);       
         registerState(receiveAuctionCFP);
         registerState(invokeResponsibility_Bid);
         registerState(sendBid);
-        registerState(receiveAuctionResult);
-        
+        registerState(receiveAuctionResult);     
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, receiveAuctionCFP);
         initialize.registerTransition(Initialize.FAIL, failureEnd);
-
-        receiveAuctionCFP.registerDefaultTransition(invokeResponsibility_Bid);
-        
-        invokeResponsibility_Bid.registerDefaultTransition(sendBid);
-        
-        sendBid.registerDefaultTransition(receiveAuctionResult);
-        
+        receiveAuctionCFP.registerDefaultTransition(invokeResponsibility_Bid);       
+        invokeResponsibility_Bid.registerDefaultTransition(sendBid);        
+        sendBid.registerDefaultTransition(receiveAuctionResult);        
         receiveAuctionResult.registerTransition(ReceiveAuctionResult.ACCEPT_PROPOSAL, successEnd);
         receiveAuctionResult.registerTransition(ReceiveAuctionResult.REJECT_PROPOSAL, failureEnd);
     }
