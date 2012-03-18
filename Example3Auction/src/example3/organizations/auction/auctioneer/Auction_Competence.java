@@ -3,7 +3,7 @@ package example3.organizations.auction.auctioneer;
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
-import competence.FSMCompetence;
+import thespian4jade.core.organization.competence.FSMCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
