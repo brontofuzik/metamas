@@ -43,7 +43,7 @@ public class DeactivateRoleProtocol extends Protocol {
      * @returns an initiator party
      */
     @Override
-    public InitiatorParty createInitiatorParty(Object[] arguments) {
+    public InitiatorParty createInitiatorParty(Object... arguments) {
         String roleName = (String)arguments[0];
         return new Player_DeactivateRole_InitiatorParty(roleName);
     }

@@ -74,7 +74,7 @@ public abstract class Player extends Agent {
     protected final void enactRole(final String organizationName,
         final String roleName) {
         addBehaviour(EnactRoleProtocol.getInstance()
-            .createInitiatorParty(new Object[] { organizationName, roleName }));
+            .createInitiatorParty(organizationName, roleName));
     }
     
     /**
@@ -112,7 +112,7 @@ public abstract class Player extends Agent {
     protected final void deactRole(final String organizationName,
         final String roleName) {
         addBehaviour(DeactRoleProtocol.getInstance()
-            .createInitiatorParty(new Object[] { organizationName, roleName }));
+            .createInitiatorParty(organizationName, roleName));
     }
     
     /**
@@ -148,7 +148,7 @@ public abstract class Player extends Agent {
      */
     protected final void activateRole(final String roleName) {
         addBehaviour(ActivateRoleProtocol.getInstance()
-            .createInitiatorParty(new Object[] { roleName }));
+            .createInitiatorParty(roleName));
     }
     
     /**
@@ -183,7 +183,7 @@ public abstract class Player extends Agent {
      */
     protected final void deactivateRole(final String roleName) {
         addBehaviour(DeactivateRoleProtocol.getInstance()
-            .createInitiatorParty(new Object[] { roleName }));
+            .createInitiatorParty(roleName));
     }
     
     /**
@@ -218,7 +218,7 @@ public abstract class Player extends Agent {
      */
     protected final <T> void invokeCompetence(final String competenceName, final T argument) {
         addBehaviour(InvokeCompetenceProtocol.getInstance()
-            .createInitiatorParty(new Object[] { competenceName, argument }));
+            .createInitiatorParty(competenceName, argument));
     }
     
     /**

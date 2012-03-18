@@ -46,7 +46,7 @@ public class InvokeResponsibilityProtocol extends Protocol {
      * @returns an initiator party
      */
     @Override
-    public InitiatorParty createInitiatorParty(Object[] arguments) {
+    public InitiatorParty createInitiatorParty(Object... arguments) {
         String responsibilityName = (String)arguments[0];
         Serializable argument = (Serializable)arguments[1];
         return new Role_InvokeResponsibility_InitiatorParty(responsibilityName, argument);

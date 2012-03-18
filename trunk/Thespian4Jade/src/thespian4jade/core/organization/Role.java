@@ -119,7 +119,7 @@ public class Role extends Agent {
     
     public void invokeResponsibility(String responsibilityName, Object argument) {
         addBehaviour(InvokeResponsibilityProtocol.getInstance()
-            .createInitiatorParty(new Object[] { responsibilityName, argument }));    
+            .createInitiatorParty(responsibilityName, argument));    
     }
     
     // ----- Logging -----

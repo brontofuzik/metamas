@@ -187,7 +187,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
                 return OK;
             } else {
                 // The sender role is not the active role.
-                // TODO
+                // TODO (priority: low) Send a message to the role exaplaining
+                // that a responsibility cannot be invoked by a non-activated role.
                 return FAIL;
             }
         }
