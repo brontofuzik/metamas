@@ -7,7 +7,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -28,7 +28,7 @@ public class Role extends Agent {
     
     Organization myOrganization;
     
-    final Map<String, Class> powers = new Hashtable<String, Class>();
+    final Map<String, Class> competences = new Hashtable<String, Class>();
     
     RoleState state = RoleState.INACTIVE;
     
@@ -112,14 +112,14 @@ public class Role extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     // TAG OBSOLETE
-//    public void invokeRequirement(String requirementName, Object argument) {
-//        initiator.initiateProtocol(InvokeRequirementProtocol.getInstance(),
-//            new Object[] { requirementName, argument } );
+//    public void invokeResponsibility(String responsibilityName, Object argument) {
+//        initiator.initiateProtocol(InvokeResponsibilityProtocol.getInstance(),
+//            new Object[] { responsibilityName, argument } );
 //    }
     
-    public void invokeRequirement(String requirementName, Object argument) {
-        addBehaviour(InvokeRequirementProtocol.getInstance()
-            .createInitiatorParty(new Object[] { requirementName, argument }));    
+    public void invokeResponsibility(String responsibilityName, Object argument) {
+        addBehaviour(InvokeResponsibilityProtocol.getInstance()
+            .createInitiatorParty(new Object[] { responsibilityName, argument }));    
     }
     
     // ----- Logging -----
@@ -164,22 +164,22 @@ public class Role extends Agent {
     // ----- PROTECTED -----
     
     /**
-     * Adds a requirement.
-     * @param requirement the requirement to add
+     * Adds a responsibility.
+     * @param responsibility the responsibility to add
      */
-    protected static void addRequirement(String requirement) {
+    protected static void addResponsibility(String responsibility) {
         // ----- Preconditions -----
-        assert requirement != null && !requirement.isEmpty();
+        assert responsibility != null && !responsibility.isEmpty();
         // -------------------------
         
-        responsibilities.add(requirement);
+        responsibilities.add(responsibility);
     }
     
     /**
      * Gets the responsibilities (as an array)
      * @return the responsibilities (as an array)
      */
-    protected static String[] getRequirements() {
+    protected static String[] getResponsibilities() {
         return responsibilities.toArray(new String[responsibilities.size()]);
     }
     
@@ -195,17 +195,17 @@ public class Role extends Agent {
         //registerWithYellowPages();
     }
     
-    protected void addPower(Class powerClass) {
+    protected void addCompetence(Class competenceClass) {
         // ----- Preconditions -----
-        if (powerClass == null) {
-            throw new IllegalArgumentException("powerClass");
+        if (competenceClass == null) {
+            throw new IllegalArgumentException("competenceClass");
         }
         // -------------------------
         
-        String powerName = powerClass.getSimpleName();
-        powers.put(powerName, powerClass);
+        String competenceName = competenceClass.getSimpleName();
+        competences.put(competenceName, competenceClass);
         
-        logInfo(String.format("Power (%1$s) added.", powerName));
+        logInfo(String.format("Competence (%1$s) added.", competenceName));
     }
     
     // ----- Yellow pages registration -----

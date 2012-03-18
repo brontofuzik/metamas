@@ -62,8 +62,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         // ----- States -----
         State initialize = new MyInitialize();
         State sendEnactRequest = new SendEnactRequest();
-        State receiveRequirementsInform = new ReceiveResponsibilitiesInform();
-        State sendRequirementsReply = new SendResponsibilitiesReply();
+        State receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
+        State sendResponsibilitiesReply = new SendResponsibilitiesReply();
         State receiveRoleAID = new ReceiveRoleAID();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
@@ -73,8 +73,8 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         registerFirstState(initialize);
         
         registerState(sendEnactRequest);
-        registerState(receiveRequirementsInform);
-        registerState(sendRequirementsReply);
+        registerState(receiveResponsibilitiesInform);
+        registerState(sendResponsibilitiesReply);
         registerState(receiveRoleAID);
         
         registerLastState(successEnd);
@@ -84,13 +84,13 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         initialize.registerTransition(MyInitialize.OK, sendEnactRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        sendEnactRequest.registerDefaultTransition(receiveRequirementsInform);
+        sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
 
-        receiveRequirementsInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendRequirementsReply);
-        receiveRequirementsInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);
+        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
+        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);
         
-        sendRequirementsReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
-        sendRequirementsReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
+        sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
+        sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
 
         receiveRoleAID.registerDefaultTransition(successEnd);
     }
@@ -206,7 +206,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirements info received.");
+            getMyAgent().logInfo("Responsibilities info received.");
         }
 
         // </editor-fold>
@@ -247,7 +247,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
         
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirements reply sent.");
+            getMyAgent().logInfo("Responsibilities reply sent.");
         }
 
         // </editor-fold>

@@ -9,20 +9,20 @@ import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.RequirementArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementRequestMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.RequirementResultMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
 
 /**
- * A 'Invoke requirement' protocol initiator party (new version).
+ * A 'Invoke responsibility' protocol initiator party (new version).
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
+public class Role_InvokeResponsibilityInitiator<TArgument extends Serializable,
     TResult extends Serializable> extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -33,19 +33,19 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
     private AID player;
     
     /**
-     * The name of the requirement.
+     * The name of the responsibility.
      */
-    private String requirementName;
+    private String responsibilityName;
     
     /**
-     * The (serializable) requirement argument.
+     * The (serializable) responsibility argument.
      */
-    private TArgument requirementArgument;
+    private TArgument responsibilityArgument;
     
     /**
-     * The serializable requirement argument.
+     * The serializable responsibility argument.
      */
-    private TResult requirementResult;
+    private TResult responsibilityResult;
     
     // </editor-fold>
     
@@ -54,25 +54,25 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
     
     
     /**
-     * Initializes a new instance of the Role_InvokeRequirementInitiator class.
-     * @param requirementName the name of the requirement
+     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * @param responsibilityName the name of the responsibility
      */
-    public Role_InvokeRequirementInitiator(String requirementName) {
-        super(InvokeRequirementProtocol.getInstance());
+    public Role_InvokeResponsibilityInitiator(String responsibilityName) {
+        super(InvokeResponsibilityProtocol.getInstance());
         // ----- Preconditions -----
-        assert requirementName != null && !requirementName.isEmpty();
+        assert responsibilityName != null && !responsibilityName.isEmpty();
         // -------------------------
         
-        this.requirementName = requirementName;
+        this.responsibilityName = responsibilityName;
         
         buildFSM();
     }
     
     // TODO Make this constructor the default one.
-    public Role_InvokeRequirementInitiator(String requirementName, TArgument requirementArgument) {
-        this(requirementName);
+    public Role_InvokeResponsibilityInitiator(String responsibilityName, TArgument responsibilityArgument) {
+        this(responsibilityName);
         
-        this.requirementArgument = requirementArgument;
+        this.responsibilityArgument = responsibilityArgument;
     }
     
     // </editor-fold>
@@ -80,19 +80,19 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Sets the requirement argument.
-     * @param requirementArgument the requirement argument
+     * Sets the responsibility argument.
+     * @param responsibilityArgument the responsibility argument
      */
-    public void setRequirementArgument(TArgument requirementArgument) {
-        this.requirementArgument = requirementArgument;
+    public void setResponsibilityArgument(TArgument responsibilityArgument) {
+        this.responsibilityArgument = responsibilityArgument;
     }
     
     /**
-     * Gets the requirement result.
-     * @return the requirement result
+     * Gets the responsibility result.
+     * @return the responsibility result
      */
-    public Object getRequirementResult() {
-        return requirementResult;
+    public Object getResponsibilityResult() {
+        return responsibilityResult;
     }
     
     // </editor-fold>
@@ -102,10 +102,10 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
-        State sendRequirementRequest = new SendRequirementRequest();
-        State receiveRequirementArgumentRequest = new ReceiveRequirementArgumentRequest();
-        State sendRequirementArgument = new SendRequirementArgument();
-        State receiveRequirementResult = new ReceiveRequirementResult();
+        State sendResponsibilityRequest = new SendResponsibilityRequest();
+        State receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
+        State sendResponsibilityArgument = new SendResponsibilityArgument();
+        State receiveResponsibilityResult = new ReceiveResponsibilityResult();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -113,27 +113,27 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         // Register the states.
         registerFirstState(initialize);
         
-        registerState(sendRequirementRequest);   
-        registerState(receiveRequirementArgumentRequest);
-        registerState(sendRequirementArgument);
-        registerState(receiveRequirementResult);
+        registerState(sendResponsibilityRequest);   
+        registerState(receiveResponsibilityArgumentRequest);
+        registerState(sendResponsibilityArgument);
+        registerState(receiveResponsibilityResult);
         
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendRequirementRequest);
+        initialize.registerTransition(MyInitialize.OK, sendResponsibilityRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        sendRequirementRequest.registerDefaultTransition(receiveRequirementArgumentRequest);
+        sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);
         
-        receiveRequirementArgumentRequest.registerTransition(ReceiveRequirementArgumentRequest.SUCCESS, sendRequirementArgument);
-        receiveRequirementArgumentRequest.registerTransition(ReceiveRequirementArgumentRequest.FAILURE, failureEnd);
+        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.SUCCESS, sendResponsibilityArgument);
+        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);
         
-        sendRequirementArgument.registerDefaultTransition(receiveRequirementResult);
+        sendResponsibilityArgument.registerDefaultTransition(receiveResponsibilityResult);
         
-        receiveRequirementResult.registerTransition(ReceiveRequirementResult.SUCCESS, successEnd);
-        receiveRequirementResult.registerTransition(ReceiveRequirementResult.FAILURE, failureEnd);
+        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.SUCCESS, successEnd);
+        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.FAILURE, failureEnd);
     }
     
     // </editor-fold>
@@ -147,18 +147,18 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Invoke requirement' (%1$s) protocol.",
-                requirementName));
+                "Initiating the 'Invoke responsibility' (%1$s) protocol.",
+                responsibilityName));
 
             if (true) {
-                // The role can invoke the requirement.
+                // The role can invoke the responsibility.
                 player = getMyAgent().playerAID;
                 return OK;
             } else {
-                // The role can not invoke the requirement.
+                // The role can not invoke the responsibility.
                 String message = String.format(
-                    "I cannot invoke the requirement '%1$s'.",
-                    requirementName);
+                    "I cannot invoke the responsibility '%1$s'.",
+                    responsibilityName);
                 return FAIL;
             }
         }
@@ -166,8 +166,8 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         // </editor-fold>
     }
     
-    private class SendRequirementRequest
-        extends SingleSenderState<InvokeRequirementRequestMessage> {
+    private class SendResponsibilityRequest
+        extends SingleSenderState<InvokeResponsibilityRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -182,30 +182,30 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending requirement request.");
+            getMyAgent().logInfo("Sending responsibility request.");
         }
         
         @Override
-        protected InvokeRequirementRequestMessage prepareMessage() {
-            InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
-            message.setRequirement(requirementName);
+        protected InvokeResponsibilityRequestMessage prepareMessage() {
+            InvokeResponsibilityRequestMessage message = new InvokeResponsibilityRequestMessage();
+            message.setResponsibility(responsibilityName);
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement request sent.");
+            getMyAgent().logInfo("Responsibility request sent.");
         }
         
         // </editor-fold>
     }
     
-    private class ReceiveRequirementArgumentRequest
+    private class ReceiveResponsibilityArgumentRequest
         extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveRequirementArgumentRequest() {
+        ReceiveResponsibilityArgumentRequest() {
             super(new ArgumentRequestMessage.Factory());
         }
         
@@ -235,8 +235,8 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         // </editor-fold>
     }
     
-    private class SendRequirementArgument
-        extends SendSuccessOrFailure<RequirementArgumentMessage> {
+    private class SendResponsibilityArgument
+        extends SendSuccessOrFailure<ResponsibilityArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -251,12 +251,12 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending requirement argument.");
+            getMyAgent().logInfo("Sending responsibility argument.");
         }
         
         @Override
         protected int onManager() {
-            if (requirementArgument != null && requirementArgument instanceof Serializable) {
+            if (responsibilityArgument != null && responsibilityArgument instanceof Serializable) {
                 return SUCCESS;
             } else {
                 return FAILURE;
@@ -264,27 +264,27 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         }
         
         @Override
-        protected RequirementArgumentMessage prepareMessage() {
-            RequirementArgumentMessage message = new RequirementArgumentMessage();
-            message.setArgument(requirementArgument);
+        protected ResponsibilityArgumentMessage prepareMessage() {
+            ResponsibilityArgumentMessage message = new ResponsibilityArgumentMessage();
+            message.setArgument(responsibilityArgument);
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement argument sent.");
+            getMyAgent().logInfo("Responsibility argument sent.");
         }
         
         // </editor-fold>
     }
     
-    private class ReceiveRequirementResult
-        extends ReceiveSuccessOrFailure<RequirementResultMessage<TResult>> {
+    private class ReceiveResponsibilityResult
+        extends ReceiveSuccessOrFailure<ResponsibilityResultMessage<TResult>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveRequirementResult() {
-            super(new RequirementResultMessage.Factory<TResult>());
+        ReceiveResponsibilityResult() {
+            super(new ResponsibilityResultMessage.Factory<TResult>());
         }
         
         // </editor-fold>
@@ -302,21 +302,21 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving requirement result.");
+            getMyAgent().logInfo("Receiving responsibility result.");
         }
         
         /**
-         * Handles the received 'Requirement result' message.
-         * @param message the received 'Requirement result' message
+         * Handles the received 'Responsibility result' message.
+         * @param message the received 'Responsibility result' message
          */
         @Override
-        protected void handleSuccessMessage(RequirementResultMessage<TResult> message) {
-            requirementResult = message.getResult();
+        protected void handleSuccessMessage(ResponsibilityResultMessage<TResult> message) {
+            responsibilityResult = message.getResult();
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement result received.");
+            getMyAgent().logInfo("Responsibility result received.");
         }
 
         // </editor-fold>
@@ -331,7 +331,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke requirement' initiator party suceeded.");
+            getMyAgent().logInfo("The 'Invoke responsibility' initiator party suceeded.");
         }
         
         // </editor-fold>
@@ -346,7 +346,7 @@ public class Role_InvokeRequirementInitiator<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke requirement' initiator party failed.");
+            getMyAgent().logInfo("The 'Invoke responsibility' initiator party failed.");
         }
         
         // </editor-fold>

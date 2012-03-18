@@ -26,7 +26,7 @@ public class RoleDescription {
     /** The organization AID. */
     private AID organizationAID;
     
-    private Map<String, Object> powerResults = new Hashtable<String, Object>();
+    private Map<String, Object> competenceResults = new Hashtable<String, Object>();
 
     // </editor-fold>
     
@@ -64,17 +64,17 @@ public class RoleDescription {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public Iterable<String> getPowers() {
+    public Iterable<String> getCompetence() {
         // TODO Implement.
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    public void savePowerResult(String powerName, Object powerResult) {
-        powerResults.put(powerName, powerResult);
+    public void saveCompetenceResult(String competenceName, Object competenceResult) {
+        competenceResults.put(competenceName, competenceResult);
     }
 
-    public Object loadPowerResult(String powerName) {
-        return powerResults.get(powerName);
+    public Object loadCompetenceResult(String competenceName) {
+        return competenceResults.get(competenceName);
     }
     
     // </editor-fold>

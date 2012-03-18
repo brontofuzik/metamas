@@ -74,9 +74,9 @@ public class PlayerKnowledgeBase {
         return doesEnactRole(roleName) && doesPlayRole(roleName);
     }
     
-    public boolean canInvokePower(String powerName) {
+    public boolean canInvokeCompetence(String competenceName) {
         // ----- Preconditions -----
-        assert powerName != null && !powerName.isEmpty();
+        assert competenceName != null && !competenceName.isEmpty();
         // -------------------------
         
         // TODO Implement.

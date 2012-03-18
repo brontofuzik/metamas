@@ -8,7 +8,7 @@ import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProto
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -206,36 +206,36 @@ public abstract class Player extends Agent {
     }
     
     // TAG OBSOLETE
-//    public final void invokePower(String powerName, Object argument) {
-//        initiator.initiateProtocol(InvokePowerProtocol.getInstance(),
-//            new Object[] { powerName, argument });
+//    public final void invokeCompetence(String competenceName, Object argument) {
+//        initiator.initiateProtocol(InvokeCompetenceProtocol.getInstance(),
+//            new Object[] { competenceName, argument });
 //    }
     
     /**
-     * Invokes a power.
-     * @param powerName the name of the power to invoke
-     * @param argument the power argument
+     * Invokes a competence.
+     * @param competenceName the name of the competence to invoke
+     * @param argument the competence argument
      */
-    protected final <T> void invokePower(final String powerName, final T argument) {
-        addBehaviour(InvokePowerProtocol.getInstance()
-            .createInitiatorParty(new Object[] { powerName, argument }));
+    protected final <T> void invokeCompetence(final String competenceName, final T argument) {
+        addBehaviour(InvokeCompetenceProtocol.getInstance()
+            .createInitiatorParty(new Object[] { competenceName, argument }));
     }
     
     /**
-     * Schedules a power invocation.
-     * @param powerFullName the full name of the power invoke
-     * @param argument the power argument
+     * Schedules a competence invocation.
+     * @param competenceFullName the full name of the competence invoke
+     * @param argument the competence argument
      * @param timeout the start timeout
      * @return the end timeout
      */
-    protected final <T> int scheduleInvokeCompetence(final CompetenceFullName powerFullName,
+    protected final <T> int scheduleInvokeCompetence(final CompetenceFullName competenceFullName,
         final T argument, final int timeout, final int duration) {
-        // Initiate the 'Invoke power' protocol.
+        // Initiate the 'Invoke competence' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().invokePower(powerFullName.getPowerName(), argument);
+                getMyPlayer().invokeCompetence(competenceFullName.getCompetenceName(), argument);
             }
         });
         return timeout + duration;
@@ -278,30 +278,30 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Adds a requirement.
-     * @param requirementClass the requirement class
+     * Adds a responsibility.
+     * @param responsibilityClass the responsibility class
      */
-    protected final void addRequirement(Class requirementClass) {
+    protected final void addResponsibility(Class responsibilityClass) {
         // ----- Preconditions -----
-        if (requirementClass == null) {
-            throw new IllegalArgumentException("requirementClass");
+        if (responsibilityClass == null) {
+            throw new IllegalArgumentException("responsibilityClass");
         }
         // -------------------------
         
-        String requirementName = requirementClass.getSimpleName();
-        responsibilities.put(requirementName, requirementClass);
+        String responsibilityName = responsibilityClass.getSimpleName();
+        responsibilities.put(responsibilityName, responsibilityClass);
         
-        logInfo(String.format("Requirement (%1$s) added.", requirementName));
+        logInfo(String.format("Responsibility (%1$s) added.", responsibilityName));
     }
     
     /**
      * Evaluates a set of responsibilities.
      * @param responsibilities the set of responsibilities to evaluate
-     * @return <c>true</c> if all requirement can be met; <c>false</c> otherwise
+     * @return <c>true</c> if all responsibility can be met; <c>false</c> otherwise
      */
     protected final boolean evaluateAllResponsibilities(String[] responsibilities) {
-        for (String requirement : responsibilities) {
-            if (!evaluateReponsibility(requirement)) {
+        for (String responsibility : responsibilities) {
+            if (!evaluateReponsibility(responsibility)) {
                 return false;
             }
         }
@@ -311,11 +311,11 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a set of responsibilities.
      * @param responsibilities the set of responsibilities to evaluate
-     * @return <c>true</c> if any requirement can be met; <c>false</c> otherwise
+     * @return <c>true</c> if any responsibility can be met; <c>false</c> otherwise
      */
-    protected final boolean evaluteAnyRequirement(String[] responsibilities) {
-        for (String requirement : responsibilities) {
-            if (evaluateReponsibility(requirement)) {
+    protected final boolean evaluteAnyResponsibilities(String[] responsibilities) {
+        for (String responsibility : responsibilities) {
+            if (evaluateReponsibility(responsibility)) {
                 return true;
             }
         }
@@ -323,8 +323,8 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Evaluates a requirement.
-     * @param requirement the requirement to evaluate
+     * Evaluates a responsibility.
+     * @param responsibility the responsibility to evaluate
      * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise 
      */
     protected boolean evaluateReponsibility(String responsibility) {
@@ -400,20 +400,20 @@ public abstract class Player extends Agent {
         
         private RoleFullName roleFullName;
         
-        private String powerName;
+        private String competenceName;
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        public CompetenceFullName(String organizationName, String roleName, String powerName) {
+        public CompetenceFullName(String organizationName, String roleName, String competenceName) {
             roleFullName = new RoleFullName(organizationName, roleName);
         }
         
-        public CompetenceFullName(String powerFullName) {
-            String[] nameParts = powerFullName.split("\\.");
+        public CompetenceFullName(String competenceFullName) {
+            String[] nameParts = competenceFullName.split("\\.");
             roleFullName = new RoleFullName(nameParts[0], nameParts[1]);
-            powerName = nameParts[2];
+            competenceName = nameParts[2];
         }
                 
         // </editor-fold>
@@ -432,8 +432,8 @@ public abstract class Player extends Agent {
             return roleFullName.getRoleName();
         }
         
-        public String getPowerName() {
-            return powerName;
+        public String getCompetenceName() {
+            return competenceName;
         }
         
         // </editor-fold>

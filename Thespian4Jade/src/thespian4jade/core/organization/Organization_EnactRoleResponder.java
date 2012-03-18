@@ -53,8 +53,8 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         // ----- States -----
         State initialize = new MyInitialize();
         State receiveEnactRequest = new ReceiveEnactRequest();
-        State sendRequirementsInform = new SendRequirementsInform();
-        State receiveRequirementsReply = new ReceiveRequirementsReply();
+        State sendResponsibilitiesInform = new SendResponsibilitiesInform();
+        State receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
         State sendRoleAID = new SendRoleAID();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
@@ -64,8 +64,8 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         registerFirstState(initialize);
         
         registerState(receiveEnactRequest);
-        registerState(sendRequirementsInform);
-        registerState(receiveRequirementsReply);
+        registerState(sendResponsibilitiesInform);
+        registerState(receiveResponsibilitiesReply);
         registerState(sendRoleAID);
         
         registerLastState(successEnd);
@@ -75,13 +75,13 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         initialize.registerTransition(MyInitialize.OK, receiveEnactRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        receiveEnactRequest.registerDefaultTransition(sendRequirementsInform);
+        receiveEnactRequest.registerDefaultTransition(sendResponsibilitiesInform);
 
-        sendRequirementsInform.registerTransition(SendRequirementsInform.SUCCESS, receiveRequirementsReply);
-        sendRequirementsInform.registerTransition(SendRequirementsInform.FAILURE, failureEnd);
+        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.SUCCESS, receiveResponsibilitiesReply);
+        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, failureEnd);
         
-        receiveRequirementsReply.registerTransition(ReceiveRequirementsReply.AGREE, sendRoleAID);
-        receiveRequirementsReply.registerTransition(ReceiveRequirementsReply.REFUSE, failureEnd);   
+        receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.AGREE, sendRoleAID);
+        receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.REFUSE, failureEnd);   
 
         sendRoleAID.registerDefaultTransition(successEnd);
     }
@@ -119,7 +119,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         // </editor-fold>        
     }
     
-    private class SendRequirementsInform
+    private class SendResponsibilitiesInform
         extends SendSuccessOrFailure<ResponsibilitiesInformMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -157,7 +157,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
         
         @Override
         protected ResponsibilitiesInformMessage prepareMessage() {
-            // Create the 'Requirements inform' message.
+            // Create the 'Responsibilities inform' message.
             ResponsibilitiesInformMessage message = new ResponsibilitiesInformMessage();
             message.setResponsibilities(getMyAgent().roles.get(roleName).getResponsibilities());
             return message;
@@ -165,13 +165,13 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirements inform sent.");
+            getMyAgent().logInfo("Responsibilities inform sent.");
         }
       
         // </editor-fold>
     }
     
-    private class ReceiveRequirementsReply extends ReceiveAgreeOrRefuse {
+    private class ReceiveResponsibilitiesReply extends ReceiveAgreeOrRefuse {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -191,7 +191,7 @@ public class Organization_EnactRoleResponder extends ResponderParty<Organization
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirements reply received.");
+            getMyAgent().logInfo("Responsibilities reply received.");
         }
         
         // </editor-fold>
