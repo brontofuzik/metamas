@@ -47,8 +47,7 @@ public class Role {
     }
     
     public void setFSM(FSM fsm) {
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.fsm = fsm;
     }
 
     // </editor-fold>
