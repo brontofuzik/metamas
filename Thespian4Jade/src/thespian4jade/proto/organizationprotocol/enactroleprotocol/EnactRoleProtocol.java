@@ -43,7 +43,7 @@ public class EnactRoleProtocol extends Protocol {
      * @returns an initiator party
      */
     @Override
-    public InitiatorParty createInitiatorParty(Object[] arguments) {
+    public InitiatorParty createInitiatorParty(Object... arguments) {
         String organizationName = (String)arguments[0];
         String roleName = (String)arguments[1];
         return new Player_EnactRole_InitiatorParty(organizationName, roleName);

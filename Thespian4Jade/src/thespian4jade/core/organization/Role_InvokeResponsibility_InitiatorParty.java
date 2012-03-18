@@ -51,8 +51,6 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    
-    
     /**
      * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
      * @param responsibilityName the name of the responsibility

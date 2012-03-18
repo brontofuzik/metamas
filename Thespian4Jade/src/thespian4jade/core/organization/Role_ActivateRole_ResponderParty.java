@@ -48,20 +48,16 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         // ------------------
 
         // Register states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);       
         registerState(receiveActivateRequest);
-        registerState(sendActivateReply);
-        
+        registerState(sendActivateReply);        
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register transitions.
         initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        receiveActivateRequest.registerDefaultTransition(sendActivateReply);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
         sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
         sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
     }
@@ -85,7 +81,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
                 return OK;
             } else {
                 // The sender player is not enacting this role.
-                // TODO
+                // TODO (priority: low) Send a message to the player exaplaining
+                // that a non-enacted role cannot be activated.
                 return FAIL;
             }
         }

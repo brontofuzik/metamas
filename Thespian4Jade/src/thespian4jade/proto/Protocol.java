@@ -39,7 +39,7 @@ public abstract class Protocol {
      * @param arguments the initiator party's contructor arguments
      * @returns an initiator party
      */
-    public abstract InitiatorParty createInitiatorParty(Object[] arguments);
+    public abstract InitiatorParty createInitiatorParty(Object... arguments);
     
     /**
      * Creates a responder party.

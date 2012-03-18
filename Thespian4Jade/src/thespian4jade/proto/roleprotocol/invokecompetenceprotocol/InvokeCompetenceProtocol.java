@@ -48,7 +48,7 @@ public class InvokeCompetenceProtocol extends Protocol {
      * @returns an initiator party
      */
     @Override
-    public InitiatorParty createInitiatorParty(Object[] arguments) {
+    public InitiatorParty createInitiatorParty(Object... arguments) {
         String competenceName = (String)arguments[0];
         Serializable argument = (Serializable)arguments[1];
         return new Player_InvokeCompetence_InitiatorParty(competenceName, argument);

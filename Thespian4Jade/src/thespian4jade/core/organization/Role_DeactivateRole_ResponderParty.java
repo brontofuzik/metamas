@@ -85,7 +85,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
                 return OK;
             } else {
                 // The sender player is not enacting this role.
-                // TODO
+                // TODO (priority: low) Send a message to the player exaplaining
+                // that a non-enacted role cannot be deactivated.
                 return FAIL;
             }
         }

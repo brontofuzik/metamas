@@ -187,7 +187,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
                 return OK;
             } else {
                 // The sender player is not enacting this role.
-                // TODO
+                // TODO (priority: low) Send a message to the player exaplaining
+                // that a competence cannot be invoked on a non-enacted role.
                 return FAIL;
             }
         }      
