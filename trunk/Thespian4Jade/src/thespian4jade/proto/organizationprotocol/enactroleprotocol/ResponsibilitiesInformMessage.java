@@ -88,8 +88,8 @@ public class ResponsibilitiesInformMessage extends TextMessage {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         /**
-         * Creates an empty 'Requirements inform' message.
-         * @return an empty 'Requirements inform' message
+         * Creates an empty 'Responsibilities inform' message.
+         * @return an empty 'Responsibilities inform' message
          */
         @Override
         public ResponsibilitiesInformMessage createMessage() {

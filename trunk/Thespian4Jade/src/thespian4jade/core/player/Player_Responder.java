@@ -1,6 +1,6 @@
 package thespian4jade.core.player;
 
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import thespian4jade.core.Responder;
 
 /**
@@ -14,7 +14,7 @@ public class Player_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Player_Responder() {
-        addResponder(InvokeRequirementProtocol.getInstance());
+        addResponder(InvokeResponsibilityProtocol.getInstance());
     }
     
     // </editor-fold>

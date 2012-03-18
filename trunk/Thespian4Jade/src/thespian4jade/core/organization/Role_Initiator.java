@@ -1,7 +1,7 @@
 package thespian4jade.core.organization;
 
 import thespian4jade.core.Initiator;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 
 // TAG OBSOLETE
 /**
@@ -16,7 +16,7 @@ public class Role_Initiator extends Initiator {
     
     Role_Initiator(Role role) {
         super(role);        
-        addInitiator(InvokeRequirementProtocol.getInstance());
+        addInitiator(InvokeResponsibilityProtocol.getInstance());
     }
     
     // </editor-fold>

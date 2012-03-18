@@ -5,7 +5,7 @@ import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProto
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 
 // TAG OBSOLETE
 /**
@@ -24,7 +24,7 @@ public class Player_Initiator extends Initiator {
         addInitiator(DeactRoleProtocol.getInstance());
         addInitiator(ActivateRoleProtocol.getInstance());
         addInitiator(DeactivateRoleProtocol.getInstance());
-        addInitiator(InvokePowerProtocol.getInstance());
+        addInitiator(InvokeCompetenceProtocol.getInstance());
     }
     
     // </editor-fold>

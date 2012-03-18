@@ -2,29 +2,29 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.power.Power;
+import competence.Competence;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.InvokePowerProtocol;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.InvokePowerRequestMessage;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.PowerArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokepowerprotocol.PowerResultMessage;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
+import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * An 'Invoke power' protocol responder party (new version).
+ * An 'Invoke competence' protocol responder party (new version).
  * @author Lukáš Kúdela
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Role_InvokePowerResponder<TArgument extends Serializable,
+public class Role_InvokeCompetenceResponder<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Role> {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -36,35 +36,35 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
     private AID player;
     
     /**
-     * The name of the power.
+     * The name of the competence.
      */
-    private String powerName;
+    private String competenceName;
     
     /**
-     * The 'Receive power argument' state.
+     * The 'Receive competence argument' state.
      */
-    private State receivePowerArgument;
+    private State receiveCompetenceArgument;
     
     /**
-     * The power state.
+     * The competence state.
      */
-    private Power power;
+    private Competence competence;
     
     /**
-     * The 'Send power result' state.
+     * The 'Send competence result' state.
      */
-    private State sendPowerResult;
+    private State sendCompetenceResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Role_InvokePowerResponder class.
+     * Initializes a new instance of the Role_InvokeCompetenceResponder class.
      * @param aclMessage the received ACL message
      */
-    public Role_InvokePowerResponder(ACLMessage aclMessage) {
-        super(InvokePowerProtocol.getInstance(), aclMessage);
+    public Role_InvokeCompetenceResponder(ACLMessage aclMessage) {
+        super(InvokeCompetenceProtocol.getInstance(), aclMessage);
         
         player = getACLMessage().getSender();
         
@@ -81,10 +81,10 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
-        State receiveInvokePowerRequest = new ReceiveInvokePowerRequest();
-        State sendPowerArgumentRequest = new SendPowerArgumentRequest();
-        receivePowerArgument = new ReceivePowerArgument();
-        sendPowerResult = new SendPowerResult();
+        State receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
+        State sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
+        receiveCompetenceArgument = new ReceiveCompetenceArgument();
+        sendCompetenceResult = new SendCompetenceResult();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -92,68 +92,68 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         // Register states.
         registerFirstState(initialize);
         
-        registerState(receiveInvokePowerRequest);      
-        registerState(sendPowerArgumentRequest);
-        registerState(receivePowerArgument);
-        registerState(sendPowerResult);
+        registerState(receiveInvokeCompetenceRequest);      
+        registerState(sendCompetenceArgumentRequest);
+        registerState(receiveCompetenceArgument);
+        registerState(sendCompetenceResult);
         
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokePowerRequest);
+        initialize.registerTransition(MyInitialize.OK, receiveInvokeCompetenceRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        receiveInvokePowerRequest.registerDefaultTransition(sendPowerArgumentRequest);
+        receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);
         
-        sendPowerArgumentRequest.registerTransition(SendPowerArgumentRequest.SUCCESS, receivePowerArgument);
-        sendPowerArgumentRequest.registerTransition(SendPowerArgumentRequest.FAILURE, failureEnd);
+        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.SUCCESS, receiveCompetenceArgument);
+        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);
         
-        sendPowerResult.registerTransition(SendPowerResult.SUCCESS, successEnd);
-        sendPowerResult.registerTransition(SendPowerResult.FAILURE, failureEnd);
+        sendCompetenceResult.registerTransition(SendCompetenceResult.SUCCESS, successEnd);
+        sendCompetenceResult.registerTransition(SendCompetenceResult.FAILURE, failureEnd);
     }
     
     /**
-     * Selects a power specified by its name.
-     * @param powerName the name of the power to select.
+     * Selects a competence specified by its name.
+     * @param competenceName the name of the competence to select.
      */
-    private void selectPower(String powerName) {
-        //System.out.println("----- ADDING POWER: " + powerName + " -----");
-        power = createPower(powerName);
+    private void selectCompetence(String competenceName) {
+        //System.out.println("----- ADDING COMPETENCE: " + competenceName + " -----");
+        competence = createCompetence(competenceName);
         
-        // Register the power-related states.
-        registerState(power);
+        // Register the competence-related states.
+        registerState(competence);
         
-        // Register the power-related transitions.
-        receivePowerArgument.registerDefaultTransition(power);
-        power.registerDefaultTransition(sendPowerResult);
-        //System.out.println("----- POWER ADDED -----");
+        // Register the competence-related transitions.
+        receiveCompetenceArgument.registerDefaultTransition(competence);
+        competence.registerDefaultTransition(sendCompetenceResult);
+        //System.out.println("----- COMPETENCE ADDED -----");
     }
     
     /**
-     * Create a power specified by its name.
-     * @param powerName the name of the power
-     * @return the power
+     * Create a competence specified by its name.
+     * @param competenceName the name of the competence
+     * @return the competence
      */
-    private Power createPower(String powerName) {
-        //System.out.println("----- CREATING POWER: " + powerName + " -----");
-        Class powerClass = getMyAgent().powers.get(powerName);
-        //System.out.println("----- POWER CLASS: " + powerClass + " -----");
+    private Competence createCompetence(String competenceName) {
+        //System.out.println("----- CREATING COMPETENCE: " + competenceName + " -----");
+        Class competenceClass = getMyAgent().competences.get(competenceName);
+        //System.out.println("----- COMPETENCE CLASS: " + competenceClass + " -----");
         
-        // Get the power constructor.
-        Constructor powerConstructor = null;
+        // Get the competence constructor.
+        Constructor competenceConstructor = null;
         try {
-            powerConstructor = powerClass.getConstructor();
+            competenceConstructor = competenceClass.getConstructor();
         } catch (NoSuchMethodException ex) {
             ex.printStackTrace();
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
                 
-        // Instantiate the power.
-        Power power = null;
+        // Instantiate the competence.
+        Competence competence = null;
         try {
-            power = (Power)powerConstructor.newInstance();
+            competence = (Competence)competenceConstructor.newInstance();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -163,9 +163,9 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        //System.out.println("----- POWER CREATED -----");
+        //System.out.println("----- COMPETENCE CREATED -----");
         
-        return power;
+        return competence;
     }
     
     // </editor-fold>
@@ -179,7 +179,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Invoke power' protocol (id = %1$s).",
+                "Responding to the 'Invoke competence' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (player.equals(getMyAgent().playerAID)) {
@@ -195,23 +195,23 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         // </editor-fold>
     }
     
-    private class ReceiveInvokePowerRequest extends OneShotBehaviourState {
+    private class ReceiveInvokeCompetenceRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            InvokePowerRequestMessage message = new InvokePowerRequestMessage();
+            InvokeCompetenceRequestMessage message = new InvokeCompetenceRequestMessage();
             message.parseACLMessage(getACLMessage());
             
-            powerName = message.getPower();                       
-            selectPower(powerName);
+            competenceName = message.getCompetence();                       
+            selectCompetence(competenceName);
         }
         
         // </editor-fold>
     }
     
-    private class SendPowerArgumentRequest
+    private class SendCompetenceArgumentRequest
         extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -227,7 +227,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Send power argument request.");
+            getMyAgent().logInfo("Send competence argument request.");
         }
 
         @Override
@@ -243,19 +243,19 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Power argument request sent.");
+            getMyAgent().logInfo("Competence argument request sent.");
         }
         
         // </editor-fold>
     }
     
-    private class ReceivePowerArgument
-        extends SingleReceiverState<PowerArgumentMessage> {
+    private class ReceiveCompetenceArgument
+        extends SingleReceiverState<CompetenceArgumentMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceivePowerArgument() {
-            super(new PowerArgumentMessage.Factory());
+        ReceiveCompetenceArgument() {
+            super(new CompetenceArgumentMessage.Factory());
         }
         
         // </editor-fold>
@@ -273,24 +273,24 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving power argument.");
+            getMyAgent().logInfo("Receiving competence argument.");
         }
         
         @Override
-        protected void handleMessage(PowerArgumentMessage message) {
-            power.setArgument(message.getArgument());
+        protected void handleMessage(CompetenceArgumentMessage message) {
+            competence.setArgument(message.getArgument());
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Power argument received.");
+            getMyAgent().logInfo("Competence argument received.");
         }
         
         // </editor-fold>
     }
     
-    private class SendPowerResult
-        extends SendSuccessOrFailure<PowerResultMessage> {
+    private class SendCompetenceResult
+        extends SendSuccessOrFailure<CompetenceResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -305,7 +305,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending power result.");
+            getMyAgent().logInfo("Sending competence result.");
         }
 
         @Override
@@ -314,15 +314,15 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         }
         
         @Override
-        protected PowerResultMessage prepareMessage() {
-            PowerResultMessage message = new PowerResultMessage();
-            message.setResult(power.getResult());
+        protected CompetenceResultMessage prepareMessage() {
+            CompetenceResultMessage message = new CompetenceResultMessage();
+            message.setResult(competence.getResult());
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Power result sent.");
+            getMyAgent().logInfo("Competence result sent.");
         }
         
         // </editor-fold>
@@ -334,7 +334,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke power' responder party succeeded.");
+            getMyAgent().logInfo("The 'Invoke competence' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -346,7 +346,7 @@ public class Role_InvokePowerResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke power' responder party failed.");
+            getMyAgent().logInfo("The 'Invoke competence' responder party failed.");
         }
         
         // </editor-fold>

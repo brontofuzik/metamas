@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.player.requirement.Requirement;
+import thespian4jade.core.player.responsibility.Responsibility;
 import jade.core.AID;
 import thespian4jade.lang.Message;
 import thespian4jade.proto.Initialize;
@@ -10,22 +10,22 @@ import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.RequirementArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementProtocol;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.InvokeRequirementRequestMessage;
-import thespian4jade.proto.roleprotocol.invokerequirementprotocol.RequirementResultMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
+import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * A 'Invoke requirement' protocol responder party (new version).
+ * A 'Invoke responsibility' protocol responder party (new version).
  * @author Lukáš Kúdela
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokeRequirementResponder<TArgument extends Serializable,
+public class Player_InvokeResponsibilityResponder<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Player> {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -36,35 +36,35 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
     private AID role;
     
     /**
-     * The name of the requirement.
+     * The name of the responsibility.
      */
-    private String requirementName;
+    private String responsibilityName;
     
     /**
-     * The 'Receive requirement argument' state.
+     * The 'Receive responsibility argument' state.
      */
-    private State receiveRequirementArgument;
+    private State receiveResponsibilityArgument;
     
     /**
-     * The requirement state.
+     * The responsibility state.
      */
-    private Requirement<TArgument, TResult> requirement;
+    private Responsibility<TArgument, TResult> responsibility;
     
     /**
-     * The 'Send requirement result' state.
+     * The 'Send responsibility result' state.
      */
-    private State sendRequirementResult;
+    private State sendResponsibilityResult;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Player_InvokeRequirementResponder class.
+     * Initializes a new instance of the Player_InvokeResponsibilityResponder class.
      * @param aclMessage the ACL message
      */
-    public Player_InvokeRequirementResponder(ACLMessage aclMessage) {
-        super(InvokeRequirementProtocol.getInstance(), aclMessage);
+    public Player_InvokeResponsibilityResponder(ACLMessage aclMessage) {
+        super(InvokeResponsibilityProtocol.getInstance(), aclMessage);
 
         role = getACLMessage().getSender();
         
@@ -81,10 +81,10 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
     private void buildFSM() {        
          // ----- States -----
         State initialize = new MyInitialize();
-        State receiveInvokeRequirementRequest = new ReceiveInvokeRequirementRequest();
-        State sendRequirementArgumentRequest = new SendRequirementArgumentRequest();
-        receiveRequirementArgument = new ReceiveRequirementArgument();
-        sendRequirementResult = new SendRequirementResult();
+        State receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
+        State sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
+        receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
+        sendResponsibilityResult = new SendResponsibilityResult();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -92,68 +92,68 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         // Register states.
         registerFirstState(initialize);
         
-        registerState(receiveInvokeRequirementRequest);    
-        registerState(sendRequirementArgumentRequest);
-        registerState(receiveRequirementArgument);
-        registerState(sendRequirementResult);
+        registerState(receiveInvokeResponsibilityRequest);    
+        registerState(sendResponsibilityArgumentRequest);
+        registerState(receiveResponsibilityArgument);
+        registerState(sendResponsibilityResult);
         
         registerLastState(successEnd);     
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokeRequirementRequest);
+        initialize.registerTransition(MyInitialize.OK, receiveInvokeResponsibilityRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        receiveInvokeRequirementRequest.registerDefaultTransition(sendRequirementArgumentRequest);
+        receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);
         
-        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.SUCCESS, receiveRequirementArgument);
-        sendRequirementArgumentRequest.registerTransition(SendRequirementArgumentRequest.FAILURE, failureEnd);
+        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.SUCCESS, receiveResponsibilityArgument);
+        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);
         
-        sendRequirementResult.registerTransition(SendRequirementResult.SUCCESS, successEnd);
-        sendRequirementResult.registerTransition(SendRequirementResult.FAILURE, failureEnd);
+        sendResponsibilityResult.registerTransition(SendResponsibilityResult.SUCCESS, successEnd);
+        sendResponsibilityResult.registerTransition(SendResponsibilityResult.FAILURE, failureEnd);
     }
     
     /**
-     * Selets a requirement specified by its name
-     * @param requirementName the name of the requirement to select
+     * Selets a responsibility specified by its name
+     * @param responsibilityName the name of the responsibility to select
      */
-    private void selectRequirement(String requirementName) {
-        requirement = createRequirement(requirementName);
+    private void selectResponsibility(String responsibilityName) {
+        responsibility = createResponsibility(responsibilityName);
         
-        // Register the requirement-related states.
-        registerState(requirement);
+        // Register the responsibility-related states.
+        registerState(responsibility);
         
-        // Register the requirement-related transitions.
-        receiveRequirementArgument.registerDefaultTransition(requirement);
-        requirement.registerDefaultTransition(sendRequirementResult);
+        // Register the responsibility-related transitions.
+        receiveResponsibilityArgument.registerDefaultTransition(responsibility);
+        responsibility.registerDefaultTransition(sendResponsibilityResult);
     }
     
     /**
-     * Creates a requirement specified by its name
-     * @param requirementName the name of the requirement
-     * @return the requirement
+     * Creates a responsibility specified by its name
+     * @param responsibilityName the name of the responsibility
+     * @return the responsibility
      */
-    private Requirement createRequirement(String requirementName) {
-        //System.out.println("----- REQUIREMENT NAME: " + requirementName + " -----");
+    private Responsibility createResponsibility(String responsibilityName) {
+        //System.out.println("----- RESPONSIBILITY NAME: " + responsibilityName + " -----");
         
-        Class requirementClass = getMyAgent().responsibilities.get(requirementName);
-        //System.out.println("----- REQUIREMENT CLASS: " + requirementClass + " -----");
+        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
+        //System.out.println("----- RESPONSIBILITY CLASS: " + responsibilityClass + " -----");
         
-        // Get the requirement constructor.
-        Constructor requirementConstructor = null;
+        // Get the responsibility constructor.
+        Constructor responsibilityConstructor = null;
         try {
-            requirementConstructor = requirementClass.getConstructor();
+            responsibilityConstructor = responsibilityClass.getConstructor();
         } catch (NoSuchMethodException ex) {
             ex.printStackTrace();
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
-        //System.out.println("----- REQUIREMENT CONSTRUCTOR: " + requirementConstructor + " -----");
+        //System.out.println("----- RESPONSIBILITY CONSTRUCTOR: " + responsibilityConstructor + " -----");
         
-        // Instantiate the requirement.
-        Requirement requirement = null;
+        // Instantiate the responsibility.
+        Responsibility responsibility = null;
         try {
-            requirement = (Requirement)requirementConstructor.newInstance();
+            responsibility = (Responsibility)responsibilityConstructor.newInstance();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -163,9 +163,9 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        //System.out.println("----- REQUIREMENT: " + requirement + " -----");
+        //System.out.println("----- RESPONSIBILITY: " + responsibility + " -----");
         
-        return requirement;
+        return responsibility;
     }
     
     // </editor-fold>
@@ -179,7 +179,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Invoke requirement' protocol (id = %1$s).",
+                "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (role.equals(getMyAgent().knowledgeBase.getActiveRole().getRoleAID())) {
@@ -195,23 +195,23 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         // </editor-fold>
     }
     
-    private class ReceiveInvokeRequirementRequest extends OneShotBehaviourState {
+    private class ReceiveInvokeResponsibilityRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            InvokeRequirementRequestMessage message = new InvokeRequirementRequestMessage();
+            InvokeResponsibilityRequestMessage message = new InvokeResponsibilityRequestMessage();
             message.parseACLMessage(getACLMessage());
             
-            requirementName = message.getRequirement();         
-            selectRequirement(requirementName);
+            responsibilityName = message.getResponsibility();         
+            selectResponsibility(responsibilityName);
         }
         
         // </editor-fold>
     }
     
-    private class SendRequirementArgumentRequest
+    private class SendResponsibilityArgumentRequest
         extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -227,7 +227,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Send requirement argument request.");
+            getMyAgent().logInfo("Send responsibility argument request.");
         }
 
         @Override
@@ -243,19 +243,19 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement argument request sent.");
+            getMyAgent().logInfo("Responsibility argument request sent.");
         }
         
         // </editor-fold>
     }
     
-    private class ReceiveRequirementArgument
-        extends SingleReceiverState<RequirementArgumentMessage<TArgument>> {
+    private class ReceiveResponsibilityArgument
+        extends SingleReceiverState<ResponsibilityArgumentMessage<TArgument>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveRequirementArgument() {
-            super(new RequirementArgumentMessage.Factory<TArgument>());
+        ReceiveResponsibilityArgument() {
+            super(new ResponsibilityArgumentMessage.Factory<TArgument>());
         }
         
         // </editor-fold>
@@ -273,28 +273,28 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving requirement argument.");
+            getMyAgent().logInfo("Receiving responsibility argument.");
         }
         
         /**
-         * Handles the received 'Requirement argument' message.
-         * @param message the received 'Requirement argument' message
+         * Handles the received 'Responsibility argument' message.
+         * @param message the received 'Responsibility argument' message
          */
         @Override
-        protected void handleMessage(RequirementArgumentMessage<TArgument> message) {
-            requirement.setArgument(message.getArgument());
+        protected void handleMessage(ResponsibilityArgumentMessage<TArgument> message) {
+            responsibility.setArgument(message.getArgument());
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement argument received.");
+            getMyAgent().logInfo("Responsibility argument received.");
         }
         
         // </editor-fold>
     }
     
-    private class SendRequirementResult
-        extends SendSuccessOrFailure<RequirementResultMessage> {
+    private class SendResponsibilityResult
+        extends SendSuccessOrFailure<ResponsibilityResultMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -309,7 +309,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending requirement result.");
+            getMyAgent().logInfo("Sending responsibility result.");
         }
 
         @Override
@@ -318,15 +318,15 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         }
         
         @Override
-        protected RequirementResultMessage prepareMessage() {
-            RequirementResultMessage message = new RequirementResultMessage();
-            message.setResult(requirement.getResult());
+        protected ResponsibilityResultMessage prepareMessage() {
+            ResponsibilityResultMessage message = new ResponsibilityResultMessage();
+            message.setResult(responsibility.getResult());
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Requirement result sent.");
+            getMyAgent().logInfo("Responsibility result sent.");
         }
         
         // </editor-fold>
@@ -338,7 +338,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke requirement' responder party succeeded.");
+            getMyAgent().logInfo("The 'Invoke responsibility' responder party succeeded.");
         }
         
         // </editor-fold>
@@ -350,7 +350,7 @@ public class Player_InvokeRequirementResponder<TArgument extends Serializable,
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke requirement' responder party failed.");
+            getMyAgent().logInfo("The 'Invoke responsibility' responder party failed.");
         }
         
         // </editor-fold>
