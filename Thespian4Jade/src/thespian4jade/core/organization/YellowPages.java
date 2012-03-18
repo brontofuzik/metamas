@@ -59,7 +59,7 @@ public class YellowPages {
         return localName;
     }
     
-    // TODO Replace the List interface with Java-equivalent of .NET's IEnumerable interface.
+    // TODO (priority: low) Replace the List interface with Java-equivalent of .NET's IEnumerable interface.
     private static List<ServiceDescription> getAgentServices(DFAgentDescription agentDescription) {
         List<ServiceDescription> serviceDescriptions = new ArrayList<ServiceDescription>();
         Iterator iterator = agentDescription.getAllServices();

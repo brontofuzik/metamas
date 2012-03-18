@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 /**
  * A 'Responsibility request' message.
  * A 'Responsibility request' message is a message sent from a role to a player
- * containing ... TODO Finish.
+ * containing a request to invoke responsibility.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%

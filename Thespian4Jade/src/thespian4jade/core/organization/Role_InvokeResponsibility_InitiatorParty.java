@@ -75,10 +75,7 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
         this(responsibilityName, null);
     }
-    
-    // TODO Make this constructor the default one.
-
-    
+        
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">

@@ -79,7 +79,7 @@ public class PlayerKnowledgeBase {
         assert competenceName != null && !competenceName.isEmpty();
         // -------------------------
         
-        // TODO Implement.
+        // TODO (priority: medium) Implement.
         return true;
     }
     

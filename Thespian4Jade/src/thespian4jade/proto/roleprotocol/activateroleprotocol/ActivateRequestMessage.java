@@ -29,7 +29,7 @@ public class ActivateRequestMessage extends TextMessage {
 
     @Override
     public String generateContent() {
-        return "activate";
+        return "activate-role";
     }
 
     @Override

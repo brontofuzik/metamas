@@ -47,7 +47,6 @@ public abstract class OneShotBehaviourState extends OneShotBehaviour implements 
     
     // ----- PRIVATE -----
     
-    // TODO Replace with the getParty() getter.
     private FSMBehaviour getParentFSM() {
         return (FSMBehaviour)getParent();
     }

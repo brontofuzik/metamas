@@ -26,7 +26,7 @@ public class DeactivateRequestMessage extends TextMessage {
 
     @Override
     public String generateContent() {
-        return "deactivate";
+        return "deactivate-role";
     }
 
     @Override
