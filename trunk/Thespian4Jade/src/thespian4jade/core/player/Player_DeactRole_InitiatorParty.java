@@ -52,6 +52,9 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
@@ -62,20 +65,16 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         // ------------------
 
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);       
         registerState(sendDeactRequest);
-        registerState(receiveDeactReply);
-        
+        registerState(receiveDeactReply);        
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendDeactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        
-        sendDeactRequest.registerDefaultTransition(receiveDeactReply);
-            
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
+        sendDeactRequest.registerDefaultTransition(receiveDeactReply);            
         receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, successEnd);
         receiveDeactReply.registerTransition(ReceiveDeactReply.REFUSE, failureEnd);
     }

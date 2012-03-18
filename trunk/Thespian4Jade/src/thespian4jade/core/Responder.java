@@ -50,10 +50,8 @@ public abstract class Responder extends FSMBehaviour {
         addResponder(protocol, ACLMessage.REQUEST);
     }
     
-    // ----- PRIVATE -----
-    
     /**
-     * Builds the finite state machine, i. e. registers the states and transitions.
+     * Builds the responder FSM.
      */
     private void buildFSM() {
         // Register the states.

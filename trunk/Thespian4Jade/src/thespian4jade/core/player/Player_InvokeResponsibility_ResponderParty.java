@@ -76,7 +76,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the finite state machine, i. e. registers the states and transitions.
+     * Builds the party FSM.
      */
     private void buildFSM() {        
          // ----- States -----
@@ -90,25 +90,20 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // ------------------
         
         // Register states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);        
         registerState(receiveInvokeResponsibilityRequest);    
         registerState(sendResponsibilityArgumentRequest);
         registerState(receiveResponsibilityArgument);
-        registerState(sendResponsibilityResult);
-        
+        registerState(sendResponsibilityResult);      
         registerLastState(successEnd);     
         registerLastState(failureEnd);
         
         // Register transitions.
         initialize.registerTransition(MyInitialize.OK, receiveInvokeResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);      
         sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.SUCCESS, receiveResponsibilityArgument);
-        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);
-        
+        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);       
         sendResponsibilityResult.registerTransition(SendResponsibilityResult.SUCCESS, successEnd);
         sendResponsibilityResult.registerTransition(SendResponsibilityResult.FAILURE, failureEnd);
     }

@@ -76,7 +76,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the finite state machine.
+     * Builds the party FSM.
      */
     private void buildFSM() {
         // ----- States -----
@@ -90,25 +90,20 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // ------------------
         
         // Register states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);       
         registerState(receiveInvokeCompetenceRequest);      
         registerState(sendCompetenceArgumentRequest);
         registerState(receiveCompetenceArgument);
-        registerState(sendCompetenceResult);
-        
+        registerState(sendCompetenceResult);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register transitions.
         initialize.registerTransition(MyInitialize.OK, receiveInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
-        receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);       
         sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.SUCCESS, receiveCompetenceArgument);
-        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);
-        
+        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);       
         sendCompetenceResult.registerTransition(SendCompetenceResult.SUCCESS, successEnd);
         sendCompetenceResult.registerTransition(SendCompetenceResult.FAILURE, failureEnd);
     }

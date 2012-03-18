@@ -49,6 +49,9 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
