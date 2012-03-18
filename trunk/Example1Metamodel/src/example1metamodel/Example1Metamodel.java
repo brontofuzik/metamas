@@ -78,12 +78,10 @@ public class Example1Metamodel {
     }
     
     private static FSM createInvokeFunctionInitiatorFSM() {
-         // TODO Implement.
         throw new UnsupportedOperationException("Not yet implemented");       
     }
     
     private static FSM createInvokeFunctionResponderFMS() {
-        // TODO Implement.
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
@@ -112,7 +110,6 @@ public class Example1Metamodel {
     }
     
     private static FSM createInvokeFunctionCompetenceFSM() {
-        // TODO Implement.
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
