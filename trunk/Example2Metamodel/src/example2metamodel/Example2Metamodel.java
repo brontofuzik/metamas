@@ -43,7 +43,7 @@ public class Example2Metamodel {
         // ---------- Organizations ----------
         
         OrganizationType evaluateExpressionOrganizationType = createEvaluateExpressionOrganizationType();        
-        example2Mas.addOrganizationType(createEvaluateExpressionOrganizationType());
+        example2Mas.addOrganizationType(evaluateExpressionOrganizationType);
         example2Mas.addOrganization(evaluateExpressionOrganizationType.createOrganization("evaluateExpression_Organization"));
 
         // ---------- Players ----------
@@ -66,15 +66,15 @@ public class Example2Metamodel {
 
         // ---------- Parties ----------
         
-        // The 'Evaluate expression' initiator party.
-        Party invokeFunctionProtocolInitiatorParty = new Party("InvokeFunction_InitiatorParty");
-        invokeFunctionProtocolInitiatorParty.setFSM(createEvaluateExpressionInitiatorFSM());
-        evaluateExpressionProtocol.setInitiatorParty(invokeFunctionProtocolInitiatorParty);
+        // The initiator party.
+        Party initiatorParty = new Party("InvokeFunction_InitiatorParty");
+        initiatorParty.setFSM(createEvaluateExpressionInitiatorFSM());
+        evaluateExpressionProtocol.setInitiatorParty(initiatorParty);
 
-        // The 'Evaluate expression' responder party.
-        Party invokeFunctionResponderParty = new Party("InvokeFunctionResponder");
-        invokeFunctionResponderParty.setFSM(createEvaluateExpressionResponderFSM());
-        evaluateExpressionProtocol.setResponderParty(invokeFunctionResponderParty);
+        // The responder party.
+        Party responderParty = new Party("InvokeFunction_ResponderParty");
+        responderParty.setFSM(createEvaluateExpressionResponderFSM());
+        evaluateExpressionProtocol.setResponderParty(responderParty);
 
         // ---------- Messages ----------
         
