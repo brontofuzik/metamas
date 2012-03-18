@@ -2,7 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import competence.Competence;
+import thespian4jade.core.organization.competence.Competence;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Role_InvokeCompetenceResponder<TArgument extends Serializable,
+public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Role> {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -63,7 +63,7 @@ public class Role_InvokeCompetenceResponder<TArgument extends Serializable,
      * Initializes a new instance of the Role_InvokeCompetenceResponder class.
      * @param aclMessage the received ACL message
      */
-    public Role_InvokeCompetenceResponder(ACLMessage aclMessage) {
+    public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
         super(InvokeCompetenceProtocol.getInstance(), aclMessage);
         
         player = getACLMessage().getSender();

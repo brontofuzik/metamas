@@ -5,21 +5,21 @@ import thespian4jade.lang.Message;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
+import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
+import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.State;
 import thespian4jade.proto.ReceiveAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * An 'Activate role' protocol initiator party (new version).
+ * A 'Deactivate role' protocol initiator (new version).
  * @author Lukáš Kúdela
- * @since 2011-12-09
+ * @since 2011-12-20
  * @version %I% %G%
  */
-public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
-
+public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player> {
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     /** The role name. */
@@ -29,11 +29,11 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
     private AID roleAID;
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Player_ActivateRoleInitiator(String roleName) {
-        super(ActivateRoleProtocol.getInstance());
+    public Player_DeactivateRole_InitiatorParty(String roleName) {
+        super(DeactivateRoleProtocol.getInstance());
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
@@ -44,14 +44,14 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
     }
 
     // </editor-fold>
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     private void registerStatesAndtransitions() {
         // ----- States -----
         State initialize = new MyInitialize();
-        State sendActivateRequest = new SendActivateRequest();
-        State receiveActivateReply = new ReceiveActivateReply();
+        State sendDeactivateRequest = new SendDeactivateRequest();
+        State receiveDeactivateReply = new ReceiveDeactivateReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -59,20 +59,20 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
         // Register the states.
         registerFirstState(initialize);
         
-        registerState(sendActivateRequest);
-        registerState(receiveActivateReply);
+        registerState(sendDeactivateRequest);
+        registerState(receiveDeactivateReply);
         
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendActivateRequest);
+        initialize.registerTransition(MyInitialize.OK, sendDeactivateRequest);
         initialize.registerTransition(MyInitialize.FAIL, failureEnd);
         
-        sendActivateRequest.registerDefaultTransition(receiveActivateReply);
+        sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 
-        receiveActivateReply.registerTransition(ReceiveActivateReply.AGREE, successEnd); 
-        receiveActivateReply.registerTransition(ReceiveActivateReply.REFUSE, failureEnd);
+        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.AGREE, successEnd); 
+        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.REFUSE, failureEnd);
     }
 
     // </editor-fold>
@@ -86,17 +86,17 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Activate role' (%1$s) protocol.",
+                "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
-            // Check if the role can be activated.
-            if (getMyAgent().knowledgeBase.canActivateRole(roleName)) {
-                // The role can be activated.
+            if (getMyAgent().knowledgeBase.canDeactivateRole(roleName)) {
+                // The role can be deactivated.
                 roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
                 return OK;
             } else {
-                // The role can not be activated.
-                String message = String.format("Error activating the role '%1$s'. It is not enacted.",
+                // The role can not be deactivated.
+                String message = String.format(
+                    "I cannot deactivate the role '%1$s' because I do not play it.",
                     roleName);
                 return FAIL;
             }
@@ -106,11 +106,11 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Send activate request' (single sender) state.
-     * A state in which the 'Activate request' message is sent.
+     * 
      */
-    private class SendActivateRequest extends SingleSenderState<ActivateRequestMessage> {
-
+    private class SendDeactivateRequest
+        extends SingleSenderState<DeactivateRequestMessage> {
+        
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -121,31 +121,30 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending activate request.");
+            getMyAgent().logInfo("Sending deactivate request.");
         }
         
         @Override
-        protected ActivateRequestMessage prepareMessage() {
-            ActivateRequestMessage message = new ActivateRequestMessage();
+        protected DeactivateRequestMessage prepareMessage() {
+            DeactivateRequestMessage message = new DeactivateRequestMessage();
             return message;
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Activate request sent.");
+            getMyAgent().logInfo("Deactivate request sent.");
         }
-
+        
         // </editor-fold>
     }
     
     /**
-     * The 'Receive activate reply' (multi sender) state.
-     * A state in which the 'Activate reply' message is received.
+     * 
      */
-    private class ReceiveActivateReply extends ReceiveAgreeOrRefuse {
+    private class ReceiveDeactivateReply extends ReceiveAgreeOrRefuse {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -157,10 +156,10 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
         // </editor-fold>
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Receiving activate reply.");
+            getMyAgent().logInfo("Receiving deactivate reply.");
         }
         
         /**
@@ -169,20 +168,20 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.activateRole(roleName);
+            getMyAgent().knowledgeBase.deactivateRole();
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Activate reply received.");
-        }
-
+            getMyAgent().logInfo("Deactivate reply received.");
+        }    
+        
         // </editor-fold>
     }
-        
+    
     /**
      * The 'Success end' (simple) state.
-     * A state in which the 'Activate role' protocol initiator party succeeds.
+     * A state in which the 'Deactivate role' protocol initiator party succeeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -190,7 +189,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role initiator party succeeded.");
+            getMyAgent().logInfo("Deactivate role initiator party succeeded.");
         }
 
         // </editor-fold>
@@ -198,7 +197,7 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
         
     /**
      * The 'Failure end' (simple) state.
-     * A state in which the 'Activate role' protocol initiator party fails.
+     * A state in which the 'Deactivate role' protocol initiator party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 
@@ -206,11 +205,11 @@ public class Player_ActivateRoleInitiator extends InitiatorParty<Player> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role initiator party failed.");
+            getMyAgent().logInfo("Deactivate role initiator party failed.");
         }
 
         // </editor-fold>
     }
-        
+    
     // </editor-fold>
 }

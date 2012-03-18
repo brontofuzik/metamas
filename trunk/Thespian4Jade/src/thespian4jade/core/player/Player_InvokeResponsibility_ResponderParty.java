@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokeResponsibilityResponder<TArgument extends Serializable,
+public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Player> {
      
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -63,7 +63,7 @@ public class Player_InvokeResponsibilityResponder<TArgument extends Serializable
      * Initializes a new instance of the Player_InvokeResponsibilityResponder class.
      * @param aclMessage the ACL message
      */
-    public Player_InvokeResponsibilityResponder(ACLMessage aclMessage) {
+    public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {
         super(InvokeResponsibilityProtocol.getInstance(), aclMessage);
 
         role = getACLMessage().getSender();

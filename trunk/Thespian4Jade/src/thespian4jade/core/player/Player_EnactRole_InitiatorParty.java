@@ -21,7 +21,7 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
  * @since 2011-12-11
  * @version %I% %G%
  */
-public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
+public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -41,7 +41,7 @@ public class Player_EnactRoleInitiator extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public Player_EnactRoleInitiator(String organizationName, String roleName) {
+    public Player_EnactRole_InitiatorParty(String organizationName, String roleName) {
         super(EnactRoleProtocol.getInstance());
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();

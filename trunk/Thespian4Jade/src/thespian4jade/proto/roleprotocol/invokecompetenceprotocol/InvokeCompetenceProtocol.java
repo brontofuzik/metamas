@@ -1,8 +1,8 @@
 package thespian4jade.proto.roleprotocol.invokecompetenceprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Role_InvokeCompetenceResponder;
-import thespian4jade.core.player.Player_InvokeCompetenceInitiator;
+import thespian4jade.core.organization.Role_InvokeCompetence_ResponderParty;
+import thespian4jade.core.player.Player_InvokeCompetence_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
@@ -51,7 +51,7 @@ public class InvokeCompetenceProtocol extends Protocol {
     public InitiatorParty createInitiatorParty(Object[] arguments) {
         String competenceName = (String)arguments[0];
         Serializable argument = (Serializable)arguments[1];
-        return new Player_InvokeCompetenceInitiator(competenceName, argument);
+        return new Player_InvokeCompetence_InitiatorParty(competenceName, argument);
     }
 
     /**
@@ -61,7 +61,7 @@ public class InvokeCompetenceProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Role_InvokeCompetenceResponder(message);
+        return new Role_InvokeCompetence_ResponderParty(message);
     }
     
     // </editor-fold>

@@ -20,7 +20,7 @@ import java.io.Serializable;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokeCompetenceInitiator<TArgument extends Serializable,
+public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializable,
     TResult extends Serializable> extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -54,7 +54,7 @@ public class Player_InvokeCompetenceInitiator<TArgument extends Serializable,
      * @param competenceName the name of the competence
      * @param competenceArgument the competence argument
      */
-    public Player_InvokeCompetenceInitiator(String competenceName, TArgument competenceArgument) {
+    public Player_InvokeCompetence_InitiatorParty(String competenceName, TArgument competenceArgument) {
         super(InvokeCompetenceProtocol.getInstance());
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();
@@ -70,7 +70,7 @@ public class Player_InvokeCompetenceInitiator<TArgument extends Serializable,
      * Initializes a new instance of the Player_InvokeCompetenceInitiator class.
      * @param competenceName the name of the competence
      */
-    public Player_InvokeCompetenceInitiator(String competenceName) {
+    public Player_InvokeCompetence_InitiatorParty(String competenceName) {
         this(competenceName, null);
     }
  

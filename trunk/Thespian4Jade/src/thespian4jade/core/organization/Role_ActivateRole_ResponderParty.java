@@ -4,19 +4,19 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
+import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
+import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import thespian4jade.proto.jadeextensions.State;
 import thespian4jade.proto.SendAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
 /**
- * A 'Deactivate role' protocol responder (new version).
+ * An 'Activate role' protocol responder party.
  * @author Lukáš Kúdela
- * @since 2011-12-20
+ * @since 2011-12-10
  * @version %I% %G%
  */
-public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
+public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -26,11 +26,11 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Role_DeactivateRoleResponder(ACLMessage aclMessage) {
-        super(DeactivateRoleProtocol.getInstance(), aclMessage);
+    public Role_ActivateRole_ResponderParty(ACLMessage aclMessage) {
+        super(ActivateRoleProtocol.getInstance(), aclMessage);
         
         playerAID = getACLMessage().getSender();
-
+        
         buildFSM();
     }
 
@@ -41,8 +41,8 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
     private void buildFSM() {
         // ----- States -----
         State initialize = new MyInitialize();
-        State receiveActivateRequest = new ReceiveDeactivateRequest();
-        State sendActivateReply = new SendDeactivateReply();
+        State receiveActivateRequest = new ReceiveActivateRequest();
+        State sendActivateReply = new SendActivateReply();
         State successEnd = new SuccessEnd();
         State failureEnd = new FailureEnd();
         // ------------------
@@ -62,14 +62,14 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
         
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);
         
-        sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
-        sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
+        sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
+        sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
     }
 
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
+
     private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -77,7 +77,7 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Deactivate role' protocol (id = %1$s).",
+                "Responding to the 'Activate role' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
             if (playerAID.equals(getMyAgent().playerAID)) {
@@ -94,26 +94,28 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
     }
     
     /**
-     * The 'Receive deactivate request' (single receiver) state.
+     * The 'Receive activate request' (single receiver) state.
+     * A state in which the 'Activate request' message is received.
      */
-    private class ReceiveDeactivateRequest extends OneShotBehaviourState {
-        
+    private class ReceiveActivateRequest extends OneShotBehaviourState {
+
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+       
         @Override
         public void action() {
-            DeactivateRequestMessage message = new DeactivateRequestMessage();
+            ActivateRequestMessage message = new ActivateRequestMessage();
             message.parseACLMessage(getACLMessage());
         }
-        
+
         // </editor-fold>
     }
-    
+
     /**
-     * The 'Send deactivate reply' (multi sender) state.
+     * The 'Send activate reply' (multi sender) state.
+     * A state in which the 'Activate reply' message is sent.
      */
-    private class SendDeactivateReply extends SendAgreeOrRefuse {
-        
+    private class SendActivateReply extends SendAgreeOrRefuse {
+
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
@@ -124,15 +126,15 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+
         @Override
         protected void onEntry() {
-            getMyAgent().logInfo("Sending deactivate reply.");
+            getMyAgent().logInfo("Sending activate reply.");
         }
-        
+
         @Override
         protected int onManager() {
-            if (getMyAgent().isDeactivable()) {            
+            if (getMyAgent().isActivable()) {            
                 return SendAgreeOrRefuse.AGREE;
             } else {
                 return SendAgreeOrRefuse.REFUSE;
@@ -141,20 +143,20 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
         
         @Override
         protected void onAgree() {
-            getMyAgent().deactivate();
+            getMyAgent().activate();
         }
 
         @Override
         protected void onExit() {
-            getMyAgent().logInfo("Deactivate reply sent.");
+            getMyAgent().logInfo("Activate reply sent.");
         }
         
         // </editor-fold>
     }
-    
+
     /**
      * The 'Success end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party succeeds.
+     * A state in which the 'Activate role' protocol responder party secceeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -162,15 +164,15 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role responder party succeeded.");
+            getMyAgent().logInfo("Activate role responder party succeeded.");
         }
 
         // </editor-fold>
     }
-        
+
     /**
      * The 'Failure end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party fails.
+     * A state in which the 'Activate role' protocol responder party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 
@@ -178,11 +180,11 @@ public class Role_DeactivateRoleResponder extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role responder party failed.");
+            getMyAgent().logInfo("Activate role responder party failed.");
         }
 
         // </editor-fold>
     }
-    
+
     // </editor-fold>
 }
