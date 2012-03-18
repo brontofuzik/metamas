@@ -27,7 +27,7 @@ public class DutchAuction_InitiatorParty extends Auction_InitiatorParty {
     
     private boolean winnerDetermined;
     
-    private double finalPrice;
+    private double hammerPrice;
     
     private AID winnerAID;
     
@@ -71,7 +71,7 @@ public class DutchAuction_InitiatorParty extends Auction_InitiatorParty {
     @Override
     public AuctionResult getAuctionResult() {
         return winnerDetermined ?
-            AuctionResult.createPositiveAuctionResult(winnerAID, finalPrice) :
+            AuctionResult.createPositiveAuctionResult(winnerAID, hammerPrice) :
             AuctionResult.createNegativeAuctionResult();
     }
     

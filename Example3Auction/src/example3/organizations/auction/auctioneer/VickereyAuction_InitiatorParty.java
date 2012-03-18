@@ -1,9 +1,9 @@
 package example3.organizations.auction.auctioneer;
 
-import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
-import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.protocols.vickreyauction.VickreyAuctionProtocol;
+import jade.core.AID;
+import java.util.Map;
 
 /**
  * The 'Vickerey auction' protocol initiator party.
@@ -12,7 +12,7 @@ import example3.protocols.vickreyauction.VickreyAuctionProtocol;
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class VickereyAuction_InitiatorParty extends Auction_InitiatorParty {
+public class VickereyAuction_InitiatorParty extends SealedBidAuction_InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -33,24 +33,31 @@ public class VickereyAuction_InitiatorParty extends Auction_InitiatorParty {
         return AuctionType.VICKREY;
     }
     
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
     /**
-     * Sets the auction argument.
-     * @param argument the auction argument
+     * Determies the winner and the hammer price.
+     * @return <c>true</c> if the winner has been determined; <c>false</c> otherwise.
      */
     @Override
-    public void setAuctionArgument(AuctionArgument argument) {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * Gets the auction result
-     * @return the auction result
-     */
-    @Override
-    public AuctionResult getAuctionResult() {
-        // TODO Implement.
-        throw new UnsupportedOperationException("Not supported yet.");
+    protected boolean determineWinner() {
+        winner = null;
+        double winnerPrice = Double.MIN_VALUE;
+        hammerPrice = Double.MIN_VALUE;
+        
+        for (Map.Entry<AID, Double> entry : bids.entrySet()) {
+            if (entry.getValue() > winnerPrice) {
+                winner = entry.getKey();
+                hammerPrice = winnerPrice;
+                winnerPrice = entry.getValue();
+            } else if (entry.getValue() > hammerPrice) {
+                hammerPrice = entry.getValue();
+            }
+        }
+        
+        return hammerPrice >= reservationPrice;
     }
     
     // </editor-fold>

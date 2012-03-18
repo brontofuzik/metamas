@@ -57,7 +57,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     public EnvelopeAuction_ResponderParty(ACLMessage message) {
         super(EnvelopeAuctionProtocol.getInstance(), message);
         
-        // TODO Consider moving this initialization to the 'MyInitialize' state.
+        // TODO (priority: low) Consider moving this initialization to the 'MyInitialize' state.
         auctioneer = getACLMessage().getSender();
         
         buildFSM();
@@ -225,7 +225,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         @Override
         protected BidMessage prepareMessage() {
             BidMessage message = new BidMessage();
-            // TODO Also consider the situation when no bid is made.
+            // TODO (priority: low) Also consider the situation when no bid is made.
             message.setBid(bid);
             return message;
         }

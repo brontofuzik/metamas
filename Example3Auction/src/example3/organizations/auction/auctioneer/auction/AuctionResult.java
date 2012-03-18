@@ -28,21 +28,21 @@ public class AuctionResult implements Serializable {
     /**
      * The final price.
      */
-    private double finalPrice;
+    private double hammerPrice;
       
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     private AuctionResult(boolean winnerDetermined,
-        AID winnerAID, double finalPrice) {
+        AID winnerAID, double hammerPrice) {
         // ----- Preconditions -----
         assert !winnerDetermined || winnerAID != null;
-        assert !winnerDetermined || finalPrice > 0;
+        assert !winnerDetermined || hammerPrice > 0;
         // -------------------------
         
         this.winnerAID = winnerAID;
-        this.finalPrice = finalPrice;
+        this.hammerPrice = hammerPrice;
     }
     
     // </editor-fold>
@@ -53,14 +53,14 @@ public class AuctionResult implements Serializable {
         return winnerDetermined;
     }
     
-    public double getFinalPrice() {
+    public double getHammerPrice() {
         // ----- Preconditions -----
         if (!winnerDetermined) {
             throw new IllegalStateException("No final price. The winner has not been determined.");
         }
         // -------------------------
         
-        return finalPrice;
+        return hammerPrice;
     }
 
     public AID getWinnerAID() {
@@ -81,12 +81,12 @@ public class AuctionResult implements Serializable {
      * Creates a positive (successful) acution result.
      * Design pattern: Static factory method
      * @param winnerAID the AID of the auction winner
-     * @param finalPrice the final price
+     * @param hammerPrice the hammer price
      * @return the successful auction result
      */
     public static AuctionResult createPositiveAuctionResult(AID winnerAID,
-        double finalPrice) {
-        return new AuctionResult(true, winnerAID, finalPrice);
+        double hammerPrice) {
+        return new AuctionResult(true, winnerAID, hammerPrice);
     }
     
     /**
