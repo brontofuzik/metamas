@@ -22,7 +22,7 @@ public class Subtractor_Role extends Role {
      * Initializes the Subtractor_Role class.
      */
     static {
-        addRequirement("Subtract_Responsibility");
+        addResponsibility("Subtract_Responsibility");
     }
     
     // </editor-fold>

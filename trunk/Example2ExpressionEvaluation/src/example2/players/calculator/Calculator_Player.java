@@ -41,10 +41,10 @@ public abstract class Calculator_Player extends Player {
         super.setup();
         
         // Add responsibilities.
-        addRequirement(Add_Responsibility.class);
-        addRequirement(Subtract_Responsibility.class);
-        addRequirement(Multiply_Responsibility.class);
-        addRequirement(Divide_Responsibility.class);
+        addResponsibility(Add_Responsibility.class);
+        addResponsibility(Subtract_Responsibility.class);
+        addResponsibility(Multiply_Responsibility.class);
+        addResponsibility(Divide_Responsibility.class);
         
         // Fur seconds before any interaction begins.
         int timeout = 4000;

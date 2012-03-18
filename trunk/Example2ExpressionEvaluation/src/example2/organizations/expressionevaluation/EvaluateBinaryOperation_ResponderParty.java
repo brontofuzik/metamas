@@ -6,7 +6,7 @@ import example2.protocols.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role;
-import thespian4jade.proto.InvokeRequirementState;
+import thespian4jade.proto.InvokeResponsibilityState;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
@@ -95,7 +95,7 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     protected abstract class InvokeResponsibility_EvaluateBinaryOperation
-        extends InvokeRequirementState<OperandPair, Integer> {
+        extends InvokeResponsibilityState<OperandPair, Integer> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -108,12 +108,12 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
-        protected OperandPair getRequirementArgument() {
+        protected OperandPair getResponsibilityArgument() {
             return new OperandPair(operand1, operand2);
         }
 
         @Override
-        protected void setRequirementResult(Integer responsibilityResult) {
+        protected void setResponsibilityResult(Integer responsibilityResult) {
             result = responsibilityResult.intValue();
         }
         

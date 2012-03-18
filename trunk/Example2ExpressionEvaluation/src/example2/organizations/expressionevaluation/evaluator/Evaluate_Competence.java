@@ -1,6 +1,6 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import thespian4jade.core.organization.power.FSMPower;
+import competence.FSMCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.State;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
@@ -11,7 +11,7 @@ import thespian4jade.proto.jadeextensions.StateWrapperState;
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Evaluate_Competence extends FSMPower<String, Integer> {
+public class Evaluate_Competence extends FSMCompetence<String, Integer> {
         
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

@@ -27,7 +27,7 @@ public class Evaluator_Role extends Role {
         logInfo("Behaviours added.");
 
         // Add competences.
-        addPower(Evaluate_Competence.class);
+        addCompetence(Evaluate_Competence.class);
         logInfo("Competences added.");
     }
 

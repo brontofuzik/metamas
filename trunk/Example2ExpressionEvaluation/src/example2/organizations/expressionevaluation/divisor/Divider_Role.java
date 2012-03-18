@@ -22,7 +22,7 @@ public class Divider_Role extends Role {
      * Initializes the Divider_Role class.
      */
     static {
-        addRequirement("Divide_Responsibility");
+        addResponsibility("Divide_Responsibility");
     }
     
     // </editor-fold>

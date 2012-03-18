@@ -1,6 +1,6 @@
 package example2.players.calculator;
 
-import thespian4jade.core.player.requirement.OneShotRequirement;
+import thespian4jade.core.player.responsibility.OneShotResponsibility;
 
 /**
  * The 'Add' (one-shot) responsibility.
@@ -8,7 +8,7 @@ import thespian4jade.core.player.requirement.OneShotRequirement;
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Add_Responsibility extends OneShotRequirement<OperandPair, Integer> {
+public class Add_Responsibility extends OneShotResponsibility<OperandPair, Integer> {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

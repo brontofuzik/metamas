@@ -22,7 +22,7 @@ public class Multiplier_Role extends Role {
      * Initializes the Multiplier_Role class.
      */
     static {
-        addRequirement("Multiply_Responsibility");
+        addResponsibility("Multiply_Responsibility");
     }
     
     // </editor-fold>
