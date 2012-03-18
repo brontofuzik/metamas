@@ -48,6 +48,9 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State receiveRequest = new ReceiveRequest();

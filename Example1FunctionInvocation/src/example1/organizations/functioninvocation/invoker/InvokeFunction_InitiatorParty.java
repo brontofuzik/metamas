@@ -52,6 +52,9 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         State initialize = new Initialize();
