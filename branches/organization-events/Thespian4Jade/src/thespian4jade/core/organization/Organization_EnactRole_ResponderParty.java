@@ -17,7 +17,6 @@ import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -99,9 +98,11 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public int initialize() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Enact role' protocol (id = %1$s).",
+                "'Enact role' protocol (id = %1$s) responder party started.",
                 getACLMessage().getConversationId()));
+            
             return OK;
         }
         
@@ -306,6 +307,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     /**
      * The 'Success end' state.
+     * A state in which the 'Enact role' responder party succeedes.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -313,7 +315,13 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role responder party succeeded.");
+            // Raise the 'Role enacted' evetnt.
+            getMyOrganization().raiseEvent("role-enacted", roleName);
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
 
         // </editor-fold>           
@@ -321,6 +329,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
     /**
      * The 'Failure end' state.
+     * A state in which the 'Enact role' responder party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 
@@ -328,7 +337,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
 
         // </editor-fold>        

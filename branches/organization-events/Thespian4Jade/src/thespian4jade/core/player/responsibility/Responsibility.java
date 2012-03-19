@@ -12,7 +12,11 @@ import java.io.Serializable;
 public interface Responsibility<TArgument extends Serializable,
     TResult extends Serializable> extends State {
         
-    void setArgument(TArgument argument);
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    TResult getResult();
+    public void setArgument(TArgument argument);
+    
+    public TResult getResult();
+    
+    // </editor-fold>
 }

@@ -1,13 +1,8 @@
 package thespian4jade.core.organization.kb;
 
 import jade.core.AID;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -80,6 +75,14 @@ public class OrganizationKnowledgeBase {
     }
     
     /**
+     * Gets all players enacting a role in the organization.
+     * @return a set of all players enacting a role in the organization
+     */
+    public Set<AID> getAllPlayers() {
+        return enactingPlayers.keySet();
+    }
+    
+    /**
      * Gets the role instance of a specified role (class) for a specified player.
      * @param roleName the name of the role (class)
      * @param playerAID the AID of the player
@@ -121,7 +124,7 @@ public class OrganizationKnowledgeBase {
     }
     
     /**
-     * Gets the set of all role instances of a specified role (class)
+     * Gets all role instances of a specified role (class).
      * @param roleName the name of the role (class)
      * @return the set of all role instances of the specified role (class)
      */

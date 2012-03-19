@@ -41,9 +41,5 @@ public abstract class OneShotCompetence<TArgument extends Serializable, TResult 
         this.result = result;
     }
     
-    protected Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
     // </editor-fold> 
 }

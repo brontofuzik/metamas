@@ -161,7 +161,14 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role responder party succeeded.");
+            // Raise the 'Role activated' event.
+            getMyRole().myOrganization.raiseEvent("role-activated",
+                getMyRole().getClass().getSimpleName());
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
 
         // </editor-fold>
@@ -177,7 +184,10 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
 
         // </editor-fold>

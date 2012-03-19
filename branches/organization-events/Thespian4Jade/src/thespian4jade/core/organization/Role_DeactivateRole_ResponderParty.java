@@ -76,7 +76,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Deactivate role' protocol (id = %1$s).",
+                "'Deactivate role' protocol (id = %1$s) responder party started.",
                 getACLMessage().getConversationId()));
         
             if (playerAID.equals(getMyAgent().playerAID)) {
@@ -162,7 +162,14 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role responder party succeeded.");
+            // Raise the 'Role deactivated' event.
+            getMyRole().myOrganization.raiseEvent("role-deactivated",
+                getMyRole().getClass().getSimpleName());
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deactivate role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
 
         // </editor-fold>
@@ -178,7 +185,10 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deactivate role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
 
         // </editor-fold>

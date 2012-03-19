@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
 
 /**
  * An organization agent.
@@ -163,6 +164,7 @@ public abstract class Organization extends Agent {
     protected void addRole(Class roleClass, String[] responsibilities) {        
         addRole(roleClass, Multiplicity.SINGLE, responsibilities);
         
+        // TODO (priority: high) Check if the following is necessary.
         // Alternative:
         addRole(new RoleDefinition(roleClass, responsibilities));
     }
@@ -197,6 +199,20 @@ public abstract class Organization extends Agent {
         logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
     }
 
+    /**
+     * Raises an event.
+     * @param event the event to raise
+     */
+    protected final void raiseEvent(final String event, final String argument) {
+        // ----- Preconditions -----
+        assert event != null && !event.isEmpty();
+        // -------------------------
+        
+        addBehaviour(RaiseEventProtocol.getInstance().createInitiatorParty(event, argument));
+    }
+    
+    // ---------- PRIVATE ----------
+    
     // TAG YellowPages
     /**
      * Registers this organization with the Yellow pages.

@@ -79,9 +79,11 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public int initialize() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Deact role' protocol (id = %1$s).",
+                "'Deact role' protocol (id = %1$s) responder party started.",
                 getACLMessage().getConversationId()));
+            
             return OK;
         }
         
@@ -169,7 +171,13 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role responder party succeeded.");
+            // Raise the 'Role deacted' event.
+            getMyOrganization().raiseEvent("role-deacted", roleName);
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
@@ -185,7 +193,10 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>

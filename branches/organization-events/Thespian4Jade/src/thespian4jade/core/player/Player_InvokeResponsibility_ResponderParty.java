@@ -131,6 +131,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     private Responsibility createResponsibility(String responsibilityName) {
         //System.out.println("----- RESPONSIBILITY NAME: " + responsibilityName + " -----");
         
+        // TODO (priority: high) Move the following to the calling method.
         Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
         //System.out.println("----- RESPONSIBILITY CLASS: " + responsibilityClass + " -----");
         

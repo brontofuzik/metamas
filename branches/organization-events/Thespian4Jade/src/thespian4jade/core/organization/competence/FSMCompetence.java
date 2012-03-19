@@ -41,9 +41,5 @@ public abstract class FSMCompetence<TArgument extends Serializable, TResult exte
         this.result = result;
     }
     
-    protected Role getMyRole() {
-        return (Role)myAgent;
-    }
-    
     // </editor-fold>
 }

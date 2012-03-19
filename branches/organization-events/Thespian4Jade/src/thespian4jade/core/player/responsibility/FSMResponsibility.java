@@ -41,10 +41,6 @@ public class FSMResponsibility<TArgument extends Serializable,
     protected void setResult(TResult result) {
         this.result = result;
     }
-        
-    protected Player getMyPlayer() {
-        return (Player)myAgent;
-    }
     
     // </editor-fold>
 }

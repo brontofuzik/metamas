@@ -1,6 +1,5 @@
 package thespian4jade.core.player.responsibility;
 
-import thespian4jade.core.player.Player;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.io.Serializable;
 
@@ -40,10 +39,6 @@ public abstract class OneShotResponsibility<TArgument extends Serializable,
     
     protected void setResult(TResult result) {
         this.result = result;
-    }
-    
-    protected Player getMyPlayer() {
-        return (Player)myAgent;
     }
     
     // </editor-fold>

@@ -1,41 +1,46 @@
-package thespian4jade.proto.organizationprotocol.enactroleprotocol;
+package thespian4jade.proto.organizationprotocol.raiseeventprotocol;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Organization_EnactRole_ResponderParty;
-import thespian4jade.core.player.Player_EnactRole_InitiatorParty;
+import thespian4jade.core.organization.Organization_RaiseEvent_InitiatorParty;
+import thespian4jade.core.player.Player_RaiseEvent_ResponderParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
 
 /**
- * The 'Enact role' protocol.
- * Design pattern: Singleton, Role: Singleton
- * Design pattern: Abstract factory, Role: Concrete factory
  * @author Lukáš Kúdela
- * @since 2011-10-21
+ * @since 2012-03-19
  * @version %I% %G%
  */
-public class EnactRoleProtocol extends Protocol {
-    
+public class RaiseEventProtocol extends Protocol {
+ 
     // <editor-fold defaultstate="collapsed" desc="Fields">
    
-    private static EnactRoleProtocol singleton;
+    private static RaiseEventProtocol singleton;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    private RaiseEventProtocol() {
+    }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public static EnactRoleProtocol getInstance() {
+    public static RaiseEventProtocol getInstance() {
         if (singleton == null) {
-            singleton = new EnactRoleProtocol();
+            singleton = new RaiseEventProtocol();
         }
         return singleton;
     }
     
     // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
     /**
      * Creates an initiator party.
      * @param arguments the initiator party's contructor arguments
@@ -43,11 +48,11 @@ public class EnactRoleProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object... arguments) {
-        String organizationName = (String)arguments[0];
-        String roleName = (String)arguments[1];
-        return new Player_EnactRole_InitiatorParty(organizationName, roleName);
+        String event = (String)arguments[0];
+        String argument = (String)arguments[1];
+        return new Organization_RaiseEvent_InitiatorParty(event, argument);
     }
-    
+
     /**
      * Creates a responder party.
      * @param message the ACL message
@@ -55,7 +60,7 @@ public class EnactRoleProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Organization_EnactRole_ResponderParty(message);
+        return new Player_RaiseEvent_ResponderParty(message);
     }
     
     // </editor-fold>
