@@ -36,34 +36,40 @@ public abstract class Demo_Player extends Player {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-     
+    
+    void enactRole() {
+        enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+    }
+    
+    void deactRole() {
+        deactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+    }
+    
+    void activateRole() {
+        activateRole(roleFullName.getRoleName());
+    }
+    
+    void deactivateRole() {
+        deactivateRole(roleFullName.getRoleName());
+    }
+    
+    // ----- PROTECTED -----
+    
     @Override
     protected void setup() {
         super.setup();
         
         // Add responsibilities.
-        addResponsibility(ExecuteFunction_Responsibility.class);
-        
-        // Four seconds before any interaction begins.
-        int timeout = 4000;
-        
-        // Enact and activate the role.
-        timeout = scheduleEnactRole(roleFullName, timeout);
-        timeout = scheduleActivateRole(roleFullName, timeout);
-        
-        // Schedule competence invocations.
-        timeout = doScheduleCompetenceInvocations(timeout);
-
-        // Deact and deactivate the role.
-        timeout = scheduleDeactivateRole(roleFullName, timeout);
-        scheduleDeactRole(roleFullName, timeout);
+        addResponsibility(ExecuteFunction_Responsibility.class);        
     }
     
-    /**
-     * Schedule competence invocations.
-     * Design pattern: Template method, Role: Primitive operation
-     */
-    protected abstract int doScheduleCompetenceInvocations(int timeout);
+    protected void scheduleEnactRole(int timeout) {
+        scheduleEnactRole(roleFullName, timeout);
+    }
+    
+    protected void scheduleDeactivateRole(int timeout) {
+        scheduleDeactivateRole(roleFullName, timeout);
+    }
 
     // </editor-fold>
 }
