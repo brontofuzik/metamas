@@ -113,7 +113,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
                 getProtocolId()));
             
             binaryEvaluatorAID = getMyAgent().getMyOrganization()
-                .getRoleInstance(getBinaryEvaluatorRoleName());
+                .getPosition(getBinaryEvaluatorRoleName());
         }
         
         // </editor-fold>

@@ -96,7 +96,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
                 getProtocolId()));
             
             evaluatorAID = getMyAgent().getMyOrganization()
-                .getRoleInstance(Evaluator_Role.NAME);
+                .getPosition(Evaluator_Role.NAME);
         }
         
         // </editor-fold>
