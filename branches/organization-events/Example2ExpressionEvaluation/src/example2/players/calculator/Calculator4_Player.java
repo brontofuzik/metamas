@@ -12,7 +12,8 @@ public class Calculator4_Player extends Calculator_Player {
     /**
      * The full name of the Multiplier role.
      */
-    private static String MULTIPLIER_ROLE_FULL_NAME = "expressionEvaluation_Organization.Multiplier_Role";
+    private static String MULTIPLIER_ROLE_FULL_NAME
+        = "expressionEvaluation_Organization.Multiplier_Role";
     
     // </editor-fold>
     
@@ -30,9 +31,11 @@ public class Calculator4_Player extends Calculator_Player {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected int doScheduleCompetenceInvocations(int timeout) {
-        // No competences to invoke.
-        return timeout + 4000;
+    protected void setup() {
+        super.setup();
+        
+        // Schedule behaviours.
+        scheduleEnactRole(8000);
     }
     
     // </editor-fold>   

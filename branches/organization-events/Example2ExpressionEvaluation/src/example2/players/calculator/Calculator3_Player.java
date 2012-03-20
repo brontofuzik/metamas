@@ -12,7 +12,8 @@ public class Calculator3_Player extends Calculator_Player {
     /**
      * The full name of the Subtractor role.
      */
-    private static String SUBTRACTOR_ROLE_FULL_NAME = "expressionEvaluation_Organization.Subtractor_Role";
+    private static String SUBTRACTOR_ROLE_FULL_NAME
+        = "expressionEvaluation_Organization.Subtractor_Role";
     
     // </editor-fold>
     
@@ -30,9 +31,11 @@ public class Calculator3_Player extends Calculator_Player {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected int doScheduleCompetenceInvocations(int timeout) {
-        // No competences to invoke.
-        return timeout + 4000;
+    protected void setup() {
+        super.setup();
+        
+        // Schedule behaviours.
+        scheduleEnactRole(6000);
     }
     
     // </editor-fold>   

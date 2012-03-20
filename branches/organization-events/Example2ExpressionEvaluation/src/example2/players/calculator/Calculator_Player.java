@@ -36,6 +36,28 @@ public abstract class Calculator_Player extends Player {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    void enactRole() {
+        enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+    }
+    
+    void scheduleEnactRole(int timeout) {
+        scheduleEnactRole(roleFullName, timeout);
+    }
+    
+    void deactRole() {
+        deactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
+    }
+    
+    void activateRole() {
+        activateRole(roleFullName.getRoleName());
+    }
+    
+    void deactivateRole() {
+        deactivateRole(roleFullName.getRoleName());
+    }
+    
+    // ----- PROTECTED -----
+    
     @Override
     protected void setup() {
         super.setup();
@@ -45,27 +67,7 @@ public abstract class Calculator_Player extends Player {
         addResponsibility(Subtract_Responsibility.class);
         addResponsibility(Multiply_Responsibility.class);
         addResponsibility(Divide_Responsibility.class);
-        
-        // Fur seconds before any interaction begins.
-        int timeout = 4000;
-        
-        // Enact and activate the role.
-        timeout = scheduleEnactRole(roleFullName, timeout);
-        timeout = scheduleActivateRole(roleFullName, timeout);
-        
-        // Schedule competence invocations.
-        timeout = doScheduleCompetenceInvocations(timeout);
-
-        // Deactivate and deact the role.
-        timeout = scheduleDeactivateRole(roleFullName, timeout);
-        scheduleDeactRole(roleFullName, timeout);
     }
-    
-    /**
-     * Schedule competence invocations.
-     * Design pattern: Template method, Role: Primitive operation
-     */
-    protected abstract int doScheduleCompetenceInvocations(int timeout);
     
     // </editor-fold>
 }
