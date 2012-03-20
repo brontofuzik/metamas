@@ -64,22 +64,22 @@ public abstract class Organization extends Agent {
     // <editor-fold defaultstate="collapsed" desc="Methods">
  
     /**
-     * Gets an instance of a specified role.
+     * Gets a position of a specified role.
      * 
      * @param roleName the name of the role
-     * @return an instance of the specified role
+     * @return a position of the specified role
      */
-    public AID getRoleInstance(String roleName) {
-        return knowledgeBase.getFirstRoleInstance(roleName);
+    public AID getPosition(String roleName) {
+        return knowledgeBase.getFirstPosition(roleName);
     }
     
     /**
-     * Gets all instances of a specified role.
+     * Gets all positions of a specified role.
      * @param roleName the name of the role.
-     * @return all instances of the specified role
+     * @return all positions of the specified role
      */
-    public Set<AID> getAllRoleInstances(String roleName) {
-        return knowledgeBase.getAllRoleInstances(roleName);
+    public Set<AID> getAllPositions(String roleName) {
+        return knowledgeBase.getAllPositions(roleName);
     }
     
     // ----- Logging -----
