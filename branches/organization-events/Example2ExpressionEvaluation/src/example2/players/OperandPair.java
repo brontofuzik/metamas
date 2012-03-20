@@ -1,4 +1,4 @@
-package example2.players.calculator;
+package example2.players;
 
 import java.io.Serializable;
 

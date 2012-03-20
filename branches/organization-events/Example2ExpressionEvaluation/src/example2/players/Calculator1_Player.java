@@ -1,4 +1,4 @@
-package example2.players.calculator;
+package example2.players;
 
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObservable;

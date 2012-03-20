@@ -1,6 +1,6 @@
 package example2.organizations.expressionevaluation;
 
-import example2.players.calculator.OperandPair;
+import example2.players.OperandPair;
 import example2.protocols.EvaluateBinaryOperationReplyMessage;
 import example2.protocols.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
