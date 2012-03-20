@@ -16,8 +16,13 @@ public class Player1 extends CompetencePlayer implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String INVOKE_FUNCTION_COMPETENCE_FULL_NAME
-        = "functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence";
+    /** The full name of the 'Invoker' role. */
+    private static final String INVOKER_ROLE_FULL_NAME
+        = "functionInvocation_Organization.Invoker_Role";
+    
+    /** The name of the 'Invoke function' competence. */
+    private static final String INVOKE_FUNCTION_COMPETENCE_NAME
+        = "InvokeFunction_Competence";
     
     // </editor-fold>
     
@@ -26,10 +31,9 @@ public class Player1 extends CompetencePlayer implements IObserver {
     /**
      * Initializes a new instance of the Demo1_Player class.
      * Creates the demo1 player who will enact the 'Invoker' role.
-     * @param competenceFullName the full name of the competence to invoke 
      */
     public Player1() {
-        super(new CompetenceFullName(INVOKE_FUNCTION_COMPETENCE_FULL_NAME));
+        super(new RoleFullName(INVOKER_ROLE_FULL_NAME), INVOKE_FUNCTION_COMPETENCE_NAME);
     }
     
     // </editor-fold>
