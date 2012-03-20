@@ -1,14 +1,14 @@
 package example1.players.demo;
 
-import thespian4jade.core.player.responsibility.OneShotResponsibility;
+import thespian4jade.core.player.responsibility.AsynchronousResponsibility;
 
 /**
- * The 'Execute function' (one-shot) responsibility.
+ * The 'Execute function' (asynchronous) responsibility.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
  */
-public class ExecuteFunction_Responsibility extends OneShotResponsibility<Integer, Integer> {
+public class ExecuteFunction_Responsibility extends AsynchronousResponsibility<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

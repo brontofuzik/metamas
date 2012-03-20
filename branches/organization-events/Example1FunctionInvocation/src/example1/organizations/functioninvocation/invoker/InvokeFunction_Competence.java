@@ -1,17 +1,17 @@
 package example1.organizations.functioninvocation.invoker;
 
-import thespian4jade.core.organization.competence.FSMCompetence;
+import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
- * The 'Invoke function' (FSM) competence.
+ * The 'Invoke function' (synchronous) competence.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class InvokeFunction_Competence extends FSMCompetence<Integer, Integer> {
+public class InvokeFunction_Competence extends SynchronousCompetence<Integer, Integer> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
