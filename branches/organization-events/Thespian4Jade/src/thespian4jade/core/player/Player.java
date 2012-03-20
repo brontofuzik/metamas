@@ -259,102 +259,87 @@ public abstract class Player extends Agent {
      * Schedules a role enactment.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to enact
-     * @param timeout the start timeout
-     * @return the end timeout
+     * @param timeout the timeout
      */
-    protected final int scheduleEnactRole(final RoleFullName roleFullName,
-        final int timeout) {
+    protected final void scheduleEnactRole(final RoleFullName roleFullName, final int timeout) {
         // Initiate the 'Enact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {    
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().enactRole(roleFullName.getOrganizationName(),
                     roleFullName.getRoleName());
             }
         });
-        return timeout + 2000;
     }
     
     /**
      * Schedules a role deactment.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to deact
-     * @param timeout the start timeout
-     * @return the end timeout
+     * @param timeout the timeout
      */
-    protected final int scheduleDeactRole(final RoleFullName roleFullName,
+    protected final void scheduleDeactRole(final RoleFullName roleFullName,
         final int timeout) {
         // Initiate the 'Deact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().deactRole(roleFullName.getOrganizationName(),
                     roleFullName.getRoleName());
             }
         });
-        return timeout + 2000;
     }
     
     /**
      * Schedules a role activation.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to actiavte
-     * @param timeout the start timeout
-     * @return the end timeout
+     * @param timeout the timeout
      */
-    protected final int scheduleActivateRole(final RoleFullName roleFullName,
+    protected final void scheduleActivateRole(final RoleFullName roleFullName,
         final int timeout) {
         // Initiate the 'Activate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {            
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {            
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().activateRole(roleFullName.getRoleName());
             }
         });
-        return timeout + 2000;
     }
     
     /**
      * Schedules a role deactivation.
      * @param roleFullName the full name of the role to deactivate
-     * @param timeout the start timeout
-     * @return the end timeout
+     * @param timeout the timeout
      */
-    protected final int scheduleDeactivateRole(final RoleFullName roleFullName,
+    protected final void scheduleDeactivateRole(final RoleFullName roleFullName,
         final int timeout) {
         // Initiate the 'Deactivate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().deactivateRole(roleFullName.getRoleName());
             }
         });
-        return timeout + 2000;
     }
         
     /**
      * Schedules a competence invocation.
      * @param competenceFullName the full name of the competence invoke
      * @param argument the competence argument
-     * @param timeout the start timeout
-     * @return the end timeout
+     * @param timeout the timeout
      */
-    protected final <TArgument extends Serializable> int scheduleInvokeCompetence(
+    protected final <TArgument extends Serializable> void scheduleInvokeCompetence(
         final CompetenceFullName competenceFullName, final TArgument argument,
-        final int timeout, final int duration) {
+        final int timeout) {
         // Initiate the 'Invoke competence' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().invokeCompetence(competenceFullName.getCompetenceName(), argument);
+                getMyPlayer()
+                    .invokeCompetence(competenceFullName.getCompetenceName(), argument);
             }
         });
-        return timeout + duration;
     }
     
     // </editor-fold>
