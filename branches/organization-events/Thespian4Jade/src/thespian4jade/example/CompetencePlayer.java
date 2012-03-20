@@ -15,19 +15,19 @@ public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private CompetenceFullName competenceFullName;
+    private String competenceName;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected CompetencePlayer(CompetenceFullName competenceFullName) {
-        super(competenceFullName.getRoleFullName());
+    protected CompetencePlayer(RoleFullName roleFullName, String competenceName) {
+        super(roleFullName);
         // ----- Preconditions -----
-        assert competenceFullName != null;
+        assert competenceName != null && !competenceName.isEmpty();
         // -------------------------
         
-        this.competenceFullName = competenceFullName;
+        this.competenceName = competenceName;
     }
     
     // </editor-fold>
@@ -43,9 +43,9 @@ public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
      */
     public <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeCompetence(TArgument argument) {
-        System.out.println("----- Invoking competence: " + competenceFullName.toString() + " -----");
+        System.out.println("----- Invoking competence: " + competenceName + " -----");
         
-        return invokeCompetence(competenceFullName.getCompetenceName(), argument);
+        return invokeCompetence(competenceName, argument);
     }
     
     /**
@@ -56,9 +56,9 @@ public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
      */
     public <TArgument extends Serializable> void scheduleInvokeCompetence(TArgument argument,
         final int timeout) {
-        System.out.println("----- Scheduling competence invocation: " + competenceFullName.toString() + " -----");
+        System.out.println("----- Scheduling competence invocation: " + competenceName + " -----");
         
-        scheduleInvokeCompetence(competenceFullName, argument, timeout);
+        scheduleInvokeCompetence(competenceName, argument, timeout);
     }
     
     // </editor-fold>

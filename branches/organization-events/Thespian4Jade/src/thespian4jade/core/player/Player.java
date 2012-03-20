@@ -325,19 +325,18 @@ public abstract class Player extends Agent {
         
     /**
      * Schedules a competence invocation.
-     * @param competenceFullName the full name of the competence invoke
+     * @param competenceName the name of the competence to invoke
      * @param argument the competence argument
      * @param timeout the timeout
      */
     protected final <TArgument extends Serializable> void scheduleInvokeCompetence(
-        final CompetenceFullName competenceFullName, final TArgument argument,
+        final String competenceName, final TArgument argument,
         final int timeout) {
         // Initiate the 'Invoke competence' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer()
-                    .invokeCompetence(competenceFullName.getCompetenceName(), argument);
+                getMyPlayer().invokeCompetence(competenceName, argument);
             }
         });
     }
@@ -409,60 +408,6 @@ public abstract class Player extends Agent {
         public String toString() {
             //return "RoleFullName{" + "organizationName=" + organizationName + ", roleName=" + roleName + '}';
             return organizationName + "." + roleName;
-        }
-        
-        // </editor-fold>
-    }
-    
-    protected static class CompetenceFullName {
-        
-        // <editor-fold defaultstate="collapsed" desc="Fields">
-        
-        private RoleFullName roleFullName;
-        
-        private String competenceName;
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public CompetenceFullName(String organizationName, String roleName, String competenceName) {
-            roleFullName = new RoleFullName(organizationName, roleName);
-        }
-        
-        public CompetenceFullName(String competenceFullName) {
-            String[] nameParts = competenceFullName.split("\\.");
-            roleFullName = new RoleFullName(nameParts[0], nameParts[1]);
-            competenceName = nameParts[2];
-        }
-                
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-        
-        public RoleFullName getRoleFullName() {
-            return roleFullName;
-        }
-        
-        public String getOrganizationName() {
-            return roleFullName.getOrganizationName();
-        }
-        
-        public String getRoleName() {
-            return roleFullName.getRoleName();
-        }
-        
-        public String getCompetenceName() {
-            return competenceName;
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        public String toString() {
-            //return "CompetenceFullName{" + "roleFullName=" + roleFullName + ", competenceName=" + competenceName + '}';
-            return roleFullName.getOrganizationName() + "." + roleFullName.getRoleName() + "." + competenceName;
         }
         
         // </editor-fold>
