@@ -186,11 +186,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
                 "Initiating the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
             
-            // TODO (priority: medium) Replace the following two lines of code with something like
-            // bidders = getMyRole().getMyOrganization().getAllActiveRoleInstances("Bidder_Role");
-            bidders = getMyRole().getMyOrganization().getAllRoleInstances("Bidder_Role");
-            // TODO (priority: medium) Remove the hardwired position name.
-            bidders.remove(new AID("bidder_Role_participant1_Player", false));
+            bidders = getMyRole().getMyOrganization().getAllPositions("Bidder_Role");
+            bidders.remove(getMyAgent().getAID());
             
             return OK;
         }
