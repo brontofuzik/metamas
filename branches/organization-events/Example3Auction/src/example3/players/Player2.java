@@ -8,14 +8,14 @@ import example3.organizations.auction.auctioneer.auction.AuctionArgument;
  * @since 2012-01-20
  * @version %I% %G%
  */
-public class Participant2_Player extends Participant_Player {  
+public class Player2 extends Participant_Player {  
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">  
     
     /**
      * Initializes the 'Participant2' player.
      */
-    public Participant2_Player() {
+    public Player2() {
         addItemToBuy(new Item(POLLOCK, 156.8)); // Highest bid.
         addItemToBuy(new Item(KLIMT, 149.2));
         

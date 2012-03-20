@@ -1,7 +1,7 @@
 auction_Organization
-participant1_Player
-participant2_Player
-participant3_Player
-auctioneer_Role_participant1_Player
-bidder_Role_participant2_Player
-bidder_Role_participant3_Player
+player1
+player2
+player3
+auctioneer_Role_player1
+bidder_Role_player2
+bidder_Role_player3
