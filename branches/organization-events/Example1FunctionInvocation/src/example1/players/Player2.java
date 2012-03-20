@@ -1,5 +1,6 @@
 package example1.players;
 
+import example1.organizations.functioninvocation.invoker.Invoker_Role;
 import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
@@ -41,9 +42,9 @@ public class Player2 extends RolePlayer {
         addResponsibility(ExecuteFunction_Responsibility.class);
         
         // Add event handlers.
-        addEventHandler(Event.ROLE_ACTIVATED, Demo2_InvokerRoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, Demo2_InvokerRoleDeactivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTED, Demo2_InvokerRoleDeacted_EventHandler.class);
+        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
         
         // Schedule behaviours.
         scheduleEnactRole(4000);
@@ -59,7 +60,7 @@ public class Player2 extends RolePlayer {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class Demo2_InvokerRoleActivated_EventHandler
+    public static class RoleActivated_EventHandler
         extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -84,7 +85,7 @@ public class Player2 extends RolePlayer {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class Demo2_InvokerRoleDeactivated_EventHandler
+    public static class RoleDeactivated_EventHandler
         extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -109,7 +110,7 @@ public class Player2 extends RolePlayer {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class Demo2_InvokerRoleDeacted_EventHandler
+    public static class RoleDeacted_EventHandler
         extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">

@@ -13,7 +13,7 @@ import thespian4jade.core.organization.Role;
  * @version %I% %G%
  */
 public class Invoker_Role extends Role {
-
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     @Override
