@@ -102,7 +102,7 @@ public class Example1Metamodel {
         
         // The 'Invoke function' competence.
         Competence invokeFunctionCompetence = new Competence("InvokeFunction_Competence",
-            Competence.CompetenceType.FSMCompetence, "Integer", "Integer");
+            Competence.CompetenceType.Synchronous, "Integer", "Integer");
         invokeFunctionCompetence.setFSM(createInvokeFunctionCompetenceFSM());
         invokerRole.addCompetence(invokeFunctionCompetence);
         
@@ -125,7 +125,7 @@ public class Example1Metamodel {
         
         // The 'Execute function' responsibility.
         Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
-            Responsibility.ResponsibilityType.OneShotResponsibility, "Integer", "Integer");
+            Responsibility.ResponsibilityType.Asynchronous, "Integer", "Integer");
         demoPlayerType.addResponsibility(executeFunctionResponsibility);
         
         return demoPlayerType;
