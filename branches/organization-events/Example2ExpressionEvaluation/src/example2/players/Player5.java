@@ -5,7 +5,7 @@ package example2.players;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class Calculator5_Player extends Calculator_Player {
+public class Player5 extends OperatorPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -22,7 +22,7 @@ public class Calculator5_Player extends Calculator_Player {
     /**
      * Initializes a new instane of the Calculator5_Player class.
      */
-    public Calculator5_Player() {
+    public Player5() {
         super(new RoleFullName(DIVIDER_ROLE_FULL_NAME));
     }
     
@@ -33,6 +33,9 @@ public class Calculator5_Player extends Calculator_Player {
     @Override
     protected void setup() {
         super.setup();
+        
+        // Add responsibility.
+        addResponsibility(Divide_Responsibility.class);
         
         // Schedule behaviours.
         scheduleEnactRole(10000);

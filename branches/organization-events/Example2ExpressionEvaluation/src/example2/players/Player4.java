@@ -5,25 +5,25 @@ package example2.players;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class Calculator3_Player extends Calculator_Player {
+public class Player4 extends OperatorPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The full name of the Subtractor role.
+     * The full name of the Multiplier role.
      */
-    private static String SUBTRACTOR_ROLE_FULL_NAME
-        = "expressionEvaluation_Organization.Subtractor_Role";
+    private static String MULTIPLIER_ROLE_FULL_NAME
+        = "expressionEvaluation_Organization.Multiplier_Role";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instane of the Calculator3_Player class.
+     * Initializes a new instane of the Calculator4_Player class.
      */
-    public Calculator3_Player() {
-        super(new RoleFullName(SUBTRACTOR_ROLE_FULL_NAME));
+    public Player4() {
+        super(new RoleFullName(MULTIPLIER_ROLE_FULL_NAME));
     }
     
     // </editor-fold>
@@ -34,8 +34,11 @@ public class Calculator3_Player extends Calculator_Player {
     protected void setup() {
         super.setup();
         
+        // Add responsibilities.
+        addResponsibility(Multiply_Responsibility.class);
+        
         // Schedule behaviours.
-        scheduleEnactRole(6000);
+        scheduleEnactRole(8000);
     }
     
     // </editor-fold>   
