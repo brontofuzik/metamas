@@ -315,7 +315,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            // Raise the 'Role enacted' evetnt.
+            // Raise the 'Role enacted' event.
             getMyOrganization().raiseEvent("role-enacted", roleName);
             
             // LOG

@@ -177,6 +177,7 @@ public class OrganizationKnowledgeBase {
         assert roleName != null && !roleName.isEmpty();
         // ------------------------
         
+        addPlayerIfApplicable(playerAID);
         getPlayerDescription(playerAID).enactRole(roleName);
     }
 
@@ -187,6 +188,19 @@ public class OrganizationKnowledgeBase {
         // ------------------------
 
         getPlayerDescription(playerAID).deactRole(roleName);
+        removePlayerIfApplicable(playerAID);
+    }
+    
+    private void addPlayerIfApplicable(AID playerAID) {
+        if (!enactingPlayers.containsKey(playerAID)) {
+            enactingPlayers.put(playerAID, new PlayerDescription(playerAID));
+        }
+    }
+    
+    private void removePlayerIfApplicable(AID playerAID) {
+        if (!getPlayerDescription(playerAID).isEmployed()) {
+            enactingPlayers.remove(playerAID);
+        }
     }
     
     /**
@@ -195,9 +209,6 @@ public class OrganizationKnowledgeBase {
      * @return the player description for the specified player
      */
     private PlayerDescription getPlayerDescription(AID playerAID) {
-        if (!enactingPlayers.containsKey(playerAID)) {
-            enactingPlayers.put(playerAID, new PlayerDescription(playerAID));
-        }
         return enactingPlayers.get(playerAID);
     }
     
