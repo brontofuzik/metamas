@@ -129,7 +129,7 @@ public class Example2Metamodel {
         
         // The 'Evaluate' competence.
         Competence evaluateCompetence = new Competence("Evaluate_Competence",
-                Competence.CompetenceType.FSMCompetence, "String", "Integer");
+                Competence.CompetenceType.Synchronous, "String", "Integer");
         evaluateCompetence.setFSM(createEvaluateCompetenceFSM());
         evaluatorRole.addCompetence(evaluateCompetence);
         
@@ -167,22 +167,22 @@ public class Example2Metamodel {
         
         // The 'Add' responsibility.
         Responsibility addResponsibility = new Responsibility("Add_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
+                Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
         calculatorPlayerType.addResponsibility(addResponsibility);
         
         // The 'Subtract' responsibility.
         Responsibility subtractResponsibility = new Responsibility("Subtract_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
+                Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
         calculatorPlayerType.addResponsibility(subtractResponsibility);
         
         // The 'Multiply' responsibility.
         Responsibility multiplyResponsibility = new Responsibility("Multiply_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
+                Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
         calculatorPlayerType.addResponsibility(multiplyResponsibility);
         
         // The 'Divide' responsibility.
         Responsibility divideResponsibility = new Responsibility("Divide_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
+                Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
         calculatorPlayerType.addResponsibility(divideResponsibility);
         
         return calculatorPlayerType;
