@@ -9,7 +9,7 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * The 'Invoke function' protocol initiator party.
@@ -57,10 +57,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        State sendRequest = new SendRequest();
-        State receiveReply = new ReceiveReply();
-        State end = new End();
+        IState initialize = new Initialize();
+        IState sendRequest = new SendRequest();
+        IState receiveReply = new ReceiveReply();
+        IState end = new End();
         // ------------------
         
         // Register the states.

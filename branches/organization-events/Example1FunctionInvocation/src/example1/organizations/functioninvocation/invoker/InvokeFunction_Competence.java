@@ -2,7 +2,7 @@ package example1.organizations.functioninvocation.invoker;
 
 import thespian4jade.core.organization.competence.FSMCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
@@ -31,8 +31,8 @@ public class InvokeFunction_Competence extends FSMCompetence<Integer, Integer> {
      */
     private void buildFSM() {
         // ----- States -----
-        State invokeFunctionInitiatorWrapper = new InvokeFunctionInitiatorWrapper();
-        State end = new End();
+        IState invokeFunctionInitiatorWrapper = new InvokeFunctionInitiatorWrapper();
+        IState end = new End();
         // ------------------
         
         // Register the states.
