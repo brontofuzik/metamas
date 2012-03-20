@@ -94,7 +94,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
                 getProtocolId()));
             
             executerAID = getMyRole().getMyOrganization()
-                .getRoleInstance("Executer_Role");
+                .getPosition("Executer_Role");
         }
         
         // </editor-fold>
