@@ -1,17 +1,17 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import thespian4jade.core.organization.competence.FSMCompetence;
+import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
- * The 'Evaluate' (FSM) competence.
+ * The 'Evaluate' (synchronous) competence.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Evaluate_Competence extends FSMCompetence<String, Integer> {
+public class Evaluate_Competence extends SynchronousCompetence<String, Integer> {
         
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     

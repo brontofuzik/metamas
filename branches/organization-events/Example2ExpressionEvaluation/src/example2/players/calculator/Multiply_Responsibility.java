@@ -1,14 +1,14 @@
 package example2.players.calculator;
 
-import thespian4jade.core.player.responsibility.OneShotResponsibility;
+import thespian4jade.core.player.responsibility.AsynchronousResponsibility;
 
 /**
- * The 'Multiply' (one-shot) responsibility.
+ * The 'Multiply' (asynchronous) responsibility.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Multiply_Responsibility extends OneShotResponsibility<OperandPair, Integer> {
+public class Multiply_Responsibility extends AsynchronousResponsibility<OperandPair, Integer> {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
