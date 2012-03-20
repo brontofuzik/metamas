@@ -2,15 +2,15 @@ package example3.players.participant;
 
 import example3.players.participant.bid.BidArgument;
 import example3.players.participant.bid.BidResult;
-import thespian4jade.core.player.responsibility.OneShotResponsibility;
+import thespian4jade.core.player.responsibility.AsynchronousResponsibility;
 
 /**
- * The 'Bid' (one-shot) responsibility.
+ * The 'Bid' (asynchronous) responsibility.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
  */
-public class Bid_Responsibility extends OneShotResponsibility<BidArgument, BidResult> {
+public class Bid_Responsibility extends AsynchronousResponsibility<BidArgument, BidResult> {
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
