@@ -2,7 +2,7 @@ package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
 
 /**

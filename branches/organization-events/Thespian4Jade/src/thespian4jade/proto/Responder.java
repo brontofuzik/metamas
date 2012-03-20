@@ -1,4 +1,4 @@
-package thespian4jade.core;
+package thespian4jade.proto;
 
 import jade.core.behaviours.FSMBehaviour;
 import jade.core.behaviours.OneShotBehaviour;

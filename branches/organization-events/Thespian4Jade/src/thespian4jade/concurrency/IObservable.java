@@ -1,4 +1,4 @@
-package thespian4jade.core;
+package thespian4jade.concurrency;
 
 /**
  * @author Lukáš Kúdela

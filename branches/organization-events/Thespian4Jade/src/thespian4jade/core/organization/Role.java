@@ -14,7 +14,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import thespian4jade.core.Future;
+import thespian4jade.concurrency.Future;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
 

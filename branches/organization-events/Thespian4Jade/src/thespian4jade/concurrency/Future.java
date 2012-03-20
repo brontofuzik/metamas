@@ -1,4 +1,4 @@
-package thespian4jade.core;
+package thespian4jade.concurrency;
 
 import java.io.Serializable;
 import thespian4jade.core.player.Player_InvokeCompetence_InitiatorParty;

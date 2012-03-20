@@ -1,4 +1,4 @@
-package thespian4jade.core;
+package thespian4jade.concurrency;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,7 +13,7 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenc
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import thespian4jade.core.Future;
+import thespian4jade.concurrency.Future;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
 
@@ -418,6 +418,15 @@ public abstract class Player extends Agent {
         }
         
         // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        public String toString() {
+            //return "RoleFullName{" + "organizationName=" + organizationName + ", roleName=" + roleName + '}';
+            return organizationName + "." + roleName;
+        }
+        
+        // </editor-fold>
     }
     
     protected static class CompetenceFullName {
@@ -460,6 +469,15 @@ public abstract class Player extends Agent {
         
         public String getCompetenceName() {
             return competenceName;
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        public String toString() {
+            //return "CompetenceFullName{" + "roleFullName=" + roleFullName + ", competenceName=" + competenceName + '}';
+            return roleFullName.getOrganizationName() + "." + roleFullName.getRoleName() + "." + competenceName;
         }
         
         // </editor-fold>

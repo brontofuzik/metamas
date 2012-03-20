@@ -1,8 +1,8 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.core.Future;
-import thespian4jade.core.IObserver;
+import thespian4jade.concurrency.Future;
+import thespian4jade.concurrency.IObserver;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
@@ -15,8 +15,8 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgum
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
 import java.io.Serializable;
-import thespian4jade.core.IObservable;
-import thespian4jade.core.Observable;
+import thespian4jade.concurrency.IObservable;
+import thespian4jade.concurrency.Observable;
 import thespian4jade.proto.IResultParty;
 
 /**

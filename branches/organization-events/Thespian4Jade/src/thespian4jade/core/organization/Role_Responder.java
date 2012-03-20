@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The role responder.

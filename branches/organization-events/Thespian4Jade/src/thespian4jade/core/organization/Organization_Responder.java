@@ -1,6 +1,6 @@
 package thespian4jade.core.organization;
 
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 

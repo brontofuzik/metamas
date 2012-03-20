@@ -1,6 +1,6 @@
 package thespian4jade.proto;
 
-import thespian4jade.core.Future;
+import thespian4jade.concurrency.Future;
 
 /**
  * @author Lukáš Kúdela
