@@ -1,7 +1,5 @@
 package example3.players;
 
-import example3.organizations.auction.auctioneer.auction.AuctionArgument;
-
 /**
  * The 'Participant3' player.
  * @author Lukáš Kúdela
@@ -40,7 +38,7 @@ public class Player3 extends ParticipantPlayer {
         scheduleEnactRole(getBidderRoleFullName(), 4000);
         
         // Role activation
-        scheduleActivateRole(getAuctioneerRoleFullName(), 14000);
+        //scheduleActivateRole(getAuctioneerRoleFullName(), 14000);
         
         // Role deactment
         scheduleDeactRole(getAuctioneerRoleFullName(), 18000);
@@ -52,8 +50,5 @@ public class Player3 extends ParticipantPlayer {
         return KLIMT;
     }
     
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Classes">
     // </editor-fold>
 }

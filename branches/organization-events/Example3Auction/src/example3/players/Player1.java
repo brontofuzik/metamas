@@ -1,7 +1,5 @@
 package example3.players;
 
-import thespian4jade.concurrency.IObservable;
-
 /**
  * The 'Participant1' player.
  * @author Lukáš Kúdela
@@ -40,7 +38,7 @@ public class Player1 extends ParticipantPlayer {
         scheduleEnactRole(getBidderRoleFullName(), 4000);
         
         // Role activation
-        scheduleActivateRole(getBidderRoleFullName(), 6000);
+        scheduleActivateRole(getAuctioneerRoleFullName(), 6000);
         
         // Role deactment
         scheduleDeactRole(getAuctioneerRoleFullName(), 18000);

@@ -160,5 +160,12 @@ public class AuctionArgument implements Serializable {
             reservationPrice, null);
     }
     
+    @Override
+    public String toString() {
+        return "AuctionArgument{" + "auctionType=" + auctionType + ", itemName=" + itemName
+            + ", startingPrice=" + startingPrice + ", reservationPrice="
+            + reservationPrice + ", bidChange=" + bidChange + '}';
+    }
+    
     // </editor-fold> 
 }

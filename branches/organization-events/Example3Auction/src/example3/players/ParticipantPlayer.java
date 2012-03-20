@@ -7,6 +7,7 @@ import java.util.Map;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.IObserver;
+import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.core.player.Player;
 
@@ -45,7 +46,7 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     /**
      * The number of active bidders.
      */
-    static int bidders;
+    private int bidders;
     
     // ----- PRIVATE -----
     
@@ -133,7 +134,11 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
      */
     @Override
     public void update(IObservable observable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // Get the 'Auction' competence result.
+        AuctionResult auctionResult = ((Future<AuctionResult>)observable).getValue();
+        System.out.println("----- 'Auction' competence result: " + auctionResult.toString() + " -----");
+        
+        deactivateRole(getAuctioneerRoleName());
     }
     
     // ----- PROTECTED -----
@@ -142,8 +147,12 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     protected void setup() {
         super.setup();
         
-        // Add the responsibilites.
+        // Add responsibilites.
         addResponsibility(Bid_Responsibility.class);
+        
+        // Add event handlers.
+        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
     }
     
     /**
@@ -210,17 +219,19 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
         // ----- PRIVATE -----
         
         private void handleAuctioneerRoleActivated() {
-            getMyPlayer().activateRole(getMyPlayer().getAuctioneerRoleName());
+            getMyPlayer().activateRole(getMyPlayer().getBidderRoleName());
         }
         
         private void handleBidderRoleActivated() {
-            bidders++;
-            if (bidders == 2) {
+            getMyPlayer().bidders++;
+            if (getMyPlayer().bidders == 2) {
+                getMyPlayer().bidders = 0;
+                
                 // Set the 'Auction' competence argument.
                 Item item = getMyPlayer().getItemToSell();
                 AuctionArgument auctionArgument = AuctionArgument.createEnvelopeAuctionArgument(
                     item.getName(), item.getPrice());
-                System.out.println("----- Auction argument: " + auctionArgument.toString() + " -----");
+                System.out.println("----- 'Auction' argument: " + auctionArgument.toString() + " -----");
                 
                 Future<AuctionResult> future = getMyPlayer().invokeCompetence(
                     getMyPlayer().getAuctionCompetenceName(), auctionArgument);
