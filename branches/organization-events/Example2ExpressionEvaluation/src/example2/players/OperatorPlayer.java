@@ -1,5 +1,6 @@
 package example2.players;
 
+import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
 
@@ -25,9 +26,9 @@ public abstract class OperatorPlayer extends RolePlayer {
         super.setup();
         
         // Add event handlers.
-        addEventHandler("role-activated", RoleActivated_EventHandler.class);
-        addEventHandler("role-deactivated", RoleDeactivated_EventHandler.class);
-        addEventHandler("role-deacted", RoleDeacted_EventHandler.class);
+        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
     }
     
     // </editor-fold>

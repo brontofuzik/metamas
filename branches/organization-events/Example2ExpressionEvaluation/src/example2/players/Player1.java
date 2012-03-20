@@ -1,10 +1,9 @@
 package example2.players;
 
-import java.util.HashSet;
-import java.util.Set;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.IObserver;
+import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
@@ -30,7 +29,7 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static Set<String> roleNames = new HashSet<String>();
+    private int operators;
     
     // </editor-fold>
     
@@ -64,9 +63,9 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
         super.setup();
         
         // Add event handlers.
-        addEventHandler("role-enacted", RoleEnacted_EventHandler.class);
-        addEventHandler("role-activated", RoleActivated_EventHandler.class);
-        addEventHandler("role-deactivated", RoleDeactivated_EventHandler.class);
+        addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
+        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
         scheduleEnactRole(2000);
@@ -93,9 +92,9 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
          */
         @Override
         protected void handleEvent(String roleName) {
-            roleNames.add(roleName);
-            if (roleNames.size() == 5) {
-                roleNames.clear();
+            getMyPlayer().operators++;
+            if (getMyPlayer().operators == 4) {
+                getMyPlayer().operators = 0;
                 getMyPlayer().activateRole();
             }
         }
@@ -120,9 +119,9 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
          */
         @Override
         protected void handleEvent(String roleName) {
-            roleNames.add(roleName);
-            if (roleNames.size() == 5) {
-                roleNames.clear();
+            getMyPlayer().operators++;
+            if (getMyPlayer().operators == 4) {
+                getMyPlayer().operators = 0;
 
                 // Set 'Evaluate' competence argument.
                 String evaluateArgument = "(1*2)+(4/2)";
@@ -153,9 +152,9 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
          */
         @Override
         protected void handleEvent(String roleName) {
-            roleNames.add(roleName);
-            if (roleNames.size() == 5) {
-                roleNames.clear();
+            getMyPlayer().operators++;
+            if (getMyPlayer().operators == 4) {
+                getMyPlayer().operators = 0;
                 getMyPlayer().deactRole();
             }
         }
