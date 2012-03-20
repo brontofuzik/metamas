@@ -1,18 +1,18 @@
-package thespian4jade.core.organization.competence;
+package thespian4jade.core.player.responsibility;
 
-import thespian4jade.core.organization.Role;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.io.Serializable;
 
 /**
- * A one-shot competence.
+ * A one-shot responsibility.
  * @author Lukáš Kúdela
  * @since 2012-01-02
  * @version %I% %G%
  */
-public abstract class OneShotCompetence<TArgument extends Serializable, TResult extends Serializable>
-    extends OneShotBehaviourState implements ICompetence<TArgument, TResult> {
-    
+public abstract class AsynchronousResponsibility<TArgument extends Serializable,
+    TResult extends Serializable> extends OneShotBehaviourState
+    implements IResponsibility<TArgument, TResult> {
+   
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private TArgument argument;
@@ -22,7 +22,7 @@ public abstract class OneShotCompetence<TArgument extends Serializable, TResult 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
+        
     public void setArgument(TArgument argument) {
         this.argument = argument;
     }
@@ -37,9 +37,9 @@ public abstract class OneShotCompetence<TArgument extends Serializable, TResult 
         return argument;
     }
     
-    public void setResult(TResult result) {
+    protected void setResult(TResult result) {
         this.result = result;
     }
     
-    // </editor-fold> 
+    // </editor-fold>
 }

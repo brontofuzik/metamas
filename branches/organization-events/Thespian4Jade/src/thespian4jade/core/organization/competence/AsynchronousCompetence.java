@@ -1,17 +1,17 @@
 package thespian4jade.core.organization.competence;
 
-import thespian4jade.core.organization.Role;
-import thespian4jade.proto.jadeextensions.FSMBehaviourState;
+import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.io.Serializable;
 
 /**
- * A FSM competence.
+ * A one-shot competence.
  * @author Lukáš Kúdela
  * @since 2012-01-02
  * @version %I% %G%
  */
-public abstract class FSMCompetence<TArgument extends Serializable, TResult extends Serializable>
-    extends FSMBehaviourState implements ICompetence<TArgument, TResult> {
+public abstract class AsynchronousCompetence
+    <TArgument extends Serializable, TResult extends Serializable>
+    extends OneShotBehaviourState implements ICompetence<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -22,7 +22,7 @@ public abstract class FSMCompetence<TArgument extends Serializable, TResult exte
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
+    
     public void setArgument(TArgument argument) {
         this.argument = argument;
     }
@@ -37,9 +37,9 @@ public abstract class FSMCompetence<TArgument extends Serializable, TResult exte
         return argument;
     }
     
-    protected void setResult(TResult result) {
+    public void setResult(TResult result) {
         this.result = result;
     }
     
-    // </editor-fold>
+    // </editor-fold> 
 }

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class FSMResponsibility<TArgument extends Serializable,
+public class SynchronousResponsibility<TArgument extends Serializable,
     TResult extends Serializable> extends FSMBehaviourState
     implements IResponsibility<TArgument, TResult> {
     
