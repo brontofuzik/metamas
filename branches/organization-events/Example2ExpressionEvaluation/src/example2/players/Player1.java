@@ -18,11 +18,13 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    /**
-     * The full name of the Evaluate competence.
-     */
-    private static final String EVALUATE_COMPETENCE_FULL_NAME
-        = "expressionEvaluation_Organization.Evaluator_Role.Evaluate_Competence";
+    /** The full name of the 'Evaluator' role. */
+    private static final String EVALUATOR_ROLE_FULL_NAME
+        = "expressionEvaluation_Organization.Evaluator_Role";
+    
+    /** The name of the 'Evaluate' competence. */
+    private static final String EVALUATE_COMPETENCE_NAME
+        = "Evaluate_Competence";
     
     // </editor-fold>
     
@@ -39,7 +41,7 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
      * Creates the calculator1 player who will enact the 'Evaluator' role.
      */
     public Player1() {
-        super(new CompetenceFullName(EVALUATE_COMPETENCE_FULL_NAME));
+        super(new RoleFullName(EVALUATOR_ROLE_FULL_NAME), EVALUATE_COMPETENCE_NAME);
     }
     
     // </editor-fold>
