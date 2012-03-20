@@ -1,6 +1,7 @@
-package example1.players.demo;
+package example1.players;
 
 import thespian4jade.core.player.EventHandler;
+import thespian4jade.example.RolePlayer;
 
 /**
  * The Demo2 player. The player playing the 'Executer' role.
@@ -8,7 +9,14 @@ import thespian4jade.core.player.EventHandler;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class Demo2_Player extends Demo_Player {
+public class Player2 extends RolePlayer {
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final String EXECUTER_ROLE_FULL_NAME
+        = "functionInvocation_Organization.Executer_Role";
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -16,8 +24,8 @@ public class Demo2_Player extends Demo_Player {
      * Creates a new Demo player who will enact the Executer role.
      * @param roleFullName the full name of the role to enact and activate
      */
-    public Demo2_Player() {
-        super(new RoleFullName("functionInvocation_Organization.Executer_Role"));
+    public Player2() {
+        super(new RoleFullName(EXECUTER_ROLE_FULL_NAME));
     }
     
     // </editor-fold>
@@ -27,6 +35,9 @@ public class Demo2_Player extends Demo_Player {
     @Override
     protected void setup() {
         super.setup();
+
+        // Add responsibilities.
+        addResponsibility(ExecuteFunction_Responsibility.class);
         
         // Add event handlers.
         addEventHandler("role-activated", Demo2_InvokerRoleActivated_EventHandler.class);
@@ -47,7 +58,7 @@ public class Demo2_Player extends Demo_Player {
      * @version %I% %G%
      */
     public static class Demo2_InvokerRoleActivated_EventHandler
-        extends EventHandler<Demo2_Player> {
+        extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -67,7 +78,7 @@ public class Demo2_Player extends Demo_Player {
      * @version %I% %G%
      */
     public static class Demo2_InvokerRoleDeactivated_EventHandler
-        extends EventHandler<Demo2_Player> {
+        extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -87,7 +98,7 @@ public class Demo2_Player extends Demo_Player {
      * @version %I% %G%
      */
     public static class Demo2_InvokerRoleDeacted_EventHandler
-        extends EventHandler<Demo2_Player> {
+        extends EventHandler<Player2> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

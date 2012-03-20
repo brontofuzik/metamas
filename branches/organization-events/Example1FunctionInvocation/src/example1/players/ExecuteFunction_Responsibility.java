@@ -1,4 +1,4 @@
-package example1.players.demo;
+package example1.players;
 
 import thespian4jade.core.player.responsibility.AsynchronousResponsibility;
 

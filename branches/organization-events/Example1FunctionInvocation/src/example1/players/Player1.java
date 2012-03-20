@@ -1,9 +1,10 @@
-package example1.players.demo;
+package example1.players;
 
-import thespian4jade.core.Future;
-import thespian4jade.core.IObservable;
-import thespian4jade.core.IObserver;
+import thespian4jade.concurrency.Future;
+import thespian4jade.concurrency.IObservable;
+import thespian4jade.concurrency.IObserver;
 import thespian4jade.core.player.EventHandler;
+import thespian4jade.example.CompetencePlayer;
 
 /**
  * The Demo1 player. The player playing the 'Invoker' role.
@@ -11,16 +12,24 @@ import thespian4jade.core.player.EventHandler;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class Demo1_Player extends Demo_Player implements IObserver {
+public class Player1 extends CompetencePlayer implements IObserver {
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private static final String INVOKE_FUNCTION_COMPETENCE_FULL_NAME
+        = "functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence";
+    
+    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Invoker role.
+     * Initializes a new instance of the Demo1_Player class.
+     * Creates the demo1 player who will enact the 'Invoker' role.
      * @param competenceFullName the full name of the competence to invoke 
      */
-    public Demo1_Player() {
-        super(new RoleFullName("functionInvocation_Organization.Invoker_Role"));
+    public Player1() {
+        super(new CompetenceFullName(INVOKE_FUNCTION_COMPETENCE_FULL_NAME));
     }
     
     // </editor-fold>
@@ -29,21 +38,11 @@ public class Demo1_Player extends Demo_Player implements IObserver {
 
     @Override
     public void update(IObservable observable) {
-        Integer competenceResult = ((Future<Integer>)observable).getValue();
-        System.out.println("----- 'Invoke function' competence result: " + competenceResult + " -----");
-        deactivateRole();
-    }
-    
-    // ----- PACKAGE -----
-    
-    void invokeCompetence() {
-        CompetenceFullName competenceFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
-        Integer competenceArgument = new Integer(10);
-        System.out.println("----- 'Invoke function' competence argument: " + competenceArgument + " -----");
+        Integer invokeFunctionResult = ((Future<Integer>)observable).getValue();
+        System.out.println("----- 'Invoke function' competence result: " + invokeFunctionResult + " -----");
         
-        Future<Integer> future = invokeCompetence(competenceFullName.getCompetenceName(), competenceArgument);
-        future.addObserver(this);
-    }
+        deactivateRole();
+    }   
 
     // ----- PROTECTED -----
     
@@ -52,9 +51,9 @@ public class Demo1_Player extends Demo_Player implements IObserver {
         super.setup();
         
         // Add event handlers.
-        addEventHandler("role-enacted", ExecuterRoleEnacted_EventHandler.class);
-        addEventHandler("role-activated", ExecuterRoleActivated_EventHandler.class);
-        addEventHandler("role-deactivated", ExecuterRoleDeactivated_EventHandler.class);
+        addEventHandler("role-enacted", RoleEnacted_EventHandler.class);
+        addEventHandler("role-activated", RoleActivated_EventHandler.class);
+        addEventHandler("role-deactivated", RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
         scheduleEnactRole(2000);
@@ -69,8 +68,8 @@ public class Demo1_Player extends Demo_Player implements IObserver {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class ExecuterRoleEnacted_EventHandler
-        extends EventHandler<Demo1_Player> {
+    public static class RoleEnacted_EventHandler
+        extends EventHandler<Player1> {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -89,15 +88,19 @@ public class Demo1_Player extends Demo_Player implements IObserver {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class ExecuterRoleActivated_EventHandler
-        extends EventHandler<Demo1_Player> {
+    public static class RoleActivated_EventHandler
+        extends EventHandler<Player1> {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Executer_Role")) {
-                getMyPlayer().invokeCompetence();
+                Integer invokeFunctionArgument = new Integer(10);
+                System.out.println("----- Invoke function argument: " + invokeFunctionArgument + " -----");
+                
+                Future<Integer> future = getMyPlayer().invokeCompetence(invokeFunctionArgument);
+                future.addObserver(getMyPlayer());
             }
         }
     
@@ -109,8 +112,8 @@ public class Demo1_Player extends Demo_Player implements IObserver {
      * @since 2012-03-19
      * @version %I% %G%
      */
-    public static class ExecuterRoleDeactivated_EventHandler
-        extends EventHandler<Demo1_Player> {
+    public static class RoleDeactivated_EventHandler
+        extends EventHandler<Player1> {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
     
