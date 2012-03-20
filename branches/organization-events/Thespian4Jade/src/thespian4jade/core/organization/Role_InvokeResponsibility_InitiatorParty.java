@@ -1,7 +1,8 @@
 package thespian4jade.core.organization;
 
 import jade.core.AID;
-import thespian4jade.core.player.Player;
+import thespian4jade.core.Future;
+import thespian4jade.core.IObserver;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
@@ -15,6 +16,9 @@ import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeRespo
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
+import thespian4jade.core.IObservable;
+import thespian4jade.core.Observable;
+import thespian4jade.proto.IResultParty;
 
 /**
  * A 'Invoke responsibility' protocol initiator party (new version).
@@ -22,8 +26,9 @@ import java.io.Serializable;
  * @since 2011-12-22
  * @version %I% %G%
  */
-public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializable,
-    TResult extends Serializable> extends InitiatorParty<Role> {
+public class Role_InvokeResponsibility_InitiatorParty
+    <TArgument extends Serializable, TResult extends Serializable>
+    extends InitiatorParty<Role> implements IResultParty<TResult>, IObservable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -46,6 +51,11 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
      * The serializable responsibility argument.
      */
     private TResult responsibilityResult;
+    
+    /**
+     * The observable helper.
+     */
+    private IObservable observable = new Observable();
     
     // </editor-fold>
     
@@ -81,6 +91,14 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
+     * Gets the responsibility result.
+     * @return the responsibility result
+     */
+    public TResult getResponsibilityResult() {
+        return responsibilityResult;
+    }
+    
+    /**
      * Sets the responsibility argument.
      * @param responsibilityArgument the responsibility argument
      */
@@ -89,16 +107,62 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     }
     
     /**
-     * Gets the responsibility result.
-     * @return the responsibility result
+     * Gets the result.
+     * @return the result
      */
-    public Object getResponsibilityResult() {
-        return responsibilityResult;
+    @Override
+    public TResult getResult() {
+        return getResponsibilityResult();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    /**
+     * Gets the result future.
+     * The IResultParty method.
+     * @return the reuslt future
+     */
+    @Override
+    public Future getResultFuture() {
+        Future<TResult> future = new Future();
+        addObserver(future);
+        return future;
+    }
+    
+    /**
+     * The IObservable method.
+     * @param observer 
+     */
+    @Override
+    public void addObserver(IObserver observer) {
+        observable.addObserver(observer);
+    }
+
+    /**
+     * The IObservable method.
+     * @param observer 
+     */
+    @Override
+    public void removeObserver(IObserver observer) {
+        observable.removeObserver(observer);
+    }
+
+    /**
+     * The IObservable method.
+     * @param observable 
+     */
+    @Override
+    public void notifyObservers(IObservable observable) {
+        this.observable.notifyObservers(observable);
+    }
+    
+    public void notifyObservers() {
+        notifyObservers(this);
+    }
+    
+    // ----- PRIVATE -----
     
     /**
      * Builds the party FSM.
@@ -133,7 +197,7 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
         receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.SUCCESS, successEnd);
         receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.FAILURE, failureEnd);
     }
-    
+ 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -322,6 +386,7 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     
     /**
      * The 'Success end' (one-shot) state.
+     * A state in which the party succeeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
         
@@ -329,7 +394,14 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke responsibility' initiator party suceeded.");
+//            // Notify the observers about the party success.
+//            ((Role_InvokeResponsibility_InitiatorParty)getParty())
+//                .notifyObservers();
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke responsibility' protocol (id = %1$s) initiator party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
@@ -337,6 +409,7 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
     
     /**
      * The 'Failure end' (one-shot) state.
+     * A state in which the party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
         
@@ -344,7 +417,14 @@ public class Role_InvokeResponsibility_InitiatorParty<TArgument extends Serializ
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke responsibility' initiator party failed.");
+//            // Notify the observers about the party failure.
+//            ((Role_InvokeResponsibility_InitiatorParty)getParty())
+//                .notifyObservers();
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke responsibility' protocol (id = %1$s) initiator party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>

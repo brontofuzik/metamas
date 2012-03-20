@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+import thespian4jade.proto.Party;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
 
 /**
@@ -208,7 +209,12 @@ public abstract class Organization extends Agent {
         assert event != null && !event.isEmpty();
         // -------------------------
         
-        addBehaviour(RaiseEventProtocol.getInstance().createInitiatorParty(event, argument));
+        // Create a 'Raise event' protocol initiator party.
+        Party raiseEventInitiator = RaiseEventProtocol.getInstance()
+            .createInitiatorParty(event, argument);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(raiseEventInitiator);
     }
     
     // ---------- PRIVATE ----------

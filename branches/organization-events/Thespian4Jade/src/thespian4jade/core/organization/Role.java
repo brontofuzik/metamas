@@ -7,12 +7,16 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
+import java.io.Serializable;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import thespian4jade.core.Future;
+import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.Party;
 
 /**
  * A role agent.
@@ -111,15 +115,19 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TAG OBSOLETE
-//    public void invokeResponsibility(String responsibilityName, Object argument) {
-//        initiator.initiateProtocol(InvokeResponsibilityProtocol.getInstance(),
-//            new Object[] { responsibilityName, argument } );
-//    }
-    
-    public void invokeResponsibility(String responsibilityName, Object argument) {
-        addBehaviour(InvokeResponsibilityProtocol.getInstance()
-            .createInitiatorParty(responsibilityName, argument));    
+    public final <TArgument extends Serializable, TResult extends Serializable>
+        Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
+        // Create an 'Invoke responsibility' protocol initiator party.
+        Party invokeResponsibilityInitiator = InvokeResponsibilityProtocol.getInstance()
+            .createInitiatorParty(responsibilityName, argument);
+        
+        // Get the inititor party result future.
+        Future<TResult> future = ((IResultParty)invokeResponsibilityInitiator).getResultFuture();
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(invokeResponsibilityInitiator);
+        
+        return future;  
     }
     
     // ----- Logging -----

@@ -4,6 +4,7 @@ import thespian4jade.core.player.kb.PlayerKnowledgeBase;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jade.util.Logger;
+import java.io.Serializable;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
@@ -12,6 +13,9 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenc
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import thespian4jade.core.Future;
+import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.Party;
 
 /**
  * A player agent.
@@ -71,8 +75,12 @@ public abstract class Player extends Agent {
      */
     public final void enactRole(final String organizationName,
         final String roleName) {
-        addBehaviour(EnactRoleProtocol.getInstance()
-            .createInitiatorParty(organizationName, roleName));
+        // Create an 'Enact role' protocol initiator party.
+        Party enactRoleInitiator = EnactRoleProtocol.getInstance()
+            .createInitiatorParty(organizationName, roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(enactRoleInitiator);
     }
     
     /**
@@ -82,8 +90,12 @@ public abstract class Player extends Agent {
      */
     public final void deactRole(final String organizationName,
         final String roleName) {
-        addBehaviour(DeactRoleProtocol.getInstance()
-            .createInitiatorParty(organizationName, roleName));
+        // Create a 'Deact role' protocol initiator party.
+        Party deactRoleInitiator = DeactRoleProtocol.getInstance()
+            .createInitiatorParty(organizationName, roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(deactRoleInitiator);
     }
     
     /**
@@ -91,8 +103,12 @@ public abstract class Player extends Agent {
      * @param roleName the name of the role to activate
      */
     public final void activateRole(final String roleName) {
-        addBehaviour(ActivateRoleProtocol.getInstance()
-            .createInitiatorParty(roleName));
+        // Create a 'Activate role' potocol initiator party.
+        Party activateRoleInitiator = ActivateRoleProtocol.getInstance()
+            .createInitiatorParty(roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(activateRoleInitiator);
     }
        
     /**
@@ -100,8 +116,12 @@ public abstract class Player extends Agent {
      * @param roleName the name of the role to deactivate
      */
     public final void deactivateRole(final String roleName) {
-        addBehaviour(DeactivateRoleProtocol.getInstance()
-            .createInitiatorParty(roleName));
+        // Create a 'Deactivate role' protocol initiator party.
+        Party deactivateRoleInitiator = DeactivateRoleProtocol.getInstance()
+            .createInitiatorParty(roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(deactivateRoleInitiator);
     }
     
     /**
@@ -109,9 +129,19 @@ public abstract class Player extends Agent {
      * @param competenceName the name of the competence to invoke
      * @param argument the competence argument
      */
-    public final <T> void invokeCompetence(final String competenceName, final T argument) {
-        addBehaviour(InvokeCompetenceProtocol.getInstance()
-            .createInitiatorParty(competenceName, argument));
+    public final <TArgument extends Serializable, TResult extends Serializable>
+        Future<TResult> invokeCompetence(final String competenceName, final TArgument argument) {
+        // Create an 'Invoke competence' protocol initiator party.
+        Party invokeCompetenceInitiator = InvokeCompetenceProtocol.getInstance()
+            .createInitiatorParty(competenceName, argument);
+        
+        // Get the inititor party result future.
+        Future<TResult> future = ((IResultParty)invokeCompetenceInitiator).getResultFuture();
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(invokeCompetenceInitiator);
+        
+        return future;
     }
     
     // ----- Logging -----
@@ -313,8 +343,9 @@ public abstract class Player extends Agent {
      * @param timeout the start timeout
      * @return the end timeout
      */
-    protected final <T> int scheduleInvokeCompetence(final CompetenceFullName competenceFullName,
-        final T argument, final int timeout, final int duration) {
+    protected final <TArgument extends Serializable> int scheduleInvokeCompetence(
+        final CompetenceFullName competenceFullName, final TArgument argument,
+        final int timeout, final int duration) {
         // Initiate the 'Invoke competence' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout)
         {

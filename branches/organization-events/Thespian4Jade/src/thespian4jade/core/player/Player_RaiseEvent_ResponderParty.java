@@ -173,7 +173,6 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
                 return HANDLE_EVENT;
             } else {
                 // The event is ignored.
-                System.out.println("----- IGNORE: " + event + " -----");
                 return IGNORE_EVENT;
             }
         }
