@@ -12,18 +12,7 @@ public class Divider_Role extends Role {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    public static final String NAME = "Divider_Role";
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    /**
-     * Initializes the Divider_Role class.
-     */
-    static {
-        addResponsibility("Divide_Responsibility");
-    }
+    public static final String NAME = "Constant fields";
     
     // </editor-fold>
     

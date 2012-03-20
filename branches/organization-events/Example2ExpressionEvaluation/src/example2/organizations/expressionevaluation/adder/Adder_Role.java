@@ -10,20 +10,9 @@ import thespian4jade.core.organization.Role;
  */
 public class Adder_Role extends Role {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     public static final String NAME = "Adder_Role";
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    /**
-     * Initializes the Adder_Role class.
-     */
-    static {
-        addResponsibility("Add_Responsibility");
-    }
     
     // </editor-fold>
     
