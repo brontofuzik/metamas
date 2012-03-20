@@ -8,7 +8,7 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.ReceiveAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
@@ -49,11 +49,11 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendDeactivateRequest = new SendDeactivateRequest();
-        State receiveDeactivateReply = new ReceiveDeactivateReply();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendDeactivateRequest = new SendDeactivateRequest();
+        IState receiveDeactivateReply = new ReceiveDeactivateReply();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
 
         // Register the states.

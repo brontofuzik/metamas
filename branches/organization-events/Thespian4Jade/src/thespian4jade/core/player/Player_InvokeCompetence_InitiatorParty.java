@@ -8,7 +8,7 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
@@ -166,13 +166,13 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
-        State receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
-        State sendCompetenceArgument = new SendCompetenceArgument();
-        State receiveCompetenceResult = new ReceiveCompetenceResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
+        IState receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
+        IState sendCompetenceArgument = new SendCompetenceArgument();
+        IState receiveCompetenceResult = new ReceiveCompetenceResult();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.

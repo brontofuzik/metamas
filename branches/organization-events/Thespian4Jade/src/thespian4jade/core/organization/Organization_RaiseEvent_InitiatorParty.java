@@ -4,7 +4,7 @@ import jade.core.AID;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.EventMessage;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
 
@@ -56,9 +56,9 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        State sendEvent = new SendEvent();
-        State end = new End();
+        IState initialize = new Initialize();
+        IState sendEvent = new SendEvent();
+        IState end = new End();
         // ------------------
         
         // Register the states.

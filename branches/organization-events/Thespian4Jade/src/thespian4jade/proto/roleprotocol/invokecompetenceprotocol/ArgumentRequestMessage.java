@@ -1,7 +1,7 @@
 package thespian4jade.proto.roleprotocol.invokecompetenceprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import thespian4jade.lang.SimpleMessage;
 
 /**
@@ -35,7 +35,7 @@ public class ArgumentRequestMessage extends SimpleMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements MessageFactory<ArgumentRequestMessage> {
+    public static class Factory implements IMessageFactory<ArgumentRequestMessage> {
 
         /**
          * Creates an empty 'Argument request' message.

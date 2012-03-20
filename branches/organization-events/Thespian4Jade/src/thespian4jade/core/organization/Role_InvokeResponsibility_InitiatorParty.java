@@ -9,7 +9,7 @@ import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
@@ -169,13 +169,13 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendResponsibilityRequest = new SendResponsibilityRequest();
-        State receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
-        State sendResponsibilityArgument = new SendResponsibilityArgument();
-        State receiveResponsibilityResult = new ReceiveResponsibilityResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendResponsibilityRequest = new SendResponsibilityRequest();
+        IState receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
+        IState sendResponsibilityArgument = new SendResponsibilityArgument();
+        IState receiveResponsibilityResult = new ReceiveResponsibilityResult();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.

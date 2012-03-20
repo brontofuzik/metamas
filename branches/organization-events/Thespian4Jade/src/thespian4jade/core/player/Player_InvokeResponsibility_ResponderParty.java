@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.player.responsibility.Responsibility;
+import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
 import thespian4jade.lang.Message;
 import thespian4jade.proto.Initialize;
@@ -9,7 +9,7 @@ import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
@@ -43,17 +43,17 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     /**
      * The 'Receive responsibility argument' state.
      */
-    private State receiveResponsibilityArgument;
+    private IState receiveResponsibilityArgument;
     
     /**
      * The responsibility state.
      */
-    private Responsibility<TArgument, TResult> responsibility;
+    private IResponsibility<TArgument, TResult> responsibility;
     
     /**
      * The 'Send responsibility result' state.
      */
-    private State sendResponsibilityResult;
+    private IState sendResponsibilityResult;
     
     // </editor-fold>
     
@@ -80,13 +80,13 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      */
     private void buildFSM() {        
          // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
-        State sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
+        IState initialize = new MyInitialize();
+        IState receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
+        IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
         sendResponsibilityResult = new SendResponsibilityResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register states.
@@ -128,7 +128,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      * @param responsibilityName the name of the responsibility
      * @return the responsibility
      */
-    private Responsibility createResponsibility(String responsibilityName) {
+    private IResponsibility createResponsibility(String responsibilityName) {
         //System.out.println("----- RESPONSIBILITY NAME: " + responsibilityName + " -----");
         
         // TODO (priority: high) Move the following to the calling method.
@@ -147,9 +147,9 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         //System.out.println("----- RESPONSIBILITY CONSTRUCTOR: " + responsibilityConstructor + " -----");
         
         // Instantiate the responsibility.
-        Responsibility responsibility = null;
+        IResponsibility responsibility = null;
         try {
-            responsibility = (Responsibility)responsibilityConstructor.newInstance();
+            responsibility = (IResponsibility)responsibilityConstructor.newInstance();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {

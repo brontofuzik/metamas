@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.EventMessage;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
 
@@ -23,9 +23,9 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
     
     private String argument;
     
-    private State selectEventHandler;
+    private IState selectEventHandler;
     
-    private State end;
+    private IState end;
     
     // </editor-fold>
     
@@ -47,7 +47,7 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
     
     private void buildFSM() {
         // ----- State -----
-        State receiveEvent = new ReceiveEvent();
+        IState receiveEvent = new ReceiveEvent();
         selectEventHandler = new SelectEventHandler();
         end = new End();
         // -----------------

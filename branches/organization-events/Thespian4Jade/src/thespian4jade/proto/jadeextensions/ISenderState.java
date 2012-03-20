@@ -9,7 +9,7 @@ import thespian4jade.lang.Message;
  * @since 2011-12-05
  * @version %I% %G%
  */
-public interface SenderState extends State {
+public interface ISenderState extends IState {
    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

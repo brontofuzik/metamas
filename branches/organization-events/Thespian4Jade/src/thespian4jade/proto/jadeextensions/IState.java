@@ -8,7 +8,7 @@ import thespian4jade.proto.Party;
  * @since 2011-12-06
  * @version %I% %G%
  */
-public interface State {
+public interface IState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
@@ -20,13 +20,13 @@ public interface State {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    void registerTransition(int event, State targetState);
+    void registerTransition(int event, IState targetState);
     
-    void registerTransition(int event, State targetState, String[] statesToReset);
+    void registerTransition(int event, IState targetState, String[] statesToReset);
     
-    void registerDefaultTransition(State targetState);
+    void registerDefaultTransition(IState targetState);
     
-    void registerDefaultTransition(State targetState, String[] statesToReset);
+    void registerDefaultTransition(IState targetState, String[] statesToReset);
     
     // </editor-fold>
 }

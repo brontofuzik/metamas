@@ -7,7 +7,7 @@ package thespian4jade.lang;
  * @since 2012-01-24
  * @version %I% %G%
  */
-public interface MessageFactory<TMessage> {
+public interface IMessageFactory<TMessage> {
     
     /**
      * Creates an empty message.

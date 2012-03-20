@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public abstract class OneShotResponsibility<TArgument extends Serializable,
     TResult extends Serializable> extends OneShotBehaviourState
-    implements Responsibility<TArgument, TResult> {
+    implements IResponsibility<TArgument, TResult> {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

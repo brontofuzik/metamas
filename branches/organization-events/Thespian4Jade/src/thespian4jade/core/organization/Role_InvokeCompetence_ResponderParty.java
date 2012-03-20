@@ -2,13 +2,13 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.competence.Competence;
+import thespian4jade.core.organization.competence.ICompetence;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
@@ -43,17 +43,17 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     /**
      * The 'Receive competence argument' state.
      */
-    private State receiveCompetenceArgument;
+    private IState receiveCompetenceArgument;
     
     /**
      * The competence state.
      */
-    private Competence competence;
+    private ICompetence competence;
     
     /**
      * The 'Send competence result' state.
      */
-    private State sendCompetenceResult;
+    private IState sendCompetenceResult;
     
     // </editor-fold>
     
@@ -80,13 +80,13 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
-        State sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
+        IState initialize = new MyInitialize();
+        IState receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
+        IState sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
         receiveCompetenceArgument = new ReceiveCompetenceArgument();
         sendCompetenceResult = new SendCompetenceResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register states.
@@ -130,7 +130,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      * @param competenceName the name of the competence
      * @return the competence
      */
-    private Competence createCompetence(String competenceName) {
+    private ICompetence createCompetence(String competenceName) {
         //System.out.println("----- CREATING COMPETENCE: " + competenceName + " -----");
         Class competenceClass = getMyAgent().competences.get(competenceName);
         //System.out.println("----- COMPETENCE CLASS: " + competenceClass + " -----");
@@ -146,9 +146,9 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         }
                 
         // Instantiate the competence.
-        Competence competence = null;
+        ICompetence competence = null;
         try {
-            competence = (Competence)competenceConstructor.newInstance();
+            competence = (ICompetence)competenceConstructor.newInstance();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {

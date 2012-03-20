@@ -9,7 +9,7 @@ import thespian4jade.lang.Message;
  * @since 2011-12-06
  * @version %I% %G%
  */
-public interface ReceiverState {
+public interface IReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

@@ -2,7 +2,7 @@ package thespian4jade.proto.roleprotocol.invokecompetenceprotocol;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import java.io.Serializable;
 
 /**
@@ -90,7 +90,7 @@ public class CompetenceResultMessage<TResult extends Serializable>
      * @version %I% %G%
      */
     public static class Factory<TResult extends Serializable>
-        implements MessageFactory<CompetenceResultMessage<TResult>> {
+        implements IMessageFactory<CompetenceResultMessage<TResult>> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

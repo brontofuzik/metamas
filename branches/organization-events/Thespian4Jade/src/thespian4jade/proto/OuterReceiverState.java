@@ -1,13 +1,13 @@
 package thespian4jade.proto;
 
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.Message;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.jadeextensions.FSMBehaviourReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,10 +63,10 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
      */
     protected void buildFSM() {
         // ----- States -----
-        State entry = new EntryState();
-        State manager = new ManagerState();
-        State blocker = new BlockerState();
-        State exit = new ExitState();
+        IState entry = new EntryState();
+        IState manager = new ManagerState();
+        IState blocker = new BlockerState();
+        IState exit = new ExitState();
         // ------------------
         
         // Register the states.
@@ -151,7 +151,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        private MessageFactory<TMessage> messageFactory;
+        private IMessageFactory<TMessage> messageFactory;
         
         private int exitValue;
         
@@ -166,7 +166,7 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
          * @param messageFactory the message factory
          * @param outerReceiverStateExitValue the outer receiver state exit value
          */
-        protected InnerReceiverState(MessageFactory<TMessage> messageFactory, int outerReceiverStateExitValue) {
+        protected InnerReceiverState(IMessageFactory<TMessage> messageFactory, int outerReceiverStateExitValue) {
             this.messageFactory = messageFactory;
             this.outerReceiverStateExitValue = outerReceiverStateExitValue;
         } 

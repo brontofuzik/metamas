@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class FSMResponsibility<TArgument extends Serializable,
     TResult extends Serializable> extends FSMBehaviourState
-    implements Responsibility<TArgument, TResult> {
+    implements IResponsibility<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

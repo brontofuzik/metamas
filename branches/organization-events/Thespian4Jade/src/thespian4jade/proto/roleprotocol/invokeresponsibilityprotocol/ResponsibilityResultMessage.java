@@ -2,7 +2,7 @@ package thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import java.io.Serializable;
 
 /**
@@ -88,7 +88,7 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
      * @version %I% %G%
      */
     public static class Factory<TResult extends Serializable>
-        implements MessageFactory<ResponsibilityResultMessage<TResult>> {
+        implements IMessageFactory<ResponsibilityResultMessage<TResult>> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

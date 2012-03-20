@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @version %I% %G%
  */
 public abstract class FSMCompetence<TArgument extends Serializable, TResult extends Serializable>
-    extends FSMBehaviourState implements Competence<TArgument, TResult> {
+    extends FSMBehaviourState implements ICompetence<TArgument, TResult> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     

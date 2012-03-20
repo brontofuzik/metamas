@@ -1,6 +1,6 @@
 package thespian4jade.core.player.responsibility;
 
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import java.io.Serializable;
 
 /**
@@ -9,8 +9,8 @@ import java.io.Serializable;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public interface Responsibility<TArgument extends Serializable,
-    TResult extends Serializable> extends State {
+public interface IResponsibility<TArgument extends Serializable,
+    TResult extends Serializable> extends IState {
         
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
