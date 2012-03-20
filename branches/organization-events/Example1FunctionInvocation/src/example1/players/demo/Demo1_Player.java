@@ -1,5 +1,8 @@
 package example1.players.demo;
 
+import thespian4jade.core.Future;
+import thespian4jade.core.IObservable;
+import thespian4jade.core.IObserver;
 import thespian4jade.core.player.EventHandler;
 
 /**
@@ -8,7 +11,7 @@ import thespian4jade.core.player.EventHandler;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class Demo1_Player extends Demo_Player {
+public class Demo1_Player extends Demo_Player implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -24,10 +27,22 @@ public class Demo1_Player extends Demo_Player {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    @Override
+    public void update(IObservable observable) {
+        Integer competenceResult = ((Future<Integer>)observable).getValue();
+        System.out.println("----- 'Invoke function' competence result: " + competenceResult + " -----");
+        deactivateRole();
+    }
+    
+    // ----- PACKAGE -----
+    
     void invokeCompetence() {
         CompetenceFullName competenceFullName = new CompetenceFullName("functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence");
         Integer competenceArgument = new Integer(10);
-        invokeCompetence(competenceFullName.getCompetenceName(), competenceArgument);
+        System.out.println("----- 'Invoke function' competence argument: " + competenceArgument + " -----");
+        
+        Future<Integer> future = invokeCompetence(competenceFullName.getCompetenceName(), competenceArgument);
+        future.addObserver(this);
     }
 
     // ----- PROTECTED -----
@@ -102,7 +117,7 @@ public class Demo1_Player extends Demo_Player {
     @Override
     protected void handleEvent(String roleName) {
         if (roleName.equals("Executer_Role")) {
-            getMyPlayer().deactivateRole();
+            getMyPlayer().deactRole();
         }
     }
     
