@@ -8,7 +8,7 @@ import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
@@ -62,10 +62,10 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
      */
     private void buildFSM() {
         // ----- States -----
-        State receiveRequest = new ReceiveRequest();
-        State evaluateExpressionWrapper = new EvaluteExpressionWrapper();
-        State sendReply = new SendReply();
-        State end = new End();
+        IState receiveRequest = new ReceiveRequest();
+        IState evaluateExpressionWrapper = new EvaluteExpressionWrapper();
+        IState sendReply = new SendReply();
+        IState end = new End();
         // ------------------
         
         // Register the states.

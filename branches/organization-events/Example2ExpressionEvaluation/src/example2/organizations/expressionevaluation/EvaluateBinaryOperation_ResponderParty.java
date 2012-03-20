@@ -11,7 +11,7 @@ import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * @author Lukáš Kúdela
@@ -59,14 +59,14 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
      */
     private void buildFSM() {
         // ----- States -----
-        State receiveEvaluateRequest = new ReceiveEvaluateRequest();
-        State setInitiatorArgument = new SetInitiatorArgument();
+        IState receiveEvaluateRequest = new ReceiveEvaluateRequest();
+        IState setInitiatorArgument = new SetInitiatorArgument();
         evaluateExpressionInitiator1 = new EvaluateExpression_InitiatorParty();
         evaluateExpressionInitiator2 = new EvaluateExpression_InitiatorParty();
-        State getInitiatorResult = new GetInitiatorResult();
-        State invokeResponsibility_EvaluateBinaryOperation = createInvokeResponsibility_EvaluateBinaryOperation();
-        State sendEvaluateReply = new SendEvaluateReply();
-        State end = new End();
+        IState getInitiatorResult = new GetInitiatorResult();
+        IState invokeResponsibility_EvaluateBinaryOperation = createInvokeResponsibility_EvaluateBinaryOperation();
+        IState sendEvaluateReply = new SendEvaluateReply();
+        IState end = new End();
         // ------------------
         
         // Register the states.

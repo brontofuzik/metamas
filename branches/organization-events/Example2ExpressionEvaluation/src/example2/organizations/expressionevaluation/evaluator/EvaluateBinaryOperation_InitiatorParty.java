@@ -8,7 +8,7 @@ import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * @author Lukáš Kúdela
@@ -83,9 +83,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        State sendEvaluteRequest = new SendEvaluateRequest();
-        State receiveEvaluateReply = new ReceiveEvaluateReply();
+        IState initialize = new Initialize();
+        IState sendEvaluteRequest = new SendEvaluateRequest();
+        IState receiveEvaluateReply = new ReceiveEvaluateReply();
         // ------------------
         
         // Register the states.
