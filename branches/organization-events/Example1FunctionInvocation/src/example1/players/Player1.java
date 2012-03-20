@@ -7,14 +7,14 @@ import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
 /**
- * The Demo1 player. The player playing the 'Invoker' role.
+ * Player1 - the player playing the 'Invoker' role.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
  */
 public class Player1 extends CompetencePlayer implements IObserver {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     private static final String INVOKE_FUNCTION_COMPETENCE_FULL_NAME
         = "functionInvocation_Organization.Invoker_Role.InvokeFunction_Competence";

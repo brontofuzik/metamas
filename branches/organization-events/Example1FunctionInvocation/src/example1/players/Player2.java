@@ -4,14 +4,14 @@ import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
 
 /**
- * The Demo2 player. The player playing the 'Executer' role.
+ * Player2 - he player playing the 'Executer' role.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
  */
 public class Player2 extends RolePlayer {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     private static final String EXECUTER_ROLE_FULL_NAME
         = "functionInvocation_Organization.Executer_Role";
