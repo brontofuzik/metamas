@@ -5,7 +5,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
 import thespian4jade.core.organization.competence.FSMCompetence;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
@@ -21,12 +21,12 @@ public class Auction_Competence extends FSMCompetence<AuctionArgument, AuctionRe
     /**
      * The 'Initialize' state.
      */
-    private State initialize;
+    private IState initialize;
     
     /**
      * The 'End' state.
      */
-    private State end;
+    private IState end;
     
     // </editor-fold>
     

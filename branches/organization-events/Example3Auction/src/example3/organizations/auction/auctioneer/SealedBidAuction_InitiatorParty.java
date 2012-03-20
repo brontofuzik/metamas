@@ -16,7 +16,7 @@ import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * The 'Sealed bid auction' protocol initiator party.
@@ -129,14 +129,14 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendAuctionCFP = new SendAuctionCFP();
-        State receiveBid = new ReceiveBid();
-        State determineWinner = new DetermineWinner();
-        State sendAuctionResultToWinner = new SendAuctionResultToWinner();
-        State sendAuctionResultToLosers = new SendAuctionResultToLosers();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendAuctionCFP = new SendAuctionCFP();
+        IState receiveBid = new ReceiveBid();
+        IState determineWinner = new DetermineWinner();
+        IState sendAuctionResultToWinner = new SendAuctionResultToWinner();
+        IState sendAuctionResultToLosers = new SendAuctionResultToLosers();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
