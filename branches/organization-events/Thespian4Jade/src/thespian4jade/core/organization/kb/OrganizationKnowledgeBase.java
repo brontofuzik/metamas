@@ -79,7 +79,7 @@ public class OrganizationKnowledgeBase {
      * @return a set of all players enacting a role in the organization
      */
     public Set<AID> getAllPlayers() {
-        return enactingPlayers.keySet();
+        return new HashSet(enactingPlayers.keySet());
     }
     
     /**

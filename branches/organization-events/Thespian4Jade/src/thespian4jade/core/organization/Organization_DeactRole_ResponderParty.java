@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
@@ -172,7 +173,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Raise the 'Role deacted' event.
-            getMyOrganization().raiseEvent("role-deacted", roleName);
+            getMyOrganization().raiseEvent(Event.ROLE_DEACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

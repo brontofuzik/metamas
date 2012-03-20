@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
@@ -163,8 +164,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         public void action() {
             // Raise the 'Role deactivated' event.
-            getMyRole().myOrganization.raiseEvent("role-deactivated",
-                getMyRole().getClass().getSimpleName());
+            getMyRole().myOrganization.raiseEvent(Event.ROLE_DEACTIVATED,
+                getMyRole().getClass().getSimpleName(), playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

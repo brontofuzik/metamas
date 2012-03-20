@@ -237,6 +237,11 @@ public abstract class Player extends Agent {
         return responsibilities.containsKey(responsibility);
     }
     
+    /**
+     * Adds an event handler.
+     * @param event the event the handler handles
+     * @param eventHandlerClass the event handler class
+     */
     protected final void addEventHandler(String event, Class eventHandlerClass) {
         // ----- Preconditions -----
         if (event == null || event.isEmpty()) {
@@ -251,6 +256,23 @@ public abstract class Player extends Agent {
         
         // LOG
         logInfo(String.format("Event handler (%1$s) added.", event));
+    }
+    
+    /**
+     * Removes an event handler.
+     * @param event the event the handler handles
+     */
+    protected final void removeEventHandler(String event) {
+        // ----- Preconditions -----
+        if (event == null || event.isEmpty()) {
+            throw new IllegalArgumentException("event");
+        }
+        // -------------------------
+        
+        eventHandlers.remove(event);
+        
+        // LOG
+        logInfo(String.format("Event handler (%1$s) removed.", event));
     }
     
     // ----- Scheduling -----

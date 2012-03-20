@@ -1,6 +1,7 @@
 package thespian4jade.core.organization;
 
 import jade.core.AID;
+import java.util.Set;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -22,9 +23,20 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
      */
     private AID[] players;
     
+    /**
+     * The event to raise.
+     */
     private String event;
     
+    /**
+     * The event argument.
+     */
     private String argument;
+    
+    /**
+     * The player to exclude.
+     */
+    private AID playerToExclude;
     
     // </editor-fold>
     
@@ -33,9 +45,12 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
     /**
      * Initializes a new instance of the Organization_RaiseEvent_InitiatorParty class.
      * @param protocol the 'Raise event' protocol.
-     * @param event 
+     * @param event the event to raise
+     * @param argument the event argument
+     * @param playerToExclude the player to exclude
      */
-    public Organization_RaiseEvent_InitiatorParty(String event, String argument) {
+    public Organization_RaiseEvent_InitiatorParty(final String event,
+        final String argument, final AID playerToExclude) {
         super(RaiseEventProtocol.getInstance());
         // ----- Preconditions -----
         assert event != null && !event.isEmpty();
@@ -43,6 +58,7 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
         
         this.event = event;
         this.argument = argument;
+        this.playerToExclude = playerToExclude;
         
         buildFSM();
     }
@@ -89,8 +105,9 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
                 "'Raise event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
-            players = getMyOrganization().knowledgeBase.getAllPlayers()
-                .toArray(new AID[0]);
+            Set<AID> allPlayers = getMyOrganization().knowledgeBase.getAllPlayers();           
+            allPlayers.remove(playerToExclude);           
+            players = allPlayers.toArray(new AID[0]);
         }
         
         // </editor-fold>

@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
@@ -162,8 +163,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         public void action() {
             // Raise the 'Role activated' event.
-            getMyRole().myOrganization.raiseEvent("role-activated",
-                getMyRole().getClass().getSimpleName());
+            getMyRole().myOrganization.raiseEvent(Event.ROLE_ACTIVATED,
+                getMyRole().getClass().getSimpleName(), playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

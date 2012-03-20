@@ -17,6 +17,7 @@ import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import thespian4jade.core.Event;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -316,7 +317,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Raise the 'Role enacted' event.
-            getMyOrganization().raiseEvent("role-enacted", roleName);
+            getMyOrganization().raiseEvent(Event.ROLE_ENACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

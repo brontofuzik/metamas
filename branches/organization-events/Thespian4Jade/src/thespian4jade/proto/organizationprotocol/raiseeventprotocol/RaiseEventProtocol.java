@@ -50,7 +50,8 @@ public class RaiseEventProtocol extends Protocol {
     public InitiatorParty createInitiatorParty(Object... arguments) {
         String event = (String)arguments[0];
         String argument = (String)arguments[1];
-        return new Organization_RaiseEvent_InitiatorParty(event, argument);
+        AID playerToExclude = (AID)arguments[2];
+        return new Organization_RaiseEvent_InitiatorParty(event, argument, playerToExclude);
     }
 
     /**

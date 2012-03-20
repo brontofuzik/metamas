@@ -203,15 +203,18 @@ public abstract class Organization extends Agent {
     /**
      * Raises an event.
      * @param event the event to raise
+     * @param argument the event argument
+     * @param playerToExclude the payer to exlcude; more precisely its AID
      */
-    protected final void raiseEvent(final String event, final String argument) {
+    protected final void raiseEvent(final String event, final String argument,
+        final AID playerToExclude) {
         // ----- Preconditions -----
         assert event != null && !event.isEmpty();
         // -------------------------
         
         // Create a 'Raise event' protocol initiator party.
         Party raiseEventInitiator = RaiseEventProtocol.getInstance()
-            .createInitiatorParty(event, argument);
+            .createInitiatorParty(event, argument, playerToExclude);
         
         // Schedule the initiator party for execution.
         addBehaviour(raiseEventInitiator);
