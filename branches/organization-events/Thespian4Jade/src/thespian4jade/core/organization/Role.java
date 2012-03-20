@@ -28,8 +28,6 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final List<String> responsibilities = new ArrayList<String>();
-    
     Organization myOrganization;
     
     final Map<String, Class> competences = new Hashtable<String, Class>();
@@ -39,9 +37,6 @@ public class Role extends Agent {
     AID playerAID;
     
     // ----- PRIVATE -----
-  
-    // TAG OBSOLETE
-//    private Role_Initiator initiator = new Role_Initiator(this);
     
     private Logger logger;
     
@@ -170,26 +165,6 @@ public class Role extends Agent {
     }
     
     // ----- PROTECTED -----
-    
-    /**
-     * Adds a responsibility.
-     * @param responsibility the responsibility to add
-     */
-    protected static void addResponsibility(String responsibility) {
-        // ----- Preconditions -----
-        assert responsibility != null && !responsibility.isEmpty();
-        // -------------------------
-        
-        responsibilities.add(responsibility);
-    }
-    
-    /**
-     * Gets the responsibilities (as an array)
-     * @return the responsibilities (as an array)
-     */
-    protected static String[] getResponsibilities() {
-        return responsibilities.toArray(new String[responsibilities.size()]);
-    }
     
     @Override
     protected void setup() {

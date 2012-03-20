@@ -28,16 +28,17 @@ public abstract class Organization extends Agent {
     /**
      * The role definitions.
      */
-    Map<String, RoleDefinition> roles = new Hashtable<String, RoleDefinition>();
+    final Map<String, RoleDefinition> roles = new Hashtable<String, RoleDefinition>();
     
     /**
      * The knowledge base.
      * The knowledge base stores knowledge acquired at run time.
      */
-    OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
+    final OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
     
     // ----- PRIVATE -----
     
+    // TAG YellowPages
     /**
      * The DF agent description.
      */
