@@ -1,4 +1,4 @@
-package example3.players.participant;
+package example3.players;
 
 /**
  * An auction item.

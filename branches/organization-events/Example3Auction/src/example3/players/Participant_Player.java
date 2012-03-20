@@ -1,4 +1,4 @@
-package example3.players.participant;
+package example3.players;
 
 import thespian4jade.core.player.Player;
 import java.util.HashMap;

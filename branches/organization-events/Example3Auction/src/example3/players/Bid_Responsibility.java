@@ -1,4 +1,4 @@
-package example3.players.participant;
+package example3.players;
 
 import example3.players.participant.bid.BidArgument;
 import example3.players.participant.bid.BidResult;
