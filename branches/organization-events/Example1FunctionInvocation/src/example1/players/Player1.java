@@ -38,6 +38,7 @@ public class Player1 extends CompetencePlayer implements IObserver {
 
     @Override
     public void update(IObservable observable) {
+        // Get the 'Invoke function' competence result.
         Integer invokeFunctionResult = ((Future<Integer>)observable).getValue();
         System.out.println("----- 'Invoke function' competence result: " + invokeFunctionResult + " -----");
         
@@ -64,6 +65,7 @@ public class Player1 extends CompetencePlayer implements IObserver {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
+     * The 'Role enacted' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -73,6 +75,10 @@ public class Player1 extends CompetencePlayer implements IObserver {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Hanles the 'Role enacted' event handler.
+         * @param roleName the name of the enacted role
+         */
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Executer_Role")) {
@@ -84,6 +90,7 @@ public class Player1 extends CompetencePlayer implements IObserver {
     }
     
     /**
+     * The 'Role activated' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -93,9 +100,14 @@ public class Player1 extends CompetencePlayer implements IObserver {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Handles the 'Role activated' event.
+         * @param roleName the name of the activated role
+         */
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Executer_Role")) {
+                // Set the 'Invoke function' competence argument. 
                 Integer invokeFunctionArgument = new Integer(10);
                 System.out.println("----- Invoke function argument: " + invokeFunctionArgument + " -----");
                 
@@ -108,6 +120,7 @@ public class Player1 extends CompetencePlayer implements IObserver {
     }
     
     /**
+     * The 'Role deactivated' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -117,17 +130,19 @@ public class Player1 extends CompetencePlayer implements IObserver {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    @Override
-    protected void handleEvent(String roleName) {
-        if (roleName.equals("Executer_Role")) {
-            getMyPlayer().deactRole();
+        /**
+         * Handles the 'Role deactivated' event.
+         * @param roleName the name of the deactivated role
+         */
+        @Override
+        protected void handleEvent(String roleName) {
+            if (roleName.equals("Executer_Role")) {
+                getMyPlayer().deactRole();
+            }
         }
+    
+        // </editor-fold>  
     }
-    
-    // </editor-fold>  
-    }
-    
-
-    
+      
     // </editor-fold>
 }

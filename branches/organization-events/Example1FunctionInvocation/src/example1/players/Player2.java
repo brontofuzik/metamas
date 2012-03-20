@@ -53,6 +53,7 @@ public class Player2 extends RolePlayer {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
+     * The 'Role activated' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -62,6 +63,10 @@ public class Player2 extends RolePlayer {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Handles the 'Role activated' event.
+         * @param roleName the name of the activated role
+         */
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Invoker_Role")) {
@@ -73,6 +78,7 @@ public class Player2 extends RolePlayer {
     }
     
     /**
+     * The 'Role deactivated' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -82,6 +88,10 @@ public class Player2 extends RolePlayer {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Handles the 'Role deactivated' event.
+         * @param roleName the name of the deactivated role.
+         */
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Invoker_Role")) {
@@ -93,6 +103,7 @@ public class Player2 extends RolePlayer {
     }
     
     /**
+     * The 'Role deacted' event handler.
      * @author Lukáš Kúdela
      * @since 2012-03-19
      * @version %I% %G%
@@ -102,6 +113,10 @@ public class Player2 extends RolePlayer {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
+        /**
+         * Handles the 'Role deacted' event.
+         * @param roleName the name of the deacted role
+         */
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals("Invoker_Role")) {
