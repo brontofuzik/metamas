@@ -1,5 +1,6 @@
 package example1.players;
 
+import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
 
@@ -40,9 +41,9 @@ public class Player2 extends RolePlayer {
         addResponsibility(ExecuteFunction_Responsibility.class);
         
         // Add event handlers.
-        addEventHandler("role-activated", Demo2_InvokerRoleActivated_EventHandler.class);
-        addEventHandler("role-deactivated", Demo2_InvokerRoleDeactivated_EventHandler.class);
-        addEventHandler("role-deacted", Demo2_InvokerRoleDeacted_EventHandler.class);
+        addEventHandler(Event.ROLE_ACTIVATED, Demo2_InvokerRoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, Demo2_InvokerRoleDeactivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTED, Demo2_InvokerRoleDeacted_EventHandler.class);
         
         // Schedule behaviours.
         scheduleEnactRole(4000);

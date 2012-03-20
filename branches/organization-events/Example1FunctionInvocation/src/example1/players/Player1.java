@@ -3,6 +3,7 @@ package example1.players;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.IObserver;
+import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
@@ -56,9 +57,9 @@ public class Player1 extends CompetencePlayer implements IObserver {
         super.setup();
         
         // Add event handlers.
-        addEventHandler("role-enacted", RoleEnacted_EventHandler.class);
-        addEventHandler("role-activated", RoleActivated_EventHandler.class);
-        addEventHandler("role-deactivated", RoleDeactivated_EventHandler.class);
+        addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
+        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
+        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
         scheduleEnactRole(2000);
