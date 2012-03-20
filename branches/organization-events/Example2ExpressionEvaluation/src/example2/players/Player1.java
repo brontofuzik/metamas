@@ -9,19 +9,24 @@ import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
 /**
+ * Player1 - the player playing the 'Evaluator' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
 public class Player1 extends CompetencePlayer<String> implements IObserver {
 
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
      * The full name of the Evaluate competence.
      */
     private static final String EVALUATE_COMPETENCE_FULL_NAME
         = "expressionEvaluation_Organization.Evaluator_Role.Evaluate_Competence";
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private static Set<String> roleNames = new HashSet<String>();
     

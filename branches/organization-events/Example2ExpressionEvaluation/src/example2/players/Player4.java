@@ -1,13 +1,14 @@
 package example2.players;
 
 /**
+ * Player4 - the player playing the 'Multiplier' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
 public class Player4 extends OperatorPlayer {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
      * The full name of the Multiplier role.

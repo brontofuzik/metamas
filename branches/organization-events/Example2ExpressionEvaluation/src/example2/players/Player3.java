@@ -1,13 +1,14 @@
 package example2.players;
 
 /**
+ * Player3 - the player plying the 'Subtractor' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
 public class Player3 extends OperatorPlayer {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
      * The full name of the Subtractor role.

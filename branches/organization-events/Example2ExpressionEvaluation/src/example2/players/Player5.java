@@ -1,13 +1,14 @@
 package example2.players;
 
 /**
+ * Player5 - the player playing the 'Divider' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
 public class Player5 extends OperatorPlayer {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
      * The full name of the Divider role.
