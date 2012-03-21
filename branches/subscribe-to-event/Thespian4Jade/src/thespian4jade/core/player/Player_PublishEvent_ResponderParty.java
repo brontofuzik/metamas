@@ -10,6 +10,7 @@ import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
+import thespian4jade.util.ClassHelper;
 
 /**
  * @author Lukáš Kúdela
@@ -72,7 +73,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         Class eventHandlerClass = getMyAgent().eventHandlers.get(event);
         if (eventHandlerClass != null) {
             // The event is handled.
-            EventHandler eventHandler = createEventHandler(eventHandlerClass);
+            EventHandler eventHandler = ClassHelper.instantiateClass(eventHandlerClass);
         
             // Register the event handler state.
             registerState(eventHandler);
@@ -86,39 +87,6 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
             // The event is ignored.
             return null;
         }
-    }
-    
-    /**
-     * Creates a new event handler - an instance of the given event handler class.
-     * @param eventHandlerClass the event handler class
-     * @return a new event handler
-     */
-    private EventHandler createEventHandler(Class eventHandlerClass) {
-        // Get the event handler constructor.
-        Constructor eventHandlerConstructor = null;
-        try {
-            eventHandlerConstructor = eventHandlerClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-        
-        // Instantiate the event handler.
-        EventHandler eventHandler = null;
-        try {
-            eventHandler = (EventHandler)eventHandlerConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        
-        return eventHandler;
     }
     
     // </editor-fold>

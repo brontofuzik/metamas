@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
+import thespian4jade.util.ClassHelper;
 
 /**
  * A 'Invoke responsibility' protocol responder party (new version).
@@ -118,7 +119,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
 //        System.out.println("----- responsibilityClass: " + responsibilityClass + " -----");
         
-        responsibility = createResponsibility(responsibilityClass);
+        responsibility = ClassHelper.instantiateClass(responsibilityClass);
         
         // Register the responsibility-related states.
         registerState(responsibility);
@@ -126,41 +127,6 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // Register the responsibility-related transitions.
         receiveResponsibilityArgument.registerDefaultTransition(responsibility);
         responsibility.registerDefaultTransition(sendResponsibilityResult);
-    }
-    
-    /**
-     * Creates a new responsibility from its class.
-     * @param responsibilityClass the responsibility class
-     * @return the responsibility instnce
-     */
-    private IResponsibility createResponsibility(Class responsibilityClass) {
-        // Get the responsibility constructor.
-        Constructor responsibilityConstructor = null;
-        try {
-            responsibilityConstructor = responsibilityClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-//        System.out.println("----- responsibilityConstructor: " + responsibilityConstructor + " -----");
-        
-        // Instantiate the responsibility.
-        IResponsibility responsibility = null;
-        try {
-            responsibility = (IResponsibility)responsibilityConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }        
-//        System.out.println("----- responsibility: " + responsibility + " -----");
-        
-        return responsibility;
     }
     
     // </editor-fold>
