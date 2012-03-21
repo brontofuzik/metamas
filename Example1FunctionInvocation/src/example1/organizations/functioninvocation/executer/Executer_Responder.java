@@ -1,6 +1,7 @@
 package example1.organizations.functioninvocation.executer;
 
-import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
+import example1.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Responder;
 
 /**
@@ -14,7 +15,7 @@ class Executer_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Executer_Responder() {
-        addResponder(InvokeFunctionProtocol.getInstance());
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL));
     }
      
     // </editor-fold>
