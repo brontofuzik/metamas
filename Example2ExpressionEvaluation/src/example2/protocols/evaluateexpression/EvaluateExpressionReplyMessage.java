@@ -3,7 +3,7 @@ package example2.protocols.evaluateexpression;
 import jade.lang.acl.ACLMessage;
 import java.io.Serializable;
 import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 
 /**
  * An 'Evaluate expression reply' (binary) message.
@@ -56,7 +56,7 @@ public class EvaluateExpressionReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<EvaluateExpressionReplyMessage> {
+    public static class Factory implements IMessageFactory<EvaluateExpressionReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

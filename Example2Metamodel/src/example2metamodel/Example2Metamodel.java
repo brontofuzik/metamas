@@ -48,13 +48,25 @@ public class Example2Metamodel {
 
         // ---------- Players ----------
         
-        PlayerType calculatorPlayerType = createCalculatorPlayerType();
-        example2Mas.addPlayerType(calculatorPlayerType);
-        example2Mas.addPlayer(calculatorPlayerType.createPlayer("calculator1_Player"));
-        example2Mas.addPlayer(calculatorPlayerType.createPlayer("calculator2_Player"));
-        example2Mas.addPlayer(calculatorPlayerType.createPlayer("calculator3_Player"));
-        example2Mas.addPlayer(calculatorPlayerType.createPlayer("calculator4_Player"));
-        example2Mas.addPlayer(calculatorPlayerType.createPlayer("calculator5_Player"));
+        PlayerType player1PlayerType = createPlayer1PlayerType();
+        example2Mas.addPlayerType(player1PlayerType);
+        example2Mas.addPlayer(player1PlayerType.createPlayer("player1"));
+        
+        PlayerType player2PlayerType = createPlayer2PlayerType();
+        example2Mas.addPlayerType(player2PlayerType);
+        example2Mas.addPlayer(player2PlayerType.createPlayer("player2"));
+        
+        PlayerType player3PlayerType = createPlayer3PlayerType();
+        example2Mas.addPlayerType(player3PlayerType);
+        example2Mas.addPlayer(player3PlayerType.createPlayer("player3"));
+        
+        PlayerType player4PlayerType = createPlayer4PlayerType();
+        example2Mas.addPlayerType(player4PlayerType);
+        example2Mas.addPlayer(player4PlayerType.createPlayer("player4"));
+        
+        PlayerType player5PlayerType = createPlayer5PlayerType();
+        example2Mas.addPlayerType(player5PlayerType);
+        example2Mas.addPlayer(player5PlayerType.createPlayer("player5"));
         
         return example2Mas;
     }
@@ -129,7 +141,7 @@ public class Example2Metamodel {
         
         // The 'Evaluate' competence.
         Competence evaluateCompetence = new Competence("Evaluate_Competence",
-                Competence.CompetenceType.FSMCompetence, "String", "Integer");
+                Competence.CompetenceType.Synchronous, "String", "Integer");
         evaluateCompetence.setFSM(createEvaluateCompetenceFSM());
         evaluatorRole.addCompetence(evaluateCompetence);
         
@@ -162,29 +174,52 @@ public class Example2Metamodel {
     
     // ---------- Players ----------
 
-    private static PlayerType createCalculatorPlayerType() {
-        PlayerType calculatorPlayerType = new PlayerType("Calculator_Player");
-        
+    private static PlayerType createPlayer1PlayerType() {
+        PlayerType player1PlayerType = new PlayerType("Player1");
+        return player1PlayerType;
+    }
+    
+    private static PlayerType createPlayer2PlayerType() {
+        PlayerType player2PlayerType = new PlayerType("Player2");
+
         // The 'Add' responsibility.
         Responsibility addResponsibility = new Responsibility("Add_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
-        calculatorPlayerType.addResponsibility(addResponsibility);
+        Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
+        player2PlayerType.addResponsibility(addResponsibility);
+        
+        return player2PlayerType;
+    }
+    
+    private static PlayerType createPlayer3PlayerType() {
+        PlayerType player3PlayerType = new PlayerType("Player3");
         
         // The 'Subtract' responsibility.
         Responsibility subtractResponsibility = new Responsibility("Subtract_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
-        calculatorPlayerType.addResponsibility(subtractResponsibility);
+        Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
+        player3PlayerType.addResponsibility(subtractResponsibility);
+        
+        return player3PlayerType;
+    }
+        
+    private static PlayerType createPlayer4PlayerType() {
+        PlayerType player4PlayerType = new PlayerType("Player4");
         
         // The 'Multiply' responsibility.
         Responsibility multiplyResponsibility = new Responsibility("Multiply_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
-        calculatorPlayerType.addResponsibility(multiplyResponsibility);
+        Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
+        player4PlayerType.addResponsibility(multiplyResponsibility);
+        
+        return player4PlayerType;
+    }
+            
+    private static PlayerType createPlayer5PlayerType() {
+        PlayerType player5PlayerType = new PlayerType("Player5");
         
         // The 'Divide' responsibility.
         Responsibility divideResponsibility = new Responsibility("Divide_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "OperandPair", "Integer");
-        calculatorPlayerType.addResponsibility(divideResponsibility);
+        Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
+        player5PlayerType.addResponsibility(divideResponsibility);
         
-        return calculatorPlayerType;
+        return player5PlayerType;
     }
 }

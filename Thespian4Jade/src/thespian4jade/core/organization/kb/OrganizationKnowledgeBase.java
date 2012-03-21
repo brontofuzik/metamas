@@ -1,13 +1,8 @@
 package thespian4jade.core.organization.kb;
 
 import jade.core.AID;
-import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -53,7 +48,7 @@ public class OrganizationKnowledgeBase {
      *         <c>false</c> otherwise.
      */
     public boolean isRoleEnactedByPlayer(String roleName, AID playerAID) {
-        return getRoleInstance(roleName, playerAID) != null;
+        return getPosition(roleName, playerAID) != null;
     }
     
     /**
@@ -64,7 +59,7 @@ public class OrganizationKnowledgeBase {
      *         <c>false</c> otherwise.
      */
     public boolean isRoleEnacted(String roleName) {
-        return !getRoleInstances(roleName).isEmpty();
+        return !getPositions(roleName).isEmpty();
     }
     
     /**
@@ -80,54 +75,73 @@ public class OrganizationKnowledgeBase {
     }
     
     /**
-     * Gets the role instance of a specified role (class) for a specified player.
-     * @param roleName the name of the role (class)
-     * @param playerAID the AID of the player
-     * @return the role instance of the specified role (class) for the cpecified player
+     * Gets all players enacting a role in the organization.
+     * @return a set of all players enacting a role in the organization
      */
-    public AID getRoleInstance(String roleName, AID playerAID) {
-        Map<AID, AID> roleInstances = getRoleInstances(roleName);
-        return (roleInstances.containsKey(playerAID)) ?
-            roleInstances.get(playerAID) : null;
+    public Set<AID> getAllPlayers() {
+        return new HashSet(enactingPlayers.keySet());
     }
     
     /**
-     * Gets the first role instance of a specified role (class).
-     * @param roleName the name of the role (class)
-     * @return the first role instance of the specified role (class)
+     * Gets the position of a specified role  for a specified player.
+     * @param roleName the name of the role
+     * @param playerAID the AID of the player
+     * @return the position of the specified role (class) for the cpecified player
      */
-    public AID getFirstRoleInstance(String roleName) {
-        Map<AID, AID> roleInstances = getRoleInstances(roleName);
-        if (!roleInstances.isEmpty()) {
-            return getRoleInstanceAtIndex(roleInstances, 0);
+    public AID getPosition(String roleName, AID playerAID) {
+//        System.out.println("----- getPosition() -----");
+//        System.out.println("----- roleName: " + roleName + " -----");
+//        System.out.println("----- playerAID: " + playerAID.getLocalName() + " -----");
+        
+        Map<AID, AID> positions = getPositions(roleName);
+//        System.out.println("----- positions.size(): " + positions.size() + " -----");
+//        for (Map.Entry<AID, AID> entry : positions.entrySet()) {
+//            System.out.println("----- " +entry.getKey() + " -> " +entry.getValue() + "-----");
+//        }
+        
+        return positions.get(playerAID);
+    }
+    
+    // TAG NOT-USED
+    /**
+     * Gets the first position of a specified role (class).
+     * @param roleName the name of the role
+     * @return the first position of the specified role
+     */
+    public AID getFirstPosition(String roleName) {
+        Map<AID, AID> positions = getPositions(roleName);
+        if (!positions.isEmpty()) {
+            return getPositionAtIndex(positions, 0);
         } else {
             return null;
         }      
     }
     
+    // TAG NOT-USED
     /**
-     * Gets a random role instance of a specified role (class).
-     * @param roleName the name of the role (class)
-     * @return a random role instance of the specified role (class)
+     * Gets a random position of a specified role.
+     * @param roleName the name of the role
+     * @return a random position of the specified role
      */
-    public AID getRandomRoleInstance(String roleName) {
-        Map<AID, AID> roleInstances = getRoleInstances(roleName);    
-        if (!roleInstances.isEmpty()) {
-            int roleInstanceIndex = random.nextInt(roleInstances.values().size());
-            return getRoleInstanceAtIndex(roleInstances, roleInstanceIndex);
+    public AID getRandomPosition(String roleName) {
+        Map<AID, AID> positions = getPositions(roleName);    
+        if (!positions.isEmpty()) {
+            int positionIndex = random.nextInt(positions.values().size());
+            return getPositionAtIndex(positions, positionIndex);
         } else {
             return null;
         }
     }
     
+    // TAG NOT-USED
     /**
-     * Gets the set of all role instances of a specified role (class)
+     * Gets all role instances of a specified role (class).
      * @param roleName the name of the role (class)
      * @return the set of all role instances of the specified role (class)
      */
-    public Set<AID> getAllRoleInstances(String roleName) {
-        Map<AID, AID> roleInstances = getRoleInstances(roleName);
-        return new HashSet<AID>(roleInstances.values());
+    public Set<AID> getAllPositions(String roleName) {
+        Map<AID, AID> positions = getPositions(roleName);
+        return new HashSet<AID>(positions.values());
     }
     
     // ----- UPDATE -----
@@ -146,7 +160,11 @@ public class OrganizationKnowledgeBase {
         assert playerAID != null;
         // -------------------------
         
-        getRoleInstances(roleName).put(playerAID, roleAID);
+//        System.out.println("----- updateRoleIsEnacted() -----");
+//        System.out.println("----- roleName: " + roleName + " -----");
+//        System.out.println("----- roleAID: " + roleAID + " -----");
+//        System.out.println("----- playerAID: " + playerAID + " -----");
+        getPositions(roleName).put(playerAID, roleAID);
         updatePlayerEnactsRole(playerAID, roleName);
     }
     
@@ -162,7 +180,7 @@ public class OrganizationKnowledgeBase {
         assert playerAID != null;
         // -------------------------
         
-        getRoleInstances(roleName).remove(playerAID);
+        getPositions(roleName).remove(playerAID);
         updatePlayerDeactsRole(playerAID, roleName);
     }
      
@@ -174,6 +192,7 @@ public class OrganizationKnowledgeBase {
         assert roleName != null && !roleName.isEmpty();
         // ------------------------
         
+        addPlayerIfApplicable(playerAID);
         getPlayerDescription(playerAID).enactRole(roleName);
     }
 
@@ -184,6 +203,19 @@ public class OrganizationKnowledgeBase {
         // ------------------------
 
         getPlayerDescription(playerAID).deactRole(roleName);
+        removePlayerIfApplicable(playerAID);
+    }
+    
+    private void addPlayerIfApplicable(AID playerAID) {
+        if (!enactingPlayers.containsKey(playerAID)) {
+            enactingPlayers.put(playerAID, new PlayerDescription(playerAID));
+        }
+    }
+    
+    private void removePlayerIfApplicable(AID playerAID) {
+        if (!getPlayerDescription(playerAID).isEmployed()) {
+            enactingPlayers.remove(playerAID);
+        }
     }
     
     /**
@@ -192,10 +224,17 @@ public class OrganizationKnowledgeBase {
      * @return the player description for the specified player
      */
     private PlayerDescription getPlayerDescription(AID playerAID) {
-        if (!enactingPlayers.containsKey(playerAID)) {
-            enactingPlayers.put(playerAID, new PlayerDescription(playerAID));
-        }
         return enactingPlayers.get(playerAID);
+    }
+    
+    private static AID getPositionAtIndex(Map<AID, AID> positions, int index) {
+        for (AID position : positions.values()) {
+            if (index == 0) {
+                return position;
+            }
+            index--;
+        }
+        return null;
     }
     
     /**
@@ -203,21 +242,11 @@ public class OrganizationKnowledgeBase {
      * @param roleName the name of the role (class)
      * @return the role instances of the specified role (class)
      */
-    private Map<AID, AID> getRoleInstances(String roleName) {
+    private Map<AID, AID> getPositions(String roleName) {
         if (!enactedRoles.containsKey(roleName)) {
             enactedRoles.put(roleName, new HashMap<AID, AID>());
         }
         return enactedRoles.get(roleName);
-    }
-    
-    private AID getRoleInstanceAtIndex(Map<AID, AID> roleInstances, int index) {
-        for (AID roleInstance : roleInstances.values()) {
-            if (index == 0) {
-                return roleInstance;
-            }
-            index--;
-        }
-        return null;
     }
     
     // </editor-fold> 

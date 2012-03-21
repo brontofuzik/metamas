@@ -9,7 +9,7 @@ import thespian4jade.lang.Message;
  * @since 2011-12-05
  * @version %I% %G%
  */
-public abstract class FSMBehaviourSenderState extends FSMBehaviourState implements SenderState {
+public abstract class FSMBehaviourSenderState extends FSMBehaviourState implements ISenderState {
        
     // <editor-fold defaultstate="collapsed" desc="Methods">
 

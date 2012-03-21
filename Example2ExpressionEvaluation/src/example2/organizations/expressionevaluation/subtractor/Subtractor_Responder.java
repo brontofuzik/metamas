@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.subtractor;
 
 import example2.protocols.evaluatesubtraction.EvaluateSubtractionProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The 'Subtractor' role responder.

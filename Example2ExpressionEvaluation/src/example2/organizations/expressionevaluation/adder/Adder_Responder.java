@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.adder;
 
 import example2.protocols.evaluateaddition.EvaluateAdditionProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The 'Adder' role responder.

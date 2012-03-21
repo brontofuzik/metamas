@@ -22,7 +22,7 @@ public class EvaluateMultiplication_InitiatorParty extends EvaluateBinaryOperati
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
-    protected String getBinaryEvaluatorRoleName() {
+    protected String getBinaryOperatorRoleName() {
         return Multiplier_Role.NAME;
     }
     

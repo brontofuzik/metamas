@@ -22,7 +22,7 @@ public class EvaluateDivision_InitiatorParty extends EvaluateBinaryOperation_Ini
     // <editor-fold defaultstate="collapsed" desc="Getters and setters
     
     @Override
-    protected String getBinaryEvaluatorRoleName() {
+    protected String getBinaryOperatorRoleName() {
         return Divider_Role.NAME;
     }
     

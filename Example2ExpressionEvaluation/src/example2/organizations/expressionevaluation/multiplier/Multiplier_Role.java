@@ -10,20 +10,9 @@ import thespian4jade.core.organization.Role;
  */
 public class Multiplier_Role extends Role {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     public static final String NAME = "Multiplier_Role";
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    /**
-     * Initializes the Multiplier_Role class.
-     */
-    static {
-        addResponsibility("Multiply_Responsibility");
-    }
     
     // </editor-fold>
     

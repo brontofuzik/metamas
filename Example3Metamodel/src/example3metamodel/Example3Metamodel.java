@@ -118,7 +118,7 @@ public class Example3Metamodel {
         
         // The 'Auction' competence.
         Competence auctionCompetence = new Competence("Auction_Competence",
-            Competence.CompetenceType.FSMCompetence, "AuctionArgument", "AuctionResult");
+            Competence.CompetenceType.Synchronous, "AuctionArgument", "AuctionResult");
         auctionCompetence.setFSM(createAuctionCompetenceFSM());
         auctioneerRole.addCompetence(auctionCompetence);
         
@@ -141,7 +141,7 @@ public class Example3Metamodel {
         
         // The 'Bid' responsibility.
         Responsibility addResponsibility = new Responsibility("Bid_Responsibility",
-                Responsibility.ResponsibilityType.OneShotResponsibility, "BidArgument", "BidResult");
+                Responsibility.ResponsibilityType.Asynchronous, "BidArgument", "BidResult");
         participantPlayerType.addResponsibility(addResponsibility);
         
         return participantPlayerType;

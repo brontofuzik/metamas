@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.evaluator;
 
 import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The 'Evaluator' role responder.

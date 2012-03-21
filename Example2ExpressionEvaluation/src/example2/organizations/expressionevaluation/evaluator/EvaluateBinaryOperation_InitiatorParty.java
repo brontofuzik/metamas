@@ -8,7 +8,7 @@ import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * @author Lukáš Kúdela
@@ -19,7 +19,10 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID binaryEvaluatorAID;
+    /**
+     * The responding binary operator; more precisely its AID.
+     */
+    private AID binaryOperator;
     
     private String operand1;
     
@@ -55,7 +58,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
     
     // ----- PROTECTED -----
     
-    protected abstract String getBinaryEvaluatorRoleName();
+    protected abstract String getBinaryOperatorRoleName();
     
     // </editor-fold>
     
@@ -83,9 +86,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        State sendEvaluteRequest = new SendEvaluateRequest();
-        State receiveEvaluateReply = new ReceiveEvaluateReply();
+        IState initialize = new Initialize();
+        IState sendEvaluteRequest = new SendEvaluateRequest();
+        IState receiveEvaluateReply = new ReceiveEvaluateReply();
         // ------------------
         
         // Register the states.
@@ -112,8 +115,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
                 "Initiating the 'Invoke function' protocol (id = %1$s)",
                 getProtocolId()));
             
-            binaryEvaluatorAID = getMyAgent().getMyOrganization()
-                .getRoleInstance(getBinaryEvaluatorRoleName());
+            // Get an active 'Binary operator' position.
+            binaryOperator = getMyAgent().getMyOrganization()
+                .getActivePosition(getBinaryOperatorRoleName()).getAID();
         }
         
         // </editor-fold>
@@ -125,7 +129,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { binaryEvaluatorAID };
+            return new AID[] { binaryOperator };
         }
         
         // </editor-fold>
@@ -167,7 +171,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { binaryEvaluatorAID };
+            return new AID[] { binaryOperator };
         }
         
         // </editor-fold>

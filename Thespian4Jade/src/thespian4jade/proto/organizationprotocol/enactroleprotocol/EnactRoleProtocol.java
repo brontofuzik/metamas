@@ -1,7 +1,6 @@
 package thespian4jade.proto.organizationprotocol.enactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Organization_DeactRole_ResponderParty;
 import thespian4jade.core.organization.Organization_EnactRole_ResponderParty;
 import thespian4jade.core.player.Player_EnactRole_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;

@@ -10,7 +10,7 @@ import thespian4jade.proto.Party;
  * @since 2011-12-02
  * @version %I% %G%
  */
-public abstract class FSMBehaviourState extends FSMBehaviour implements State {
+public abstract class FSMBehaviourState extends FSMBehaviour implements IState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -70,31 +70,31 @@ public abstract class FSMBehaviourState extends FSMBehaviour implements State {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void registerFirstState(State state) {
+    public void registerFirstState(IState state) {
         registerFirstState((Behaviour)state, state.getName());
     }
     
-    public void registerState(State state) {
+    public void registerState(IState state) {
         registerState((Behaviour)state, state.getName());
     }
     
-    public void registerLastState(State state) {
+    public void registerLastState(IState state) {
         registerLastState((Behaviour)state, state.getName());
     }
     
-    public void registerTransition(int event, State targetState) {
+    public void registerTransition(int event, IState targetState) {
         getParentFSM().registerTransition(getName(), targetState.getName(), event);
     }
     
-    public void registerTransition(int event, State targetState, String[] statesToReset) {
+    public void registerTransition(int event, IState targetState, String[] statesToReset) {
         getParentFSM().registerTransition(getName(), targetState.getName(), event, statesToReset);
     }
     
-    public void registerDefaultTransition(State targetState) {
+    public void registerDefaultTransition(IState targetState) {
         getParentFSM().registerDefaultTransition(getName(), targetState.getName());
     }
     
-    public void registerDefaultTransition(State targetState, String[] statesToReset) {
+    public void registerDefaultTransition(IState targetState, String[] statesToReset) {
         getParentFSM().registerDefaultTransition(getName(), targetState.getName(), statesToReset);
     }
     

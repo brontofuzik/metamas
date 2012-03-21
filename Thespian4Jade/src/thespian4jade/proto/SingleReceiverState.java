@@ -2,7 +2,7 @@ package thespian4jade.proto;
 
 import jade.core.AID;
 import thespian4jade.lang.Message;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 
 /**
  * A single receiver state.
@@ -23,7 +23,7 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public SingleReceiverState(MessageFactory<TMessage> messageFactory) {        
+    public SingleReceiverState(IMessageFactory<TMessage> messageFactory) {        
         addReceiver(new SingleReceiver(messageFactory));
         
         buildFSM();
@@ -52,7 +52,7 @@ public abstract class SingleReceiverState<TMessage extends Message>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        SingleReceiver(MessageFactory<TMessage> messageFactory) {
+        SingleReceiver(IMessageFactory<TMessage> messageFactory) {
             super(messageFactory, RECEIVED);
         }
         

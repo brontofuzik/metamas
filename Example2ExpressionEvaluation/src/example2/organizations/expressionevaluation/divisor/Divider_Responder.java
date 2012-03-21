@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.divisor;
 
 import example2.protocols.evaluatedivision.EvaluateDivisionProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The 'Divisor' role responder.

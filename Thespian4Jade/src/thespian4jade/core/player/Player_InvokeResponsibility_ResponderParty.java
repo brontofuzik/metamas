@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.player.responsibility.Responsibility;
+import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
 import thespian4jade.lang.Message;
 import thespian4jade.proto.Initialize;
@@ -9,7 +9,7 @@ import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
@@ -43,17 +43,17 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     /**
      * The 'Receive responsibility argument' state.
      */
-    private State receiveResponsibilityArgument;
+    private IState receiveResponsibilityArgument;
     
     /**
      * The responsibility state.
      */
-    private Responsibility<TArgument, TResult> responsibility;
+    private IResponsibility<TArgument, TResult> responsibility;
     
     /**
      * The 'Send responsibility result' state.
      */
-    private State sendResponsibilityResult;
+    private IState sendResponsibilityResult;
     
     // </editor-fold>
     
@@ -80,13 +80,13 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      */
     private void buildFSM() {        
          // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
-        State sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
+        IState initialize = new MyInitialize();
+        IState receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
+        IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
         sendResponsibilityResult = new SendResponsibilityResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register states.
@@ -113,7 +113,12 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      * @param responsibilityName the name of the responsibility to select
      */
     private void selectResponsibility(String responsibilityName) {
-        responsibility = createResponsibility(responsibilityName);
+//        System.out.println("----- responsibilityName: " + responsibilityName + " -----");
+        
+        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
+//        System.out.println("----- responsibilityClass: " + responsibilityClass + " -----");
+        
+        responsibility = createResponsibility(responsibilityClass);
         
         // Register the responsibility-related states.
         registerState(responsibility);
@@ -124,16 +129,11 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * Creates a responsibility specified by its name
-     * @param responsibilityName the name of the responsibility
-     * @return the responsibility
+     * Creates a new responsibility from its class.
+     * @param responsibilityClass the responsibility class
+     * @return the responsibility instnce
      */
-    private Responsibility createResponsibility(String responsibilityName) {
-        //System.out.println("----- RESPONSIBILITY NAME: " + responsibilityName + " -----");
-        
-        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
-        //System.out.println("----- RESPONSIBILITY CLASS: " + responsibilityClass + " -----");
-        
+    private IResponsibility createResponsibility(Class responsibilityClass) {
         // Get the responsibility constructor.
         Constructor responsibilityConstructor = null;
         try {
@@ -143,12 +143,12 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
-        //System.out.println("----- RESPONSIBILITY CONSTRUCTOR: " + responsibilityConstructor + " -----");
+//        System.out.println("----- responsibilityConstructor: " + responsibilityConstructor + " -----");
         
         // Instantiate the responsibility.
-        Responsibility responsibility = null;
+        IResponsibility responsibility = null;
         try {
-            responsibility = (Responsibility)responsibilityConstructor.newInstance();
+            responsibility = (IResponsibility)responsibilityConstructor.newInstance();
         } catch (InstantiationException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {
@@ -158,7 +158,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        //System.out.println("----- RESPONSIBILITY: " + responsibility + " -----");
+//        System.out.println("----- responsibility: " + responsibility + " -----");
         
         return responsibility;
     }

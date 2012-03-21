@@ -1,7 +1,7 @@
 package example3.protocols.envelopeauction;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import thespian4jade.lang.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,7 +91,7 @@ public class AuctionCFPMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements MessageFactory<AuctionCFPMessage> {
+    public static class Factory implements IMessageFactory<AuctionCFPMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

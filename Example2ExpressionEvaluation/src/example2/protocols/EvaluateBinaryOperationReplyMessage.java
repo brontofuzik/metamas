@@ -3,7 +3,7 @@ package example2.protocols;
 import jade.lang.acl.ACLMessage;
 import java.io.Serializable;
 import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 
 /**
  * A 'Evaluate binary operation reply' (binary) message.
@@ -71,7 +71,7 @@ public class EvaluateBinaryOperationReplyMessage extends BinaryMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    public static class Factory implements MessageFactory<EvaluateBinaryOperationReplyMessage> {
+    public static class Factory implements IMessageFactory<EvaluateBinaryOperationReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

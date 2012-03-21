@@ -10,7 +10,7 @@ import thespian4jade.lang.Message;
  * @version %I% %G%
  */
 public abstract class OneShotBehaviourSenderState extends OneShotBehaviourState
-    implements SenderState {
+    implements ISenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

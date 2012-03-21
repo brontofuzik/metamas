@@ -1,18 +1,23 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
+import thespian4jade.concurrency.Future;
+import thespian4jade.concurrency.IObserver;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
 import java.io.Serializable;
+import thespian4jade.concurrency.IObservable;
+import thespian4jade.concurrency.Observable;
+import thespian4jade.proto.IResultParty;
 
 /**
  * An 'Invoke competence' protocol initiator party (new version).
@@ -20,8 +25,9 @@ import java.io.Serializable;
  * @since 2011-12-21
  * @version %I% %G%
  */
-public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializable,
-    TResult extends Serializable> extends InitiatorParty<Player> {
+public class Player_InvokeCompetence_InitiatorParty
+    <TArgument extends Serializable, TResult extends Serializable>
+    extends InitiatorParty<Player> implements IResultParty<TResult>, IObservable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -44,6 +50,8 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
      * The competence result.
      */
     private TResult competenceResult;
+    
+    private IObservable observable = new Observable();
     
     // </editor-fold>
     
@@ -79,6 +87,14 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     /**
+     * Gets the competence result.
+     * @return the competence result
+     */
+    public TResult getCompetenceResult() {
+        return competenceResult;
+    }
+    
+    /**
      * Sets the competence argument.
      * @param competenceArgument the competence argument
      */
@@ -87,29 +103,76 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
     }
     
     /**
-     * Gets the competence result.
-     * @return the competence result
+     * Gets the result.
+     * The IResultParty method.
+     * @return the result
      */
-    public TResult getCompetenceResult() {
-        return competenceResult;
+    @Override
+    public TResult getResult() {
+        return getCompetenceResult();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
+   
+    /**
+     * Gets the result future.
+     * The IResultParty method.
+     * @return the reuslt future
+     */
+    @Override
+    public Future getResultFuture() {
+        Future<TResult> future = new Future();
+        addObserver(future);
+        return future;
+    }
+    
+    /**
+     * The IObservable method.
+     * @param observer 
+     */
+    @Override
+    public void addObserver(IObserver observer) {
+        observable.addObserver(observer);
+    }
+
+    /**
+     * The IObservable method.
+     * @param observer 
+     */
+    @Override
+    public void removeObserver(IObserver observer) {
+        observable.removeObserver(observer);
+    }
+
+    /**
+     * The IObservable method.
+     * @param observable 
+     */
+    @Override
+    public void notifyObservers(IObservable observable) {
+        this.observable.notifyObservers(observable);
+    }
+    
+    public void notifyObservers() {
+        notifyObservers(this);
+    }
+    
+    // ----- PRIVATE -----
     
     /**
      * Builds the party FSM.
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
-        State receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
-        State sendCompetenceArgument = new SendCompetenceArgument();
-        State receiveCompetenceResult = new ReceiveCompetenceResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
+        IState receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
+        IState sendCompetenceArgument = new SendCompetenceArgument();
+        IState receiveCompetenceResult = new ReceiveCompetenceResult();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
@@ -307,25 +370,47 @@ public class Player_InvokeCompetence_InitiatorParty<TArgument extends Serializab
         // </editor-fold>
     }
     
+    /**
+     * The 'Success end' (one-shot) state.
+     * A state in which the party succeeds.
+     */
     private class SuccessEnd extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke competence' initiator party succeeded.");
+            // Notify the observers about the party success.
+            ((Player_InvokeCompetence_InitiatorParty)getParty())
+                .notifyObservers();
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke competence' protocol (id = %1$s) initiator party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
     }
     
+    /**
+     * The 'Failure end' (one-shot) state.
+     * A state in which the party fails.
+     */
     private class FailureEnd extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke competence' initiator party failed.");
+//            // Notify the observers about the party failure.
+//            ((Player_InvokeCompetence_InitiatorParty)getParty())
+//                .notifyObservers();
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke competence' protocol (id = %1$s) initiator party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>

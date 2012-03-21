@@ -7,12 +7,14 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
+import java.io.Serializable;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import thespian4jade.concurrency.Future;
+import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.Party;
 
 /**
  * A role agent.
@@ -24,21 +26,35 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final List<String> responsibilities = new ArrayList<String>();
-    
-    Organization myOrganization;
-    
+    /**
+     * The role' competences.
+     * Design-time state.
+     */
     final Map<String, Class> competences = new Hashtable<String, Class>();
     
-    RoleState state = RoleState.INACTIVE;
-    
+    /**
+     * The position's organization.
+     * Run-time state.
+     */
+    Organization myOrganization;
+
+    /**
+     * The position's player; more precisely its AID.
+     * Run-time state.
+     */
     AID playerAID;
     
-    // ----- PRIVATE -----
-  
-    // TAG OBSOLETE
-//    private Role_Initiator initiator = new Role_Initiator(this);
+    /**
+     * The position's state.
+     * Run-time state.
+     */
+    RoleState state = RoleState.INACTIVE;
     
+    // ----- PRIVATE -----
+    
+    /**
+     * The logger.
+     */
     private Logger logger;
     
     // </editor-fold>
@@ -61,6 +77,10 @@ public class Role extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    public String getRoleName() {
+        return getClass().getSimpleName();
+    }
     
     /**
      * Gets my organization
@@ -101,8 +121,8 @@ public class Role extends Agent {
         }
         // -------------------------
         
-        String roleAgentName = getClass().getSimpleName().substring(0, 1).toLowerCase()
-            + getClass().getSimpleName().substring(1);
+        String roleAgentName = getRoleName().substring(0, 1).toLowerCase()
+            + getRoleName().substring(1);
         String playerAgentName = getPlayerAID().getLocalName();
         return String.format("%1$s_%2$s", roleAgentName, playerAgentName);
     }
@@ -111,15 +131,19 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TAG OBSOLETE
-//    public void invokeResponsibility(String responsibilityName, Object argument) {
-//        initiator.initiateProtocol(InvokeResponsibilityProtocol.getInstance(),
-//            new Object[] { responsibilityName, argument } );
-//    }
-    
-    public void invokeResponsibility(String responsibilityName, Object argument) {
-        addBehaviour(InvokeResponsibilityProtocol.getInstance()
-            .createInitiatorParty(responsibilityName, argument));    
+    public final <TArgument extends Serializable, TResult extends Serializable>
+        Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
+        // Create an 'Invoke responsibility' protocol initiator party.
+        Party invokeResponsibilityInitiator = InvokeResponsibilityProtocol.getInstance()
+            .createInitiatorParty(responsibilityName, argument);
+        
+        // Get the inititor party result future.
+        Future<TResult> future = ((IResultParty)invokeResponsibilityInitiator).getResultFuture();
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(invokeResponsibilityInitiator);
+        
+        return future;  
     }
     
     // ----- Logging -----
@@ -163,26 +187,6 @@ public class Role extends Agent {
     
     // ----- PROTECTED -----
     
-    /**
-     * Adds a responsibility.
-     * @param responsibility the responsibility to add
-     */
-    protected static void addResponsibility(String responsibility) {
-        // ----- Preconditions -----
-        assert responsibility != null && !responsibility.isEmpty();
-        // -------------------------
-        
-        responsibilities.add(responsibility);
-    }
-    
-    /**
-     * Gets the responsibilities (as an array)
-     * @return the responsibilities (as an array)
-     */
-    protected static String[] getResponsibilities() {
-        return responsibilities.toArray(new String[responsibilities.size()]);
-    }
-    
     @Override
     protected void setup() {
         super.setup();
@@ -191,10 +195,14 @@ public class Role extends Agent {
         addBehaviour(new Role_Responder());
         logInfo("Behaviours added.");
         
-        // TAG YellowPages
+        // TAG YELLOW-PAGES
         //registerWithYellowPages();
     }
     
+    /**
+     * Design-time behaviour.
+     * @param competenceClass 
+     */
     protected void addCompetence(Class competenceClass) {
         // ----- Preconditions -----
         if (competenceClass == null) {
@@ -210,7 +218,7 @@ public class Role extends Agent {
     
     // ----- Yellow pages registration -----
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private void registerWithYellowPages() { 
         try {
             DFService.register(this, createAgentDescription());
@@ -220,7 +228,7 @@ public class Role extends Agent {
         logInfo("Registered with the Yellow Pages.");
     }
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private DFAgentDescription createAgentDescription() {
         // Create the agent description.
         DFAgentDescription agentDescription = new DFAgentDescription();

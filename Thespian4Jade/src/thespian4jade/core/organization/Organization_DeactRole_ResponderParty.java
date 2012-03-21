@@ -2,11 +2,12 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.SendAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
@@ -44,11 +45,11 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
      * Builds the party FSM.
      */
     private void buildFSM() {
-        State initialize = new MyInitialize();
-        State receiveDeactRequest = new ReceiveDeactRequest();
-        State sendDeactReply = new SendDeactReply();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState receiveDeactRequest = new ReceiveDeactRequest();
+        IState sendDeactReply = new SendDeactReply();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
 
         // Register the states.
         registerFirstState(initialize);
@@ -79,9 +80,11 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public int initialize() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Deact role' protocol (id = %1$s).",
+                "'Deact role' protocol (id = %1$s) responder party started.",
                 getACLMessage().getConversationId()));
+            
             return OK;
         }
         
@@ -132,10 +135,14 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
+                System.out.println("----- ROLE: " + roleName + " -----");
+                System.out.println("----- PLAYER: " + playerAID + " -----");
                 if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
+                    System.out.println("----- AGREE -----");
                     // The is enacted by the player.
                     return SendAgreeOrRefuse.AGREE;
                 } else {
+                    System.out.println("----- REFUSE -----");
                     // The role is not enacted by the player.
                     return SendAgreeOrRefuse.REFUSE;
                 }
@@ -147,8 +154,18 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected void onAgree() {
+            // Update the knowledge base.
             getMyAgent().knowledgeBase
                 .updateRoleIsDeacted(roleName, playerAID);
+            
+            // Stop the role agent.
+            // TODO (priority: medium) Implement.
+            
+            // Unlink the position from its organization.
+            // TODO (priority: medium) Implement.
+            
+            // Destroy the role agent.
+            // TODO (priority: medium) Implement.
         }
 
         @Override
@@ -169,7 +186,13 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role responder party succeeded.");
+            // Publish the 'Role deacted' event.
+            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, playerAID);
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
@@ -185,7 +208,10 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>

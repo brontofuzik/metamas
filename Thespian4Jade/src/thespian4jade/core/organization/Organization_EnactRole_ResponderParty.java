@@ -9,7 +9,7 @@ import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMe
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.ReceiveAgreeOrRefuse;
 import thespian4jade.proto.ResponderParty;
@@ -17,7 +17,7 @@ import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import thespian4jade.core.Event;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -54,13 +54,13 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveEnactRequest = new ReceiveEnactRequest();
-        State sendResponsibilitiesInform = new SendResponsibilitiesInform();
-        State receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
-        State sendRoleAID = new SendRoleAID();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState receiveEnactRequest = new ReceiveEnactRequest();
+        IState sendResponsibilitiesInform = new SendResponsibilitiesInform();
+        IState receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
+        IState sendRoleAID = new SendRoleAID();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
@@ -99,9 +99,11 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public int initialize() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Enact role' protocol (id = %1$s).",
+                "'Enact role' protocol (id = %1$s) responder party started.",
                 getACLMessage().getConversationId()));
+            
             return OK;
         }
         
@@ -145,7 +147,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organizaiton.
-                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)) {
+                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)
+                    || getMyAgent().roles.get(roleName).getMultiplicity() == Multiplicity.MULTIPLE) {
                     // The role is not yet enacted.
                     return SUCCESS;
                 } else {
@@ -222,10 +225,16 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         protected RoleAIDMessage prepareMessage() {
             getMyAgent().logInfo("Creating role agent.");
             
-            // Create the role agent and associate it with the player.
+            // Create the role agent.
             Role role = createRoleAgent(roleName);
+            
+            // Link the position to its organization.
+            getMyAgent().addPosition(role);
+            
+            // Link the position to its player.
             role.setPlayerAID(playerAID);
             
+            // Start the role agent.
             startRoleAgent(role);
             
             // Update the knowledge base.
@@ -284,9 +293,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             }
             //System.out.println("----- ROLE: " + roleAgent + " -----");
             
-            // Associate the role agent with the organization agent.
-            roleAgent.setMyOrganization(getMyAgent());
-            
             return roleAgent;
         }
 
@@ -306,6 +312,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     /**
      * The 'Success end' state.
+     * A state in which the 'Enact role' responder party succeedes.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -313,7 +320,13 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role responder party succeeded.");
+            // Publish the 'Role enacted' event.
+            getMyAgent().publishEvent(Event.ROLE_ENACTED, roleName, playerAID);
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
 
         // </editor-fold>           
@@ -321,6 +334,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
     /**
      * The 'Failure end' state.
+     * A state in which the 'Enact role' responder party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 
@@ -328,7 +342,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
 
         // </editor-fold>        

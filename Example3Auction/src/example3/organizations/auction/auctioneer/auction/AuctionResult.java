@@ -98,5 +98,11 @@ public class AuctionResult implements Serializable {
         return new AuctionResult(false, null, 0.0);
     }
     
+    @Override
+    public String toString() {
+        return "AuctionResult{" + "winnerDetermined=" + winnerDetermined
+            + ", winnerAID=" + winnerAID + ", hammerPrice=" + hammerPrice + '}';
+    }   
+    
     // </editor-fold>
 }

@@ -4,6 +4,7 @@ import thespian4jade.core.player.kb.PlayerKnowledgeBase;
 import jade.core.Agent;
 import jade.core.behaviours.WakerBehaviour;
 import jade.util.Logger;
+import java.io.Serializable;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
@@ -12,6 +13,9 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenc
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import thespian4jade.concurrency.Future;
+import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.Party;
 
 /**
  * A player agent.
@@ -23,7 +27,11 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /** The responsibilities (classes). */
     Map<String, Class> responsibilities = new HashMap<String, Class>();
+    
+    /** The event handlers (classes). */
+    Map<String, Class> eventHandlers = new HashMap<String, Class>();
     
     /** The knowledge base. */
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
@@ -60,186 +68,81 @@ public abstract class Player extends Agent {
         return evaluateAllResponsibilities(responsibilities);
     }
     
-    // TAG OBSOLETE
-//    public final void enactRole(String organizationName, String roleName) {
-//        initiator.initiateProtocol(EnactRoleProtocol.getInstance(),
-//            new Object[] { organizationName, roleName });
-//    }
-    
     /**
      * Enacts a role.
      * @param organizationName the name of the organization
      * @param roleName the name of the role to enact
      */
-    protected final void enactRole(final String organizationName,
+    public final void enactRole(final String organizationName,
         final String roleName) {
-        addBehaviour(EnactRoleProtocol.getInstance()
-            .createInitiatorParty(organizationName, roleName));
+        // Create an 'Enact role' protocol initiator party.
+        Party enactRoleInitiator = EnactRoleProtocol.getInstance()
+            .createInitiatorParty(organizationName, roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(enactRoleInitiator);
     }
-    
-    /**
-     * Schedules a role enactment.
-     * Takes 2 seconds.
-     * @param roleFullName the full name of the role to enact
-     * @param timeout the start timeout
-     * @return the end timeout
-     */
-    protected final int scheduleEnactRole(final RoleFullName roleFullName,
-        final int timeout) {
-        // Initiate the 'Enact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {    
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().enactRole(roleFullName.getOrganizationName(),
-                    roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-    
-    // TAG OBSOLETE
-//    public final void deactRole(String organizationName, String roleName) {
-//        initiator.initiateProtocol(DeactRoleProtocol.getInstance(),
-//            new Object[] { organizationName, roleName });
-//    }
     
     /**
      * Deacts a role.
      * @param organizationName the name of the organization
      * @param roleName the name of the role to deact
      */
-    protected final void deactRole(final String organizationName,
+    public final void deactRole(final String organizationName,
         final String roleName) {
-        addBehaviour(DeactRoleProtocol.getInstance()
-            .createInitiatorParty(organizationName, roleName));
+        // Create a 'Deact role' protocol initiator party.
+        Party deactRoleInitiator = DeactRoleProtocol.getInstance()
+            .createInitiatorParty(organizationName, roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(deactRoleInitiator);
     }
-    
-    /**
-     * Schedules a role deactment.
-     * Takes 2 seconds.
-     * @param roleFullName the full name of the role to deact
-     * @param timeout the start timeout
-     * @return the end timeout
-     */
-    protected final int scheduleDeactRole(final RoleFullName roleFullName,
-        final int timeout) {
-        // Initiate the 'Deact role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().deactRole(roleFullName.getOrganizationName(),
-                    roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-    
-    // TAG OBSOLETE
-//    public final activateRole(String roleName) {
-//        initiator.initiateProtocol(ActivateRoleProtocol.getInstance(),
-//            new Object[] { roleName });
-//    }
     
     /**
      * Activates a role.
      * @param roleName the name of the role to activate
      */
-    protected final void activateRole(final String roleName) {
-        addBehaviour(ActivateRoleProtocol.getInstance()
-            .createInitiatorParty(roleName));
+    public final void activateRole(final String roleName) {
+        // Create a 'Activate role' potocol initiator party.
+        Party activateRoleInitiator = ActivateRoleProtocol.getInstance()
+            .createInitiatorParty(roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(activateRoleInitiator);
     }
-    
-    /**
-     * Schedules a role activation.
-     * Takes 2 seconds.
-     * @param roleFullName the full name of the role to actiavte
-     * @param timeout the start timeout
-     * @return the end timeout
-     */
-    protected final int scheduleActivateRole(final RoleFullName roleFullName,
-        final int timeout) {
-        // Initiate the 'Activate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {            
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().activateRole(roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-    
-    // TAG OBSOLETE
-//    public final void deactivateRole(String roleName) {
-//        initiator.initiateProtocol(DeactivateRoleProtocol.getInstance(),
-//            new Object[] { roleName });
-//    }
-    
+       
     /**
      * Deactivates a role.
      * @param roleName the name of the role to deactivate
      */
-    protected final void deactivateRole(final String roleName) {
-        addBehaviour(DeactivateRoleProtocol.getInstance()
-            .createInitiatorParty(roleName));
+    public final void deactivateRole(final String roleName) {
+        // Create a 'Deactivate role' protocol initiator party.
+        Party deactivateRoleInitiator = DeactivateRoleProtocol.getInstance()
+            .createInitiatorParty(roleName);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(deactivateRoleInitiator);
     }
-    
-    /**
-     * Schedules a role deactivation.
-     * @param roleFullName the full name of the role to deactivate
-     * @param timeout the start timeout
-     * @return the end timeout
-     */
-    protected final int scheduleDeactivateRole(final RoleFullName roleFullName,
-        final int timeout) {
-        // Initiate the 'Deactivate role' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().deactivateRole(roleFullName.getRoleName());
-            }
-        });
-        return timeout + 2000;
-    }
-    
-    // TAG OBSOLETE
-//    public final void invokeCompetence(String competenceName, Object argument) {
-//        initiator.initiateProtocol(InvokeCompetenceProtocol.getInstance(),
-//            new Object[] { competenceName, argument });
-//    }
     
     /**
      * Invokes a competence.
      * @param competenceName the name of the competence to invoke
      * @param argument the competence argument
      */
-    protected final <T> void invokeCompetence(final String competenceName, final T argument) {
-        addBehaviour(InvokeCompetenceProtocol.getInstance()
-            .createInitiatorParty(competenceName, argument));
+    public final <TArgument extends Serializable, TResult extends Serializable>
+        Future<TResult> invokeCompetence(final String competenceName, final TArgument argument) {
+        // Create an 'Invoke competence' protocol initiator party.
+        Party invokeCompetenceInitiator = InvokeCompetenceProtocol.getInstance()
+            .createInitiatorParty(competenceName, argument);
+        
+        // Get the inititor party result future.
+        Future<TResult> future = ((IResultParty)invokeCompetenceInitiator).getResultFuture();
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(invokeCompetenceInitiator);
+        
+        return future;
     }
-    
-    /**
-     * Schedules a competence invocation.
-     * @param competenceFullName the full name of the competence invoke
-     * @param argument the competence argument
-     * @param timeout the start timeout
-     * @return the end timeout
-     */
-    protected final <T> int scheduleInvokeCompetence(final CompetenceFullName competenceFullName,
-        final T argument, final int timeout, final int duration) {
-        // Initiate the 'Invoke competence' protocol.
-        addBehaviour(new PlayerWakerBehaviour(this, timeout)
-        {
-            @Override
-            protected void handleElapsedTimeout() {
-                getMyPlayer().invokeCompetence(competenceFullName.getCompetenceName(), argument);
-            }
-        });
-        return timeout + duration;
-    }  
     
     // ----- Logging -----
     
@@ -266,7 +169,7 @@ public abstract class Player extends Agent {
         log(Level.SEVERE, message);
     }
     
-    // ---------- PROTECTED ----------
+    // ----- PROTECTED -----
     
     @Override
     protected void setup() {
@@ -274,6 +177,8 @@ public abstract class Player extends Agent {
         
         // Add behaviours.
         addBehaviour(new Player_Responder());
+        
+        // LOG
         logInfo("Behaviours added.");
     }
     
@@ -291,6 +196,7 @@ public abstract class Player extends Agent {
         String responsibilityName = responsibilityClass.getSimpleName();
         responsibilities.put(responsibilityName, responsibilityClass);
         
+        // LOG
         logInfo(String.format("Responsibility (%1$s) added.", responsibilityName));
     }
     
@@ -329,6 +235,132 @@ public abstract class Player extends Agent {
      */
     protected boolean evaluateReponsibility(String responsibility) {
         return responsibilities.containsKey(responsibility);
+    }
+    
+    /**
+     * Adds an event handler.
+     * @param event the event the handler handles
+     * @param eventHandlerClass the event handler class
+     */
+    protected final void addEventHandler(String event, Class eventHandlerClass) {
+        // ----- Preconditions -----
+        if (event == null || event.isEmpty()) {
+            throw new IllegalArgumentException("event");
+        }
+        if (eventHandlerClass == null) {
+            throw new IllegalArgumentException("eventHandlerClass");
+        }
+        // -------------------------
+        
+        eventHandlers.put(event, eventHandlerClass);
+        
+        // LOG
+        logInfo(String.format("Event handler (%1$s) added.", event));
+    }
+    
+    /**
+     * Removes an event handler.
+     * @param event the event the handler handles
+     */
+    protected final void removeEventHandler(String event) {
+        // ----- Preconditions -----
+        if (event == null || event.isEmpty()) {
+            throw new IllegalArgumentException("event");
+        }
+        // -------------------------
+        
+        eventHandlers.remove(event);
+        
+        // LOG
+        logInfo(String.format("Event handler (%1$s) removed.", event));
+    }
+    
+    // ----- Scheduling -----
+    
+    /**
+     * Schedules a role enactment.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to enact
+     * @param timeout the timeout
+     */
+    protected final void scheduleEnactRole(final RoleFullName roleFullName, final int timeout) {
+        // Initiate the 'Enact role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().enactRole(roleFullName.getOrganizationName(),
+                    roleFullName.getRoleName());
+            }
+        });
+    }
+    
+    /**
+     * Schedules a role deactment.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to deact
+     * @param timeout the timeout
+     */
+    protected final void scheduleDeactRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Deact role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().deactRole(roleFullName.getOrganizationName(),
+                    roleFullName.getRoleName());
+            }
+        });
+    }
+    
+    /**
+     * Schedules a role activation.
+     * Takes 2 seconds.
+     * @param roleFullName the full name of the role to actiavte
+     * @param timeout the timeout
+     */
+    protected final void scheduleActivateRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Activate role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {            
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().activateRole(roleFullName.getRoleName());
+            }
+        });
+    }
+    
+    /**
+     * Schedules a role deactivation.
+     * @param roleFullName the full name of the role to deactivate
+     * @param timeout the timeout
+     */
+    protected final void scheduleDeactivateRole(final RoleFullName roleFullName,
+        final int timeout) {
+        // Initiate the 'Deactivate role' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().deactivateRole(roleFullName.getRoleName());
+            }
+        });
+    }
+        
+    /**
+     * Schedules a competence invocation.
+     * @param competenceName the name of the competence to invoke
+     * @param argument the competence argument
+     * @param timeout the timeout
+     */
+    protected final <TArgument extends Serializable> void scheduleInvokeCompetence(
+        final String competenceName, final TArgument argument,
+        final int timeout) {
+        // Initiate the 'Invoke competence' protocol.
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().invokeCompetence(competenceName, argument);
+            }
+        });
     }
     
     // </editor-fold>
@@ -392,48 +424,12 @@ public abstract class Player extends Agent {
         }
         
         // </editor-fold>
-    }
-    
-    protected static class CompetenceFullName {
         
-        // <editor-fold defaultstate="collapsed" desc="Fields">
+        // <editor-fold defaultstate="collapsed" desc="Methods">
         
-        private RoleFullName roleFullName;
-        
-        private String competenceName;
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        public CompetenceFullName(String organizationName, String roleName, String competenceName) {
-            roleFullName = new RoleFullName(organizationName, roleName);
-        }
-        
-        public CompetenceFullName(String competenceFullName) {
-            String[] nameParts = competenceFullName.split("\\.");
-            roleFullName = new RoleFullName(nameParts[0], nameParts[1]);
-            competenceName = nameParts[2];
-        }
-                
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-        
-        public RoleFullName getRoleFullName() {
-            return roleFullName;
-        }
-        
-        public String getOrganizationName() {
-            return roleFullName.getOrganizationName();
-        }
-        
-        public String getRoleName() {
-            return roleFullName.getRoleName();
-        }
-        
-        public String getCompetenceName() {
-            return competenceName;
+        public String toString() {
+            //return "RoleFullName{" + "organizationName=" + organizationName + ", roleName=" + roleName + '}';
+            return organizationName + "." + roleName;
         }
         
         // </editor-fold>

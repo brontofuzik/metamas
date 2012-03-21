@@ -10,7 +10,7 @@ import thespian4jade.proto.Party;
  * @since 2011-12-02
  * @version %I% %G%
  */
-public abstract class OneShotBehaviourState extends OneShotBehaviour implements State {
+public abstract class OneShotBehaviourState extends OneShotBehaviour implements IState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -55,19 +55,19 @@ public abstract class OneShotBehaviourState extends OneShotBehaviour implements 
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    public void registerTransition(int event, State targetState) {
+    public void registerTransition(int event, IState targetState) {
         getParentFSM().registerTransition(getName(), targetState.getName(), event);
     }
     
-    public void registerTransition(int event, State targetState, String[] statesToReset) {
+    public void registerTransition(int event, IState targetState, String[] statesToReset) {
         getParentFSM().registerTransition(getName(), targetState.getName(), event, statesToReset);
     }
     
-    public void registerDefaultTransition(State targetState) {
+    public void registerDefaultTransition(IState targetState) {
         getParentFSM().registerDefaultTransition(getName(), targetState.getName());
     }
     
-    public void registerDefaultTransition(State targetState, String[] statesToReset) {
+    public void registerDefaultTransition(IState targetState, String[] statesToReset) {
         getParentFSM().registerDefaultTransition(getName(), targetState.getName(), statesToReset);
     }
     

@@ -2,6 +2,7 @@ package thespian4jade.core.player;
 
 /**
  * A player exception.
+ * Currently not used.
  * @author Lukáš Kúdela
  * @since 2011-10-29
  * @version %I% %G%
