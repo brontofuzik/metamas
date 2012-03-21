@@ -210,9 +210,9 @@ public class Player_InvokeCompetence_InitiatorParty
                 "Initiating the 'Invoke competence' (%1$s) protocol.",
                 competenceName));
 
-            if (getMyAgent().knowledgeBase.canInvokeCompetence(competenceName)) {
+            if (getMyAgent().knowledgeBase.query().canInvokeCompetence(competenceName)) {
                 // The player can invoke the competence.
-                role = getMyAgent().knowledgeBase.getActiveRole().getRoleAID();
+                role = getMyAgent().knowledgeBase.query().getActiveRole().getRoleAID();
                 return OK;
             } else {
                 // The player can not invoke the competence.
@@ -359,7 +359,7 @@ public class Player_InvokeCompetence_InitiatorParty
         @Override
         protected void handleSuccessMessage(CompetenceResultMessage<TResult> message) {
             competenceResult = message.getResult();
-            getMyAgent().knowledgeBase.getActiveRole()
+            getMyAgent().knowledgeBase.query().getActiveRole()
                 .saveCompetenceResult(competenceName, message.getResult());
         }
 

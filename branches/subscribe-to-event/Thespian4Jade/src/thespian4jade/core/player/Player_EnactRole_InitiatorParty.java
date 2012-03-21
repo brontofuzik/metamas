@@ -295,7 +295,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         @Override
         protected void handleMessage(RoleAIDMessage message) {
             AID roleAID = message.getRoleAID();
-            getMyAgent().knowledgeBase.enactRole(roleName, roleAID,
+            getMyAgent().knowledgeBase.update().enactRole(roleName, roleAID,
                 organization.getLocalName(), organization);
         }
 

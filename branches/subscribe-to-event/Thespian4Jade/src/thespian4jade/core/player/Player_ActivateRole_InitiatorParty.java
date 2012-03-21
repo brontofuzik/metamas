@@ -90,9 +90,9 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
                 roleName));
 
             // Check if the role can be activated.
-            if (getMyAgent().knowledgeBase.canActivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.query().canActivateRole(roleName)) {
                 // The role can be activated.
-                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getRoleAID();
                 return OK;
             } else {
                 // The role can not be activated.
@@ -169,7 +169,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.activateRole(roleName);
+            getMyAgent().knowledgeBase.update().activateRole(roleName);
         }
 
         @Override

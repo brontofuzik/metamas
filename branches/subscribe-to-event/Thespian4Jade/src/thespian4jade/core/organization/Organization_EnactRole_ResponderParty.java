@@ -152,7 +152,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organizaiton.
-                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)
+                if (!getMyAgent().knowledgeBase.query().isRoleEnacted(roleName)
                     || getMyAgent().roles.get(roleName).getMultiplicity() == Multiplicity.MULTIPLE) {
                     // The role is not yet enacted.
                     return SUCCESS;
@@ -244,7 +244,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             startRoleAgent(role);
             
             // Update the knowledge base.
-            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), player);
+            getMyAgent().knowledgeBase.update().roleIsEnacted(roleName, role.getAID(), player);
             
             getMyAgent().logInfo("Role agent created.");
             
