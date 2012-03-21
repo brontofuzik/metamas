@@ -1,39 +1,38 @@
-package thespian4jade.proto.organizationprotocol.publisheventprotocol;
+package thespian4jade.proto.organizationprotocol.subscribetoeventprotocol;
 
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Organization_PublishEvent_InitiatorParty;
-import thespian4jade.core.player.Player_PublishEvent_ResponderParty;
+import thespian4jade.core.organization.Organization_SubscribeToEvent_ResponderParty;
+import thespian4jade.core.player.Player_SubscribeToEventEvent_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.ResponderParty;
 
 /**
- * The 'Publish event' protocol.
+ * The 'Subscribe to event' protocol.
  * @author Lukáš Kúdela
- * @since 2012-03-19
+ * @since 2012-03-21
  * @version %I% %G%
  */
-public class PublishEventProtocol extends Protocol {
+public class SubscribeToEventProtocol extends Protocol {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
    
-    private static PublishEventProtocol singleton;
+    private static SubscribeToEventProtocol singleton;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private PublishEventProtocol() {
+    private SubscribeToEventProtocol() {
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public static PublishEventProtocol getInstance() {
+    public static SubscribeToEventProtocol getInstance() {
         if (singleton == null) {
-            singleton = new PublishEventProtocol();
+            singleton = new SubscribeToEventProtocol();
         }
         return singleton;
     }
@@ -49,10 +48,9 @@ public class PublishEventProtocol extends Protocol {
      */
     @Override
     public InitiatorParty createInitiatorParty(Object... arguments) {
-        String event = (String)arguments[0];
-        String argument = (String)arguments[1];
-        AID playerToExclude = (AID)arguments[2];
-        return new Organization_PublishEvent_InitiatorParty(event, argument, playerToExclude);
+        String organizationName = (String)arguments[0];
+        String event = (String)arguments[1];
+        return new Player_SubscribeToEventEvent_InitiatorParty(organizationName, event);
     }
 
     /**
@@ -62,8 +60,8 @@ public class PublishEventProtocol extends Protocol {
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
-        return new Player_PublishEvent_ResponderParty(message);
+        return new Organization_SubscribeToEvent_ResponderParty(message);
     }
     
-    // </editor-fold>
+    // </editor-fold>    
 }
