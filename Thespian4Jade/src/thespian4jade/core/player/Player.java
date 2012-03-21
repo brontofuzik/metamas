@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
+import thespian4jade.proto.organizationprotocol.subscribetoeventprotocol.SubscribeToEventProtocol;
 
 /**
  * A player agent.
@@ -142,6 +143,15 @@ public abstract class Player extends Agent {
         addBehaviour(invokeCompetenceInitiator);
         
         return future;
+    }
+    
+    public final void subscribeToEvent(String organizationName, String event) {
+        // Create a 'Subscribe to event' protocol initiator party.
+        Party subscribeToEventInitiator = SubscribeToEventProtocol.getInstance()
+            .createInitiatorParty(organizationName, event);
+        
+        // Schedule the initiator party for execution.
+        addBehaviour(subscribeToEventInitiator);
     }
     
     // ----- Logging -----

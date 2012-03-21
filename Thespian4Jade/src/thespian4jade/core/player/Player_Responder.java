@@ -20,8 +20,8 @@ public class Player_Responder extends Responder {
      * Configures the player responder - adds individual protocol responders.
      */
     Player_Responder() {
-        addResponder(PublishEventProtocol.getInstance(), ACLMessage.INFORM);
         addResponder(InvokeResponsibilityProtocol.getInstance());
+        addResponder(PublishEventProtocol.getInstance(), ACLMessage.INFORM);
     }
     
     // </editor-fold>
