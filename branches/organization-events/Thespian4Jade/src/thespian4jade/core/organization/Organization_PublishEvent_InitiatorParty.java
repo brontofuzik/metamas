@@ -6,15 +6,15 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.organizationprotocol.raiseeventprotocol.EventMessage;
-import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
  * @author Lukáš Kúdela
  * @since 2012-03-19
  * @version %I% %G%
  */
-public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organization> {
+public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Organization> {
  
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -24,7 +24,7 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
     private AID[] players;
     
     /**
-     * The event to raise.
+     * The event to publish.
      */
     private String event;
     
@@ -43,15 +43,15 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Organization_RaiseEvent_InitiatorParty class.
-     * @param protocol the 'Raise event' protocol.
-     * @param event the event to raise
+     * Initializes a new instance of the Organization_PublishEvent_InitiatorParty class.
+     * @param protocol the 'Publish event' protocol.
+     * @param event the event to publish
      * @param argument the event argument
      * @param playerToExclude the player to exclude
      */
-    public Organization_RaiseEvent_InitiatorParty(final String event,
+    public Organization_PublishEvent_InitiatorParty(final String event,
         final String argument, final AID playerToExclude) {
-        super(RaiseEventProtocol.getInstance());
+        super(PublishEventProtocol.getInstance());
         // ----- Preconditions -----
         assert event != null && !event.isEmpty();
         // -------------------------
@@ -102,7 +102,7 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Raise event' protocol (id = %1$s) initiator party started.",
+                "'Publish event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
             Set<AID> allPlayers = getMyAgent().knowledgeBase.getAllPlayers();           
@@ -164,7 +164,7 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Raise event' protocol (id = %1$s) initiator party ended.",
+                "'Publish event' protocol (id = %1$s) initiator party ended.",
                 getProtocolId()));
         }
         

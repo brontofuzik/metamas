@@ -162,8 +162,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            // Raise the 'Role activated' event.
-            getMyAgent().myOrganization.raiseEvent(Event.ROLE_ACTIVATED,
+            // Publish the 'Role activated' event.
+            getMyAgent().myOrganization.publishEvent(Event.ROLE_ACTIVATED,
                 getMyAgent().getRoleName(), playerAID);
             
             // LOG

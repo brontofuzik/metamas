@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import thespian4jade.proto.Party;
-import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
  * An organization agent.
@@ -225,23 +225,23 @@ public abstract class Organization extends Agent {
     }
 
     /**
-     * Raises an event.
-     * @param event the event to raise
+     * Publishes an event.
+     * @param event the event to publish
      * @param argument the event argument
      * @param playerToExclude the payer to exlcude; more precisely its AID
      */
-    protected final void raiseEvent(final String event, final String argument,
+    protected final void publishEvent(final String event, final String argument,
         final AID playerToExclude) {
         // ----- Preconditions -----
         assert event != null && !event.isEmpty();
         // -------------------------
         
-        // Create a 'Raise event' protocol initiator party.
-        Party raiseEventInitiator = RaiseEventProtocol.getInstance()
+        // Create a 'Publish event' protocol initiator party.
+        Party publishEventInitiator = PublishEventProtocol.getInstance()
             .createInitiatorParty(event, argument, playerToExclude);
         
         // Schedule the initiator party for execution.
-        addBehaviour(raiseEventInitiator);
+        addBehaviour(publishEventInitiator);
     }
     
     // ----- PRIVATE -----

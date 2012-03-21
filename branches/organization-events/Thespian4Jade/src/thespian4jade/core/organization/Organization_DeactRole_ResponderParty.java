@@ -186,8 +186,8 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         public void action() {
-            // Raise the 'Role deacted' event.
-            getMyAgent().raiseEvent(Event.ROLE_DEACTED, roleName, playerAID);
+            // Publish the 'Role deacted' event.
+            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

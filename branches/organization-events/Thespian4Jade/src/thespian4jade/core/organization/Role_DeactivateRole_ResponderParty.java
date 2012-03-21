@@ -163,8 +163,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            // Raise the 'Role deactivated' event.
-            getMyAgent().myOrganization.raiseEvent(Event.ROLE_DEACTIVATED,
+            // Publish the 'Role deactivated' event.
+            getMyAgent().myOrganization.publishEvent(Event.ROLE_DEACTIVATED,
                 getMyAgent().getRoleName(), playerAID);
             
             // LOG

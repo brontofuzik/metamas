@@ -320,8 +320,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
 
         @Override
         public void action() {
-            // Raise the 'Role enacted' event.
-            getMyAgent().raiseEvent(Event.ROLE_ENACTED, roleName, playerAID);
+            // Publish the 'Role enacted' event.
+            getMyAgent().publishEvent(Event.ROLE_ENACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

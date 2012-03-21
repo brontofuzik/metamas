@@ -7,15 +7,15 @@ import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.organizationprotocol.raiseeventprotocol.EventMessage;
-import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
  * @author Lukáš Kúdela
  * @since 2012-03-19
  * @version %I% %G%
  */
-public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
+public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -32,11 +32,11 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Player_RaiseEvent_ResponderParty class.
+     * Initializes a new instance of the Player_PublishEvent_ResponderParty class.
      * @param message 
      */
-    public Player_RaiseEvent_ResponderParty(ACLMessage message) {
-        super(RaiseEventProtocol.getInstance(), message);
+    public Player_PublishEvent_ResponderParty(ACLMessage message) {
+        super(PublishEventProtocol.getInstance(), message);
         
         buildFSM();
     }
@@ -135,7 +135,7 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Raise event' protocol (id = %1$s) responder party started.",
+                "'Publish event' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
             
             EventMessage message = new EventMessage();
@@ -191,7 +191,7 @@ public class Player_RaiseEvent_ResponderParty extends ResponderParty<Player> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Raise event' protocol (id = %1$s) responder party ended.",
+                "'Publish event' protocol (id = %1$s) responder party ended.",
                 getProtocolId()));
         }
         
