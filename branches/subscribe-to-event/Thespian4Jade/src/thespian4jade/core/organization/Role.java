@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * A role agent.
@@ -134,7 +135,7 @@ public class Role extends Agent {
     public final <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
         // Create an 'Invoke responsibility' protocol initiator party.
-        Party invokeResponsibilityInitiator = InvokeResponsibilityProtocol.getInstance()
+        Party invokeResponsibilityInitiator = ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_RESPONSIBILITY_PROTOCOL)
             .createInitiatorParty(responsibilityName, argument);
         
         // Get the inititor party result future.

@@ -2,6 +2,7 @@ package thespian4jade.core.player;
 
 import jade.core.AID;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.organizationprotocol.subscribetoeventprotocol.SubscribeToEventProtocol;
 
 /**
@@ -42,7 +43,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
      * @param event the event to subscribe to
      */
     public Player_SubscribeToEventEvent_InitiatorParty(String organizationName, String event) {
-        super(SubscribeToEventProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.SUBSCRIBE_TO_EVENT_PROTOCOL));
         
         this.organizationName = organizationName;
         this.event = event;

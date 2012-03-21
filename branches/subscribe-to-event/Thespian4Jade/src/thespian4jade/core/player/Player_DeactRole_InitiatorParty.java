@@ -5,6 +5,7 @@ import thespian4jade.lang.Message;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import thespian4jade.proto.SingleSenderState;
@@ -36,7 +37,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactRole_InitiatorParty(String organizationName, String roleName) {
-        super(DeactRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.DEACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();

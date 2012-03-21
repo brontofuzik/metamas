@@ -17,28 +17,6 @@ import java.io.Serializable;
  * @version %I% %G%
  */
 public class InvokeCompetenceProtocol extends Protocol {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    /** The singleton instance of this protocol. */
-    private static InvokeCompetenceProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    /**
-     * Gets the singleton instance of this protocol.
-     * @return the singleton instance of this protocol
-     */
-    public static InvokeCompetenceProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new InvokeCompetenceProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

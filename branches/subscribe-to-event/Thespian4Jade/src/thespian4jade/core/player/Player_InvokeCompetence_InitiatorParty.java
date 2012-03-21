@@ -18,6 +18,7 @@ import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
 import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * An 'Invoke competence' protocol initiator party (new version).
@@ -63,7 +64,7 @@ public class Player_InvokeCompetence_InitiatorParty
      * @param competenceArgument the competence argument
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName, TArgument competenceArgument) {
-        super(InvokeCompetenceProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_COMPETENCE_PROTOCOL));
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();
         // -------------------------

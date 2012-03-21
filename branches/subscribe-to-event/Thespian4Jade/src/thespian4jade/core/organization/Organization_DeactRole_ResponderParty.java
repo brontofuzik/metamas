@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
@@ -30,7 +31,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
-        super(DeactRoleProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.DEACT_ROLE_PROTOCOL), aclMessage);
 
         playerAID = getACLMessage().getSender();
 

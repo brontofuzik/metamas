@@ -17,23 +17,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class DeactivateRoleProtocol extends Protocol {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static DeactivateRoleProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static DeactivateRoleProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new DeactivateRoleProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

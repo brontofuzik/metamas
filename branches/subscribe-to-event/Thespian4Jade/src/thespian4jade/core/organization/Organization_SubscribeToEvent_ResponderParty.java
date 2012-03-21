@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.organizationprotocol.subscribetoeventprotocol.SubscribeToEventProtocol;
 
@@ -37,7 +38,7 @@ public class Organization_SubscribeToEvent_ResponderParty
      * @param message 
      */
     public Organization_SubscribeToEvent_ResponderParty(ACLMessage message) {
-        super(SubscribeToEventProtocol.getInstance(), message);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.SUBSCRIBE_TO_EVENT_PROTOCOL), message);
         
         buildFSM();
     }

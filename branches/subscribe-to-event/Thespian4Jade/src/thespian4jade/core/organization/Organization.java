@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import thespian4jade.proto.Party;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
@@ -237,7 +238,7 @@ public abstract class Organization extends Agent {
         // -------------------------
         
         // Create a 'Publish event' protocol initiator party.
-        Party publishEventInitiator = PublishEventProtocol.getInstance()
+        Party publishEventInitiator = ProtocolRegistry.getProtocol(ProtocolRegistry.PUBLISH_EVENT_PROTOCOL)
             .createInitiatorParty(event, argument, playerToExclude);
         
         // Schedule the initiator party for execution.

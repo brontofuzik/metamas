@@ -5,6 +5,7 @@ import thespian4jade.lang.Message;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
 import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
 import thespian4jade.proto.SingleSenderState;
@@ -33,7 +34,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactivateRole_InitiatorParty(String roleName) {
-        super(DeactivateRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.DEACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------

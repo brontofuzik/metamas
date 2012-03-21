@@ -4,6 +4,7 @@ import jade.lang.acl.ACLMessage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
@@ -36,7 +37,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
      * @param message 
      */
     public Player_PublishEvent_ResponderParty(ACLMessage message) {
-        super(PublishEventProtocol.getInstance(), message);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.PUBLISH_EVENT_PROTOCOL), message);
         
         buildFSM();
     }
