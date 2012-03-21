@@ -9,7 +9,7 @@ import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMe
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.SendAgreeOrRefuse;
@@ -60,13 +60,13 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendEnactRequest = new SendEnactRequest();
-        State receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
-        State sendResponsibilitiesReply = new SendResponsibilitiesReply();
-        State receiveRoleAID = new ReceiveRoleAID();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendEnactRequest = new SendEnactRequest();
+        IState receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
+        IState sendResponsibilitiesReply = new SendResponsibilitiesReply();
+        IState receiveRoleAID = new ReceiveRoleAID();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
 
         // Register the states.

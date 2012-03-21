@@ -44,8 +44,8 @@ public class Responsibility {
     
     public enum ResponsibilityType
     {
-        OneShotResponsibility,
-        FSMResponsibility
+        Synchronous,
+        Asynchronous
     }
     
     // </editor-fold>  

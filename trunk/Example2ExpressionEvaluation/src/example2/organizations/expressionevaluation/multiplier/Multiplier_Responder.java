@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.multiplier;
 
 import example2.protocols.evaluatemultiplication.EvaluateMultiplicationProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
 
 /**
  * The 'Multiplier' role responder.

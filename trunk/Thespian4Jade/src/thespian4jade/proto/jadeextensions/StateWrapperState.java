@@ -6,7 +6,7 @@ package thespian4jade.proto.jadeextensions;
  * @since 2012-03-15
  * @version %I% %G%
  */
-public abstract class StateWrapperState<TState extends State>
+public abstract class StateWrapperState<TState extends IState>
     extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
@@ -53,8 +53,8 @@ public abstract class StateWrapperState<TState extends State>
      */
     private void buildFSM() {
         // ----- States -----
-        State setStateArgument = new SetWrappedStateArgument();
-        State getStateResult = new GetWrappedStateResult();
+        IState setStateArgument = new SetWrappedStateArgument();
+        IState getStateResult = new GetWrappedStateResult();
         // ------------------
         
         // Register the states.

@@ -47,8 +47,8 @@ public class Competence {
     
     public enum CompetenceType
     {
-        OneShotCompetence,
-        FSMCompetence
+        Synchronous,
+        Asynchronous
     }
     
     // </editor-fold>  

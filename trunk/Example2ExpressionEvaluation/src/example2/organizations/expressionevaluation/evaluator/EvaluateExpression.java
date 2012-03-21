@@ -2,7 +2,7 @@ package example2.organizations.expressionevaluation.evaluator;
 
 import thespian4jade.proto.jadeextensions.FSMBehaviourState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
@@ -16,8 +16,8 @@ public class EvaluateExpression extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     // ----- States -----
-    private State initialize;
-    private State end;
+    private IState initialize;
+    private IState end;
     // ------------------
     
     private String expression;

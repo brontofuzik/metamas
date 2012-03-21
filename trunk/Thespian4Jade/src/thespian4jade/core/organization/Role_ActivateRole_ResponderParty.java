@@ -2,11 +2,12 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
 import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.SendAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
@@ -40,11 +41,11 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveActivateRequest = new ReceiveActivateRequest();
-        State sendActivateReply = new SendActivateReply();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState receiveActivateRequest = new ReceiveActivateRequest();
+        IState sendActivateReply = new SendActivateReply();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
 
         // Register states.
@@ -161,7 +162,14 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role responder party succeeded.");
+            // Publish the 'Role activated' event.
+            getMyAgent().myOrganization.publishEvent(Event.ROLE_ACTIVATED,
+                getMyAgent().getRoleName(), playerAID);
+            
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
 
         // </editor-fold>
@@ -177,7 +185,10 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
 
         // </editor-fold>

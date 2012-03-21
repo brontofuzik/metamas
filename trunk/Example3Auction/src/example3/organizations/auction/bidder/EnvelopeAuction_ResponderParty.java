@@ -13,7 +13,7 @@ import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * The 'Envelope auction' protocol responder party.
@@ -72,13 +72,13 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State receiveAuctionCFP = new ReceiveAuctionCFP();
-        State invokeResponsibility_Bid = new InvokeResponsibility_Bid();
-        State sendBid = new SendBid();
-        State receiveAuctionResult = new ReceiveAuctionResult();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState receiveAuctionCFP = new ReceiveAuctionCFP();
+        IState invokeResponsibility_Bid = new InvokeResponsibility_Bid();
+        IState sendBid = new SendBid();
+        IState receiveAuctionResult = new ReceiveAuctionResult();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.

@@ -2,7 +2,7 @@ package thespian4jade.proto.organizationprotocol.enactroleprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import thespian4jade.lang.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,7 +71,7 @@ public class RoleAIDMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */ 
-    public static class Factory implements MessageFactory<RoleAIDMessage> {
+    public static class Factory implements IMessageFactory<RoleAIDMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

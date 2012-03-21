@@ -44,10 +44,13 @@ public class Example1Metamodel {
         
         // ---------- Players ----------
         
-        PlayerType demoPlayerType = createDemoPlayerType();
-        example1Mas.addPlayerType(demoPlayerType);
-        example1Mas.addPlayer(demoPlayerType.createPlayer("demo1_Player"));
-        example1Mas.addPlayer(demoPlayerType.createPlayer("demo2_Player"));
+        PlayerType player1PlayerType = createPlayer1PlayerType();
+        example1Mas.addPlayerType(player1PlayerType);
+        example1Mas.addPlayer(player1PlayerType.createPlayer("player1"));
+        
+        PlayerType player2PlayerType = createPlayer2PlayerType();
+        example1Mas.addPlayerType(player2PlayerType); 
+        example1Mas.addPlayer(player2PlayerType.createPlayer("player2"));
         
         return example1Mas;
     }
@@ -102,7 +105,7 @@ public class Example1Metamodel {
         
         // The 'Invoke function' competence.
         Competence invokeFunctionCompetence = new Competence("InvokeFunction_Competence",
-            Competence.CompetenceType.FSMCompetence, "Integer", "Integer");
+            Competence.CompetenceType.Synchronous, "Integer", "Integer");
         invokeFunctionCompetence.setFSM(createInvokeFunctionCompetenceFSM());
         invokerRole.addCompetence(invokeFunctionCompetence);
         
@@ -120,14 +123,19 @@ public class Example1Metamodel {
     
     // ---------- Players ----------
     
-    private static PlayerType createDemoPlayerType() {
-        PlayerType demoPlayerType = new PlayerType("Demo_Player");
+    private static PlayerType createPlayer1PlayerType() {
+        PlayerType player1PlayerType = new PlayerType("Player1");        
+        return player1PlayerType;
+    } 
+    
+    private static PlayerType createPlayer2PlayerType() {
+        PlayerType player2PlayerType = new PlayerType("Player2");
         
         // The 'Execute function' responsibility.
         Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
-            Responsibility.ResponsibilityType.OneShotResponsibility, "Integer", "Integer");
-        demoPlayerType.addResponsibility(executeFunctionResponsibility);
+            Responsibility.ResponsibilityType.Asynchronous, "Integer", "Integer");
+        player2PlayerType.addResponsibility(executeFunctionResponsibility);
         
-        return demoPlayerType;
-    } 
+        return player2PlayerType;
+    }
 }

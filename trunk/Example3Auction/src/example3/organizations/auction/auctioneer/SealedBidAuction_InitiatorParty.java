@@ -8,15 +8,17 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import thespian4jade.core.organization.Role;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * The 'Sealed bid auction' protocol initiator party.
@@ -129,14 +131,14 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendAuctionCFP = new SendAuctionCFP();
-        State receiveBid = new ReceiveBid();
-        State determineWinner = new DetermineWinner();
-        State sendAuctionResultToWinner = new SendAuctionResultToWinner();
-        State sendAuctionResultToLosers = new SendAuctionResultToLosers();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendAuctionCFP = new SendAuctionCFP();
+        IState receiveBid = new ReceiveBid();
+        IState determineWinner = new DetermineWinner();
+        IState sendAuctionResultToWinner = new SendAuctionResultToWinner();
+        IState sendAuctionResultToLosers = new SendAuctionResultToLosers();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
         
         // Register the states.
@@ -182,15 +184,18 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         
         @Override
         protected int initialize() {
-            getMyRole().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
             
-            // TODO (priority: medium) Replace the following two lines of code with something like
-            // bidders = getMyRole().getMyOrganization().getAllActiveRoleInstances("Bidder_Role");
-            bidders = getMyRole().getMyOrganization().getAllRoleInstances("Bidder_Role");
-            // TODO (priority: medium) Remove the hardwired position name.
-            bidders.remove(new AID("bidder_Role_participant1_Player", false));
+            // Get all active 'Bidder' positions.
+            List<Role> bidderPositions = getMyAgent().getMyOrganization()
+                .getAllActivePositions("Bidder_Role");
+            for (Role bidderPosition : bidderPositions) {
+                if (bidderPosition != getMyAgent()) {
+                    bidders.add(bidderPosition.getAID());
+                }
+            }
             
             return OK;
         }
@@ -222,7 +227,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending auction CFP.");
+            getMyAgent().logInfo("Sending auction CFP.");
         }
 
         /**
@@ -238,7 +243,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Auction CFP sent.");
+            getMyAgent().logInfo("Auction CFP sent.");
         }
         
         // </editor-fold>
@@ -292,7 +297,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving bid.");
+            getMyAgent().logInfo("Receiving bid.");
         }
         
         /**
@@ -306,7 +311,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Bid received.");
+            getMyAgent().logInfo("Bid received.");
         }
         
         // </editor-fold> 
@@ -373,7 +378,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         @Override
         protected void onEntry() {
             // LOG
-            getMyRole().logInfo("Sending auction result to the winner.");
+            getMyAgent().logInfo("Sending auction result to the winner.");
         }
         
         /**
@@ -388,7 +393,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         @Override
         protected void onExit() {
             // LOG
-            getMyRole().logInfo("Auction result sent to the winner.");
+            getMyAgent().logInfo("Auction result sent to the winner.");
         }
         
         // </editor-fold>
@@ -418,7 +423,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         @Override
         protected void onEntry() {
             // LOG
-            getMyRole().logInfo("Sending auction result to the losers.");
+            getMyAgent().logInfo("Sending auction result to the losers.");
         }
         
         /**
@@ -433,7 +438,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         @Override
         protected void onExit() {
             // LOG
-            getMyRole().logInfo("Auction result sent to the losers.");
+            getMyAgent().logInfo("Auction result sent to the losers.");
         }
         
         // </editor-fold>
@@ -452,7 +457,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
             winnerDetermined = true;
             
             // LOG
-            getMyRole().logInfo("The '" + getAuctionType().getName() + "' initiator succeeded.");
+            getMyAgent().logInfo("The '" + getAuctionType().getName() + "' initiator succeeded.");
         }
         
         // </editor-fold>
@@ -471,7 +476,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
             winnerDetermined = false;
             
             // LOG
-            getMyRole().logInfo("The '" + getAuctionType().getName() + "' initiator party failed.");
+            getMyAgent().logInfo("The '" + getAuctionType().getName() + "' initiator party failed.");
         }
         
         // </editor-fold>

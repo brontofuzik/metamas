@@ -9,17 +9,6 @@ import thespian4jade.core.organization.Role;
  * @version %I% %G%
  */
 public class Bidder_Role extends Role {
-
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    /**
-     * Initializes the Bidder_Role class.
-     */
-    static {
-        addResponsibility("Bid_Responsibility");
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 

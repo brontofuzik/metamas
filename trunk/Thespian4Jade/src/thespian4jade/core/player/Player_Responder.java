@@ -1,7 +1,9 @@
 package thespian4jade.core.player;
 
+import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import thespian4jade.core.Responder;
+import thespian4jade.proto.Responder;
+import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
  * The player responder.
@@ -13,7 +15,12 @@ public class Player_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Player_Responder class.
+     * Configures the player responder - adds individual protocol responders.
+     */
     Player_Responder() {
+        addResponder(PublishEventProtocol.getInstance(), ACLMessage.INFORM);
         addResponder(InvokeResponsibilityProtocol.getInstance());
     }
     

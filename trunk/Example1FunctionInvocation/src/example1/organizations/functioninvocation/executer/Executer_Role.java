@@ -13,15 +13,10 @@ import thespian4jade.core.organization.Role;
  * @version %I% %G%
  */
 public class Executer_Role extends Role {
-
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    /**
-     * Initializes the Executer_Role class.
-     */
-    static {
-        addResponsibility("ExecuteFunction_Responsibility");
-    }
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    public static final String NAME = "Executer_Role";
     
     // </editor-fold>
     

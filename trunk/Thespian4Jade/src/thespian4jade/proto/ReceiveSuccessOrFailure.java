@@ -3,7 +3,7 @@ package thespian4jade.proto;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.Message;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 
 /**
  * A 'Receive success or FAILURE' (multi-receiver) state.
@@ -25,7 +25,7 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected ReceiveSuccessOrFailure(MessageFactory<TMessage> messageFactory) {
+    protected ReceiveSuccessOrFailure(IMessageFactory<TMessage> messageFactory) {
         addReceiver(new MyReceiveSuccess(messageFactory));
         addReceiver(new MyReceiveFailure());
         
@@ -54,7 +54,7 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        MyReceiveSuccess(MessageFactory<TMessage> messageFactory) {
+        MyReceiveSuccess(IMessageFactory<TMessage> messageFactory) {
             super(messageFactory, SUCCESS);
         }
         

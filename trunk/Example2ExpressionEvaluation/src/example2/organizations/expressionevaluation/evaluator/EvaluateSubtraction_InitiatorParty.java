@@ -22,7 +22,7 @@ public class EvaluateSubtraction_InitiatorParty extends EvaluateBinaryOperation_
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
 
     @Override
-    protected String getBinaryEvaluatorRoleName() {
+    protected String getBinaryOperatorRoleName() {
         return Subtractor_Role.NAME;
     }
     

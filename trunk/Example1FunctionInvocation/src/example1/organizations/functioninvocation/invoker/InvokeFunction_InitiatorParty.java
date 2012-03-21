@@ -1,5 +1,6 @@
 package example1.organizations.functioninvocation.invoker;
 
+import example1.organizations.functioninvocation.executer.Executer_Role;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
 import example1.protocols.invokefunctionprotocol.ReplyMessage;
 import example1.protocols.invokefunctionprotocol.RequestMessage;
@@ -9,7 +10,7 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 
 /**
  * The 'Invoke function' protocol initiator party.
@@ -57,10 +58,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new Initialize();
-        State sendRequest = new SendRequest();
-        State receiveReply = new ReceiveReply();
-        State end = new End();
+        IState initialize = new Initialize();
+        IState sendRequest = new SendRequest();
+        IState receiveReply = new ReceiveReply();
+        IState end = new End();
         // ------------------
         
         // Register the states.
@@ -89,12 +90,13 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         public void action() {
-            getMyRole().logInfo(String.format(
+            getMyAgent().logInfo(String.format(
                 "Initiating the 'Invoke function' protocol (id = %1$s)",
                 getProtocolId()));
             
-            executerAID = getMyRole().getMyOrganization()
-                .getRoleInstance("Executer_Role");
+            // Get an active 'Executer' position.
+            executerAID = getMyAgent().getMyOrganization()
+                .getActivePosition(Executer_Role.NAME).getAID();
         }
         
         // </editor-fold>
@@ -115,7 +117,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Sending invoke function request.");
+            getMyAgent().logInfo("Sending invoke function request.");
         }
         
         /**
@@ -131,7 +133,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Invoke function request sent.");
+            getMyAgent().logInfo("Invoke function request sent.");
         }
         
         // </editor-fold>
@@ -160,7 +162,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         protected void onEntry() {
-            getMyRole().logInfo("Receiving result.");
+            getMyAgent().logInfo("Receiving result.");
         }
 
         @Override
@@ -170,7 +172,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
 
         @Override
         protected void onExit() {
-            getMyRole().logInfo("Result received.");
+            getMyAgent().logInfo("Result received.");
         }
         
         // </editor-fold>
@@ -182,7 +184,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         public void action() {
-            getMyRole().logInfo("'Invoke function' initiator party ended.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke function' protocol (id = %1$s) initiator party ended.",
+                getProtocolId()));
         }
         
         // </editor-fold>

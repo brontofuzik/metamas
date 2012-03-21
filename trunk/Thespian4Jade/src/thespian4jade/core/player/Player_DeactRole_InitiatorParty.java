@@ -8,7 +8,7 @@ import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
 import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
 import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.State;
+import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.ReceiveAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 
@@ -57,11 +57,11 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
      */
     private void buildFSM() {
         // ----- States -----
-        State initialize = new MyInitialize();
-        State sendDeactRequest = new SendDeactRequest();
-        State receiveDeactReply = new ReceiveDeactReply();
-        State successEnd = new SuccessEnd();
-        State failureEnd = new FailureEnd();
+        IState initialize = new MyInitialize();
+        IState sendDeactRequest = new SendDeactRequest();
+        IState receiveDeactReply = new ReceiveDeactReply();
+        IState successEnd = new SuccessEnd();
+        IState failureEnd = new FailureEnd();
         // ------------------
 
         // Register the states.
@@ -93,7 +93,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
 
-//            // TAG YellowPages
+//            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages
 //                .searchOrganizationWithRole(this, organizationName, roleName);
 

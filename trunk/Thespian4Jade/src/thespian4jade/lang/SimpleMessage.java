@@ -56,7 +56,7 @@ public class SimpleMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements MessageFactory {
+    public static class Factory implements IMessageFactory {
 
         // <editor-fold defaultstate="collapsed" desc="Fields">
         

@@ -1,7 +1,7 @@
 package example1.protocols.invokefunctionprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.MessageFactory;
+import thespian4jade.lang.IMessageFactory;
 import thespian4jade.lang.TextMessage;
 
 /**
@@ -60,7 +60,7 @@ public class ReplyMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements MessageFactory<ReplyMessage> {
+    public static class Factory implements IMessageFactory<ReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
