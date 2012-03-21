@@ -1,7 +1,8 @@
 package example3.organizations.auction.bidder;
 
-import example3.protocols.vickreyauction.VickreyAuctionProtocol;
+import example3.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.ResponderParty;
 
 /**
@@ -16,7 +17,7 @@ public class VickereyAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public VickereyAuction_ResponderParty(ACLMessage message) {
-        super(VickreyAuctionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL), message);
     }
     
     // </editor-fold>

@@ -15,30 +15,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class DutchAuctionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static DutchAuctionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private DutchAuctionProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static DutchAuctionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new DutchAuctionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 

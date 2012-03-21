@@ -1,7 +1,7 @@
 package example3.players;
 
-import example3.players.participant.bid.BidArgument;
-import example3.players.participant.bid.BidResult;
+import example3.players.bid.BidArgument;
+import example3.players.bid.BidResult;
 import thespian4jade.core.player.responsibility.AsynchronousResponsibility;
 
 /**
