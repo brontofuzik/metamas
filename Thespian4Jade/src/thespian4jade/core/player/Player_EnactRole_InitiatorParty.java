@@ -1,12 +1,11 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import thespian4jade.proto.jadeextensions.IState;
@@ -42,7 +41,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_EnactRole_InitiatorParty(String organizationName, String roleName) {
-        super(EnactRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.ENACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();

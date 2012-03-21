@@ -19,6 +19,7 @@ import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
 import thespian4jade.proto.IResultParty;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * A 'Invoke responsibility' protocol initiator party (new version).
@@ -67,7 +68,7 @@ public class Role_InvokeResponsibility_InitiatorParty
      * @param responsibilityArgument the responsibility argument
      */
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
-        super(InvokeResponsibilityProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_RESPONSIBILITY_PROTOCOL));
         // ----- Preconditions -----
         assert responsibilityName != null && !responsibilityName.isEmpty();
         // -------------------------

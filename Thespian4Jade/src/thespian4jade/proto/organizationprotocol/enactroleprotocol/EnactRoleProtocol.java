@@ -17,23 +17,6 @@ import thespian4jade.proto.ResponderParty;
  */
 public class EnactRoleProtocol extends Protocol {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-   
-    private static EnactRoleProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static EnactRoleProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EnactRoleProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**

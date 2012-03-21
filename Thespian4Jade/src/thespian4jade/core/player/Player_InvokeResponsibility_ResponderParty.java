@@ -18,6 +18,7 @@ import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.Responsibil
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * A 'Invoke responsibility' protocol responder party (new version).
@@ -64,7 +65,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      * @param aclMessage the ACL message
      */
     public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {
-        super(InvokeResponsibilityProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_RESPONSIBILITY_PROTOCOL), aclMessage);
 
         role = getACLMessage().getSender();
         

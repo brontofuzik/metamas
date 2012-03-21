@@ -18,6 +18,7 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import thespian4jade.core.Event;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -38,7 +39,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
-        super(EnactRoleProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.ENACT_ROLE_PROTOCOL), aclMessage);
        
         playerAID = getACLMessage().getSender();
         

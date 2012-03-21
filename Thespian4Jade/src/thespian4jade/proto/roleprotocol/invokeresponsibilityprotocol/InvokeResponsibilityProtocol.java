@@ -20,23 +20,6 @@ import java.io.Serializable;
  * @version %I% %G%
  */
 public class InvokeResponsibilityProtocol extends Protocol {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static InvokeResponsibilityProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static InvokeResponsibilityProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new InvokeResponsibilityProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

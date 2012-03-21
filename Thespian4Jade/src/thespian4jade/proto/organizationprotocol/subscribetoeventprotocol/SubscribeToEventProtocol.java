@@ -14,30 +14,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class SubscribeToEventProtocol extends Protocol {
- 
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-   
-    private static SubscribeToEventProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private SubscribeToEventProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static SubscribeToEventProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new SubscribeToEventProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

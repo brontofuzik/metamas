@@ -15,30 +15,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class PublishEventProtocol extends Protocol {
- 
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-   
-    private static PublishEventProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private PublishEventProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static PublishEventProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new PublishEventProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

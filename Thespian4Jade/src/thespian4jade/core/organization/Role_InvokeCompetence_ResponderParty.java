@@ -17,6 +17,7 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResul
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import thespian4jade.proto.ProtocolRegistry;
 
 /**
  * An 'Invoke competence' protocol responder party (new version).
@@ -64,7 +65,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      * @param aclMessage the received ACL message
      */
     public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
-        super(InvokeCompetenceProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
         
         player = getACLMessage().getSender();
         
