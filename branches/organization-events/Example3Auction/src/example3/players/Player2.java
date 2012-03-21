@@ -34,15 +34,15 @@ public class Player2 extends ParticipantPlayer {
         
         // Add behaviours.
         // Role enactnement
-        scheduleEnactRole(getAuctioneerRoleFullName(), 2000);
-        scheduleEnactRole(getBidderRoleFullName(), 4000);
+        scheduleEnactRole(getAuctioneerRoleFullName(), 4000);
+        scheduleEnactRole(getBidderRoleFullName(), 5000);
         
         // Role activation
         scheduleActivateRole(getAuctioneerRoleFullName(), 10000);
         
         // Role deactment
-        scheduleDeactRole(getAuctioneerRoleFullName(), 18000);
-        scheduleDeactRole(getBidderRoleFullName(), 20000);
+        scheduleDeactRole(getAuctioneerRoleFullName(), 22000);
+        scheduleDeactRole(getBidderRoleFullName(), 23000);
     }
     
     @Override
