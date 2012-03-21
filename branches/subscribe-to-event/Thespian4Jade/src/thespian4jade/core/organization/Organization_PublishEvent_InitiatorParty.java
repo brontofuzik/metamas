@@ -3,12 +3,12 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import java.util.Set;
 import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ProtocolRegistry;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
 
 /**
  * @author Lukáš Kúdela
@@ -52,7 +52,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
      */
     public Organization_PublishEvent_InitiatorParty(final String event,
         final String argument, final AID playerToExclude) {
-        super(ProtocolRegistry.getProtocol(ProtocolRegistry.PUBLISH_EVENT_PROTOCOL));
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL));
         // ----- Preconditions -----
         assert event != null && !event.isEmpty();
         // -------------------------

@@ -12,14 +12,14 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
 import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.ProtocolRegistry;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 
 /**
  * A 'Invoke responsibility' protocol initiator party (new version).
@@ -68,7 +68,7 @@ public class Role_InvokeResponsibility_InitiatorParty
      * @param responsibilityArgument the responsibility argument
      */
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
-        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_RESPONSIBILITY_PROTOCOL));
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL));
         // ----- Preconditions -----
         assert responsibilityName != null && !responsibilityName.isEmpty();
         // -------------------------
