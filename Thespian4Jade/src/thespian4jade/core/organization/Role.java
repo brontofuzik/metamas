@@ -8,14 +8,14 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
 import java.io.Serializable;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
-import thespian4jade.proto.ProtocolRegistry;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 
 /**
  * A role agent.
@@ -135,7 +135,8 @@ public class Role extends Agent {
     public final <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
         // Create an 'Invoke responsibility' protocol initiator party.
-        Party invokeResponsibilityInitiator = ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_RESPONSIBILITY_PROTOCOL)
+        Party invokeResponsibilityInitiator = ProtocolRegistry_StaticClass
+            .getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL)
             .createInitiatorParty(responsibilityName, argument);
         
         // Get the inititor party result future.

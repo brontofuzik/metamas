@@ -1,9 +1,7 @@
 package thespian4jade.core.organization;
 
-import thespian4jade.proto.ProtocolRegistry;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 import thespian4jade.proto.Responder;
 
 /**
@@ -21,9 +19,9 @@ public class Role_Responder extends Responder {
      * Configures the role responder - adds individual protocol responders.
      */
     Role_Responder() {
-        addResponder(ProtocolRegistry.getProtocol(ProtocolRegistry.ACTIVATE_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(ProtocolRegistry.DEACTIVATE_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_COMPETENCE_PROTOCOL));
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL));
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
     }
         
     // </editor-fold>

@@ -6,7 +6,6 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
 import thespian4jade.proto.jadeextensions.IState;
@@ -18,7 +17,8 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import thespian4jade.core.Event;
-import thespian4jade.proto.ProtocolRegistry;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -39,7 +39,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry.getProtocol(ProtocolRegistry.ENACT_ROLE_PROTOCOL), aclMessage);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
        
         playerAID = getACLMessage().getSender();
         

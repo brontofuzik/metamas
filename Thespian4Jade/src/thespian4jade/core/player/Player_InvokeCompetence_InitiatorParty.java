@@ -9,7 +9,6 @@ import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
@@ -18,7 +17,8 @@ import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
 import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.ProtocolRegistry;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.proto.Protocols;
 
 /**
  * An 'Invoke competence' protocol initiator party (new version).
@@ -64,7 +64,7 @@ public class Player_InvokeCompetence_InitiatorParty
      * @param competenceArgument the competence argument
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName, TArgument competenceArgument) {
-        super(ProtocolRegistry.getProtocol(ProtocolRegistry.INVOKE_COMPETENCE_PROTOCOL));
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();
         // -------------------------
