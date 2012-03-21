@@ -16,30 +16,6 @@ import thespian4jade.proto.ResponderParty;
  */
 public class EnglishAuctionProtocol extends Protocol {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EnglishAuctionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private EnglishAuctionProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static EnglishAuctionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EnglishAuctionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**

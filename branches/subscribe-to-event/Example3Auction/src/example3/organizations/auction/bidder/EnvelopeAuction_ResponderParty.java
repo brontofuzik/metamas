@@ -1,14 +1,15 @@
 package example3.organizations.auction.bidder;
 
-import example3.players.participant.bid.BidArgument;
-import example3.players.participant.bid.BidResult;
+import example3.players.bid.BidArgument;
+import example3.players.bid.BidResult;
+import example3.protocols.Protocols;
 import example3.protocols.envelopeauction.AuctionCFPMessage;
 import example3.protocols.envelopeauction.BidMessage;
-import example3.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InvokeResponsibilityState;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
@@ -55,7 +56,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * @param message the ACL message
      */
     public EnvelopeAuction_ResponderParty(ACLMessage message) {
-        super(EnvelopeAuctionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), message);
         
         // TODO (priority: low) Consider moving this initialization to the 'MyInitialize' state.
         auctioneer = getACLMessage().getSender();
