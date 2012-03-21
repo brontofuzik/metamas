@@ -10,7 +10,7 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenc
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 
 /**
- * A static class.
+ * A static class containing the protocols used in Thespian4Jade.
  * @author Lukáš Kúdela
  * @since 2012-03-21
  * @version %I% %G%
