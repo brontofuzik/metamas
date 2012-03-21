@@ -9,9 +9,7 @@ import jade.domain.FIPAException;
 import jade.util.Logger;
 import java.io.Serializable;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
@@ -28,16 +26,35 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    Organization myOrganization;
-    
+    /**
+     * The role' competences.
+     * Design-time state.
+     */
     final Map<String, Class> competences = new Hashtable<String, Class>();
     
-    RoleState state = RoleState.INACTIVE;
-    
+    /**
+     * The position's organization.
+     * Run-time state.
+     */
+    Organization myOrganization;
+
+    /**
+     * The position's player; more precisely its AID.
+     * Run-time state.
+     */
     AID playerAID;
+    
+    /**
+     * The position's state.
+     * Run-time state.
+     */
+    RoleState state = RoleState.INACTIVE;
     
     // ----- PRIVATE -----
     
+    /**
+     * The logger.
+     */
     private Logger logger;
     
     // </editor-fold>
@@ -60,6 +77,11 @@ public class Role extends Agent {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    // TODO (priority: high) Employ.
+    public String getRoleName() {
+        return getClass().getSimpleName();
+    }
     
     /**
      * Gets my organization
@@ -174,10 +196,14 @@ public class Role extends Agent {
         addBehaviour(new Role_Responder());
         logInfo("Behaviours added.");
         
-        // TAG YellowPages
+        // TAG YELLOW-PAGES
         //registerWithYellowPages();
     }
     
+    /**
+     * Design-time behaviour.
+     * @param competenceClass 
+     */
     protected void addCompetence(Class competenceClass) {
         // ----- Preconditions -----
         if (competenceClass == null) {
@@ -193,7 +219,7 @@ public class Role extends Agent {
     
     // ----- Yellow pages registration -----
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private void registerWithYellowPages() { 
         try {
             DFService.register(this, createAgentDescription());
@@ -203,7 +229,7 @@ public class Role extends Agent {
         logInfo("Registered with the Yellow Pages.");
     }
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private DFAgentDescription createAgentDescription() {
         // Create the agent description.
         DFAgentDescription agentDescription = new DFAgentDescription();

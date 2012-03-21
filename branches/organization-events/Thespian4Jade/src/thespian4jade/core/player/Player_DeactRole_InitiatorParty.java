@@ -93,7 +93,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
 
-//            // TAG YellowPages
+//            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages
 //                .searchOrganizationWithRole(this, organizationName, roleName);
 

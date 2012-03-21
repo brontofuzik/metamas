@@ -94,6 +94,7 @@ public class OrganizationKnowledgeBase {
             positions.get(playerAID) : null;
     }
     
+    // TAG NOT-USED
     /**
      * Gets the first position of a specified role (class).
      * @param roleName the name of the role
@@ -108,6 +109,7 @@ public class OrganizationKnowledgeBase {
         }      
     }
     
+    // TAG NOT-USED
     /**
      * Gets a random position of a specified role.
      * @param roleName the name of the role
@@ -123,6 +125,7 @@ public class OrganizationKnowledgeBase {
         }
     }
     
+    // TAG NOT-USED
     /**
      * Gets all role instances of a specified role (class).
      * @param roleName the name of the role (class)

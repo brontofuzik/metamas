@@ -66,41 +66,41 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
         return (TAgent)myAgent;
     }
     
-    /**
-     * Gets the organization owning this party.
-     * @return the organization owning this party
-     */
-    protected TAgent getMyOrganization() {
-        if (!(getMyAgent() instanceof Organization)) {
-            // The agent owning this party is not an arganization.
-            throw new IllegalStateException();
-        }
-        return getMyAgent();
-    }
-    
-    /**
-     * Gets the role owning this party.
-     * @return the role owning this party
-     */
-    protected TAgent getMyRole() {
-        if (!(getMyAgent() instanceof Role)) {
-            // The agent owning this party is not a role.
-            throw new IllegalStateException();
-        }
-        return getMyAgent();
-    }
-    
-    /**
-     * Gets the player owning this party.
-     * @return the player owning this party
-     */
-    protected TAgent getMyPlayer() {
-        if (!(getMyAgent() instanceof Player)) {
-            // The agent owning this party is not a player.
-            throw new IllegalStateException();
-        }
-        return getMyAgent();
-    }
+//    /**
+//     * Gets the organization owning this party.
+//     * @return the organization owning this party
+//     */
+//    protected TAgent getMyOrganization() {
+//        if (!(getMyAgent() instanceof Organization)) {
+//            // The agent owning this party is not an arganization.
+//            throw new IllegalStateException();
+//        }
+//        return getMyAgent();
+//    }
+//    
+//    /**
+//     * Gets the role owning this party.
+//     * @return the role owning this party
+//     */
+//    protected TAgent getMyRole() {
+//        if (!(getMyAgent() instanceof Role)) {
+//            // The agent owning this party is not a role.
+//            throw new IllegalStateException();
+//        }
+//        return getMyAgent();
+//    }
+//    
+//    /**
+//     * Gets the player owning this party.
+//     * @return the player owning this party
+//     */
+//    protected TAgent getMyPlayer() {
+//        if (!(getMyAgent() instanceof Player)) {
+//            // The agent owning this party is not a player.
+//            throw new IllegalStateException();
+//        }
+//        return getMyAgent();
+//    }
     
     // </editor-fold>
     

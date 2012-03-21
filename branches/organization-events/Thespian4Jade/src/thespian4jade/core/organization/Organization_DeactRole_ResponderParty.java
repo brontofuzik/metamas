@@ -150,8 +150,18 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected void onAgree() {
+            // Stop the role agent.
+            // TODO (priority: medium) Implement.
+
+            // Update the knowledge base.
             getMyAgent().knowledgeBase
                 .updateRoleIsDeacted(roleName, playerAID);
+            
+            // Unlink the position from its organization.
+            // TODO (priority: medium) Implement.
+            
+            // Destroy the role agent.
+            // TODO (priority: medium) Implement.
         }
 
         @Override
@@ -173,7 +183,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Raise the 'Role deacted' event.
-            getMyOrganization().raiseEvent(Event.ROLE_DEACTED, roleName, playerAID);
+            getMyAgent().raiseEvent(Event.ROLE_DEACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

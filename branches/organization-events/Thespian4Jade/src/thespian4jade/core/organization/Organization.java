@@ -8,9 +8,12 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 import java.util.logging.Level;
 import thespian4jade.proto.Party;
 import thespian4jade.proto.organizationprotocol.raiseeventprotocol.RaiseEventProtocol;
@@ -25,20 +28,29 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    // TODO (priority: high) Replace Hashtable with HashMap.
     /**
-     * The role definitions.
+     * The organization type's roles.
+     * Design-time state.
      */
     final Map<String, RoleDefinition> roles = new Hashtable<String, RoleDefinition>();
     
     /**
-     * The knowledge base.
+     * The organization's position holder.
+     * Run-time state.
+     */
+    final PositionHolder positionHolder = new PositionHolder();
+    
+    /**
+     * The organization's knowledge base.
      * The knowledge base stores knowledge acquired at run time.
+     * Run-time state.
      */
     final OrganizationKnowledgeBase knowledgeBase = new OrganizationKnowledgeBase();
     
     // ----- PRIVATE -----
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     /**
      * The DF agent description.
      */
@@ -64,23 +76,34 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
  
-    /**
-     * Gets a position of a specified role.
-     * 
-     * @param roleName the name of the role
-     * @return a position of the specified role
-     */
-    public AID getPosition(String roleName) {
-        return knowledgeBase.getFirstPosition(roleName);
+    // ----- Position management -----
+    
+    void addPosition(Role role) {
+        positionHolder.addPosition(role);
+        role.setMyOrganization(this);
+    }
+    
+    void removePosition(Role role) {
+        positionHolder.removePosition(role);
+        role.setMyOrganization(null);
     }
     
     /**
-     * Gets all positions of a specified role.
+     * Gets an active position of a specified role.
+     * @param roleName the name of the role
+     * @return a position of the specified role
+     */
+    public Role getActivePosition(String roleName) {
+        return positionHolder.getActivePosition(roleName);
+    }
+    
+    /**
+     * Gets all active positions of a specified role.
      * @param roleName the name of the role.
      * @return all positions of the specified role
      */
-    public Set<AID> getAllPositions(String roleName) {
-        return knowledgeBase.getAllPositions(roleName);
+    public List<Role> getAllActivePositions(String roleName) {
+        return positionHolder.getAllActivePositions(roleName);
     }
     
     // ----- Logging -----
@@ -114,12 +137,15 @@ public abstract class Organization extends Agent {
         addBehaviour(new Organization_Responder());
         logInfo("Behaviours addded.");
         
-        // TAG YellowPages
+        // TAG YELLOW-PAGES
         //registerWithYellowPages();
     }
+    
+    // ----- Role management -----
 
     /**
      * Adds a role.
+     * Design-time behaviour.
      * @param roleClass the role class
      * @param multiplicity the role multiplicity (single or multiple)
      * @param responsibilities the role responsibilities
@@ -137,7 +163,7 @@ public abstract class Organization extends Agent {
         RoleDefinition roleDefinition = new RoleDefinition(roleClass, multiplicity, responsibilities);
         roles.put(roleDefinition.getName(), roleDefinition);
         
-        // TAG YellowPages
+        // TAG YELLOW-PAGES
         //registerRoleWithDF(roleName);
         
         logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
@@ -195,7 +221,7 @@ public abstract class Organization extends Agent {
         
         roles.put(roleDefinition.getName(), roleDefinition);
         
-        // TAG YellowPages
+        // TAG YELLOW-PAGES
         //registerRoleWithDF(roleName);
         
         logInfo(String.format("Role (%1$s) added.", roleDefinition.getName()));
@@ -221,9 +247,11 @@ public abstract class Organization extends Agent {
         addBehaviour(raiseEventInitiator);
     }
     
-    // ---------- PRIVATE ----------
+    // ----- PRIVATE -----
     
-    // TAG YellowPages
+    // ----- Yellow pages management -----
+    
+    // TAG YELLOW-PAGES
     /**
      * Registers this organization with the Yellow pages.
      */
@@ -238,12 +266,12 @@ public abstract class Organization extends Agent {
         logInfo("Registered with the Yellow Pages.");
     }
 
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private OrganizationAgentDescription createOrganizationDescription() {
         return new OrganizationAgentDescription(getAID());
     }
 
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     /**
      * Register a role with the Yellow pages.
      */
@@ -258,16 +286,16 @@ public abstract class Organization extends Agent {
         logInfo(String.format("Role (%1$) registered with the Yellow Pages.", roleName));
     }
 
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     private RoleServiceDescription createRoleDescription(String roleName) {
         return new RoleServiceDescription(roleName);
-    } 
+    }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     /**
      * An organization agent description.
      */
@@ -283,7 +311,7 @@ public abstract class Organization extends Agent {
         // </editor-fold>
     }
 
-    // TAG YellowPages
+    // TAG YELLOW-PAGES
     /**
      * A role service description.
      */
@@ -304,6 +332,83 @@ public abstract class Organization extends Agent {
         }
         
         // </editor-fold>
+    }
+    
+    // </editor-fold>
+}
+
+class PositionHolder {
+
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    /**
+     * The pseudo-random number generator.
+     */
+    private static final Random random = new Random();
+    
+    /**
+     * The role positions.
+     */
+    private final Map<String, List<Role>> rolePositions = new HashMap<String, List<Role>>();
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    
+    void addPosition(Role position) {
+        List<Role> positions = rolePositions.get(position.getRoleName());
+        
+        // Add a new role-entry if necessary.
+        if (positions == null) {
+            positions = new ArrayList<Role>();
+            rolePositions.put(position.getRoleName(), positions);
+        }
+        
+        // Add the position.
+        positions.add(position);
+    }
+    
+    void removePosition(Role position) {
+        List<Role> positions = rolePositions.get(position.getRoleName());
+        
+        // Remove the position.
+        positions.remove(position);
+        
+        // Remove the old role entry if necessary.
+        if (positions.isEmpty()) {
+            rolePositions.remove(position.getRoleName());
+        }
+    }
+    
+    Role getActivePosition(String roleName) {
+        return getFirstActivePosition(roleName);
+    }
+    
+    List<Role> getAllActivePositions(String roleName) {
+        List<Role> allPositions = rolePositions.get(roleName);
+        List<Role> allActivePositions = new ArrayList<>();
+        for (Role position : allPositions) {
+            if (position.state == Role.RoleState.ACTIVE) {
+                allActivePositions.add(position);
+            }
+        }
+        return allActivePositions;
+    }
+    
+    // ----- PRIVATE -----
+    
+    private Role getFirstActivePosition(String roleName) {
+        List<Role> allActivePositions = getAllActivePositions(roleName);
+        return (!allActivePositions.isEmpty()) ?
+            allActivePositions.get(0) :
+            null;
+    }
+    
+    private Role getRandomActivePosition(String roleName) {
+        List<Role> allActivePositions = getAllActivePositions(roleName);
+        return (!allActivePositions.isEmpty()) ?
+            allActivePositions.get(random.nextInt(allActivePositions.size())) :
+            null;
     }
     
     // </editor-fold>

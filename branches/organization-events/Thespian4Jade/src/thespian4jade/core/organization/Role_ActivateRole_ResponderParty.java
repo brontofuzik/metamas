@@ -163,8 +163,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         public void action() {
             // Raise the 'Role activated' event.
-            getMyRole().myOrganization.raiseEvent(Event.ROLE_ACTIVATED,
-                getMyRole().getClass().getSimpleName(), playerAID);
+            getMyAgent().myOrganization.raiseEvent(Event.ROLE_ACTIVATED,
+                getMyAgent().getClass().getSimpleName(), playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

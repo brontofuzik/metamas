@@ -105,7 +105,7 @@ public class Organization_RaiseEvent_InitiatorParty extends InitiatorParty<Organ
                 "'Raise event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
-            Set<AID> allPlayers = getMyOrganization().knowledgeBase.getAllPlayers();           
+            Set<AID> allPlayers = getMyAgent().knowledgeBase.getAllPlayers();           
             allPlayers.remove(playerToExclude);           
             players = allPlayers.toArray(new AID[0]);
         }

@@ -224,14 +224,20 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         protected RoleAIDMessage prepareMessage() {
             getMyAgent().logInfo("Creating role agent.");
             
-            // Create the role agent and associate it with the player.
+            // Create the role agent.
             Role role = createRoleAgent(roleName);
+            
+            // Link the position to its organization.
+            getMyAgent().addPosition(role);
+            
+            // Link the position to its player.
             role.setPlayerAID(playerAID);
-            
-            startRoleAgent(role);
-            
+
             // Update the knowledge base.
             getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
+            
+            // Start the role agent.
+            startRoleAgent(role);
             
             getMyAgent().logInfo("Role agent created.");
             
@@ -286,9 +292,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             }
             //System.out.println("----- ROLE: " + roleAgent + " -----");
             
-            // Associate the role agent with the organization agent.
-            roleAgent.setMyOrganization(getMyAgent());
-            
             return roleAgent;
         }
 
@@ -317,7 +320,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Raise the 'Role enacted' event.
-            getMyOrganization().raiseEvent(Event.ROLE_ENACTED, roleName, playerAID);
+            getMyAgent().raiseEvent(Event.ROLE_ENACTED, roleName, playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(
