@@ -1,8 +1,9 @@
 package example2.organizations.expressionevaluation.adder;
 
 import example2.organizations.expressionevaluation.EvaluateBinaryOperation_ResponderParty;
-import example2.protocols.evaluateaddition.EvaluateAdditionProtocol;
+import example2.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate addition' protocol responder party.
@@ -16,7 +17,7 @@ public class EvaluateAddition_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateAddition_ResponderParty(ACLMessage message) {
-        super(EvaluateAdditionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_ADDITION_PROTOCOL), message);
     }
     
     // </editor-fold>

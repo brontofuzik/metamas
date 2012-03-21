@@ -13,23 +13,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EvaluateMultiplicationProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EvaluateMultiplicationProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static EvaluateMultiplicationProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EvaluateMultiplicationProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

@@ -1,8 +1,9 @@
 package example2.organizations.expressionevaluation.multiplier;
 
 import example2.organizations.expressionevaluation.EvaluateBinaryOperation_ResponderParty;
-import example2.protocols.evaluatemultiplication.EvaluateMultiplicationProtocol;
+import example2.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate multiplication' protocol responder party.
@@ -16,7 +17,7 @@ public class EvaluateMultiplication_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateMultiplication_ResponderParty(ACLMessage message) {
-        super(EvaluateMultiplicationProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_MULTIPLICATION_PROTOCOL), message);
     }
     
     // </editor-fold>

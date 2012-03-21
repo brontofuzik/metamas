@@ -1,6 +1,7 @@
 package example2.organizations.expressionevaluation.adder;
 
-import example2.protocols.evaluateaddition.EvaluateAdditionProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Responder;
 
 /**
@@ -17,7 +18,7 @@ class Adder_Responder extends Responder {
      * Initializes a new instance of the Adder_Responder class.
      */
     Adder_Responder() {
-        addResponder(EvaluateAdditionProtocol.getInstance());
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_ADDITION_PROTOCOL));
     }
     
     // </editor-fold>

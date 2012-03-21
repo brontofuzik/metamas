@@ -1,6 +1,7 @@
 package example2.organizations.expressionevaluation.subtractor;
 
-import example2.protocols.evaluatesubtraction.EvaluateSubtractionProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Responder;
 
 /**
@@ -17,7 +18,7 @@ class Subtractor_Responder extends Responder {
      * Initializes a new instance of the Subtractor_Responder class.
      */
     Subtractor_Responder() {
-        addResponder(EvaluateSubtractionProtocol.getInstance());
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_SUBTRACTION_PROTOCOL));
     }
     
     // </editor-fold> 

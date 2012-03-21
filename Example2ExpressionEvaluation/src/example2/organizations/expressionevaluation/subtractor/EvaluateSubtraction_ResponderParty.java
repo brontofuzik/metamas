@@ -1,8 +1,9 @@
 package example2.organizations.expressionevaluation.subtractor;
 
 import example2.organizations.expressionevaluation.EvaluateBinaryOperation_ResponderParty;
-import example2.protocols.evaluatesubtraction.EvaluateSubtractionProtocol;
+import example2.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate subtraction' protocol responder party.
@@ -16,7 +17,7 @@ public class EvaluateSubtraction_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateSubtraction_ResponderParty(ACLMessage message) {
-        super(EvaluateSubtractionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_SUBTRACTION_PROTOCOL), message);
     }
     
     // </editor-fold>

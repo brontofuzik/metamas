@@ -1,7 +1,8 @@
 package example2.organizations.expressionevaluation.evaluator;
 
 import example2.organizations.expressionevaluation.multiplier.Multiplier_Role;
-import example2.protocols.evaluatemultiplication.EvaluateMultiplicationProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate multiplication' protocol initiator party.
@@ -14,7 +15,7 @@ public class EvaluateMultiplication_InitiatorParty extends EvaluateBinaryOperati
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateMultiplication_InitiatorParty() {
-        super(EvaluateMultiplicationProtocol.getInstance());
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_MULTIPLICATION_PROTOCOL));
     }
     
     // </editor-fold>

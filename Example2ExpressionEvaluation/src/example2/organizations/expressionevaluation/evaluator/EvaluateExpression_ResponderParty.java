@@ -1,10 +1,11 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
+import example2.protocols.Protocols;
 import example2.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
 import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -45,7 +46,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
      * @param message the received ACL message
      */
     public EvaluateExpression_ResponderParty(ACLMessage message) {
-        super(EvaluateExpressionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL), message);
         
         // TODO (priority: low) Consider moving this initialization to the 'Initialize' state.
         binaryOperator = message.getSender();
