@@ -14,6 +14,12 @@ import thespian4jade.core.organization.Role;
  */
 public class Executer_Role extends Role {
     
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    public static final String NAME = "Executer_Role";
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
