@@ -14,8 +14,6 @@ import thespian4jade.proto.ReceiveAgreeOrRefuse;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import thespian4jade.core.Event;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -31,7 +29,11 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role enactment; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
 
     private String roleName;
 
@@ -42,7 +44,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
        
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -104,6 +106,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) responder party started.",
+                // TODO (priority: high) Replace the following with getProtocolId().
                 getACLMessage().getConversationId()));
             
             return OK;
@@ -133,7 +136,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -185,7 +188,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -211,7 +214,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -235,13 +238,13 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             getMyAgent().addPosition(role);
             
             // Link the position to its player.
-            role.setPlayerAID(playerAID);
+            role.setPlayerAID(player);
             
             // Start the role agent.
             startRoleAgent(role);
             
             // Update the knowledge base.
-            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
+            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), player);
             
             getMyAgent().logInfo("Role agent created.");
             
@@ -284,7 +287,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Publish the 'Role enacted' event.
-            getMyAgent().publishEvent(Event.ROLE_ENACTED, roleName, playerAID);
+            getMyAgent().publishEvent(Event.ROLE_ENACTED, roleName, player);
             
             // LOG
             getMyAgent().logInfo(String.format(

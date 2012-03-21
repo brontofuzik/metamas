@@ -14,8 +14,6 @@ import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgum
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
 import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.util.ClassHelper;
@@ -29,11 +27,11 @@ import thespian4jade.util.ClassHelper;
 public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Role> {
  
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
+    // <editor-fold defaultstate="collapsed" desc="Fields"> 
     
     /**
-     * The player; more precisely its AID.
+     * The player requesting the competence invocation; more precisely its AID.
+     * The initiator party.
      */
     private AID player;
     
@@ -145,11 +143,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
                 "Responding to the 'Invoke competence' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (player.equals(getMyAgent().playerAID)) {
-                // The sender player is enacting this role.
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
                 return OK;
             } else {
-                // The sender player is not enacting this role.
+                // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a competence cannot be invoked on a non-enacted role.
                 return FAIL;

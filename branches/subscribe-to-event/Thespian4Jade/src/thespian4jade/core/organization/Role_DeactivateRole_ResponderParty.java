@@ -22,7 +22,11 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role deactivation; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
 
     // </editor-fold>
     
@@ -31,7 +35,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     public Role_DeactivateRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry_StaticClass.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL), aclMessage);
         
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -79,13 +83,14 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         public int initialize() {
             getMyAgent().logInfo(String.format(
                 "'Deactivate role' protocol (id = %1$s) responder party started.",
+                // TODO (priority: high) Replace the following with getProtocolId().
                 getACLMessage().getConversationId()));
         
-            if (playerAID.equals(getMyAgent().playerAID)) {
-                // The sender player is enacting this role.
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
                 return OK;
             } else {
-                // The sender player is not enacting this role.
+                // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be deactivated.
                 return FAIL;
@@ -120,7 +125,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -166,7 +171,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // Publish the 'Role deactivated' event.
             getMyAgent().myOrganization.publishEvent(Event.ROLE_DEACTIVATED,
-                getMyAgent().getRoleName(), playerAID);
+                getMyAgent().getRoleName(), player);
             
             // LOG
             getMyAgent().logInfo(String.format(

@@ -25,16 +25,25 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The organization name. */
+    /**
+     * The organization in which to enact the role; more precisely its AID.
+     * The responder party.
+     */
+    private AID organization;
+    
+    /**
+     * The name of the organization in which to enact the role.
+     */
     private String organizationName;
     
-    /** The organization AID. */
-    private AID organizationAID;
-
-    /** The role name */
+    /**
+     * The name of the role to enact.
+     */
     private String roleName;
     
-    /** The role responsibilities. */
+    /**
+     * The responsibilitties of the role.
+     */
     private String[] responsibilities;
 
     // </editor-fold>
@@ -70,28 +79,22 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         // ------------------
 
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);     
         registerState(sendEnactRequest);
         registerState(receiveResponsibilitiesInform);
         registerState(sendResponsibilitiesReply);
-        registerState(receiveRoleAID);
-        
+        registerState(receiveRoleAID);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
         initialize.registerTransition(MyInitialize.OK, sendEnactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
+        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
         sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
-
         receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
-        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);
-        
+        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);      
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
-
         receiveRoleAID.registerDefaultTransition(successEnd);
     }
 
@@ -99,6 +102,9 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'My initialize' (initialize) state.
+     */
     private class MyInitialize extends Initialize {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -106,16 +112,16 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         @Override
         public int initialize() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Enact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
+                "'Enact role' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
             
 //            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages
 //                .searchOrganizationWithRole(this, organizationName, roleName);
             
             // Check if the organization exists.
-            organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-            if (organizationAID != null) {
+            organization = new AID(organizationName, AID.ISLOCALNAME);
+            if (organization != null) {
                 // The organization exists.
                 return OK;
             } else {
@@ -140,7 +146,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -149,6 +155,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending enact request.");
         }
         
@@ -162,6 +169,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Enact request sent.");
         }
 
@@ -187,7 +195,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -222,7 +230,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -271,7 +279,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -280,6 +288,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Receiving role AID.");
         }
         
@@ -287,11 +296,12 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         protected void handleMessage(RoleAIDMessage message) {
             AID roleAID = message.getRoleAID();
             getMyAgent().knowledgeBase.enactRole(roleName, roleAID,
-                organizationAID.getLocalName(), organizationAID);
+                organization.getLocalName(), organization);
         }
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Role AID received.");
         }
 

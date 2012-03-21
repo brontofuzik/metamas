@@ -146,11 +146,12 @@ public abstract class Player extends Agent {
         return future;
     }
     
-    public final void subscribeToEvent(String organizationName, String event) {
+    public final void subscribeToEvent(String organizationName, String event,
+        Class eventHandler) {
         // Create a 'Subscribe to event' protocol initiator party.
         Party subscribeToEventInitiator = ProtocolRegistry_StaticClass
             .getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL)
-            .createInitiatorParty(organizationName, event);
+            .createInitiatorParty(organizationName, event, eventHandler);
         
         // Schedule the initiator party for execution.
         addBehaviour(subscribeToEventInitiator);

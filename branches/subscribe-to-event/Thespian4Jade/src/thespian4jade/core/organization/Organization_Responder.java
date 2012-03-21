@@ -22,7 +22,7 @@ public class Organization_Responder extends Responder {
     Organization_Responder() {
         addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));
         addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL), ACLMessage.SUBSCRIBE);
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
     }
 
     // </editor-fold>

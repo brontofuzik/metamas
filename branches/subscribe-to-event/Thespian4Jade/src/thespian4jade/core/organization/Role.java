@@ -43,7 +43,7 @@ public class Role extends Agent {
      * The position's player; more precisely its AID.
      * Run-time state.
      */
-    AID playerAID;
+    AID enactingPlayer;
     
     /**
      * The position's state.
@@ -104,11 +104,11 @@ public class Role extends Agent {
     }
     
     public AID getPlayerAID() {
-        return playerAID;
+        return enactingPlayer;
     }
     
     public void setPlayerAID(AID playerAID) {
-        this.playerAID = playerAID;
+        this.enactingPlayer = playerAID;
     }
     
     // ----- PACKAGE -----
