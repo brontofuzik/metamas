@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
+import thespian4jade.util.ClassHelper;
 
 /**
  * An 'Invoke competence' protocol responder party (new version).
@@ -119,7 +120,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         Class competenceClass = getMyAgent().competences.get(competenceName);
 //        System.out.println("----- competenceClass: " + competenceClass + " -----");
 
-        competence = createCompetence(competenceClass);
+        competence = ClassHelper.instantiateClass(competenceClass);
         
         // Register the competence-related states.
         registerState(competence);
@@ -128,39 +129,6 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         receiveCompetenceArgument.registerDefaultTransition(competence);
         competence.registerDefaultTransition(sendCompetenceResult);
         //System.out.println("----- COMPETENCE ADDED -----");
-    }
-    
-    /**
-     * Create a new competence from its class.
-     * @param competenceClass the competence class
-     * @return the competence instance
-     */
-    private ICompetence createCompetence(Class competenceClass) {        
-        // Get the competence constructor.
-        Constructor competenceConstructor = null;
-        try {
-            competenceConstructor = competenceClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-                
-        // Instantiate the competence.
-        ICompetence competence = null;
-        try {
-            competence = (ICompetence)competenceConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        
-        return competence;
     }
     
     // </editor-fold>

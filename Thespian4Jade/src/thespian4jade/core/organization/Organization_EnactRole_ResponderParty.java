@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import thespian4jade.core.Event;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
+import thespian4jade.util.ClassHelper;
 
 /**
  * An 'Enact role' protocol responder party.
@@ -227,7 +228,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             getMyAgent().logInfo("Creating role agent.");
             
             // Create the role agent.
-            Role role = createRoleAgent(roleName);
+            Class roleClass = getMyAgent().roles.get(roleName).getRoleClass();
+            Role role = ClassHelper.instantiateClass(roleClass);
             
             // Link the position to its organization.
             getMyAgent().addPosition(role);
@@ -256,46 +258,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         }
         
         // ---------- PRIVATE ----------
-
-        /**
-         * Create a role agent.
-         * @param roleClassName the name of the role agent class.
-         * @param roleInstanceName the name of the role agent instance.
-         * @return the role agent.
-         */
-        private Role createRoleAgent(String roleClassName) {
-            // Get the role class.
-            Class roleClass = getMyAgent().roles.get(roleClassName).getRoleClass();
-            //System.out.println("----- ROLE CLASS: " + roleClass + " -----");
-            
-            // Get the role constructor.
-            Constructor roleConstructor = null;
-            try {
-                roleConstructor = roleClass.getConstructor();
-            } catch (NoSuchMethodException ex) {
-                ex.printStackTrace();
-            } catch (SecurityException ex) {
-                ex.printStackTrace();
-            }
-            //System.out.println("----- ROLE CONSTRUCTOR: " + roleConstructor + " -----");
-            
-            // Instantiate the role agent.
-            Role roleAgent = null;
-            try {
-                roleAgent = (Role)roleConstructor.newInstance();
-            } catch (InstantiationException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            }
-            //System.out.println("----- ROLE: " + roleAgent + " -----");
-            
-            return roleAgent;
-        }
 
         private void startRoleAgent(Role roleAgent) {
             //System.out.println("----- STARTING ROLE AGENT: " + roleAgent.getNickname() + " -----");
