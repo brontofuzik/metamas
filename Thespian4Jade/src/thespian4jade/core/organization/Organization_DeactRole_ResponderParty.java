@@ -22,7 +22,11 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role deactment; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
     
     private String roleName;
 
@@ -33,7 +37,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry_StaticClass.getProtocol(Protocols.DEACT_ROLE_PROTOCOL), aclMessage);
 
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -84,6 +88,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",
+                // TODO (priority: high) Replace the following with getProtocolId().
                 getACLMessage().getConversationId()));
             
             return OK;
@@ -120,7 +125,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -136,7 +141,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
-                if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
+                if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, player)) {
                     // The is enacted by the player.
                     return SendAgreeOrRefuse.AGREE;
                 } else {
@@ -153,7 +158,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected void onAgree() {
             // Update the knowledge base.
             getMyAgent().knowledgeBase
-                .updateRoleIsDeacted(roleName, playerAID);
+                .updateRoleIsDeacted(roleName, player);
             
             // Stop the role agent.
             // TODO (priority: medium) Implement.
@@ -184,7 +189,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Publish the 'Role deacted' event.
-            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, playerAID);
+            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, player);
             
             // LOG
             getMyAgent().logInfo(String.format(

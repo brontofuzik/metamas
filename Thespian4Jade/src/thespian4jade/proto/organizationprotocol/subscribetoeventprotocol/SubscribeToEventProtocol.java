@@ -26,7 +26,8 @@ public class SubscribeToEventProtocol extends Protocol {
     public InitiatorParty createInitiatorParty(Object... arguments) {
         String organizationName = (String)arguments[0];
         String event = (String)arguments[1];
-        return new Player_SubscribeToEventEvent_InitiatorParty(organizationName, event);
+        Class eventHandlerClass = (Class)arguments[2];
+        return new Player_SubscribeToEventEvent_InitiatorParty(organizationName, event, eventHandlerClass);
     }
 
     /**

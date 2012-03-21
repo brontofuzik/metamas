@@ -37,18 +37,18 @@ public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
    
-    // ----- QUERY -----
+    // ----- QUERY: ROLES -----
     
     /**
      * Queries this organization knowledge base to determine whether
      * a particular role is enacted by a particular player.
      * @param roleName the role name
-     * @param playerAID the player AID
+     * @param playerAID the player; more precisely its AID
      * @return <c>true</c> if the specified role is enacted by the specified player;
      *         <c>false</c> otherwise.
      */
-    public boolean isRoleEnactedByPlayer(String roleName, AID playerAID) {
-        return getPosition(roleName, playerAID) != null;
+    public boolean isRoleEnactedByPlayer(String roleName, AID player) {
+        return getPosition(roleName, player) != null;
     }
     
     /**
@@ -62,33 +62,15 @@ public class OrganizationKnowledgeBase {
         return !getPositions(roleName).isEmpty();
     }
     
-    /**
-     * Queries this organization knowledge base whether
-     * a particular player enacts any role.
-     * @param playerAID the player AID
-     * @return <c>true</c> if the specified player enacts any role;
-     *         <c>false</c> otherwise.
-     */
-    public boolean doesPlayerEnact(AID playerAID) {
-        return enactingPlayers.containsKey(playerAID) &&
-            enactingPlayers.get(playerAID).isEmployed();
-    }
-    
-    /**
-     * Gets all players enacting a role in the organization.
-     * @return a set of all players enacting a role in the organization
-     */
-    public Set<AID> getAllPlayers() {
-        return new HashSet(enactingPlayers.keySet());
-    }
+    // ----- QUERY: POSITIONS -----
     
     /**
      * Gets the position of a specified role  for a specified player.
      * @param roleName the name of the role
-     * @param playerAID the AID of the player
+     * @param player the player; more precisely its AID
      * @return the position of the specified role (class) for the cpecified player
      */
-    public AID getPosition(String roleName, AID playerAID) {
+    public AID getPosition(String roleName, AID player) {
 //        System.out.println("----- getPosition() -----");
 //        System.out.println("----- roleName: " + roleName + " -----");
 //        System.out.println("----- playerAID: " + playerAID.getLocalName() + " -----");
@@ -99,7 +81,7 @@ public class OrganizationKnowledgeBase {
 //            System.out.println("----- " +entry.getKey() + " -> " +entry.getValue() + "-----");
 //        }
         
-        return positions.get(playerAID);
+        return positions.get(player);
     }
     
     // TAG NOT-USED
@@ -144,88 +126,69 @@ public class OrganizationKnowledgeBase {
         return new HashSet<AID>(positions.values());
     }
     
-    // ----- UPDATE -----
+    // ----- QUERY: PLAYERS -----
     
     /**
-     * Updates this organization knowledge base to contain information about
-     * a particular role being enacted by a particular player.
+     * Queries this organization knowledge base whether
+     * a particular player enacts any role.
+     * @param player the player; more precisely its AID
+     * @return <c>true</c> if the specified player enacts any role;
+     *         <c>false</c> otherwise.
+     */
+    public boolean doesPlayerEnact(AID player) {
+        return enactingPlayers.containsKey(player) &&
+            enactingPlayers.get(player).isEmployed();
+    }
+    
+    /**
+     * Gets all players enacting a role in the organization.
+     * @return a set of all players enacting a role in the organization
+     */
+    public Set<AID> getAllPlayers() {
+        return new HashSet(enactingPlayers.keySet());
+    }
+    
+    // ----- UPDATE: ROLES -----
+    
+    /**
+     * Updates this organization knowledge base to contain information that
+     * a particular role is being enacted by a particular player.
      * @param roleName the role name
      * @param roleAID the role AID
-     * @param playerAID  the player AID
+     * @param player the player; more precisely its AID
      */
-    public void updateRoleIsEnacted(String roleName, AID roleAID, AID playerAID) {
+    public void updateRoleIsEnacted(String roleName, AID roleAID, AID player) {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
         assert roleAID != null;
-        assert playerAID != null;
+        assert player != null;
         // -------------------------
         
 //        System.out.println("----- updateRoleIsEnacted() -----");
 //        System.out.println("----- roleName: " + roleName + " -----");
 //        System.out.println("----- roleAID: " + roleAID + " -----");
 //        System.out.println("----- playerAID: " + playerAID + " -----");
-        getPositions(roleName).put(playerAID, roleAID);
-        updatePlayerEnactsRole(playerAID, roleName);
+        getPositions(roleName).put(player, roleAID);
+        updatePlayerEnactsRole(player, roleName);
     }
     
     /**
-     * Updates this organization knowledge base to contain information about
-     * a particular role being deacted by a particular player.
+     * Updates this organization knowledge base to contain information that
+     * a particular role is being deacted by a particular player.
      * @param roleName the role name
-     * @param playerAID the player AID
+     * @param player the player; more precisely its AID
      */
-    public void updateRoleIsDeacted(String roleName, AID playerAID) {
+    public void updateRoleIsDeacted(String roleName, AID player) {
         // ----- Preconditions -----
         assert roleName != null && !roleName.isEmpty();
-        assert playerAID != null;
+        assert player != null;
         // -------------------------
         
-        getPositions(roleName).remove(playerAID);
-        updatePlayerDeactsRole(playerAID, roleName);
-    }
-     
-    // ---------- PRIVATE ----------
-
-    private void updatePlayerEnactsRole(AID playerAID, String roleName) {
-        // ----- Preconditions -----
-        assert playerAID != null;
-        assert roleName != null && !roleName.isEmpty();
-        // ------------------------
-        
-        addPlayerIfApplicable(playerAID);
-        getPlayerDescription(playerAID).enactRole(roleName);
+        getPositions(roleName).remove(player);
+        updatePlayerDeactsRole(player, roleName);
     }
 
-    private void updatePlayerDeactsRole(AID playerAID, String roleName) {
-       // ----- Preconditions -----
-        assert playerAID != null;
-        assert roleName != null && !roleName.isEmpty();
-        // ------------------------
-
-        getPlayerDescription(playerAID).deactRole(roleName);
-        removePlayerIfApplicable(playerAID);
-    }
-    
-    private void addPlayerIfApplicable(AID playerAID) {
-        if (!enactingPlayers.containsKey(playerAID)) {
-            enactingPlayers.put(playerAID, new PlayerDescription(playerAID));
-        }
-    }
-    
-    private void removePlayerIfApplicable(AID playerAID) {
-        if (!getPlayerDescription(playerAID).isEmployed()) {
-            enactingPlayers.remove(playerAID);
-        }
-    }
-    
-    /**
-     * Gets the player description for a specified player
-     * @param playerAID the AID of the player
-     * @return the player description for the specified player
-     */
-    private PlayerDescription getPlayerDescription(AID playerAID) {
-        return enactingPlayers.get(playerAID);
-    }
+    // ----- UPDATE: POSITIONS -----
     
     private static AID getPositionAtIndex(Map<AID, AID> positions, int index) {
         for (AID position : positions.values()) {
@@ -238,15 +201,78 @@ public class OrganizationKnowledgeBase {
     }
     
     /**
-     * Gets the role instances of a specified role (class).
-     * @param roleName the name of the role (class)
-     * @return the role instances of the specified role (class)
+     * Gets the positions of a specified role.
+     * @param roleName the name of the role
+     * @return the positions of the specified role
      */
     private Map<AID, AID> getPositions(String roleName) {
         if (!enactedRoles.containsKey(roleName)) {
             enactedRoles.put(roleName, new HashMap<AID, AID>());
         }
         return enactedRoles.get(roleName);
+    }
+    
+    // ----- UPDATE: PLAYERS -----
+    
+    /**
+     * Updates the organization knowledge base to contain information that
+     * a particular player enacts a particular role.
+     * @param player the player; more precisely its AID
+     * @param roleName the name of the role
+     */
+    private void updatePlayerEnactsRole(AID player, String roleName) {
+        // ----- Preconditions -----
+        assert player != null;
+        assert roleName != null && !roleName.isEmpty();
+        // ------------------------
+        
+        addPlayerIfApplicable(player);
+        getPlayerDescription(player).enactRole(roleName);
+    }
+
+    /**
+     * Updates the organization knowledge base to contain information that
+     * a particular player deacts a particular role.
+     * @param player the player; more precisely its AID
+     * @param roleName the name of the role
+     */
+    private void updatePlayerDeactsRole(AID player, String roleName) {
+       // ----- Preconditions -----
+        assert player != null;
+        assert roleName != null && !roleName.isEmpty();
+        // ------------------------
+
+        getPlayerDescription(player).deactRole(roleName);
+        removePlayerIfApplicable(player);
+    }
+    
+    /**
+     * Adds a player to the enacting players if it is not already there.
+     * @param player the player to add
+     */
+    private void addPlayerIfApplicable(AID player) {
+        if (!enactingPlayers.containsKey(player)) {
+            enactingPlayers.put(player, new PlayerDescription(player));
+        }
+    }
+    
+    /**
+     * Removes a player from the enacting players if is not employed.
+     * @param player the player to remove
+     */
+    private void removePlayerIfApplicable(AID player) {
+        if (!getPlayerDescription(player).isEmployed()) {
+            enactingPlayers.remove(player);
+        }
+    }
+    
+    /**
+     * Gets the player description for a specified player
+     * @param player the player; more precisely its AID
+     * @return the player description for the specified player
+     */
+    private PlayerDescription getPlayerDescription(AID player) {
+        return enactingPlayers.get(player);
     }
     
     // </editor-fold> 

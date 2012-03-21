@@ -14,8 +14,6 @@ import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentReq
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
 import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.util.ClassHelper;
@@ -32,7 +30,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The role; more precisely, its AID.
+     * The role requesting the responsibility invocation; more precisely its AID.
+     * The initiator party.
      */
     private AID role;
     

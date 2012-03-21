@@ -215,7 +215,7 @@ public class Role_InvokeResponsibility_InitiatorParty
 
             if (true) {
                 // The role can invoke the responsibility.
-                player = getMyAgent().playerAID;
+                player = getMyAgent().enactingPlayer;
                 return OK;
             } else {
                 // The role can not invoke the responsibility.

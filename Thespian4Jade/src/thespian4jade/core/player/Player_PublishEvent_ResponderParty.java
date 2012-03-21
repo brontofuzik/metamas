@@ -1,8 +1,6 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
