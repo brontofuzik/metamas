@@ -28,7 +28,7 @@ public abstract class OperatorPlayer extends RolePlayer {
         // Add event handlers.
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
         addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
+        //addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
     }
     
     // </editor-fold>

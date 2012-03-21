@@ -39,7 +39,11 @@ public class Player2 extends OperatorPlayer {
         addResponsibility(Add_Responsibility.class);
         
         // Schedule behaviours.
+        // Role enactment
         scheduleEnactRole(4000);
+        
+        // Role deactment
+        scheduleDeactRole(18000);
     }
     
     // </editor-fold>

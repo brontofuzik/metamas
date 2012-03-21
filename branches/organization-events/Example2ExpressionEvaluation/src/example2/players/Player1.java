@@ -63,12 +63,19 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
         super.setup();
         
         // Add event handlers.
-        addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
+        //addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
+        //addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
+        // Role enactment
         scheduleEnactRole(2000);
+        
+        // Competence invocation
+        scheduleActivateRole(12000);
+        
+        // Role deactment
+        scheduleDeactRole(16000);
     }
 
     // </editor-fold>
