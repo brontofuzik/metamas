@@ -1,17 +1,48 @@
 package thespian4jade.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * The generics helper.
- * A static class containing generics helper methods.
+ * A static class containing class helper methods.
  * @author Lukáš Kúdela
- * @since 2012-01-24
+ * @since 2012-03-21
  * @version %I% %G%
  */
-public /* static */ class GenericsHelper {
+public /* static */ class ClassHelper {
+
+    public static <T> T instantiateClass(Class clazz) {
+        // Get the default constructor.
+        Constructor constructor = null;
+        try {
+            constructor = clazz.getConstructor();
+        } catch (NoSuchMethodException ex) {
+            ex.printStackTrace();
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+        //System.out.println("----- constructor: " + constructor + " -----");
+
+        // Instantiate the class.
+        T instance = null;
+        try {
+            instance = (T)constructor.newInstance();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
+        //System.out.println("----- instance: " + instance + " -----");
+
+        return instance;
+    }
     
     /**
      * @param object instance of a class that is a subclass of a generic class
@@ -47,22 +78,19 @@ public /* static */ class GenericsHelper {
     @SuppressWarnings("unchecked")
     public static <T> T createTemplateInstance(Object object) {
         return createTemplateInstance(object, 0);
-    }
+    } 
 }
 
 /**
- * A generic class. The GenericsHelper class test class.
- * @author Lukáš Kúdela
- * @since 2011-01-24
- * @version %I% %G%
+ * A class testing the ClassHelper.createTemplateInstance() method.
  */
 abstract class GenericClass<T> {
     
     T createTemplateInstance() {
-        return GenericsHelper.createTemplateInstance(this);
+        return ClassHelper.createTemplateInstance(this);
     }
 
-    public static void test() {
+    public static void main() {
         GenericClass<ArrayList<String>> genericInstance = new GenericClass<ArrayList<String>>() {};
         ArrayList<String> templateInstance = genericInstance.createTemplateInstance();
     }

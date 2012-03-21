@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * String utilities.
  * A static class containing string utility methods.
  * @author Lukáš Kúdela
  * @since 2012-03-18

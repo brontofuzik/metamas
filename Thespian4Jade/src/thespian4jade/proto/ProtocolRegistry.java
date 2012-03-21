@@ -28,21 +28,21 @@ public class ProtocolRegistry {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private static final Map<String, Protocol> singletons = new HashMap<String, Protocol>();
+    private static final Map<String, Protocol> protocolSingletons = new HashMap<String, Protocol>();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     static {
-        singletons.put(ENACT_ROLE_PROTOCOL, new EnactRoleProtocol());
-        singletons.put(DEACT_ROLE_PROTOCOL, new DeactRoleProtocol());
-        singletons.put(SUBSCRIBE_TO_EVENT_PROTOCOL, new SubscribeToEventProtocol());
-        singletons.put(PUBLISH_EVENT_PROTOCOL, new PublishEventProtocol());
-        singletons.put(ACTIVATE_ROLE_PROTOCOL, new ActivateRoleProtocol());
-        singletons.put(DEACTIVATE_ROLE_PROTOCOL, new DeactivateRoleProtocol());
-        singletons.put(INVOKE_COMPETENCE_PROTOCOL, new InvokeCompetenceProtocol());
-        singletons.put(INVOKE_RESPONSIBILITY_PROTOCOL, new InvokeResponsibilityProtocol());
+        protocolSingletons.put(ENACT_ROLE_PROTOCOL, new EnactRoleProtocol());
+        protocolSingletons.put(DEACT_ROLE_PROTOCOL, new DeactRoleProtocol());
+        protocolSingletons.put(SUBSCRIBE_TO_EVENT_PROTOCOL, new SubscribeToEventProtocol());
+        protocolSingletons.put(PUBLISH_EVENT_PROTOCOL, new PublishEventProtocol());
+        protocolSingletons.put(ACTIVATE_ROLE_PROTOCOL, new ActivateRoleProtocol());
+        protocolSingletons.put(DEACTIVATE_ROLE_PROTOCOL, new DeactivateRoleProtocol());
+        protocolSingletons.put(INVOKE_COMPETENCE_PROTOCOL, new InvokeCompetenceProtocol());
+        protocolSingletons.put(INVOKE_RESPONSIBILITY_PROTOCOL, new InvokeResponsibilityProtocol());
     }
     
     // </editor-fold>
@@ -50,7 +50,7 @@ public class ProtocolRegistry {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     public static synchronized Protocol getProtocol(String protocolName) {
-        return singletons.get(protocolName);
+        return protocolSingletons.get(protocolName);
     }
     
     // </editor-fold>
