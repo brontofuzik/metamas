@@ -38,7 +38,7 @@ public class Player2 extends ParticipantPlayer {
         scheduleEnactRole(getBidderRoleFullName(), 4000);
         
         // Role activation
-        //scheduleActivateRole(getAuctioneerRoleFullName(), 10000);
+        scheduleActivateRole(getAuctioneerRoleFullName(), 10000);
         
         // Role deactment
         scheduleDeactRole(getAuctioneerRoleFullName(), 18000);

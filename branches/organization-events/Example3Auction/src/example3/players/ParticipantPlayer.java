@@ -257,7 +257,8 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
         @Override
         protected void handleEvent(String roleName) {
             if (roleName.equals(getMyPlayer().getAuctioneerRoleName())) {
-                getMyPlayer().deactivateRole(getMyPlayer().getAuctioneerRoleName());
+                getMyPlayer().bidders = 0;
+                getMyPlayer().deactivateRole(getMyPlayer().getBidderRoleName());
             }
         }
         
