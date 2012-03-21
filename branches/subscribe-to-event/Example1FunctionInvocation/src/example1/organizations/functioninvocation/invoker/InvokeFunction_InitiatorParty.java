@@ -1,12 +1,14 @@
 package example1.organizations.functioninvocation.invoker;
 
 import example1.organizations.functioninvocation.executer.Executer_Role;
+import example1.protocols.Protocols;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
 import example1.protocols.invokefunctionprotocol.ReplyMessage;
 import example1.protocols.invokefunctionprotocol.RequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -33,7 +35,8 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public InvokeFunction_InitiatorParty() {
-        super(InvokeFunctionProtocol.getInstance());
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL));
+        
         buildFSM();
     }
     
