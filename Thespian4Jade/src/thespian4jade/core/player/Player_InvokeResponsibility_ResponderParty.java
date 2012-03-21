@@ -142,7 +142,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
                 "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (role.equals(getMyAgent().knowledgeBase.getActiveRole().getRoleAID())) {
+            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getRoleAID())) {
                 // The sender role is the active role.
                 return OK;
             } else {

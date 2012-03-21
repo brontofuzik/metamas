@@ -97,7 +97,7 @@ public class Organization_SubscribeToEvent_ResponderParty
                 // TODO (priority: high) Replace the following with getProtocolId().
                 getACLMessage().getConversationId()));
         
-            if (getMyAgent().knowledgeBase.doesPlayerEnact(player)) {
+            if (getMyAgent().knowledgeBase.query().doesPlayerEnact(player)) {
                 // The initiator player is employed (enacts a role) in this organization.
                 return OK;
             } else {

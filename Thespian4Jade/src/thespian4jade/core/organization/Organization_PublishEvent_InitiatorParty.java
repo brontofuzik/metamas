@@ -106,7 +106,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
                 "'Publish event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
-            Set<AID> allPlayers = getMyAgent().knowledgeBase.getAllPlayers();           
+            Set<AID> allPlayers = getMyAgent().knowledgeBase.query().getAllPlayers();           
             allPlayers.remove(playerToExclude);           
             players = allPlayers.toArray(new AID[0]);
         }

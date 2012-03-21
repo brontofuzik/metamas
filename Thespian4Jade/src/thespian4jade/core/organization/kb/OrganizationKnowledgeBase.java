@@ -17,6 +17,10 @@ public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    private Query query = this.new Query(); 
+    
+    private Update update = this.new Update(); 
+    
     /**
      * The pseudo-random number generator.
      */
@@ -34,160 +38,17 @@ public class OrganizationKnowledgeBase {
     private Map<AID, PlayerDescription> enactingPlayers = new HashMap<AID, PlayerDescription>();
     
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Methods">
-   
-    // ----- QUERY: ROLES -----
-    
-    /**
-     * Queries this organization knowledge base to determine whether
-     * a particular role is enacted by a particular player.
-     * @param roleName the role name
-     * @param playerAID the player; more precisely its AID
-     * @return <c>true</c> if the specified role is enacted by the specified player;
-     *         <c>false</c> otherwise.
-     */
-    public boolean isRoleEnactedByPlayer(String roleName, AID player) {
-        return getPosition(roleName, player) != null;
-    }
-    
-    /**
-     * Queries this organization knowledge base whether
-     * a particular role is enacted by any player.
-     * @param roleName the role name
-     * @return <c>true</c> if the specified role is enacted by any player;
-     *         <c>false</c> otherwise.
-     */
-    public boolean isRoleEnacted(String roleName) {
-        return !getPositions(roleName).isEmpty();
-    }
-    
-    // ----- QUERY: POSITIONS -----
-    
-    /**
-     * Gets the position of a specified role  for a specified player.
-     * @param roleName the name of the role
-     * @param player the player; more precisely its AID
-     * @return the position of the specified role (class) for the cpecified player
-     */
-    public AID getPosition(String roleName, AID player) {
-//        System.out.println("----- getPosition() -----");
-//        System.out.println("----- roleName: " + roleName + " -----");
-//        System.out.println("----- playerAID: " + playerAID.getLocalName() + " -----");
-        
-        Map<AID, AID> positions = getPositions(roleName);
-//        System.out.println("----- positions.size(): " + positions.size() + " -----");
-//        for (Map.Entry<AID, AID> entry : positions.entrySet()) {
-//            System.out.println("----- " +entry.getKey() + " -> " +entry.getValue() + "-----");
-//        }
-        
-        return positions.get(player);
-    }
-    
-    // TAG NOT-USED
-    /**
-     * Gets the first position of a specified role (class).
-     * @param roleName the name of the role
-     * @return the first position of the specified role
-     */
-    public AID getFirstPosition(String roleName) {
-        Map<AID, AID> positions = getPositions(roleName);
-        if (!positions.isEmpty()) {
-            return getPositionAtIndex(positions, 0);
-        } else {
-            return null;
-        }      
-    }
-    
-    // TAG NOT-USED
-    /**
-     * Gets a random position of a specified role.
-     * @param roleName the name of the role
-     * @return a random position of the specified role
-     */
-    public AID getRandomPosition(String roleName) {
-        Map<AID, AID> positions = getPositions(roleName);    
-        if (!positions.isEmpty()) {
-            int positionIndex = random.nextInt(positions.values().size());
-            return getPositionAtIndex(positions, positionIndex);
-        } else {
-            return null;
-        }
-    }
-    
-    // TAG NOT-USED
-    /**
-     * Gets all role instances of a specified role (class).
-     * @param roleName the name of the role (class)
-     * @return the set of all role instances of the specified role (class)
-     */
-    public Set<AID> getAllPositions(String roleName) {
-        Map<AID, AID> positions = getPositions(roleName);
-        return new HashSet<AID>(positions.values());
-    }
-    
-    // ----- QUERY: PLAYERS -----
-    
-    /**
-     * Queries this organization knowledge base whether
-     * a particular player enacts any role.
-     * @param player the player; more precisely its AID
-     * @return <c>true</c> if the specified player enacts any role;
-     *         <c>false</c> otherwise.
-     */
-    public boolean doesPlayerEnact(AID player) {
-        return enactingPlayers.containsKey(player) &&
-            enactingPlayers.get(player).isEmployed();
-    }
-    
-    /**
-     * Gets all players enacting a role in the organization.
-     * @return a set of all players enacting a role in the organization
-     */
-    public Set<AID> getAllPlayers() {
-        return new HashSet(enactingPlayers.keySet());
-    }
-    
-    // ----- UPDATE: ROLES -----
-    
-    /**
-     * Updates this organization knowledge base to contain information that
-     * a particular role is being enacted by a particular player.
-     * @param roleName the role name
-     * @param roleAID the role AID
-     * @param player the player; more precisely its AID
-     */
-    public void updateRoleIsEnacted(String roleName, AID roleAID, AID player) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        assert roleAID != null;
-        assert player != null;
-        // -------------------------
-        
-//        System.out.println("----- updateRoleIsEnacted() -----");
-//        System.out.println("----- roleName: " + roleName + " -----");
-//        System.out.println("----- roleAID: " + roleAID + " -----");
-//        System.out.println("----- playerAID: " + playerAID + " -----");
-        getPositions(roleName).put(player, roleAID);
-        updatePlayerEnactsRole(player, roleName);
-    }
-    
-    /**
-     * Updates this organization knowledge base to contain information that
-     * a particular role is being deacted by a particular player.
-     * @param roleName the role name
-     * @param player the player; more precisely its AID
-     */
-    public void updateRoleIsDeacted(String roleName, AID player) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        assert player != null;
-        // -------------------------
-        
-        getPositions(roleName).remove(player);
-        updatePlayerDeactsRole(player, roleName);
+
+    public Query query() {
+        return query;
     }
 
+    public Update update() {
+        return update;
+    }
+    
     // ----- UPDATE: POSITIONS -----
     
     private static AID getPositionAtIndex(Map<AID, AID> positions, int index) {
@@ -275,5 +136,166 @@ public class OrganizationKnowledgeBase {
         return enactingPlayers.get(player);
     }
     
-    // </editor-fold> 
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public class Query {
+        
+        // ----- QUERY: ROLES -----
+        
+        /**
+         * Queries this organization knowledge base to determine whether
+         * a particular role is enacted by a particular player.
+         * @param roleName the role name
+         * @param playerAID the player; more precisely its AID
+         * @return <c>true</c> if the specified role is enacted by the specified player;
+         *         <c>false</c> otherwise.
+         */
+        public boolean isRoleEnactedByPlayer(String roleName, AID player) {
+            return getPosition(roleName, player) != null;
+        }
+
+        /**
+         * Queries this organization knowledge base whether
+         * a particular role is enacted by any player.
+         * @param roleName the role name
+         * @return <c>true</c> if the specified role is enacted by any player;
+         *         <c>false</c> otherwise.
+         */
+        public boolean isRoleEnacted(String roleName) {
+            return !getPositions(roleName).isEmpty();
+        }
+
+        // ----- QUERY: POSITIONS -----
+
+        /**
+         * Gets the position of a specified role  for a specified player.
+         * @param roleName the name of the role
+         * @param player the player; more precisely its AID
+         * @return the position of the specified role (class) for the cpecified player
+         */
+        public AID getPosition(String roleName, AID player) {
+    //        System.out.println("----- getPosition() -----");
+    //        System.out.println("----- roleName: " + roleName + " -----");
+    //        System.out.println("----- playerAID: " + playerAID.getLocalName() + " -----");
+
+            Map<AID, AID> positions = getPositions(roleName);
+    //        System.out.println("----- positions.size(): " + positions.size() + " -----");
+    //        for (Map.Entry<AID, AID> entry : positions.entrySet()) {
+    //            System.out.println("----- " +entry.getKey() + " -> " +entry.getValue() + "-----");
+    //        }
+
+            return positions.get(player);
+        }
+
+        // TAG NOT-USED
+        /**
+         * Gets the first position of a specified role (class).
+         * @param roleName the name of the role
+         * @return the first position of the specified role
+         */
+        public AID getFirstPosition(String roleName) {
+            Map<AID, AID> positions = getPositions(roleName);
+            if (!positions.isEmpty()) {
+                return getPositionAtIndex(positions, 0);
+            } else {
+                return null;
+            }      
+        }
+
+        // TAG NOT-USED
+        /**
+         * Gets a random position of a specified role.
+         * @param roleName the name of the role
+         * @return a random position of the specified role
+         */
+        public AID getRandomPosition(String roleName) {
+            Map<AID, AID> positions = getPositions(roleName);    
+            if (!positions.isEmpty()) {
+                int positionIndex = random.nextInt(positions.values().size());
+                return getPositionAtIndex(positions, positionIndex);
+            } else {
+                return null;
+            }
+        }
+
+        // TAG NOT-USED
+        /**
+         * Gets all role instances of a specified role (class).
+         * @param roleName the name of the role (class)
+         * @return the set of all role instances of the specified role (class)
+         */
+        public Set<AID> getAllPositions(String roleName) {
+            Map<AID, AID> positions = getPositions(roleName);
+            return new HashSet<AID>(positions.values());
+        }
+
+        // ----- QUERY: PLAYERS -----
+
+        /**
+         * Queries this organization knowledge base whether
+         * a particular player enacts any role.
+         * @param player the player; more precisely its AID
+         * @return <c>true</c> if the specified player enacts any role;
+         *         <c>false</c> otherwise.
+         */
+        public boolean doesPlayerEnact(AID player) {
+            return enactingPlayers.containsKey(player) &&
+                enactingPlayers.get(player).isEmployed();
+        }
+
+        /**
+         * Gets all players enacting a role in the organization.
+         * @return a set of all players enacting a role in the organization
+         */
+        public Set<AID> getAllPlayers() {
+            return new HashSet(enactingPlayers.keySet());
+        }
+    }
+    
+    public class Update {
+        
+        // ----- UPDATE: ROLES -----
+    
+        /**
+         * Updates this organization knowledge base to contain information that
+         * a particular role is being enacted by a particular player.
+         * @param roleName the role name
+         * @param roleAID the role AID
+         * @param player the player; more precisely its AID
+         */
+        public void roleIsEnacted(String roleName, AID roleAID, AID player) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            assert roleAID != null;
+            assert player != null;
+            // -------------------------
+
+    //        System.out.println("----- updateRoleIsEnacted() -----");
+    //        System.out.println("----- roleName: " + roleName + " -----");
+    //        System.out.println("----- roleAID: " + roleAID + " -----");
+    //        System.out.println("----- playerAID: " + playerAID + " -----");
+            getPositions(roleName).put(player, roleAID);
+            updatePlayerEnactsRole(player, roleName);
+        }
+    
+        /**
+         * Updates this organization knowledge base to contain information that
+         * a particular role is being deacted by a particular player.
+         * @param roleName the role name
+         * @param player the player; more precisely its AID
+         */
+        public void roleIsDeacted(String roleName, AID player) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            assert player != null;
+            // -------------------------
+
+            getPositions(roleName).remove(player);
+            updatePlayerDeactsRole(player, roleName);
+        }
+    }
+    
+    // </editor-fold>
 }

@@ -89,9 +89,9 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
                 "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
-            if (getMyAgent().knowledgeBase.canDeactivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getRoleAID();
                 return OK;
             } else {
                 // The role can not be deactivated.
@@ -168,7 +168,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.deactivateRole();
+            getMyAgent().knowledgeBase.update().deactivateRole();
         }
 
         @Override

@@ -178,7 +178,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.deactRole(roleName);
+            getMyAgent().knowledgeBase.update().deactRole(roleName);
         }
 
         @Override
