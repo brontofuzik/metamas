@@ -40,7 +40,7 @@ public class RolePlayer extends Player {
      * Enacts the role.
      */
     public void enactRole() {
-        System.out.println("----- Enacting role: " + roleFullName.toString() + "-----");
+        System.out.println("----- Enacting role: " + roleFullName.toString() + " -----");
         enactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
     }
     
@@ -49,7 +49,7 @@ public class RolePlayer extends Player {
      * @param timeout the timeout
      */
     public void scheduleEnactRole(int timeout) {
-        System.out.println("----- Scheduling role enactment: " + roleFullName.toString() + "-----");
+        System.out.println("----- Scheduling role enactment: " + roleFullName.toString() + " -----");
         scheduleEnactRole(roleFullName, timeout);
     }
     
@@ -57,7 +57,7 @@ public class RolePlayer extends Player {
      * Deacts the role.
      */
     public void deactRole() {
-        System.out.println("----- Deacting role: " + roleFullName.toString() + "-----");
+        System.out.println("----- Deacting role: " + roleFullName.toString() + " -----");
         deactRole(roleFullName.getOrganizationName(), roleFullName.getRoleName());
     }
     
@@ -66,7 +66,7 @@ public class RolePlayer extends Player {
      * @param timeout the timeout
      */
     public void scheduleDeactRole(int timeout) {
-        System.out.println("----- Scheduling role deactment: " + roleFullName.toString() + "-----");
+        System.out.println("----- Scheduling role deactment: " + roleFullName.toString() + " -----");
         scheduleDeactRole(roleFullName, timeout);
     }
     
@@ -74,7 +74,7 @@ public class RolePlayer extends Player {
      * Activates the role.
      */
     public void activateRole() {
-        System.out.println("----- Activating role: " + roleFullName.toString() + "-----");
+        System.out.println("----- Activating role: " + roleFullName.toString() + " -----");
         activateRole(roleFullName.getRoleName());
     }
     
@@ -83,7 +83,7 @@ public class RolePlayer extends Player {
      * @param timeout the timeout
      */
     public void scheduleActivateRole(int timeout) {
-        System.out.println("----- Scheduling role activation: " + roleFullName.toString() + "-----");
+        System.out.println("----- Scheduling role activation: " + roleFullName.toString() + " -----");
         scheduleActivateRole(roleFullName, timeout);
     } 
     
@@ -91,7 +91,7 @@ public class RolePlayer extends Player {
      * Deactivates the role.
      */
     public void deactivateRole() {
-        System.out.println("----- Deactivating role: " + roleFullName.toString() + "-----");
+        System.out.println("----- Deactivating role: " + roleFullName.toString() + " -----");
         deactivateRole(roleFullName.getRoleName());
     }
     
@@ -100,7 +100,7 @@ public class RolePlayer extends Player {
      * @param timeout the timeout
      */
     public void scheduleRoleDeactivation(int timeout) {
-        System.out.println("----- Scheduling role deactivation: " + roleFullName.toString() + "-----");
+        System.out.println("----- Scheduling role deactivation: " + roleFullName.toString() + " -----");
         scheduleDeactivateRole(roleFullName, timeout);
     }
     

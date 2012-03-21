@@ -89,9 +89,17 @@ public class OrganizationKnowledgeBase {
      * @return the position of the specified role (class) for the cpecified player
      */
     public AID getPosition(String roleName, AID playerAID) {
+//        System.out.println("----- getPosition() -----");
+//        System.out.println("----- roleName: " + roleName + " -----");
+//        System.out.println("----- playerAID: " + playerAID.getLocalName() + " -----");
+        
         Map<AID, AID> positions = getPositions(roleName);
-        return (positions.containsKey(playerAID)) ?
-            positions.get(playerAID) : null;
+//        System.out.println("----- positions.size(): " + positions.size() + " -----");
+//        for (Map.Entry<AID, AID> entry : positions.entrySet()) {
+//            System.out.println("----- " +entry.getKey() + " -> " +entry.getValue() + "-----");
+//        }
+        
+        return positions.get(playerAID);
     }
     
     // TAG NOT-USED
@@ -152,6 +160,10 @@ public class OrganizationKnowledgeBase {
         assert playerAID != null;
         // -------------------------
         
+//        System.out.println("----- updateRoleIsEnacted() -----");
+//        System.out.println("----- roleName: " + roleName + " -----");
+//        System.out.println("----- roleAID: " + roleAID + " -----");
+//        System.out.println("----- playerAID: " + playerAID + " -----");
         getPositions(roleName).put(playerAID, roleAID);
         updatePlayerEnactsRole(playerAID, roleName);
     }

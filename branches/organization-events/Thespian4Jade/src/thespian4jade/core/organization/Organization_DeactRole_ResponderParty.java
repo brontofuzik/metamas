@@ -135,10 +135,14 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
+                System.out.println("----- ROLE: " + roleName + " -----");
+                System.out.println("----- PLAYER: " + playerAID + " -----");
                 if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
+                    System.out.println("----- AGREE -----");
                     // The is enacted by the player.
                     return SendAgreeOrRefuse.AGREE;
                 } else {
+                    System.out.println("----- REFUSE -----");
                     // The role is not enacted by the player.
                     return SendAgreeOrRefuse.REFUSE;
                 }
@@ -150,12 +154,12 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected void onAgree() {
-            // Stop the role agent.
-            // TODO (priority: medium) Implement.
-
             // Update the knowledge base.
             getMyAgent().knowledgeBase
                 .updateRoleIsDeacted(roleName, playerAID);
+            
+            // Stop the role agent.
+            // TODO (priority: medium) Implement.
             
             // Unlink the position from its organization.
             // TODO (priority: medium) Implement.

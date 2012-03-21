@@ -232,12 +232,12 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             
             // Link the position to its player.
             role.setPlayerAID(playerAID);
-
-            // Update the knowledge base.
-            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
             
             // Start the role agent.
             startRoleAgent(role);
+            
+            // Update the knowledge base.
+            getMyAgent().knowledgeBase.updateRoleIsEnacted(roleName, role.getAID(), playerAID);
             
             getMyAgent().logInfo("Role agent created.");
             
