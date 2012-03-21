@@ -136,14 +136,10 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
-                System.out.println("----- ROLE: " + roleName + " -----");
-                System.out.println("----- PLAYER: " + playerAID + " -----");
                 if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
-                    System.out.println("----- AGREE -----");
                     // The is enacted by the player.
                     return SendAgreeOrRefuse.AGREE;
                 } else {
-                    System.out.println("----- REFUSE -----");
                     // The role is not enacted by the player.
                     return SendAgreeOrRefuse.REFUSE;
                 }
