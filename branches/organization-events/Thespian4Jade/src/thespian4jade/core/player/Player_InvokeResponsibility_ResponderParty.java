@@ -113,7 +113,12 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      * @param responsibilityName the name of the responsibility to select
      */
     private void selectResponsibility(String responsibilityName) {
-        responsibility = createResponsibility(responsibilityName);
+//        System.out.println("----- responsibilityName: " + responsibilityName + " -----");
+        
+        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
+//        System.out.println("----- responsibilityClass: " + responsibilityClass + " -----");
+        
+        responsibility = createResponsibility(responsibilityClass);
         
         // Register the responsibility-related states.
         registerState(responsibility);
@@ -124,17 +129,11 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * Creates a responsibility specified by its name
-     * @param responsibilityName the name of the responsibility
-     * @return the responsibility
+     * Creates a new responsibility from its class.
+     * @param responsibilityClass the responsibility class
+     * @return the responsibility instnce
      */
-    private IResponsibility createResponsibility(String responsibilityName) {
-        //System.out.println("----- RESPONSIBILITY NAME: " + responsibilityName + " -----");
-        
-        // TODO (priority: high) Move the following to the calling method.
-        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
-        //System.out.println("----- RESPONSIBILITY CLASS: " + responsibilityClass + " -----");
-        
+    private IResponsibility createResponsibility(Class responsibilityClass) {
         // Get the responsibility constructor.
         Constructor responsibilityConstructor = null;
         try {
@@ -144,7 +143,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         } catch (SecurityException ex) {
             ex.printStackTrace();
         }
-        //System.out.println("----- RESPONSIBILITY CONSTRUCTOR: " + responsibilityConstructor + " -----");
+//        System.out.println("----- responsibilityConstructor: " + responsibilityConstructor + " -----");
         
         // Instantiate the responsibility.
         IResponsibility responsibility = null;
@@ -159,7 +158,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }        
-        //System.out.println("----- RESPONSIBILITY: " + responsibility + " -----");
+//        System.out.println("----- responsibility: " + responsibility + " -----");
         
         return responsibility;
     }

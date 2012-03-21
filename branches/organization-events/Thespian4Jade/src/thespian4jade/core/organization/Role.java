@@ -78,7 +78,6 @@ public class Role extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    // TODO (priority: high) Employ.
     public String getRoleName() {
         return getClass().getSimpleName();
     }
@@ -122,8 +121,8 @@ public class Role extends Agent {
         }
         // -------------------------
         
-        String roleAgentName = getClass().getSimpleName().substring(0, 1).toLowerCase()
-            + getClass().getSimpleName().substring(1);
+        String roleAgentName = getRoleName().substring(0, 1).toLowerCase()
+            + getRoleName().substring(1);
         String playerAgentName = getPlayerAID().getLocalName();
         return String.format("%1$s_%2$s", roleAgentName, playerAgentName);
     }

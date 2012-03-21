@@ -164,7 +164,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // Raise the 'Role activated' event.
             getMyAgent().myOrganization.raiseEvent(Event.ROLE_ACTIVATED,
-                getMyAgent().getClass().getSimpleName(), playerAID);
+                getMyAgent().getRoleName(), playerAID);
             
             // LOG
             getMyAgent().logInfo(String.format(

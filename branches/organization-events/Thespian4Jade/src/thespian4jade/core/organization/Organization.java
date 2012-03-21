@@ -10,7 +10,6 @@ import jade.domain.FIPAException;
 import jade.util.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -28,12 +27,11 @@ public abstract class Organization extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    // TODO (priority: high) Replace Hashtable with HashMap.
     /**
      * The organization type's roles.
      * Design-time state.
      */
-    final Map<String, RoleDefinition> roles = new Hashtable<String, RoleDefinition>();
+    final Map<String, RoleDefinition> roles = new HashMap<String, RoleDefinition>();
     
     /**
      * The organization's position holder.
@@ -192,9 +190,8 @@ public abstract class Organization extends Agent {
     protected void addRole(Class roleClass, String[] responsibilities) {        
         addRole(roleClass, Multiplicity.SINGLE, responsibilities);
         
-        // TODO (priority: high) Check if the following is necessary.
         // Alternative:
-        addRole(new RoleDefinition(roleClass, responsibilities));
+        //addRole(new RoleDefinition(roleClass, responsibilities));
     }
     
     /**

@@ -110,11 +110,15 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     /**
      * Selects a competence specified by its name.
-     * @param competenceName the name of the competence to select.
+     * @param competenceName the name of the competence to select
      */
     private void selectCompetence(String competenceName) {
-        //System.out.println("----- ADDING COMPETENCE: " + competenceName + " -----");
-        competence = createCompetence(competenceName);
+//        System.out.println("----- competenceName: " + competenceName + " -----");
+        
+        Class competenceClass = getMyAgent().competences.get(competenceName);
+//        System.out.println("----- competenceClass: " + competenceClass + " -----");
+
+        competence = createCompetence(competenceClass);
         
         // Register the competence-related states.
         registerState(competence);
@@ -126,15 +130,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     }
     
     /**
-     * Create a competence specified by its name.
-     * @param competenceName the name of the competence
-     * @return the competence
+     * Create a new competence from its class.
+     * @param competenceClass the competence class
+     * @return the competence instance
      */
-    private ICompetence createCompetence(String competenceName) {
-        //System.out.println("----- CREATING COMPETENCE: " + competenceName + " -----");
-        Class competenceClass = getMyAgent().competences.get(competenceName);
-        //System.out.println("----- COMPETENCE CLASS: " + competenceClass + " -----");
-        
+    private ICompetence createCompetence(Class competenceClass) {        
         // Get the competence constructor.
         Constructor competenceConstructor = null;
         try {
@@ -157,8 +157,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
             ex.printStackTrace();
         } catch (InvocationTargetException ex) {
             ex.printStackTrace();
-        }        
-        //System.out.println("----- COMPETENCE CREATED -----");
+        }
         
         return competence;
     }
