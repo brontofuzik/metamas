@@ -147,7 +147,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organizaiton.
-                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)) {
+                if (!getMyAgent().knowledgeBase.isRoleEnacted(roleName)
+                    || getMyAgent().roles.get(roleName).getMultiplicity() == Multiplicity.MULTIPLE) {
                     // The role is not yet enacted.
                     return SUCCESS;
                 } else {
