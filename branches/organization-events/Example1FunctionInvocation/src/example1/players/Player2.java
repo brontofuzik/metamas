@@ -1,6 +1,5 @@
 package example1.players;
 
-import example1.organizations.functioninvocation.invoker.Invoker_Role;
 import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
@@ -44,10 +43,13 @@ public class Player2 extends RolePlayer {
         // Add event handlers.
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
         addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
         
         // Schedule behaviours.
+        // Role enactment
         scheduleEnactRole(4000);
+        
+        // Role deactment
+        scheduleDeactRole(12000);
     }
     
     // </editor-fold>
@@ -102,31 +104,6 @@ public class Player2 extends RolePlayer {
         }    
 
         // </editor-fold> 
-    }
-    
-    /**
-     * The 'Role deacted' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-19
-     * @version %I% %G%
-     */
-    public static class RoleDeacted_EventHandler
-        extends EventHandler<Player2> {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        /**
-         * Handles the 'Role deacted' event.
-         * @param roleName the name of the deacted role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            if (roleName.equals("Invoker_Role")) {
-                getMyPlayer().deactRole();
-            }
-        }    
-
-        // </editor-fold>
     }
     
     // </editor-fold>

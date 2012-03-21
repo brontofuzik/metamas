@@ -57,42 +57,22 @@ public class Player1 extends CompetencePlayer implements IObserver {
         super.setup();
         
         // Add event handlers.
-        addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
+        // Role enactment
         scheduleEnactRole(2000);
+        
+        // Competence invocation
+        scheduleActivateRole(6000);
+        
+        // Role deactment
+        scheduleDeactRole(10000);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Role enacted' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-19
-     * @version %I% %G%
-     */
-    public static class RoleEnacted_EventHandler
-        extends EventHandler<Player1> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-
-        /**
-         * Hanles the 'Role enacted' event handler.
-         * @param roleName the name of the enacted role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            if (roleName.equals("Executer_Role")) {
-                getMyPlayer().activateRole();
-            }
-        }
-
-        // </editor-fold>
-    }
     
     /**
      * The 'Role activated' event handler.
@@ -122,31 +102,6 @@ public class Player1 extends CompetencePlayer implements IObserver {
         }
     
         // </editor-fold>    
-    }
-    
-    /**
-     * The 'Role deactivated' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-19
-     * @version %I% %G%
-     */
-    public static class RoleDeactivated_EventHandler
-        extends EventHandler<Player1> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-        /**
-         * Handles the 'Role deactivated' event.
-         * @param roleName the name of the deactivated role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            if (roleName.equals("Executer_Role")) {
-                getMyPlayer().deactRole();
-            }
-        }
-    
-        // </editor-fold>  
     }
       
     // </editor-fold>
