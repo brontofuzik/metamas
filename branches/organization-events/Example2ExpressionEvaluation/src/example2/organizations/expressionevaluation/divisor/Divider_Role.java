@@ -10,9 +10,9 @@ import thespian4jade.core.organization.Role;
  */
 public class Divider_Role extends Role {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    public static final String NAME = "Constant fields";
+    public static final String NAME = "Divider_Role";
     
     // </editor-fold>
     

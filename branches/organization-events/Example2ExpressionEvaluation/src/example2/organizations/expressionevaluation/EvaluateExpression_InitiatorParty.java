@@ -95,8 +95,9 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
                 "Initiating the 'Evaluate expression' protocol (id = %1$s)",
                 getProtocolId()));
             
+            // Get an active 'Evaluator' position.
             evaluatorAID = getMyAgent().getMyOrganization()
-                .getPosition(Evaluator_Role.NAME);
+                .getActivePosition(Evaluator_Role.NAME).getAID();
         }
         
         // </editor-fold>

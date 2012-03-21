@@ -22,9 +22,9 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The AID of the binary evaluator initiating the protocol.
+     * The initiating binary operator; more precisely its AID.
      */
-    private AID binaryEvaluatorAID;
+    private AID binaryOperator;
     
     /**
      * The expression to evaluate.
@@ -48,7 +48,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
         super(EvaluateExpressionProtocol.getInstance(), message);
         
         // TODO (priority: low) Consider moving this initialization to the 'Initialize' state.
-        binaryEvaluatorAID = message.getSender();
+        binaryOperator = message.getSender();
         
         buildFSM();
     }
@@ -145,7 +145,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { binaryEvaluatorAID };
+            return new AID[] { binaryOperator };
         }
         
         // </editor-fold>
