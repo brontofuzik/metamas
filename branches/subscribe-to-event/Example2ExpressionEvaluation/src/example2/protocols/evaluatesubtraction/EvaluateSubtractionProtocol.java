@@ -13,23 +13,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EvaluateSubtractionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EvaluateSubtractionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static EvaluateSubtractionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EvaluateSubtractionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

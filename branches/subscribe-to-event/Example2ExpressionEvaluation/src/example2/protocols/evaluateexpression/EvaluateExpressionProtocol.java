@@ -13,23 +13,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EvaluateExpressionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EvaluateExpressionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static EvaluateExpressionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EvaluateExpressionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

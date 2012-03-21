@@ -1,7 +1,8 @@
 package example2.organizations.expressionevaluation.evaluator;
 
 import example2.organizations.expressionevaluation.divisor.Divider_Role;
-import example2.protocols.evaluatedivision.EvaluateDivisionProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate division' protocol responder party.
@@ -14,7 +15,7 @@ public class EvaluateDivision_InitiatorParty extends EvaluateBinaryOperation_Ini
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateDivision_InitiatorParty() {
-        super(EvaluateDivisionProtocol.getInstance());
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_DIVISION_PROTOCOL));
     }
     
     // </editor-fold>

@@ -1,8 +1,9 @@
 package example2.organizations.expressionevaluation.divisor;
 
 import example2.organizations.expressionevaluation.EvaluateBinaryOperation_ResponderParty;
-import example2.protocols.evaluatedivision.EvaluateDivisionProtocol;
+import example2.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Evaluate division' protocol responder party.
@@ -16,7 +17,7 @@ public class EvaluateDivision_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateDivision_ResponderParty(ACLMessage message) {
-        super(EvaluateDivisionProtocol.getInstance(), message);
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_DIVISION_PROTOCOL), message);
     }
     
     // </editor-fold>

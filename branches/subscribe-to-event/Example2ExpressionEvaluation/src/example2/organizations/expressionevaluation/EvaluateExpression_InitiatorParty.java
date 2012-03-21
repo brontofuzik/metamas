@@ -1,12 +1,14 @@
 package example2.organizations.expressionevaluation;
 
 import example2.organizations.expressionevaluation.evaluator.Evaluator_Role;
+import example2.protocols.Protocols;
 import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
 import example2.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
 import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
 import thespian4jade.proto.InitiatorParty;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -33,7 +35,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateExpression_InitiatorParty() {
-        super(EvaluateExpressionProtocol.getInstance());
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
         
         buildFSM();
     }

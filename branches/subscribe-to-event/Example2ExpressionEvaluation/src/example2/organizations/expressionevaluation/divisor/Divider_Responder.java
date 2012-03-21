@@ -1,6 +1,7 @@
 package example2.organizations.expressionevaluation.divisor;
 
-import example2.protocols.evaluatedivision.EvaluateDivisionProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Responder;
 
 /**
@@ -17,7 +18,7 @@ class Divider_Responder extends Responder {
      * Initializes a new instance of the Divider_Responder class.
      */
     Divider_Responder() {
-        addResponder(EvaluateDivisionProtocol.getInstance());
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_DIVISION_PROTOCOL));
     }
     
     // </editor-fold>    

@@ -1,6 +1,7 @@
 package example2.organizations.expressionevaluation.multiplier;
 
-import example2.protocols.evaluatemultiplication.EvaluateMultiplicationProtocol;
+import example2.protocols.Protocols;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Responder;
 
 /**
@@ -17,7 +18,7 @@ class Multiplier_Responder extends Responder {
      * Initializes a new instance of the Multiplier_Responder class.
      */
     Multiplier_Responder() {
-        addResponder(EvaluateMultiplicationProtocol.getInstance());
+        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_MULTIPLICATION_PROTOCOL));
     }
     
     // </editor-fold> 

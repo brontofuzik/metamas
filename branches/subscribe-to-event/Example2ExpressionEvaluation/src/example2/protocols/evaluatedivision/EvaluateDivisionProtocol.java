@@ -13,23 +13,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EvaluateDivisionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EvaluateDivisionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static EvaluateDivisionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EvaluateDivisionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
