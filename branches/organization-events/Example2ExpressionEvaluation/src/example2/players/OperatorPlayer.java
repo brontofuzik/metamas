@@ -28,7 +28,6 @@ public abstract class OperatorPlayer extends RolePlayer {
         // Add event handlers.
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
         addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
-        //addEventHandler(Event.ROLE_DEACTED, RoleDeacted_EventHandler.class);
     }
     
     // </editor-fold>
@@ -79,31 +78,6 @@ public abstract class OperatorPlayer extends RolePlayer {
         protected void handleEvent(String roleName) {
             if (roleName.equals("Evaluator_Role")) {
                 getMyPlayer().deactivateRole();
-            }
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Role deacted' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-20
-     * @version %I% %G%
-     */
-    public static class RoleDeacted_EventHandler
-        extends EventHandler<OperatorPlayer> {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Handles the 'Role deacted' event.
-         * @param roleName the name of the deacted role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            if (roleName.equals("Evaluator_Role")) {
-                getMyPlayer().deactRole();
             }
         }
         

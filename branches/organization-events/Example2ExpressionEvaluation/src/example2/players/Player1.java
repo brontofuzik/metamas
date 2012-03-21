@@ -63,9 +63,7 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
         super.setup();
         
         // Add event handlers.
-        //addEventHandler(Event.ROLE_ENACTED, RoleEnacted_EventHandler.class);
         addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        //addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
         
         // Schedule behaviours.
         // Role enactment
@@ -81,33 +79,6 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    /**
-     * The 'Role enacted' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-20
-     * @version %I% %G%
-     */
-    public static class RoleEnacted_EventHandler
-        extends EventHandler<Player1> {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Handles the 'Role enacted' event.
-         * @param roleName the name of the enacted role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            getMyPlayer().operators++;
-            if (getMyPlayer().operators == 4) {
-                getMyPlayer().operators = 0;
-                getMyPlayer().activateRole();
-            }
-        }
-        
-        // </editor-fold>
-    }
     
     /**
      * The 'Role activated' event handler.
@@ -136,33 +107,6 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
                 
                 Future<Integer> future = getMyPlayer().invokeCompetence(evaluateArgument);
                 future.addObserver(getMyPlayer());
-            }
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Role deactivated' event handler.
-     * @author Lukáš Kúdela
-     * @since 2012-03-20
-     * @version %I% %G%
-     */   
-    public static class RoleDeactivated_EventHandler
-        extends EventHandler<Player1> {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        /**
-         * Handles the 'Role deactivated' event.
-         * @param roleName the name of the deactivated role
-         */
-        @Override
-        protected void handleEvent(String roleName) {
-            getMyPlayer().operators++;
-            if (getMyPlayer().operators == 4) {
-                getMyPlayer().operators = 0;
-                getMyPlayer().deactRole();
             }
         }
         
