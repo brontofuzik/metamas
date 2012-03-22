@@ -1,5 +1,7 @@
 package example2.players;
 
+import thespian4jade.core.Event;
+
 /**
  * Player4 - the player playing the 'Multiplier' role.
  * @author Lukáš Kúdela
@@ -41,6 +43,8 @@ public class Player4 extends OperatorPlayer {
         // Schedule behaviours.
         // Role enactment
         scheduleEnactRole(8000);
+        scheduleSubscribeToEvent(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class, 9000);
+        scheduleSubscribeToEvent(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class, 9000);
         
         // Role deactment
         scheduleDeactRole(22000);

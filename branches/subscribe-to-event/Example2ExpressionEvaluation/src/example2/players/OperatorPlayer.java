@@ -1,6 +1,5 @@
 package example2.players;
 
-import thespian4jade.core.Event;
 import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
 
@@ -15,19 +14,6 @@ public abstract class OperatorPlayer extends RolePlayer {
     
     protected OperatorPlayer(RoleFullName roleFullName) {
         super(roleFullName);
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    @Override
-    protected void setup() {
-        super.setup();
-        
-        // Add event handlers.
-        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
     }
     
     // </editor-fold>
