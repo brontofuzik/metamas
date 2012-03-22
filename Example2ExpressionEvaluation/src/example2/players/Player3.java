@@ -1,5 +1,7 @@
 package example2.players;
 
+import thespian4jade.core.Event;
+
 /**
  * Player3 - the player plying the 'Subtractor' role.
  * @author Lukáš Kúdela
@@ -41,6 +43,8 @@ public class Player3 extends OperatorPlayer {
         // Schedule behaviours.
         // Role enactment
         scheduleEnactRole(6000);
+        scheduleSubscribeToEvent(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class, 7000);
+        scheduleSubscribeToEvent(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class, 7000);    
         
         // Role deactment
         scheduleDeactRole(20000);
