@@ -7,7 +7,7 @@ import example3.protocols.envelopeauction.AuctionCFPMessage;
 import example3.protocols.envelopeauction.BidMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InvokeResponsibilityState;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
@@ -73,7 +73,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Start();
         IState receiveAuctionCFP = new ReceiveAuctionCFP();
         IState invokeResponsibility_Bid = new InvokeResponsibility_Bid();
         IState sendBid = new SendBid();
@@ -92,8 +92,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, receiveAuctionCFP);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerDefaultTransition(receiveAuctionCFP);
         receiveAuctionCFP.registerDefaultTransition(invokeResponsibility_Bid);       
         invokeResponsibility_Bid.registerDefaultTransition(sendBid);        
         sendBid.registerDefaultTransition(receiveAuctionResult);        
@@ -109,17 +108,24 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * The 'Initialize' state.
      * An (initial) state in which the party is initialized and begins.
      */
-    private class MyInitialize extends Initialize {
+    private class Start extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        public void action() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Envelope auction' protocol (id = %1$s)",
+                "'Envelope auction' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
-            
-            return OK;
         }
         
         // </editor-fold>
