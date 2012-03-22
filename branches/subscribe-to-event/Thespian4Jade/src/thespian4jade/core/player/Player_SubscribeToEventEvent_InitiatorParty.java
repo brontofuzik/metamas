@@ -3,7 +3,7 @@ package thespian4jade.core.player;
 import jade.core.AID;
 import thespian4jade.core.Event;
 import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -75,7 +75,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendSubscribeRequest = new SendSubscribeRequest();
         IState receiveSubscribeReply = new ReceiveSubscribeReply();
         IState successEnd = new SuccessEnd();
@@ -90,8 +90,8 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendSubscribeRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendSubscribeRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         sendSubscribeRequest.registerDefaultTransition(receiveSubscribeReply);
         receiveSubscribeReply.registerDefaultTransition(successEnd);
     }
@@ -100,12 +100,21 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        protected int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Subscribe to event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));

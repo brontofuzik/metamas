@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
@@ -58,7 +58,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveEnactRequest = new ReceiveEnactRequest();
         IState sendResponsibilitiesInform = new SendResponsibilitiesInform();
         IState receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
@@ -68,28 +68,22 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);        
         registerState(receiveEnactRequest);
         registerState(sendResponsibilitiesInform);
         registerState(receiveResponsibilitiesReply);
-        registerState(sendRoleAID);
-        
+        registerState(sendRoleAID);     
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveEnactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
+        initialize.registerTransition(Initialize.OK, receiveEnactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);     
         receiveEnactRequest.registerDefaultTransition(sendResponsibilitiesInform);
-
         sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.SUCCESS, receiveResponsibilitiesReply);
-        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, failureEnd);
-        
+        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, failureEnd);       
         receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.AGREE, sendRoleAID);
         receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.REFUSE, failureEnd);   
-
         sendRoleAID.registerDefaultTransition(successEnd);
     }
     
@@ -97,12 +91,21 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) responder party started.",

@@ -295,10 +295,9 @@ public abstract class Player extends Agent {
      * Schedules a role enactment.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to enact
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     protected final void scheduleEnactRole(final RoleFullName roleFullName, final int timeout) {
-        // Initiate the 'Enact role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
             @Override
             protected void handleElapsedTimeout() {
@@ -312,11 +311,10 @@ public abstract class Player extends Agent {
      * Schedules a role deactment.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to deact
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     protected final void scheduleDeactRole(final RoleFullName roleFullName,
         final int timeout) {
-        // Initiate the 'Deact role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
@@ -330,11 +328,10 @@ public abstract class Player extends Agent {
      * Schedules a role activation.
      * Takes 2 seconds.
      * @param roleFullName the full name of the role to actiavte
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     protected final void scheduleActivateRole(final RoleFullName roleFullName,
         final int timeout) {
-        // Initiate the 'Activate role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {            
             @Override
             protected void handleElapsedTimeout() {
@@ -346,11 +343,10 @@ public abstract class Player extends Agent {
     /**
      * Schedules a role deactivation.
      * @param roleFullName the full name of the role to deactivate
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     protected final void scheduleDeactivateRole(final RoleFullName roleFullName,
         final int timeout) {
-        // Initiate the 'Deactivate role' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
@@ -363,16 +359,32 @@ public abstract class Player extends Agent {
      * Schedules a competence invocation.
      * @param competenceName the name of the competence to invoke
      * @param argument the competence argument
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     protected final <TArgument extends Serializable> void scheduleInvokeCompetence(
         final String competenceName, final TArgument argument,
         final int timeout) {
-        // Initiate the 'Invoke competence' protocol.
         addBehaviour(new PlayerWakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
                 getMyPlayer().invokeCompetence(competenceName, argument);
+            }
+        });
+    }
+    
+    /**
+     * Schedules an event subscription.
+     * @param organizationName the name of the organization
+     * @param event the event
+     * @param eventHandlerClass the event handler class
+     * @param timeout the timeout of execution
+     */
+    protected final void scheduleSubscribeToEvent(final String organizationName,
+        final Event event, final Class eventHandlerClass, final int timeout) {
+        addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
+            @Override
+            protected void handleElapsedTimeout() {
+                getMyPlayer().subscribeToEvent(organizationName, event, eventHandlerClass);
             }
         });
     }

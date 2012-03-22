@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.proto.ResponderParty;
@@ -60,7 +60,7 @@ public class Organization_SubscribeToEvent_ResponderParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveSubscribeRequest = new ReceiveSubscribeRequest();
         IState sendSubscribeReply = new SendSubscribeReply();
         IState successEnd = new SuccessEnd();
@@ -75,8 +75,8 @@ public class Organization_SubscribeToEvent_ResponderParty
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveSubscribeRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveSubscribeRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         receiveSubscribeRequest.registerDefaultTransition(sendSubscribeReply);
         sendSubscribeReply.registerDefaultTransition(successEnd);
     }
@@ -86,14 +86,23 @@ public class Organization_SubscribeToEvent_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'My initialize' (initialize) state.
+     * The 'Initialize' (initialize) state.
      */
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        protected int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Subscribe to event' protocol (id = %1$s) responder party started.",
                 // TODO (priority: high) Replace the following with getProtocolId().
@@ -141,7 +150,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         
         @Override
         protected AID[] getReceivers() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return new AID[] { player };
         }
         
         // </editor-fold>

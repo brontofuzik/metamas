@@ -182,6 +182,17 @@ public class OrganizationKnowledgeBase {
             return enactingPlayers.containsKey(player) &&
                 enactingPlayers.get(player).isEmployed();
         }
+        
+        public Set<AID> getPlayersSubscribedToEvent(Event event) {
+            Set<PlayerDescription> allPlayers = new HashSet<PlayerDescription>(enactingPlayers.values());
+            Set<PlayerDescription> subscribedPlayers = new HashSet<PlayerDescription>();
+            for (PlayerDescription player : allPlayers) {
+                if (player.isSubscribedToEvent(event)) {
+                    subscribedPlayers.add(player);
+                }
+            }
+            return projectPlayerDescriptionsToAIDs(subscribedPlayers);
+        }
 
         /**
          * Gets all players enacting a role in the organization.
@@ -189,6 +200,30 @@ public class OrganizationKnowledgeBase {
          */
         public Set<AID> getAllPlayers() {
             return new HashSet(enactingPlayers.keySet());
+        }
+
+        public boolean canInvokeResponsibility(String responsibilityName) {
+            // ----- Preconditions -----
+            assert responsibilityName != null && !responsibilityName.isEmpty();
+            // -------------------------
+            
+            // TODO (priority: medium) Implement.
+            return true;
+        }
+        
+        // ----- PRIVATE -----
+        
+        /**
+         * Projects the player description
+         * @param playerDescriptions
+         * @return 
+         */
+        private Set<AID> projectPlayerDescriptionsToAIDs(Set<PlayerDescription> playerDescriptions) {
+            Set<AID> playerAIDs = new HashSet<AID>();
+            for (PlayerDescription playerDescription : playerDescriptions) {
+                playerAIDs.add(playerDescription.getAID());
+            }
+            return playerAIDs;
         }
     }
     

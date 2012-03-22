@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -69,7 +69,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendEnactRequest = new SendEnactRequest();
         IState receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
         IState sendResponsibilitiesReply = new SendResponsibilitiesReply();
@@ -88,8 +88,8 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendEnactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, sendEnactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
         receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
         receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);      
@@ -105,12 +105,21 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     /**
      * The 'My initialize' (initialize) state.
      */
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>    
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));

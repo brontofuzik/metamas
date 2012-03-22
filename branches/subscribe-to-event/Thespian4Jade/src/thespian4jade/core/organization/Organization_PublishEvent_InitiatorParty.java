@@ -3,6 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import java.util.Set;
 import thespian4jade.core.Event;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -85,7 +86,8 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
         registerLastState(end);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendEvent);
+        initialize.registerTransition(Initialize.SOME_SUBSCRIBERS, sendEvent);
+        initialize.registerTransition(Initialize.NO_SUBSCRIBERS, sendEvent);
         sendEvent.registerDefaultTransition(end);
     }
     
@@ -96,20 +98,34 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     /**
      * The 'Initialize' (one-shot) state.
      */
-    private class Initialize extends OneShotBehaviourState {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int SOME_SUBSCRIBERS = 1;
+        public static final int NO_SUBSCRIBERS = 2;
+        // -----------------------        
+                
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        protected int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Publish event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
-            Set<AID> allPlayers = getMyAgent().knowledgeBase.query().getAllPlayers();           
-            allPlayers.remove(playerToExclude);           
-            players = allPlayers.toArray(new AID[0]);
+            // Get all players subscribed to the event.
+            Set<AID> subscribedPlayers = getMyAgent().knowledgeBase
+                .query().getPlayersSubscribedToEvent(event);           
+            subscribedPlayers.remove(playerToExclude);
+            
+            players = subscribedPlayers.toArray(new AID[0]);
+            
+            return (!subscribedPlayers.isEmpty()) ? SOME_SUBSCRIBERS : NO_SUBSCRIBERS;
         }
         
         // </editor-fold>

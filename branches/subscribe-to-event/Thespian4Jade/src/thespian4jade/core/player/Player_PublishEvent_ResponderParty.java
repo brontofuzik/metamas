@@ -2,7 +2,7 @@ package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.proto.ResponderParty;
@@ -119,9 +119,9 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     /**
      * The 'Select event handler' (one-shot) state.
      */
-    private class SelectEventHandler extends Initialize {
+    private class SelectEventHandler extends ExitValueState {
 
-        // <editor-fold defaultstate="collapsed" desc="Fields">
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         // ----- Exit values -----
         public static final int HANDLE_EVENT = 1;
@@ -133,7 +133,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        protected int doAction() {
             EventHandler eventHandler = selectEventHandler(event);
             if (eventHandler != null) {
                 // The event is handled.

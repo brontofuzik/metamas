@@ -3,7 +3,7 @@ package thespian4jade.core.player;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
@@ -80,7 +80,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      */
     private void buildFSM() {        
          // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
         IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
@@ -99,8 +99,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokeResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveInvokeResponsibilityRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);      
         sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.SUCCESS, receiveResponsibilityArgument);
         sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);       
@@ -132,17 +132,26 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
         
-            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getRoleAID())) {
+            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
                 // The sender role is the active role.
                 return OK;
             } else {

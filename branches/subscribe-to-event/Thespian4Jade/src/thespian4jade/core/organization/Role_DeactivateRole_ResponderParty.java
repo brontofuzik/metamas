@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.proto.ResponderParty;
@@ -49,7 +49,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveActivateRequest = new ReceiveDeactivateRequest();
         IState sendActivateReply = new SendDeactivateReply();
         IState successEnd = new SuccessEnd();
@@ -64,8 +64,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         registerLastState(failureEnd);
 
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
         sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
         sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
@@ -75,12 +75,21 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Deactivate role' protocol (id = %1$s) responder party started.",
                 // TODO (priority: high) Replace the following with getProtocolId().
