@@ -136,16 +136,13 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending activate reply.");
         }
 
         @Override
         protected int onManager() {
-            if (getMyAgent().isActivable()) {            
-                return SendAgreeOrRefuse.AGREE;
-            } else {
-                return SendAgreeOrRefuse.REFUSE;
-            }
+            return (getMyAgent().isActivable()) ? AGREE : REFUSE;
         }
         
         @Override
@@ -155,6 +152,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Activate reply sent.");
         }
         

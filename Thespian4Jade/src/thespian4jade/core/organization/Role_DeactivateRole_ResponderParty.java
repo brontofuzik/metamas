@@ -140,9 +140,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         protected int onManager() {
             if (getMyAgent().isDeactivable()) {            
-                return SendAgreeOrRefuse.AGREE;
+                return AGREE;
             } else {
-                return SendAgreeOrRefuse.REFUSE;
+                return REFUSE;
             }
         }
         

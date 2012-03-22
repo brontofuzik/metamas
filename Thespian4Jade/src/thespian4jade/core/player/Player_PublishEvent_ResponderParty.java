@@ -1,6 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -19,7 +20,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String event;
+    private Event event;
     
     private String argument;
     
@@ -67,7 +68,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
      * @param event the event to handle
      * @return the selected event handler
      */
-    private EventHandler selectEventHandler(String event) {
+    private EventHandler selectEventHandler(Event event) {
         Class eventHandlerClass = getMyAgent().eventHandlers.get(event);
         if (eventHandlerClass != null) {
             // The event is handled.

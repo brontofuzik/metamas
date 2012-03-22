@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -9,6 +10,7 @@ import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendAgreeOrRefuse;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.proto.organizationprotocol.subscribetoeventprotocol.SubscribeRequestMessage;
 
 /**
  * The 'Subscribe to event' protocol responder party.
@@ -30,7 +32,7 @@ public class Organization_SubscribeToEvent_ResponderParty
     /**
      * The event to subscribe to.
      */
-    private String event;
+    private Event event;
     
     // </editor-fold>
     
@@ -121,7 +123,10 @@ public class Organization_SubscribeToEvent_ResponderParty
         
         @Override
         public void action() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            SubscribeRequestMessage message = new SubscribeRequestMessage();
+            message.parseACLMessage(getACLMessage());
+            
+            event = message.getEvent();
         }
         
         // </editor-fold>
@@ -151,8 +156,13 @@ public class Organization_SubscribeToEvent_ResponderParty
 
         @Override
         protected int onManager() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return event != Event.NONE ? AGREE : REFUSE;
         }
+
+        @Override
+        protected void onAgree() {
+            getMyAgent().knowledgeBase.update().playerSubscribesToEvent(player, event);
+        } 
 
         @Override
         protected void onExit() {

@@ -2,6 +2,7 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import java.util.Set;
+import thespian4jade.core.Event;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -27,7 +28,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     /**
      * The event to publish.
      */
-    private String event;
+    private Event event;
     
     /**
      * The event argument.
@@ -50,11 +51,11 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
      * @param argument the event argument
      * @param playerToExclude the player to exclude
      */
-    public Organization_PublishEvent_InitiatorParty(final String event,
+    public Organization_PublishEvent_InitiatorParty(final Event event,
         final String argument, final AID playerToExclude) {
         super(ProtocolRegistry_StaticClass.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL));
         // ----- Preconditions -----
-        assert event != null && !event.isEmpty();
+        assert event != Event.NONE;
         // -------------------------
         
         this.event = event;

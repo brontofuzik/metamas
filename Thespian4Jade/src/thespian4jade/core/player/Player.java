@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
+import thespian4jade.core.Event;
 import thespian4jade.proto.IResultParty;
 import thespian4jade.proto.Party;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
@@ -28,7 +29,7 @@ public abstract class Player extends Agent {
     Map<String, Class> responsibilities = new HashMap<String, Class>();
     
     /** The event handlers (classes). */
-    Map<String, Class> eventHandlers = new HashMap<String, Class>();
+    Map<Event, Class> eventHandlers = new HashMap<Event, Class>();
     
     /** The knowledge base. */
     PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
@@ -146,7 +147,7 @@ public abstract class Player extends Agent {
         return future;
     }
     
-    public final void subscribeToEvent(String organizationName, String event,
+    public final void subscribeToEvent(String organizationName, Event event,
         Class eventHandler) {
         // Create a 'Subscribe to event' protocol initiator party.
         Party subscribeToEventInitiator = ProtocolRegistry_StaticClass
@@ -255,9 +256,9 @@ public abstract class Player extends Agent {
      * @param event the event the handler handles
      * @param eventHandlerClass the event handler class
      */
-    protected final void addEventHandler(String event, Class eventHandlerClass) {
+    protected final void addEventHandler(Event event, Class eventHandlerClass) {
         // ----- Preconditions -----
-        if (event == null || event.isEmpty()) {
+        if (event == null || event == Event.NONE) {
             throw new IllegalArgumentException("event");
         }
         if (eventHandlerClass == null) {
@@ -275,9 +276,9 @@ public abstract class Player extends Agent {
      * Removes an event handler.
      * @param event the event the handler handles
      */
-    protected final void removeEventHandler(String event) {
+    protected final void removeEventHandler(Event event) {
         // ----- Preconditions -----
-        if (event == null || event.isEmpty()) {
+        if (event == null || event == Event.NONE) {
             throw new IllegalArgumentException("event");
         }
         // -------------------------

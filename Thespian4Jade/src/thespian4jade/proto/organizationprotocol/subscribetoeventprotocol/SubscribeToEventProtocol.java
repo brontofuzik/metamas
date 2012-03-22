@@ -1,6 +1,7 @@
 package thespian4jade.proto.organizationprotocol.subscribetoeventprotocol;
 
 import jade.lang.acl.ACLMessage;
+import thespian4jade.core.Event;
 import thespian4jade.core.organization.Organization_SubscribeToEvent_ResponderParty;
 import thespian4jade.core.player.Player_SubscribeToEventEvent_InitiatorParty;
 import thespian4jade.proto.InitiatorParty;
@@ -25,7 +26,7 @@ public class SubscribeToEventProtocol extends Protocol {
     @Override
     public InitiatorParty createInitiatorParty(Object... arguments) {
         String organizationName = (String)arguments[0];
-        String event = (String)arguments[1];
+        Event event = (Event)arguments[1];
         Class eventHandlerClass = (Class)arguments[2];
         return new Player_SubscribeToEventEvent_InitiatorParty(organizationName, event, eventHandlerClass);
     }
