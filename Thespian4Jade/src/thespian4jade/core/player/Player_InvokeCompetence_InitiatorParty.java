@@ -3,7 +3,7 @@ package thespian4jade.core.player;
 import jade.core.AID;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SingleSenderState;
@@ -167,7 +167,7 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
         IState receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
         IState sendCompetenceArgument = new SendCompetenceArgument();
@@ -186,8 +186,8 @@ public class Player_InvokeCompetence_InitiatorParty
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.OK, sendInvokeCompetenceRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);        
         sendInvokeCompetenceRequest.registerDefaultTransition(receiveCompetenceArgumentRequest);       
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.SUCCESS, sendCompetenceArgument);
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, failureEnd);       
@@ -200,19 +200,28 @@ public class Player_InvokeCompetence_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Invoke competence' (%1$s) protocol.",
                 competenceName));
 
             if (getMyAgent().knowledgeBase.query().canInvokeCompetence(competenceName)) {
                 // The player can invoke the competence.
-                role = getMyAgent().knowledgeBase.query().getActiveRole().getRoleAID();
+                role = getMyAgent().knowledgeBase.query().getActiveRole().getAID();
                 return OK;
             } else {
                 // The player can not invoke the competence.
@@ -359,8 +368,6 @@ public class Player_InvokeCompetence_InitiatorParty
         @Override
         protected void handleSuccessMessage(CompetenceResultMessage<TResult> message) {
             competenceResult = message.getResult();
-            getMyAgent().knowledgeBase.query().getActiveRole()
-                .saveCompetenceResult(competenceName, message.getResult());
         }
 
         @Override

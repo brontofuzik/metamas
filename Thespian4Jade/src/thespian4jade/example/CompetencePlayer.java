@@ -52,7 +52,7 @@ public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
      * Schedules the competence invocation.
      * @param <TArgument> The type of the competence argument
      * @param argument the competence argument
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     public <TArgument extends Serializable> void scheduleInvokeCompetence(TArgument argument,
         final int timeout) {

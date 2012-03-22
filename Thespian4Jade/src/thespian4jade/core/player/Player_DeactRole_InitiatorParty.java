@@ -2,7 +2,7 @@ package thespian4jade.core.player;
 
 import jade.core.AID;
 import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -57,7 +57,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendDeactRequest = new SendDeactRequest();
         IState receiveDeactReply = new ReceiveDeactReply();
         IState successEnd = new SuccessEnd();
@@ -83,12 +83,21 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));

@@ -29,9 +29,7 @@ public class PlayerDescription {
     
     PlayerDescription(AID playerAID) {
         // ----- Preconditions -----
-        if (playerAID == null) {
-            throw new NullPointerException("playerAID");
-        }
+        assert playerAID != null;
         // -------------------------
         
         this.playerAID = playerAID;
@@ -48,7 +46,40 @@ public class PlayerDescription {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-            
+    
+    // ----- Query -----
+    
+    /**
+     * Determies whether the player enacts a given role.
+     * @param role the role
+     * @return <c>true</c> if the player enacts the given role;
+     *     <c>false</c> otherwise.
+     */
+    boolean doesEnactRole(String role) {
+        return enactedRoles.contains(role); 
+    }
+    
+    /**
+     * Determines whether the player is employed, i.e. if it enacts some roles
+     * in the organization.
+     * @return <c>true</c> if the player is employed; <c>false</c> otherwise.
+     */
+    boolean isEmployed() {
+        return !enactedRoles.isEmpty();
+    }
+    
+    /**
+     * Determies whether the player is subscribed to a given role.
+     * @param event the event
+     * @return <c>true</c> if the player is subscribed to the given event;
+     *     <c>false</c> otherwise.
+     */
+    boolean isSubscribedToEvent(Event event) {
+        return subscribedEvents.contains(event);
+    }
+    
+    // ----- Update -----
+    
     /**
      * Enacts a role.
      * @param role the role being enacted
@@ -74,16 +105,7 @@ public class PlayerDescription {
         
         enactedRoles.remove(role);
     }
-    
-    /**
-     * Determines whether the player is employed by the organization
-     * owning this player info.
-     * @return <c>true</c> if the player is employed; <c>false</c> otherwise.
-     */
-    boolean isEmployed() {
-        return !enactedRoles.isEmpty();
-    }
-    
+   
     /**
      * Subscribes to an event.
      * @param event the event being subscribed to

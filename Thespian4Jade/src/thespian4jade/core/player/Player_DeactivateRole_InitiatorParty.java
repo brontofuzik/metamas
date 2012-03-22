@@ -2,7 +2,7 @@ package thespian4jade.core.player;
 
 import jade.core.AID;
 import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
@@ -49,7 +49,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendDeactivateRequest = new SendDeactivateRequest();
         IState receiveDeactivateReply = new ReceiveDeactivateReply();
         IState successEnd = new SuccessEnd();
@@ -66,8 +66,8 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendDeactivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendDeactivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 
@@ -79,19 +79,28 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
             if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be deactivated.

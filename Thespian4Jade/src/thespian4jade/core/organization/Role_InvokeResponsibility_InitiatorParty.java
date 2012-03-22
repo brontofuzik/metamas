@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ReceiveSuccessOrFailure;
 import thespian4jade.proto.SendSuccessOrFailure;
@@ -170,7 +170,7 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendResponsibilityRequest = new SendResponsibilityRequest();
         IState receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
         IState sendResponsibilityArgument = new SendResponsibilityArgument();
@@ -189,8 +189,8 @@ public class Role_InvokeResponsibility_InitiatorParty
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.OK, sendResponsibilityRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);        
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.SUCCESS, sendResponsibilityArgument);
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);       
@@ -203,17 +203,27 @@ public class Role_InvokeResponsibility_InitiatorParty
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        protected int doAction() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Invoke responsibility' (%1$s) protocol.",
-                responsibilityName));
+                "'Invoke responsibility' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
-            if (true) {
+            if (getMyAgent().myOrganization.knowledgeBase
+                .query().canInvokeResponsibility(responsibilityName)) {
                 // The role can invoke the responsibility.
                 player = getMyAgent().enactingPlayer;
                 return OK;

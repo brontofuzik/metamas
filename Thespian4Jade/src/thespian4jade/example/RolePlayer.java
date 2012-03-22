@@ -1,5 +1,6 @@
 package thespian4jade.example;
 
+import thespian4jade.core.Event;
 import thespian4jade.core.player.Player;
 
 /**
@@ -46,7 +47,7 @@ public class RolePlayer extends Player {
     
     /**
      * Schedules the role enactment.
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     public void scheduleEnactRole(int timeout) {
         System.out.println("----- Scheduling role enactment: " + roleFullName.toString() + " -----");
@@ -63,7 +64,7 @@ public class RolePlayer extends Player {
     
     /**
      * Schedules the role deactment.
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     public void scheduleDeactRole(int timeout) {
         System.out.println("----- Scheduling role deactment: " + roleFullName.toString() + " -----");
@@ -80,7 +81,7 @@ public class RolePlayer extends Player {
     
     /**
      * Schedules the role activation.
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
     public void scheduleActivateRole(int timeout) {
         System.out.println("----- Scheduling role activation: " + roleFullName.toString() + " -----");
@@ -97,11 +98,22 @@ public class RolePlayer extends Player {
     
     /**
      * Shchedules the role deactivation.
-     * @param timeout the timeout
+     * @param timeout the timeout of execution
      */
-    public void scheduleRoleDeactivation(int timeout) {
+    public void scheduleDeactivateRole(int timeout) {
         System.out.println("----- Scheduling role deactivation: " + roleFullName.toString() + " -----");
         scheduleDeactivateRole(roleFullName, timeout);
+    }
+    
+    /**
+     * Schedules the event subscription.
+     * @param event the event
+     * @param eventHandlerClass the event handlers
+     * @param timeout the timeout of execution
+     */
+    public void scheduleSubscribeToEvent(Event event, Class eventHandlerClass, int timeout) {
+        System.out.println("----- Scheduling event subscription: " + event.toString() + " -----");
+        scheduleSubscribeToEvent(roleFullName.getOrganizationName(), event, eventHandlerClass, timeout);
     }
     
     // ----- PROTECTED -----

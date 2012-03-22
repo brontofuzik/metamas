@@ -17,9 +17,9 @@ public class PlayerKnowledgeBase {
     
     private Update update = this.new Update();
     
-    private Hashtable<String, RoleDescription> enactedRoles = new Hashtable<String, RoleDescription>();
+    private Hashtable<String, PositionDescription> enactedRoles = new Hashtable<String, PositionDescription>();
     
-    private RoleDescription activeRole;
+    private PositionDescription activeRole;
     
     // </editor-fold>
     
@@ -39,15 +39,15 @@ public class PlayerKnowledgeBase {
     
     public class Query {
         
-        public Iterable<RoleDescription> getEnactedRoles() {
+        public Iterable<PositionDescription> getEnactedRoles() {
             return enactedRoles.values();
         }
 
-        public RoleDescription getEnactedRole(String roleName) {       
+        public PositionDescription getEnactedRole(String roleName) {       
             return enactedRoles.get(roleName);
         }
 
-        public RoleDescription getActiveRole() {
+        public PositionDescription getActiveRole() {
             return activeRole;
         }
 
@@ -71,7 +71,7 @@ public class PlayerKnowledgeBase {
             assert roleName != null && !roleName.isEmpty();
             // -------------------------
 
-            return activeRole != null ? roleName.equals(activeRole.getRoleName()) : false;
+            return activeRole != null ? roleName.equals(activeRole.getRole()) : false;
         }
 
         public boolean canActivateRole(String roleName) {
@@ -103,7 +103,7 @@ public class PlayerKnowledgeBase {
     public class Update {
         
         public void enactRole(String roleName, AID roleAID, String organizationName, AID organizationAID) {
-            RoleDescription roleDescription = new RoleDescription(roleName, roleAID, organizationName, organizationAID);
+            PositionDescription roleDescription = new PositionDescription(roleAID, roleName, organizationAID);
             enactedRoles.put(roleName, roleDescription);
         }
 

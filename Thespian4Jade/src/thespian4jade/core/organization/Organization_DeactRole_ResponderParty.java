@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
 import thespian4jade.proto.ResponderParty;
@@ -50,7 +50,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
      * Builds the party FSM.
      */
     private void buildFSM() {
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveDeactRequest = new ReceiveDeactRequest();
         IState sendDeactReply = new SendDeactReply();
         IState successEnd = new SuccessEnd();
@@ -66,8 +66,8 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         registerLastState(failureEnd);
         
         // Register the transisions.
-        initialize.registerTransition(MyInitialize.OK, receiveDeactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveDeactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
 
@@ -79,12 +79,21 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",

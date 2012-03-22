@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.competence.ICompetence;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SendSuccessOrFailure;
 import thespian4jade.proto.SingleReceiverState;
@@ -80,7 +80,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
         IState sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
         receiveCompetenceArgument = new ReceiveCompetenceArgument();
@@ -99,8 +99,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveInvokeCompetenceRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);       
         sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.SUCCESS, receiveCompetenceArgument);
         sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);       
@@ -133,12 +133,21 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke competence' protocol (id = %1$s).",
                 getACLMessage().getConversationId()));
