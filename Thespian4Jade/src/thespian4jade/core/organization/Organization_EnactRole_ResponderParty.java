@@ -109,8 +109,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) responder party started.",
-                // TODO (priority: high) Replace the following with getProtocolId().
-                getACLMessage().getConversationId()));
+                getProtocolId()));
             
             return OK;
         }

@@ -105,8 +105,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         protected int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Subscribe to event' protocol (id = %1$s) responder party started.",
-                // TODO (priority: high) Replace the following with getProtocolId().
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
             if (getMyAgent().knowledgeBase.query().doesPlayerEnact(player)) {
                 // The initiator player is employed (enacts a role) in this organization.
