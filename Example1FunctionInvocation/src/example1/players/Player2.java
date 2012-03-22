@@ -40,13 +40,11 @@ public class Player2 extends RolePlayer {
         // Add responsibilities.
         addResponsibility(ExecuteFunction_Responsibility.class);
         
-        // Add event handlers.
-        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
-        
         // Schedule behaviours.
         // Role enactment
         scheduleEnactRole(4000);
+        scheduleSubscribeToEvent(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class, 5000);
+        scheduleSubscribeToEvent(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class, 5000);
         
         // Role deactment
         scheduleDeactRole(12000);
