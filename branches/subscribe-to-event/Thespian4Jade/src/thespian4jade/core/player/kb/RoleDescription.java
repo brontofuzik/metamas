@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 /**
- * A role description.
+ * A role description for a player.
  * @author Lukáš Kúdela
  * @since 2011-10-29
  * @version %I% %G%

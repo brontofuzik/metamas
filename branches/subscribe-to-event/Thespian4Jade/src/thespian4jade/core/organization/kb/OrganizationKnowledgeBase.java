@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import thespian4jade.core.Event;
 
 /**
  * An organization knowledge base.
@@ -49,7 +50,7 @@ public class OrganizationKnowledgeBase {
         return update;
     }
     
-    // ----- UPDATE: POSITIONS -----
+    // ----- PRIVATE -----
     
     private static AID getPositionAtIndex(Map<AID, AID> positions, int index) {
         for (AID position : positions.values()) {
@@ -73,76 +74,13 @@ public class OrganizationKnowledgeBase {
         return enactedRoles.get(roleName);
     }
     
-    // ----- UPDATE: PLAYERS -----
-    
-    /**
-     * Updates the organization knowledge base to contain information that
-     * a particular player enacts a particular role.
-     * @param player the player; more precisely its AID
-     * @param roleName the name of the role
-     */
-    private void updatePlayerEnactsRole(AID player, String roleName) {
-        // ----- Preconditions -----
-        assert player != null;
-        assert roleName != null && !roleName.isEmpty();
-        // ------------------------
-        
-        addPlayerIfApplicable(player);
-        getPlayerDescription(player).enactRole(roleName);
-    }
-
-    /**
-     * Updates the organization knowledge base to contain information that
-     * a particular player deacts a particular role.
-     * @param player the player; more precisely its AID
-     * @param roleName the name of the role
-     */
-    private void updatePlayerDeactsRole(AID player, String roleName) {
-       // ----- Preconditions -----
-        assert player != null;
-        assert roleName != null && !roleName.isEmpty();
-        // ------------------------
-
-        getPlayerDescription(player).deactRole(roleName);
-        removePlayerIfApplicable(player);
-    }
-    
-    /**
-     * Adds a player to the enacting players if it is not already there.
-     * @param player the player to add
-     */
-    private void addPlayerIfApplicable(AID player) {
-        if (!enactingPlayers.containsKey(player)) {
-            enactingPlayers.put(player, new PlayerDescription(player));
-        }
-    }
-    
-    /**
-     * Removes a player from the enacting players if is not employed.
-     * @param player the player to remove
-     */
-    private void removePlayerIfApplicable(AID player) {
-        if (!getPlayerDescription(player).isEmployed()) {
-            enactingPlayers.remove(player);
-        }
-    }
-    
-    /**
-     * Gets the player description for a specified player
-     * @param player the player; more precisely its AID
-     * @return the player description for the specified player
-     */
-    private PlayerDescription getPlayerDescription(AID player) {
-        return enactingPlayers.get(player);
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     public class Query {
         
-        // ----- QUERY: ROLES -----
+        // ----- Roles -----
         
         /**
          * Queries this organization knowledge base to determine whether
@@ -167,7 +105,7 @@ public class OrganizationKnowledgeBase {
             return !getPositions(roleName).isEmpty();
         }
 
-        // ----- QUERY: POSITIONS -----
+        // ----- Positions -----
 
         /**
          * Gets the position of a specified role  for a specified player.
@@ -231,7 +169,7 @@ public class OrganizationKnowledgeBase {
             return new HashSet<AID>(positions.values());
         }
 
-        // ----- QUERY: PLAYERS -----
+        // ----- Players -----
 
         /**
          * Queries this organization knowledge base whether
@@ -256,11 +194,10 @@ public class OrganizationKnowledgeBase {
     
     public class Update {
         
-        // ----- UPDATE: ROLES -----
+        // ----- Roles -----
     
         /**
-         * Updates this organization knowledge base to contain information that
-         * a particular role is being enacted by a particular player.
+         * A role is being enacted by a player.
          * @param roleName the role name
          * @param roleAID the role AID
          * @param player the player; more precisely its AID
@@ -277,12 +214,11 @@ public class OrganizationKnowledgeBase {
     //        System.out.println("----- roleAID: " + roleAID + " -----");
     //        System.out.println("----- playerAID: " + playerAID + " -----");
             getPositions(roleName).put(player, roleAID);
-            updatePlayerEnactsRole(player, roleName);
+            playerEnactsRole(player, roleName);
         }
     
         /**
-         * Updates this organization knowledge base to contain information that
-         * a particular role is being deacted by a particular player.
+         * A role is being deacted by a player.
          * @param roleName the role name
          * @param player the player; more precisely its AID
          */
@@ -293,7 +229,86 @@ public class OrganizationKnowledgeBase {
             // -------------------------
 
             getPositions(roleName).remove(player);
-            updatePlayerDeactsRole(player, roleName);
+            playerDeactsRole(player, roleName);
+        }
+        
+        // ----- Players -----
+
+        /**
+         * A player subscribes to an event.
+         * @param player the player; more precisely its AID
+         * @param event the event
+         */
+        public void playerSubscribesToEvent(AID player, Event event) {
+            getPlayerDescription(player).subscribeToEvent(event);
+        }
+        
+        /**
+         * A player unsubscribes from an event.
+         * @param player the player; more precisely its AID
+         * @param event the event
+         */
+        public void playerUnsubscribesFromEvent(AID player, Event event) {
+            getPlayerDescription(player).unsubscribeFromEvent(event);
+        }
+        
+        /**
+         * A player enacts a role.
+         * @param player the player; more precisely its AID
+         * @param roleName the name of the role
+         */
+        private void playerEnactsRole(AID player, String roleName) {
+            // ----- Preconditions -----
+            assert player != null;
+            assert roleName != null && !roleName.isEmpty();
+            // ------------------------
+
+            addPlayerIfApplicable(player);
+            getPlayerDescription(player).enactRole(roleName);
+        }
+        
+        /**
+         * A player deacts a role.
+         * @param player the player; more precisely its AID
+         * @param roleName the name of the role
+         */
+        private void playerDeactsRole(AID player, String roleName) {
+           // ----- Preconditions -----
+            assert player != null;
+            assert roleName != null && !roleName.isEmpty();
+            // ------------------------
+
+            getPlayerDescription(player).deactRole(roleName);
+            removePlayerIfApplicable(player);
+        }
+        
+        /**
+         * Adds a player to the enacting players if it is not already there.
+         * @param player the player to add
+         */
+        private void addPlayerIfApplicable(AID player) {
+            if (!enactingPlayers.containsKey(player)) {
+                enactingPlayers.put(player, new PlayerDescription(player));
+            }
+        }
+    
+        /**
+         * Removes a player from the enacting players if is not employed.
+         * @param player the player to remove
+         */
+        private void removePlayerIfApplicable(AID player) {
+            if (!getPlayerDescription(player).isEmployed()) {
+                enactingPlayers.remove(player);
+            }
+        }
+        
+        /**
+         * Gets the player description for a specified player
+         * @param player the player; more precisely its AID
+         * @return the player description for the specified player
+         */
+        private PlayerDescription getPlayerDescription(AID player) {
+            return enactingPlayers.get(player);
         }
     }
     

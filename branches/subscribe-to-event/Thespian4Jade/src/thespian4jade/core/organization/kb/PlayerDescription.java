@@ -3,9 +3,10 @@ package thespian4jade.core.organization.kb;
 import jade.core.AID;
 import java.util.HashSet;
 import java.util.Set;
+import thespian4jade.core.Event;
 
 /**
- * A player description.
+ * A player description for an organization.
  * @author Lukáš Kúdela
  * @since 2011-10-18
  * @version %I% %G%
@@ -17,17 +18,16 @@ public class PlayerDescription {
     /** The AID of the player. */
     private AID playerAID;
     
-    /** The name of the player. */
-    private String name;
-    
     /** The roles the player enacts. */
     private Set<String> enactedRoles = new HashSet<String>();
+    
+    private Set<Event> subscribedEvents = new HashSet<Event>();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public PlayerDescription(AID playerAID) {
+    PlayerDescription(AID playerAID) {
         // ----- Preconditions -----
         if (playerAID == null) {
             throw new NullPointerException("playerAID");
@@ -35,19 +35,14 @@ public class PlayerDescription {
         // -------------------------
         
         this.playerAID = playerAID;
-        name = playerAID.getName();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public AID getAID() {
+    AID getAID() {
         return playerAID;
-    }
-    
-    public String getName() {
-        return name;
     }
     
     // </editor-fold>
@@ -56,7 +51,7 @@ public class PlayerDescription {
             
     /**
      * Enacts a role.
-     * @param role the role being enacted 
+     * @param role the role being enacted
      */
     void enactRole(String role) {
         // ----- Preconditions -----
@@ -86,7 +81,31 @@ public class PlayerDescription {
      * @return <c>true</c> if the player is employed; <c>false</c> otherwise.
      */
     boolean isEmployed() {
-        return enactedRoles.size() != 0;
+        return !enactedRoles.isEmpty();
+    }
+    
+    /**
+     * Subscribes to an event.
+     * @param event the event being subscribed to
+     */
+    void subscribeToEvent(Event event) {
+        // ----- Preconditions -----
+        assert event != null && event != Event.NONE;
+        // -------------------------
+        
+        subscribedEvents.add(event);
+    }
+
+    /**
+     * Unsubscribes from an event.
+     * @param event the event being unsubscribed from 
+     */
+    void unsubscribeFromEvent(Event event) {
+        // ----- Preconditions -----
+        assert event != null && event != Event.NONE;
+        // -------------------------
+        
+        subscribedEvents.remove(event);
     }
     
     // </editor-fold> 

@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
+import thespian4jade.core.Event;
 import thespian4jade.lang.SimpleMessage;
 import thespian4jade.proto.Initialize;
 import thespian4jade.proto.InitiatorParty;
@@ -38,7 +38,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     /**
      * The event to subscribe to.
      */
-    private final String event;
+    private final Event event;
     
     /**
      * The event handler.
@@ -56,7 +56,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
      * @param event the event to subscribe to
      */
     public Player_SubscribeToEventEvent_InitiatorParty(String organizationName,
-        String event, Class eventHandlerClass) {
+        Event event, Class eventHandlerClass) {
         super(ProtocolRegistry_StaticClass.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
         
         this.organizationName = organizationName;

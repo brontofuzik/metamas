@@ -3,6 +3,7 @@ package thespian4jade.proto.organizationprotocol.subscribetoeventprotocol;
 import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import thespian4jade.core.Event;
 import thespian4jade.lang.TextMessage;
 
 /**
@@ -21,7 +22,7 @@ public class SubscribeRequestMessage extends TextMessage {
     /**
      * The event to subscribe to.
      */
-    private String event;
+    private Event event;
     
     // </editor-fold>
     
@@ -42,7 +43,7 @@ public class SubscribeRequestMessage extends TextMessage {
      * Gets the event to subscribe to.
      * @return the event to subscribe to
      */
-    public String getEvent() {
+    public Event getEvent() {
         return event;
     }
     
@@ -51,7 +52,7 @@ public class SubscribeRequestMessage extends TextMessage {
      * @param event the event to subscribe to
      * @return this 'Subscribe request' message
      */
-    public SubscribeRequestMessage setEvent(String event) {
+    public SubscribeRequestMessage setEvent(Event event) {
         this.event = event;
         return this;
     }
@@ -71,7 +72,7 @@ public class SubscribeRequestMessage extends TextMessage {
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  
-        event = matcher.group(1);
+        event = Event.fromString(matcher.group(1));
     }
     
     // </editor-fold>

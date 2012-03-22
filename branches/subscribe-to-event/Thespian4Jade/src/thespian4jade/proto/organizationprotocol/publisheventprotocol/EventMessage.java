@@ -3,6 +3,7 @@ package thespian4jade.proto.organizationprotocol.publisheventprotocol;
 import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import thespian4jade.core.Event;
 import thespian4jade.lang.TextMessage;
 
 /**
@@ -17,7 +18,7 @@ public class EventMessage extends TextMessage {
     /**
      * The event (enact-role, deact-role, activate-role or deactivate-role).
      */
-    private String event;
+    private Event event;
     
     /**
      * The event argument.
@@ -43,7 +44,7 @@ public class EventMessage extends TextMessage {
      * Gets the event.
      * @return the event
      */
-    public String getEvent() {
+    public Event getEvent() {
         return event;
     }
     
@@ -52,7 +53,7 @@ public class EventMessage extends TextMessage {
      * @param event the event
      * @return this 'Event' message
      */
-    public EventMessage setEvent(String event) {
+    public EventMessage setEvent(Event event) {
         this.event = event;
         return this;
     }
@@ -81,7 +82,7 @@ public class EventMessage extends TextMessage {
     
     @Override
     protected String generateContent() {
-        return String.format("event(%1$s,%2$s)", event, argument);
+        return String.format("event(%1$s,%2$s)", event.toString(), argument);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class EventMessage extends TextMessage {
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  
-        event = matcher.group(1);
+        event = Event.fromString(matcher.group(1));
         argument = matcher.group(2);
     }
     
