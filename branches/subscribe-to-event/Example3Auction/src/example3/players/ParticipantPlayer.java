@@ -76,6 +76,10 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    String getAuctionOrganizationName() {
+        return auctioneerRoleFullName.getOrganizationName();
+    }
+    
     /**
      * Gets the full name of the 'Auctioneer' role.
      * @return the full name of the 'Auctioneer' role
@@ -149,10 +153,6 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
         
         // Add responsibilites.
         addResponsibility(Bid_Responsibility.class);
-        
-        // Add event handlers.
-        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
     }
     
     /**

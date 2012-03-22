@@ -1,5 +1,7 @@
 package example3.players;
 
+import thespian4jade.core.Event;
+
 /**
  * The 'Participant1' player.
  * @author Lukáš Kúdela
@@ -35,7 +37,11 @@ public class Player1 extends ParticipantPlayer {
         // Add behaviours.
         // Role enactment
         scheduleEnactRole(getAuctioneerRoleFullName(), 2000);
-        scheduleEnactRole(getBidderRoleFullName(), 3000);
+        scheduleEnactRole(getBidderRoleFullName(), 2000);
+        scheduleSubscribeToEvent(getAuctionOrganizationName(), Event.ROLE_ACTIVATED,
+            RoleActivated_EventHandler.class, 3000);
+        scheduleSubscribeToEvent(getAuctionOrganizationName(), Event.ROLE_DEACTIVATED,
+            RoleDeactivated_EventHandler.class, 3000);
         
         // Role activation
         scheduleActivateRole(getAuctioneerRoleFullName(), 8000);

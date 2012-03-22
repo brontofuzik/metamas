@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import thespian4jade.core.organization.Role;
 import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
+import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
@@ -131,7 +131,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendAuctionCFP = new SendAuctionCFP();
         IState receiveBid = new ReceiveBid();
         IState determineWinner = new DetermineWinner();
@@ -152,8 +152,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, sendAuctionCFP);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);        
+        initialize.registerDefaultTransition(sendAuctionCFP);      
         sendAuctionCFP.registerDefaultTransition(receiveBid);       
         receiveBid.registerTransition(ReceiveBid.ALL_BIDS_RECEIVED, determineWinner);
         receiveBid.registerTransition(ReceiveBid.SOME_BIDS_NOT_RECEIVED, receiveBid,
@@ -178,12 +177,12 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
      * The 'Initialize' state.
      * An (initial) state in which the party is initialized and begins.
      */
-    private class MyInitialize extends Initialize {
-
+    private class Initialize extends OneShotBehaviourState {
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        public void action() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Envelope auction' protocol (id = %1$s)",
                 getProtocolId()));
@@ -196,8 +195,6 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
                     bidders.add(bidderPosition.getAID());
                 }
             }
-            
-            return OK;
         }
         
         // </editor-fold>
