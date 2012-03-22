@@ -92,8 +92,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         public int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Activate role' protocol (id = %1$s) responder party started.",
-                // TODO (priority: high) Replace the following with getProtocolId().
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
             if (player.equals(getMyAgent().enactingPlayer)) {
                 // The initiator player is enacting this role.

@@ -150,7 +150,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke competence' protocol (id = %1$s).",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
             if (player.equals(getMyAgent().enactingPlayer)) {
                 // The initiator player is enacting this role.

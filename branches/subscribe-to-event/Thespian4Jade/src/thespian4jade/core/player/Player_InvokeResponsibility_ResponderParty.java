@@ -149,7 +149,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
             if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
                 // The sender role is the active role.

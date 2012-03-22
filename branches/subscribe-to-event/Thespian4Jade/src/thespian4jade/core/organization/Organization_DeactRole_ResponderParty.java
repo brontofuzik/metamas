@@ -97,8 +97,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",
-                // TODO (priority: high) Replace the following with getProtocolId().
-                getACLMessage().getConversationId()));
+                getProtocolId()));
             
             return OK;
         }
