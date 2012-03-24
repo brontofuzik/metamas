@@ -1,8 +1,8 @@
 package thespian4jade.proto;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.Message;
+import thespian4jade.language.SimpleMessage;
 import thespian4jade.proto.jadeextensions.FSMBehaviourSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import java.util.HashMap;

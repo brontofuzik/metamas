@@ -1,10 +1,10 @@
 package thespian4jade.proto;
 
-import thespian4jade.lang.IMessageFactory;
+import thespian4jade.language.IMessageFactory;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.Message;
+import thespian4jade.language.SimpleMessage;
 import thespian4jade.proto.jadeextensions.FSMBehaviourReceiverState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;

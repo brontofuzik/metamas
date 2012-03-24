@@ -2,8 +2,8 @@ package thespian4jade.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.Message;
+import thespian4jade.language.SimpleMessage;
 
 /**
  * A 'Send success or FAILURE' (multi-sender) state.

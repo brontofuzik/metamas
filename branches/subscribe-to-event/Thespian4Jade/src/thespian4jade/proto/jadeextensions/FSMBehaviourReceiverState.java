@@ -1,7 +1,7 @@
 package thespian4jade.proto.jadeextensions;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
+import thespian4jade.language.Message;
 
 /**
  * A FSM behaviour receiver state.

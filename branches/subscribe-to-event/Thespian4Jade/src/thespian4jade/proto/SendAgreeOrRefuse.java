@@ -2,8 +2,8 @@ package thespian4jade.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.Message;
+import thespian4jade.language.SimpleMessage;
 
 /**
  * A 'Send AGREE or REFUSE' (multi-sender) state.

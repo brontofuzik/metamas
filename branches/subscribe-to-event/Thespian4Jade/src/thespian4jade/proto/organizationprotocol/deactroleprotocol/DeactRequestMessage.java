@@ -5,7 +5,7 @@
 package thespian4jade.proto.organizationprotocol.deactroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -1,8 +1,8 @@
 package thespian4jade.proto.roleprotocol.invokecompetenceprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.IMessageFactory;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.IMessageFactory;
+import thespian4jade.language.SimpleMessage;
 
 /**
  * A 'Competence argument request' message.

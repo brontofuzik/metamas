@@ -4,7 +4,7 @@ import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import thespian4jade.core.Event;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 
 /**
  * A 'Request subscribe' (text) message.

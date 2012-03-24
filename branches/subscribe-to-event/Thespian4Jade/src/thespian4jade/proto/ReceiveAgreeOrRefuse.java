@@ -2,7 +2,7 @@ package thespian4jade.proto;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.SimpleMessage;
 
 /**
  * A 'Receive AGREE or REFUSE' (multi-receiver) state.
