@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * @since 2012-01-04
  * @version %I% %G%
  */
-public class RequestMessage extends TextMessage {
+public class InvokeFunctionRequestMessage extends TextMessage {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -21,7 +21,7 @@ public class RequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public RequestMessage() {
+    public InvokeFunctionRequestMessage() {
         super(ACLMessage.REQUEST);
     }
     
