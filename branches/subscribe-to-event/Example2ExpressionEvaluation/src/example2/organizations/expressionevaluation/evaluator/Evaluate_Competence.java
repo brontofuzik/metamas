@@ -1,9 +1,9 @@
 package example2.organizations.expressionevaluation.evaluator;
 
 import thespian4jade.core.organization.competence.SynchronousCompetence;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.jadeextensions.StateWrapperState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.protocols.jadeextensions.StateWrapperState;
 
 /**
  * The 'Evaluate' (synchronous) competence.

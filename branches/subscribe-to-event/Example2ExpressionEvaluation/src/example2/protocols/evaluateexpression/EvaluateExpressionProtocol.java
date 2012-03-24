@@ -3,9 +3,9 @@ package example2.protocols.evaluateexpression;
 import example2.organizations.expressionevaluation.EvaluateExpression_InitiatorParty;
 import example2.organizations.expressionevaluation.evaluator.EvaluateExpression_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.protocols.ResponderParty;
 
 /**
  * @author Lukáš Kúdela

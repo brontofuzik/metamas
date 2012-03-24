@@ -1,9 +1,9 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import thespian4jade.proto.jadeextensions.FSMBehaviourState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.jadeextensions.StateWrapperState;
+import thespian4jade.protocols.jadeextensions.FSMBehaviourState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.protocols.jadeextensions.StateWrapperState;
 
 /**
  * The 'State expression' (FSM) behaviour.
