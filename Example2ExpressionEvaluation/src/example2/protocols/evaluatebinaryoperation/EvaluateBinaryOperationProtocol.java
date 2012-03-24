@@ -4,9 +4,9 @@ import example2.organizations.expressionevaluation.EvaluateBinaryOperation_Respo
 import example2.organizations.expressionevaluation.evaluator.EvaluateBinaryOperation_InitiatorParty;
 import example2.organizations.expressionevaluation.evaluator.Operation;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.protocols.ResponderParty;
 
 /**
  * The 'Evaluate binary operation' protocol. 

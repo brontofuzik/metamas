@@ -1,8 +1,8 @@
 package example2.organizations.expressionevaluation;
 
 import example2.protocols.Protocols;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Responder;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Responder;
 
 /**
  * The 'Binary operator' role responder.

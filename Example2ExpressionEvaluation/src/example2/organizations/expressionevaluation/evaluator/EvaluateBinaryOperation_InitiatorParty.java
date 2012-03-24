@@ -9,12 +9,12 @@ import example2.protocols.Protocols;
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMessage;
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.SingleReceiverState;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
 
 /**
  * @author Lukáš Kúdela
