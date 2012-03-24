@@ -113,7 +113,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeResponsibility_ExecuteFunction() {
-            super("ExecuteFunction_Responsibility");
+            super(Executer_Role.EXECUTE_RESPONSIBILITY);
         }
         
         // </editor-fold>

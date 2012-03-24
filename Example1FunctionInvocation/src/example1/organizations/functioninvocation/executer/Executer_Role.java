@@ -18,6 +18,8 @@ public class Executer_Role extends Role {
     
     public static final String NAME = "Executer_Role";
     
+    public static final String EXECUTE_RESPONSIBILITY = "ExecuteFunction_Responsibility";
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
