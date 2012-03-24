@@ -3,7 +3,8 @@ package example3.players;
 import thespian4jade.core.Event;
 
 /**
- * The 'Participant2' player.
+ * 'Player2' player - a 'Participant' player playing the 'Auctioneer' role
+ * in the second round and the 'Bidder' role in the first and third rounds.
  * @author Lukáš Kúdela
  * @since 2012-01-20
  * @version %I% %G%
