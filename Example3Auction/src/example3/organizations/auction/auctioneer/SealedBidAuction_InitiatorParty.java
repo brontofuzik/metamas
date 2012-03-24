@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import thespian4jade.core.organization.Role;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.SimpleMessage;
 import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.Protocol;
 import thespian4jade.proto.SingleReceiverState;
