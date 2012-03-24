@@ -16,7 +16,7 @@ import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.Responsibil
 import java.io.Serializable;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
-import thespian4jade.util.ClassHelper;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * A 'Invoke responsibility' protocol responder party (new version).

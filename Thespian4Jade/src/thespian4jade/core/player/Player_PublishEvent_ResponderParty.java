@@ -9,7 +9,7 @@ import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
-import thespian4jade.util.ClassHelper;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * @author Lukáš Kúdela

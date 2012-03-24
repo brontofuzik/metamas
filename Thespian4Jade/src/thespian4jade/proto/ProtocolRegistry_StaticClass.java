@@ -2,7 +2,7 @@ package thespian4jade.proto;
 
 import java.util.HashMap;
 import java.util.Map;
-import thespian4jade.util.ClassHelper;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * A protocol registry - static class version.

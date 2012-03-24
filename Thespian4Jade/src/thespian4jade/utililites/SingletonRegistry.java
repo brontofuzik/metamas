@@ -1,4 +1,4 @@
-package thespian4jade.util;
+package thespian4jade.utililites;
 
 import java.util.HashMap;
 import java.util.Map;
