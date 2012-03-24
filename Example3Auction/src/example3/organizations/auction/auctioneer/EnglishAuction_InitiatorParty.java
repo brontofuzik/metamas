@@ -6,7 +6,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.protocols.Protocols;
 import example3.protocols.englishauction.EnglishAuctionProtocol;
 import jade.core.AID;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 
 /**
  * The 'English auction' protocol initiator party.

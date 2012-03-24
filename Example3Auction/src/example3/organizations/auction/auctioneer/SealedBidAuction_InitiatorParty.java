@@ -14,12 +14,12 @@ import java.util.Map;
 import java.util.Set;
 import thespian4jade.core.organization.Role;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.proto.ExitValueState;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.protocols.ExitValueState;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.protocols.SingleReceiverState;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
 
 /**
  * The 'Sealed bid auction' protocol initiator party.

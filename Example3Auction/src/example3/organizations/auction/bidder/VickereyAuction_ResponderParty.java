@@ -2,8 +2,8 @@ package example3.organizations.auction.bidder;
 
 import example3.protocols.Protocols;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ResponderParty;
 
 /**
  * The 'Vickerey auction' protocol responder party.

@@ -5,8 +5,8 @@ import example3.protocols.dutchauction.DutchAuctionProtocol;
 import example3.protocols.englishauction.EnglishAuctionProtocol;
 import example3.protocols.vickreyauction.VickreyAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Responder;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Responder;
 
 /**
  * The Bidder role responder.

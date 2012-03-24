@@ -7,14 +7,14 @@ import example3.protocols.AuctionCFPMessage;
 import example3.protocols.BidProposeMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.ExitValueState;
-import thespian4jade.proto.InvokeResponsibilityState;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.protocols.ExitValueState;
+import thespian4jade.protocols.InvokeResponsibilityState;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ReceiveAcceptOrRejectProposal;
+import thespian4jade.protocols.ResponderParty;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
 
 /**
  * The 'Envelope auction' protocol responder party.
