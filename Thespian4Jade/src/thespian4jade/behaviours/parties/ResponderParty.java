@@ -1,7 +1,8 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours.parties;
 
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import thespian4jade.protocols.Protocol;
 
 /**
  * A responder party.

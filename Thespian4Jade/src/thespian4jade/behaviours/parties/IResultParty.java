@@ -1,4 +1,4 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours.parties;
 
 import thespian4jade.concurrency.Future;
 

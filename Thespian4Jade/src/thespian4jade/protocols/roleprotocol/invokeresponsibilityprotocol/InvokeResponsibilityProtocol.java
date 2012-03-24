@@ -7,9 +7,9 @@ package thespian4jade.protocols.roleprotocol.invokeresponsibilityprotocol;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role_InvokeResponsibility_InitiatorParty;
 import thespian4jade.core.player.Player_InvokeResponsibility_ResponderParty;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.protocols.ResponderParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 import java.io.Serializable;
 
 /**

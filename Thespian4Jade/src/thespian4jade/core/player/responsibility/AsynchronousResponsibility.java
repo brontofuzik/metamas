@@ -1,6 +1,6 @@
 package thespian4jade.core.player.responsibility;
 
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import java.io.Serializable;
 
 /**

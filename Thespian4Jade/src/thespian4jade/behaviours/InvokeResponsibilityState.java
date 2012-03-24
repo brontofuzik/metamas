@@ -1,8 +1,7 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours;
 
 import java.io.Serializable;
 import thespian4jade.core.organization.Role_InvokeResponsibility_InitiatorParty;
-import thespian4jade.protocols.jadeextensions.StateWrapperState;
 
 /**
  * @author Lukáš Kúdela

@@ -3,14 +3,14 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.protocols.ExitValueState;
+import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 import thespian4jade.protocols.Protocols;
-import thespian4jade.protocols.ResponderParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.protocols.organizationprotocol.deactroleprotocol.DeactRequestMessage;
-import thespian4jade.protocols.jadeextensions.IState;
-import thespian4jade.protocols.SendAgreeOrRefuse;
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deact role' protocol responder party (new version).

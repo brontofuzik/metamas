@@ -1,19 +1,19 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.protocols.ExitValueState;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 import thespian4jade.protocols.Protocols;
-import thespian4jade.protocols.ReceiveSuccessOrFailure;
+import thespian4jade.behaviours.receiverstate.ReceiveSuccessOrFailure;
 import thespian4jade.protocols.organizationprotocol.enactroleprotocol.EnactRequestMessage;
 import thespian4jade.protocols.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
 import thespian4jade.protocols.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import thespian4jade.protocols.jadeextensions.IState;
-import thespian4jade.protocols.SingleReceiverState;
-import thespian4jade.protocols.SingleSenderState;
-import thespian4jade.protocols.SendAgreeOrRefuse;
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.SingleReceiverState;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Enact role' protocol initiator party.

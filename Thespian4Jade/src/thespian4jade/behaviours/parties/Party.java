@@ -1,14 +1,12 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours.parties;
 
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import thespian4jade.core.organization.Organization;
-import thespian4jade.core.organization.Role;
-import thespian4jade.core.player.Player;
 import thespian4jade.language.Message;
-import thespian4jade.protocols.jadeextensions.FSMBehaviourState;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
 
 /**
  * A protocol party.

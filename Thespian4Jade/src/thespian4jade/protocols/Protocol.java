@@ -1,5 +1,7 @@
 package thespian4jade.protocols;
 
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 

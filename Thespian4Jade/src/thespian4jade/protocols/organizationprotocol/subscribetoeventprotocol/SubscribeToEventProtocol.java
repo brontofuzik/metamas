@@ -4,9 +4,9 @@ import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
 import thespian4jade.core.organization.Organization_SubscribeToEvent_ResponderParty;
 import thespian4jade.core.player.Player_SubscribeToEventEvent_InitiatorParty;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.protocols.ResponderParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * The 'Subscribe to event' protocol.

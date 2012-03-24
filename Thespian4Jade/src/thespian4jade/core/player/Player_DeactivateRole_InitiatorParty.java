@@ -2,15 +2,15 @@ package thespian4jade.core.player;
 
 import jade.core.AID;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.protocols.ExitValueState;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.protocols.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import thespian4jade.protocols.SingleSenderState;
-import thespian4jade.protocols.jadeextensions.IState;
-import thespian4jade.protocols.ReceiveAgreeOrRefuse;
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deactivate role' protocol initiator (new version).

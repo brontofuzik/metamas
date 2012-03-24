@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
 import thespian4jade.core.Event;
-import thespian4jade.protocols.IResultParty;
-import thespian4jade.protocols.Party;
+import thespian4jade.behaviours.parties.IResultParty;
+import thespian4jade.behaviours.parties.Party;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 import thespian4jade.protocols.Protocols;
 

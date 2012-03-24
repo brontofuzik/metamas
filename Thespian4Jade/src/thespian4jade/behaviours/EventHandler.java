@@ -1,6 +1,6 @@
-package thespian4jade.core.player;
+package thespian4jade.behaviours;
 
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * @author Lukáš Kúdela
