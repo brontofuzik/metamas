@@ -2,8 +2,8 @@ package example1.organizations.functioninvocation.executer;
 
 import example1.protocols.Protocols;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
-import example1.protocols.invokefunctionprotocol.ReplyMessage;
-import example1.protocols.invokefunctionprotocol.RequestMessage;
+import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
+import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.InvokeResponsibilityState;
@@ -93,7 +93,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
             // LOG
             getMyAgent().logInfo("Receiving request.");
             
-            RequestMessage message = new RequestMessage();
+            InvokeFunctionRequestMessage message = new InvokeFunctionRequestMessage();
             message.parseACLMessage(getACLMessage());          
             argument = message.getArgument();
             
@@ -136,7 +136,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
     /**
      * The 'Send reply' (sinle sender) state.
      */
-    private class SendReply extends SingleSenderState<ReplyMessage> {
+    private class SendReply extends SingleSenderState<InvokeFunctionReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -155,8 +155,8 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         }
 
         @Override
-        protected ReplyMessage prepareMessage() {
-            ReplyMessage message = new ReplyMessage();
+        protected InvokeFunctionReplyMessage prepareMessage() {
+            InvokeFunctionReplyMessage message = new InvokeFunctionReplyMessage();
             message.setResult(result);
             return message;
         }

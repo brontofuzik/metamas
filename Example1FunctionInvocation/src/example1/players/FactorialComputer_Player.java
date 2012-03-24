@@ -5,12 +5,12 @@ import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.RolePlayer;
 
 /**
- * Player2 - he player playing the 'Executer' role.
+ * 'Factorial computer' player - the player playing the 'Executer' role.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class Player2 extends RolePlayer {
+public class FactorialComputer_Player extends RolePlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -25,7 +25,7 @@ public class Player2 extends RolePlayer {
      * Creates a new Demo player who will enact the Executer role.
      * @param roleFullName the full name of the role to enact and activate
      */
-    public Player2() {
+    public FactorialComputer_Player() {
         super(new RoleFullName(EXECUTER_ROLE_FULL_NAME));
     }
     
@@ -61,7 +61,7 @@ public class Player2 extends RolePlayer {
      * @version %I% %G%
      */
     public static class RoleActivated_EventHandler
-        extends EventHandler<Player2> {
+        extends EventHandler<FactorialComputer_Player> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -86,7 +86,7 @@ public class Player2 extends RolePlayer {
      * @version %I% %G%
      */
     public static class RoleDeactivated_EventHandler
-        extends EventHandler<Player2> {
+        extends EventHandler<FactorialComputer_Player> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 

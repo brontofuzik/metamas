@@ -10,7 +10,7 @@ import thespian4jade.lang.TextMessage;
  * @since 2012-01-04
  * @version %I% %G%
  */
-public class ReplyMessage extends TextMessage {
+public class InvokeFunctionReplyMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -20,7 +20,7 @@ public class ReplyMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public ReplyMessage() {
+    public InvokeFunctionReplyMessage() {
         super(ACLMessage.INFORM);
     }
     
@@ -60,7 +60,7 @@ public class ReplyMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements IMessageFactory<ReplyMessage> {
+    public static class Factory implements IMessageFactory<InvokeFunctionReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -69,8 +69,8 @@ public class ReplyMessage extends TextMessage {
          * @return an empty 'Reply' message
          */
         @Override
-        public ReplyMessage createMessage() {
-            return new ReplyMessage();
+        public InvokeFunctionReplyMessage createMessage() {
+            return new InvokeFunctionReplyMessage();
         }
         
         // </editor-fold>
