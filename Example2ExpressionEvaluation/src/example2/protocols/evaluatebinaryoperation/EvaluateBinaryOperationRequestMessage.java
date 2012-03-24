@@ -3,7 +3,7 @@ package example2.protocols.evaluatebinaryoperation;
 import jade.lang.acl.ACLMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 
 /**
  * An 'Evaluate binary operation request' (text) message.

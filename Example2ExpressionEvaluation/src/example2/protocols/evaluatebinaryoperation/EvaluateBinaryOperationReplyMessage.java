@@ -2,8 +2,8 @@ package example2.protocols.evaluatebinaryoperation;
 
 import jade.lang.acl.ACLMessage;
 import java.io.Serializable;
-import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.IMessageFactory;
+import thespian4jade.language.BinaryMessage;
+import thespian4jade.language.IMessageFactory;
 
 /**
  * A 'Evaluate binary operation reply' (binary) message.
