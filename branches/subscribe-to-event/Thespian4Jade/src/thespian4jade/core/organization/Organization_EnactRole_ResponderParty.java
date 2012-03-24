@@ -17,7 +17,7 @@ import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
 import thespian4jade.core.Event;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.Protocols;
-import thespian4jade.util.ClassHelper;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * An 'Enact role' protocol responder party.

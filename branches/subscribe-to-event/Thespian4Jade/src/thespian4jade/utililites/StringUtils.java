@@ -1,4 +1,4 @@
-package thespian4jade.util;
+package thespian4jade.utililites;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -24,6 +24,6 @@ public /* static */ class StringUtils {
     }
     
     public static String join(Object[] objects, String delimiter) {
-        return thespian4jade.util.StringUtils.join(Arrays.asList(objects), delimiter);
+        return thespian4jade.utililites.StringUtils.join(Arrays.asList(objects), delimiter);
     }
 }

@@ -57,7 +57,7 @@ public class ResponsibilitiesInformMessage extends TextMessage {
     @Override
     public String generateContent() {
         return String.format("responsibilities(%1$s)",
-            thespian4jade.util.StringUtils.join(responsibilities, ","));
+            thespian4jade.utililites.StringUtils.join(responsibilities, ","));
     }
 
     @Override

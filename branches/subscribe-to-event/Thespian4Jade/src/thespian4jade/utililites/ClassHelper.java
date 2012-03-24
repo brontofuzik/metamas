@@ -1,4 +1,4 @@
-package thespian4jade.util;
+package thespian4jade.utililites;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
