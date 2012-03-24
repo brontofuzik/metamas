@@ -60,7 +60,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Player_InvokeResponsibilityResponder class.
+     * Initializes a new instance of the Player_InvokeResponsibility_ResponderParty class.
      * @param aclMessage the ACL message
      */
     public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {

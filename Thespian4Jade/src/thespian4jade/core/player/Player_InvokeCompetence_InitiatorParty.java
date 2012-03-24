@@ -59,7 +59,7 @@ public class Player_InvokeCompetence_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initialize a new instance of the Player_InvokeCompetenceInitiator class.
+     * Initialize a new instance of the Player_InvokeCompetence_InitiatorParty class.
      * @param competenceName the name of the competence
      * @param competenceArgument the competence argument
      */
@@ -76,11 +76,18 @@ public class Player_InvokeCompetence_InitiatorParty
     }
     
     /**
-     * Initializes a new instance of the Player_InvokeCompetenceInitiator class.
+     * Initializes a new instance of the Player_InvokeCompetence_InitiatorParty class.
      * @param competenceName the name of the competence
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName) {
         this(competenceName, null);
+    }
+    
+    /**
+     * Initializes a new instance of the Player_InvokeCompetence_InitiatorParty class.
+     */
+    public Player_InvokeCompetence_InitiatorParty() {
+        this("TO BE PROVIDED LATER", null);
     }
  
     // </editor-fold>
@@ -88,11 +95,19 @@ public class Player_InvokeCompetence_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     /**
-     * Gets the competence result.
-     * @return the competence result
+     * Gets the name of the competence.
+     * @return the name of the competence
      */
-    public TResult getCompetenceResult() {
-        return competenceResult;
+    public String getCometenceName() {
+        return competenceName;
+    }
+    
+    /**
+     * Sets the name of the competence.
+     * @param competenceName the name of the competence
+     */
+    public void setCompetenceName(String competenceName) {
+        this.competenceName = competenceName;
     }
     
     /**
@@ -101,6 +116,14 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     public void setCompetenceArgument(TArgument competenceArgument) {
         this.competenceArgument = competenceArgument;
+    }
+    
+    /**
+     * Gets the competence result.
+     * @return the competence result
+     */
+    public TResult getCompetenceResult() {
+        return competenceResult;
     }
     
     /**
@@ -195,6 +218,8 @@ public class Player_InvokeCompetence_InitiatorParty
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.SUCCESS, successEnd);       
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.FAILURE, failureEnd);
     }
+
+
     
     // </editor-fold>
     

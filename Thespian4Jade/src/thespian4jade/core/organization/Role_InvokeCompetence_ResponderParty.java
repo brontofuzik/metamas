@@ -60,7 +60,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Role_InvokeCompetenceResponder class.
+     * Initializes a new instance of the Role_InvokeCompetence_ResponderParty class.
      * @param aclMessage the received ACL message
      */
     public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {

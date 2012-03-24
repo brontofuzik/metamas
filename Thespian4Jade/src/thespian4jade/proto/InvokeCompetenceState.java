@@ -9,32 +9,74 @@ import thespian4jade.proto.jadeextensions.StateWrapperState;
  * @since 2012-03-17
  * @version %I% %G%
  */  
-public abstract class InvokeCompetenceState<TArgument extends Serializable, TResult extends Serializable>
+public abstract class InvokeCompetenceState
+    <TArgument extends Serializable, TResult extends Serializable>
     extends StateWrapperState<Player_InvokeCompetence_InitiatorParty> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public InvokeCompetenceState(String cpmpetenceName) {
-        super(new Player_InvokeCompetence_InitiatorParty(cpmpetenceName));
+    /**
+     * Initializes a new instance of the InvokeCompetenceState class.
+     * @param competenceName the name of the competence
+     * @param competenceArgument the competence argument
+     */
+    public InvokeCompetenceState(String competenceName, TArgument competenceArgument) {
+        super(new Player_InvokeCompetence_InitiatorParty(competenceName, competenceArgument));
+    }
+    
+    /**
+     * Initializes a new instance of the InvokeCompetenceState class.
+     * @param competenceName the name of the competence
+     */
+    public InvokeCompetenceState(String competenceName) {
+        super(new Player_InvokeCompetence_InitiatorParty(competenceName));
+    }
+    
+    /**
+     * Initializes a new instance of the InvokeCompetenceState class.
+     */
+    public InvokeCompetenceState() {
+        super(new Player_InvokeCompetence_InitiatorParty());
     }
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    /**
+     * Gets the name of the competence.
+     * @return the name of the competence
+     */
+    protected String getCompetenceName() {
+        return getWrappedState().getCometenceName();
+    }
+    
+    /**
+     * Gets the competence argument.
+     * @return the competence argument
+     */
+    protected abstract TArgument getCompetenceArgument();
+    
+    /**
+     * Sets the competence result.
+     * @param competenceResult the competence result
+     */
+    protected abstract void setCompetenceResult(TResult competenceResult);
+    
+    // </editor-fold>   
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override
-    protected void setWrappedStateArgument(Player_InvokeCompetence_InitiatorParty wrappedState) {
+    protected final void setWrappedStateArgument(Player_InvokeCompetence_InitiatorParty wrappedState) {
+        wrappedState.setCompetenceName(getCompetenceName());
         wrappedState.setCompetenceArgument(getCompetenceArgument());
     }
     
-    protected abstract TArgument getCompetenceArgument();
-
     @Override
-    protected void getWrappedStateResult(Player_InvokeCompetence_InitiatorParty wrappedState) {
+    protected final void getWrappedStateResult(Player_InvokeCompetence_InitiatorParty wrappedState) {
         setCompetenceResult((TResult)wrappedState.getCompetenceResult());
     }
-    
-    protected abstract void setCompetenceResult(TResult competenceResult);
     
     // </editor-fold>
 }
