@@ -44,13 +44,13 @@ public class Example1Metamodel {
         
         // ---------- Players ----------
         
-        PlayerType player1PlayerType = createPlayer1PlayerType();
-        example1Mas.addPlayerType(player1PlayerType);
-        example1Mas.addPlayer(player1PlayerType.createPlayer("player1"));
+        PlayerType blankPlayerType = createBlankPlayerType();
+        example1Mas.addPlayerType(blankPlayerType);
+        example1Mas.addPlayer(blankPlayerType.createPlayer("player1"));
         
-        PlayerType player2PlayerType = createPlayer2PlayerType();
-        example1Mas.addPlayerType(player2PlayerType); 
-        example1Mas.addPlayer(player2PlayerType.createPlayer("player2"));
+        PlayerType factorialComputerPlayerType = createFactorialComputerPlayerType();
+        example1Mas.addPlayerType(factorialComputerPlayerType); 
+        example1Mas.addPlayer(factorialComputerPlayerType.createPlayer("player2"));
         
         return example1Mas;
     }
@@ -123,19 +123,19 @@ public class Example1Metamodel {
     
     // ---------- Players ----------
     
-    private static PlayerType createPlayer1PlayerType() {
-        PlayerType player1PlayerType = new PlayerType("Player1");        
-        return player1PlayerType;
+    private static PlayerType createBlankPlayerType() {
+        PlayerType blankPlayerType = new PlayerType("Blank_Player");        
+        return blankPlayerType;
     } 
     
-    private static PlayerType createPlayer2PlayerType() {
-        PlayerType player2PlayerType = new PlayerType("Player2");
+    private static PlayerType createFactorialComputerPlayerType() {
+        PlayerType factorialComputerPlayerType = new PlayerType("FactorialComputer_Player");
         
         // The 'Execute function' responsibility.
         Responsibility executeFunctionResponsibility = new Responsibility("InvokeFunction_Responsibility",
             Responsibility.ResponsibilityType.Asynchronous, "Integer", "Integer");
-        player2PlayerType.addResponsibility(executeFunctionResponsibility);
+        factorialComputerPlayerType.addResponsibility(executeFunctionResponsibility);
         
-        return player2PlayerType;
+        return factorialComputerPlayerType;
     }
 }
