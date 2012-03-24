@@ -6,7 +6,7 @@ import thespian4jade.proto.jadeextensions.IState;
 import thespian4jade.proto.jadeextensions.StateWrapperState;
 
 /**
- * The 'Evaluate expression' (FSM) behaviour.
+ * The 'State expression' (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2012-04-15
  * @version %I% %G%
@@ -105,7 +105,7 @@ public class EvaluateExpression extends FSMBehaviourState {
                 operand2 = parser.getOperand2();
                 
                 EvaluateBinaryOperation_InitiatorParty evaluateBinaryOperationInitiator
-                    = EvaluateBinaryOperation_InitiatorParty.createInitiatorParty(parser.getOperation());
+                    = new EvaluateBinaryOperation_InitiatorParty(parser.getOperation());
                 EvaluateBinaryOperationInitiatorWrapper evaluateBinaryOperationInitiatorWrapper
                     = new EvaluateBinaryOperationInitiatorWrapper(evaluateBinaryOperationInitiator);
                 

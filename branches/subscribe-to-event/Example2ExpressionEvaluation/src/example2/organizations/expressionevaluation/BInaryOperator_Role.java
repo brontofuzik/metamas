@@ -1,35 +1,34 @@
-package example2.organizations.expressionevaluation.evaluator;
+package example2.organizations.expressionevaluation;
 
 import thespian4jade.core.organization.Role;
 
 /**
- * The 'Evaluator' role.
+ * The 'Binary operator' (abstract) role.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Evaluator_Role extends Role {
+public abstract class BinaryOperator_Role extends Role {
     
-    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public static final String NAME = "Evaluator_Role";
+    public abstract String getResponsibilityName();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-
+     
     @Override
     protected void setup() {
         super.setup();
 
         // Add behaviours.
-        addBehaviour(new Evaluator_Responder());
+        addBehaviour(new BinaryOperator_Responder());
         logInfo("Behaviours added.");
 
         // Add competences.
-        addCompetence(Evaluate_Competence.class);
-        logInfo("Competences added.");
+        // No competences.
     }
-
+    
     // </editor-fold>
 }

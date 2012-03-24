@@ -1,10 +1,16 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import example2.protocols.EvaluateBinaryOperationReplyMessage;
-import example2.protocols.EvaluateBinaryOperationRequestMessage;
+import example2.organizations.expressionevaluation.adder.Adder_Role;
+import example2.organizations.expressionevaluation.divisor.Divider_Role;
+import example2.organizations.expressionevaluation.multiplier.Multiplier_Role;
+import example2.organizations.expressionevaluation.subtractor.Subtractor_Role;
+import example2.players.AdditionComputer_Player;
+import example2.protocols.Protocols;
+import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMessage;
+import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.SingleReceiverState;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -15,7 +21,8 @@ import thespian4jade.proto.jadeextensions.IState;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorParty<Evaluator_Role> {
+public class EvaluateBinaryOperation_InitiatorParty
+    extends InitiatorParty<Evaluator_Role> {
    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -24,18 +31,34 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
      */
     private AID binaryOperator;
     
+    /**
+     * The concrete binary operation (addition, subtraction, multiplicaiton or division).
+     */
+    private Operation operation;
+    
+    /**
+     * The first operand.
+     */
     private String operand1;
     
+    /**
+     * The second operand.
+     */
     private String operand2;
     
+    /**
+     * The result.
+     */
     private int result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected EvaluateBinaryOperation_InitiatorParty(Protocol protocol) {
-        super(protocol);
+    public EvaluateBinaryOperation_InitiatorParty(Operation operation) {
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
+        
+        this.operation = operation;
         
         buildFSM();
     }
@@ -56,30 +79,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         return result;
     }
     
-    // ----- PROTECTED -----
-    
-    protected abstract String getBinaryOperatorRoleName();
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
-    static EvaluateBinaryOperation_InitiatorParty createInitiatorParty(Operation operation) {
-        switch (operation) {
-            case ADDITION:
-                return new EvaluateAddition_InitiatorParty();
-            case SUBTRACTION:
-                return new EvaluateSubtraction_InitiatorParty();
-            case MULTIPLICATION:
-                return new EvaluateMultiplication_InitiatorParty();
-            case DIVISION:
-                return new EvaluateDivision_InitiatorParty();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-    
-    // ----- PRIVATE -----
     
     /**
      * Builds the party FSM.
@@ -89,22 +91,28 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         IState initialize = new Initialize();
         IState sendEvaluteRequest = new SendEvaluateRequest();
         IState receiveEvaluateReply = new ReceiveEvaluateReply();
+        IState end = new End();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);      
         registerState(sendEvaluteRequest);       
-        registerLastState(receiveEvaluateReply);
+        registerState(receiveEvaluateReply);
+        registerLastState(end);
         
         // Register the transitions.
         initialize.registerDefaultTransition(sendEvaluteRequest);        
         sendEvaluteRequest.registerDefaultTransition(receiveEvaluateReply);
+        receiveEvaluateReply.registerDefaultTransition(end);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' (one-shot) state.
+     */
     private class Initialize extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -112,7 +120,7 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         @Override
         public void action() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Invoke function' protocol (id = %1$s)",
+                "Initiating the 'Evaluate binary operation' protocol (id = %1$s)",
                 getProtocolId()));
             
             // Get an active 'Binary operator' position.
@@ -120,9 +128,27 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
                 .getActivePosition(getBinaryOperatorRoleName()).getAID();
         }
         
+        private String getBinaryOperatorRoleName() {
+            switch (operation) {
+                case ADDITION:
+                    return Adder_Role.NAME;
+                case SUBTRACTION:
+                    return Subtractor_Role.NAME;
+                case MULTIPLICATION:
+                    return Multiplier_Role.NAME;
+                case DIVISION:
+                    return Divider_Role.NAME;
+                default:
+                    throw new IllegalArgumentException();
+            }
+        }
+        
         // </editor-fold>
     }
     
+    /**
+     * The 'Send evalaute request' (single sender) state.
+     */
     private class SendEvaluateRequest extends SingleSenderState<EvaluateBinaryOperationRequestMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -157,6 +183,9 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive evaluate reply' (single receiver) state.
+     */
     private class ReceiveEvaluateReply extends SingleReceiverState<EvaluateBinaryOperationReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -193,6 +222,24 @@ public abstract class EvaluateBinaryOperation_InitiatorParty extends InitiatorPa
             getMyAgent().logInfo("Evaluate reply received.");
         }
 
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'End' (one-shot) state.
+     */
+    private class End extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Evaluate binary operation' protocol (id = %1$s) initiator party ended.",
+                getProtocolId()));
+        }
+    
         // </editor-fold>
     }
     

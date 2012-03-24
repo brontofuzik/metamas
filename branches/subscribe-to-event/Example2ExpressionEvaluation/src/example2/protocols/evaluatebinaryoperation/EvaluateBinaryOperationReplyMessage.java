@@ -1,4 +1,4 @@
-package example2.protocols;
+package example2.protocols.evaluatebinaryoperation;
 
 import jade.lang.acl.ACLMessage;
 import java.io.Serializable;
