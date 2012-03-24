@@ -1,13 +1,14 @@
 package example2.organizations.expressionevaluation;
 
 import example2.players.OperandPair;
-import example2.protocols.EvaluateBinaryOperationReplyMessage;
-import example2.protocols.EvaluateBinaryOperationRequestMessage;
+import example2.protocols.Protocols;
+import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMessage;
+import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role;
 import thespian4jade.proto.InvokeResponsibilityState;
-import thespian4jade.proto.Protocol;
+import thespian4jade.proto.ProtocolRegistry_StaticClass;
 import thespian4jade.proto.ResponderParty;
 import thespian4jade.proto.SingleSenderState;
 import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
@@ -18,11 +19,15 @@ import thespian4jade.proto.jadeextensions.IState;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderParty<Role> {
+public class EvaluateBinaryOperation_ResponderParty
+    extends ResponderParty<BinaryOperator_Role> {
         
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID evaluatorAID;
+    /**
+     * The initiating evaluator; more precisely its AID.
+     */
+    private AID evaluator;
     
     private String operandExpression1;
     
@@ -42,10 +47,10 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public EvaluateBinaryOperation_ResponderParty(Protocol protocol, ACLMessage message) {
-        super(protocol, message);
+    public EvaluateBinaryOperation_ResponderParty(ACLMessage message) {
+        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL), message);
         
-        evaluatorAID = message.getSender();
+        evaluator = message.getSender();
         
         buildFSM();
     }
@@ -64,7 +69,7 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         evaluateExpressionInitiator1 = new EvaluateExpression_InitiatorParty();
         evaluateExpressionInitiator2 = new EvaluateExpression_InitiatorParty();
         IState getInitiatorResult = new GetInitiatorResult();
-        IState invokeResponsibility_EvaluateBinaryOperation = createInvokeResponsibility_EvaluateBinaryOperation();
+        IState invokeResponsibility_EvaluateBinaryOperation = new InvokeResponsibility_EvaluateBinaryOperation();
         IState sendEvaluateReply = new SendEvaluateReply();
         IState end = new End();
         // ------------------
@@ -88,40 +93,10 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         invokeResponsibility_EvaluateBinaryOperation.registerDefaultTransition(sendEvaluateReply);       
         sendEvaluateReply.registerDefaultTransition(end);
     }
-    
-    protected abstract InvokeResponsibility_EvaluateBinaryOperation createInvokeResponsibility_EvaluateBinaryOperation();
         
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-    
-    protected abstract class InvokeResponsibility_EvaluateBinaryOperation
-        extends InvokeResponsibilityState<OperandPair, Integer> {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected InvokeResponsibility_EvaluateBinaryOperation(String responsibilityName) {
-            super(responsibilityName);
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        @Override
-        protected OperandPair getResponsibilityArgument() {
-            return new OperandPair(operand1, operand2);
-        }
-
-        @Override
-        protected void setResponsibilityResult(Integer responsibilityResult) {
-            result = responsibilityResult.intValue();
-        }
-        
-        // </editor-fold>
-    }
-    
-    // ---------- PRIVATE ----------
             
     private class ReceiveEvaluateRequest extends OneShotBehaviourState {
 
@@ -168,13 +143,44 @@ public abstract class EvaluateBinaryOperation_ResponderParty extends ResponderPa
         // </editor-fold>
     }
 
+    private class InvokeResponsibility_EvaluateBinaryOperation
+        extends InvokeResponsibilityState<OperandPair, Integer> {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        InvokeResponsibility_EvaluateBinaryOperation() {
+            super();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+
+        @Override
+        protected String getResponsibilityName() {
+            return getMyAgent().getResponsibilityName();
+        }
+        
+        @Override
+        protected OperandPair getResponsibilityArgument() {
+            return new OperandPair(operand1, operand2);
+        }
+
+        @Override
+        protected void setResponsibilityResult(Integer responsibilityResult) {
+            result = responsibilityResult.intValue();
+        }
+        
+        // </editor-fold>
+    }
+    
     private class SendEvaluateReply extends SingleSenderState<EvaluateBinaryOperationReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { evaluatorAID };
+            return new AID[] { evaluator };
         }
         
         // </editor-fold>
