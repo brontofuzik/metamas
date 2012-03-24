@@ -63,7 +63,7 @@ public class Role_InvokeResponsibility_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
      * @param responsibilityName the name of the responsibility
      * @param responsibilityArgument the responsibility argument
      */
@@ -80,11 +80,18 @@ public class Role_InvokeResponsibility_InitiatorParty
     }
     
     /**
-     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
      * @param responsibilityName the name of the responsibility
      */
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
         this(responsibilityName, null);
+    }
+    
+    /**
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
+     */
+    public Role_InvokeResponsibility_InitiatorParty() {
+        this("TO BE PROVIDED LATER", null);
     }
         
     // </editor-fold>
@@ -92,11 +99,19 @@ public class Role_InvokeResponsibility_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the responsibility result.
-     * @return the responsibility result
+     * Gets the name of the responsibility.
+     * @return the name of the responsibility
      */
-    public TResult getResponsibilityResult() {
-        return responsibilityResult;
+    public String getResponsibilityName() {
+        return responsibilityName;
+    }
+    
+    /**
+     * Sets the name of the responsibility.
+     * @param responsibilityName the name of the responsibility
+     */
+    public void setResponsibilityName(String responsibilityName) {
+        this.responsibilityName = responsibilityName;
     }
     
     /**
@@ -105,6 +120,14 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     public void setResponsibilityArgument(TArgument responsibilityArgument) {
         this.responsibilityArgument = responsibilityArgument;
+    }
+    
+    /**
+     * Gets the responsibility result.
+     * @return the responsibility result
+     */
+    public TResult getResponsibilityResult() {
+        return responsibilityResult;
     }
     
     /**

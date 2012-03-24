@@ -32,6 +32,14 @@ public abstract class StateWrapperState<TState extends IState>
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    protected TState getWrappedState() {
+        return wrappedState;
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
