@@ -3,8 +3,8 @@ package example3.organizations.auction.bidder;
 import example3.players.bid.BidArgument;
 import example3.players.bid.BidResult;
 import example3.protocols.Protocols;
-import example3.protocols.envelopeauction.AuctionCFPMessage;
-import example3.protocols.envelopeauction.BidMessage;
+import example3.protocols.AuctionCFPMessage;
+import example3.protocols.BidProposeMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.proto.ExitValueState;
@@ -201,7 +201,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * The 'Send bid' (single-sender) state.
      * A state in which the bid is sent to the auctioneer.
      */
-    private class SendBid extends SingleSenderState<BidMessage> {
+    private class SendBid extends SingleSenderState<BidProposeMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -224,8 +224,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * @return the 'Bid' message
          */
         @Override
-        protected BidMessage prepareMessage() {
-            BidMessage message = new BidMessage();
+        protected BidProposeMessage prepareMessage() {
+            BidProposeMessage message = new BidProposeMessage();
             // TODO (priority: low) Also consider the situation when no bid is made.
             message.setBid(bid);
             return message;

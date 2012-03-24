@@ -1,4 +1,4 @@
-package example3.protocols.envelopeauction;
+package example3.protocols;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.IMessageFactory;

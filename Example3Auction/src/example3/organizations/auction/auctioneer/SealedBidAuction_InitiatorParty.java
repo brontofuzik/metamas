@@ -2,8 +2,8 @@ package example3.organizations.auction.auctioneer;
 
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.organizations.auction.auctioneer.auction.AuctionResult;
-import example3.protocols.envelopeauction.AuctionCFPMessage;
-import example3.protocols.envelopeauction.BidMessage;
+import example3.protocols.AuctionCFPMessage;
+import example3.protocols.BidProposeMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import java.util.HashMap;
@@ -250,7 +250,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
      * The 'Receive bid' (single sender) state.
      * A state in which a bid is received from the bidders.
      */
-    private class ReceiveBid extends SingleReceiverState<BidMessage> {
+    private class ReceiveBid extends SingleReceiverState<BidProposeMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
@@ -265,7 +265,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         ReceiveBid() {
-            super(new BidMessage.Factory());
+            super(new BidProposeMessage.Factory());
         }
         
         // </editor-fold>
@@ -302,7 +302,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
          * @param message the 'Bid' message
          */
         @Override
-        protected void handleMessage(BidMessage message) {
+        protected void handleMessage(BidProposeMessage message) {
             bids.put(message.getSender(), message.getBid());
         }
 
