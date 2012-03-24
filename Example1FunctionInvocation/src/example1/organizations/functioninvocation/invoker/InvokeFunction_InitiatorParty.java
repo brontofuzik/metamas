@@ -7,12 +7,12 @@ import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.SingleReceiverState;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
 
 /**
  * The 'Invoke function' protocol initiator party.

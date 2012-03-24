@@ -3,9 +3,9 @@ package example1.protocols.invokefunctionprotocol;
 import example1.organizations.functioninvocation.executer.InvokeFunction_ResponderParty;
 import example1.organizations.functioninvocation.invoker.InvokeFunction_InitiatorParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.protocols.ResponderParty;
 
 /**
  * The 'Invoke function' protocol.
