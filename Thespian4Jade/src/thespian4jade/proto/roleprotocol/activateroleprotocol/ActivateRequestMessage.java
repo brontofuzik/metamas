@@ -5,7 +5,7 @@
 package thespian4jade.proto.roleprotocol.activateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 
 /**
  * An 'Activate request' message.

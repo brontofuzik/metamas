@@ -1,7 +1,7 @@
 package thespian4jade.proto.roleprotocol.deactivateroleprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 
 /**
  * A 'Deactivate request' message.

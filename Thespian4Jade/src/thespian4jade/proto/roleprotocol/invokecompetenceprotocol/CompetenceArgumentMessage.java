@@ -1,8 +1,8 @@
 package thespian4jade.proto.roleprotocol.invokecompetenceprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.BinaryMessage;
-import thespian4jade.lang.IMessageFactory;
+import thespian4jade.language.BinaryMessage;
+import thespian4jade.language.IMessageFactory;
 import java.io.Serializable;
 
 /**

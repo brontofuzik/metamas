@@ -2,8 +2,8 @@ package thespian4jade.proto.organizationprotocol.enactroleprotocol;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.IMessageFactory;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.IMessageFactory;
+import thespian4jade.language.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

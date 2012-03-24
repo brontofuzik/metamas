@@ -7,7 +7,7 @@ import jade.lang.acl.MessageTemplate;
 import thespian4jade.core.organization.Organization;
 import thespian4jade.core.organization.Role;
 import thespian4jade.core.player.Player;
-import thespian4jade.lang.Message;
+import thespian4jade.language.Message;
 import thespian4jade.proto.jadeextensions.FSMBehaviourState;
 
 /**

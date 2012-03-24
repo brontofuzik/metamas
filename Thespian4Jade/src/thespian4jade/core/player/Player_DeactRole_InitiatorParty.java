@@ -1,7 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.SimpleMessage;
+import thespian4jade.language.SimpleMessage;
 import thespian4jade.proto.ExitValueState;
 import thespian4jade.proto.InitiatorParty;
 import thespian4jade.proto.ProtocolRegistry_StaticClass;
