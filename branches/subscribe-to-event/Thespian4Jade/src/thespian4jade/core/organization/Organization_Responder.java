@@ -1,9 +1,9 @@
 package thespian4jade.core.organization;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Protocols;
-import thespian4jade.proto.Responder;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.protocols.Responder;
 
 /**
  * The organization responder.

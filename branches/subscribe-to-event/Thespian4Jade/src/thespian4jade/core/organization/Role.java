@@ -12,10 +12,10 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.concurrency.Future;
-import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.Party;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Protocols;
+import thespian4jade.protocols.IResultParty;
+import thespian4jade.protocols.Party;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Protocols;
 
 /**
  * A role agent.
