@@ -3,23 +3,23 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.ExitValueState;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ReceiveSuccessOrFailure;
-import thespian4jade.proto.SendSuccessOrFailure;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
+import thespian4jade.protocols.ExitValueState;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.ReceiveSuccessOrFailure;
+import thespian4jade.protocols.SendSuccessOrFailure;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.protocols.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
+import thespian4jade.protocols.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
+import thespian4jade.protocols.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
+import thespian4jade.protocols.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
 import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
-import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Protocols;
+import thespian4jade.protocols.IResultParty;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Protocols;
 
 /**
  * A 'Invoke responsibility' protocol initiator party (new version).

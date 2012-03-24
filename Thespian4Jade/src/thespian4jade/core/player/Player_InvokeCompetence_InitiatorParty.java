@@ -3,22 +3,22 @@ package thespian4jade.core.player;
 import jade.core.AID;
 import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.ExitValueState;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ReceiveSuccessOrFailure;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
+import thespian4jade.protocols.ExitValueState;
+import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.protocols.ReceiveSuccessOrFailure;
+import thespian4jade.protocols.SingleSenderState;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
+import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
+import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
+import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
 import java.io.Serializable;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.Observable;
-import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Protocols;
+import thespian4jade.protocols.IResultParty;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Protocols;
 
 /**
  * An 'Invoke competence' protocol initiator party (new version).

@@ -3,14 +3,14 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.ExitValueState;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
-import thespian4jade.proto.Protocols;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.SendAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.protocols.ExitValueState;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.protocols.ResponderParty;
+import thespian4jade.protocols.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
+import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.protocols.SendAgreeOrRefuse;
+import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deactivate role' protocol responder (new version).
