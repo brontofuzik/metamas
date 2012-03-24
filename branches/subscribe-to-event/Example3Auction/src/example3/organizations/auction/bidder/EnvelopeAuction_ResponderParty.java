@@ -166,7 +166,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * Initializes a new instance of the InvokeResponsibility_Bid class.
          */
         InvokeResponsibility_Bid() {
-            super("Bid_Responsibility");
+            super(Bidder_Role.BID_RESPONSIBILITY);
         }
         
         // </editor-fold>

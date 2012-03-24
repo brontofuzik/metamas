@@ -2,6 +2,7 @@ package example3.organizations.auction.auctioneer;
 
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.organizations.auction.auctioneer.auction.AuctionResult;
+import example3.organizations.auction.bidder.Bidder_Role;
 import example3.protocols.AuctionCFPMessage;
 import example3.protocols.BidProposeMessage;
 import jade.core.AID;
@@ -189,7 +190,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
             
             // Get all active 'Bidder' positions.
             List<Role> bidderPositions = getMyAgent().getMyOrganization()
-                .getAllActivePositions("Bidder_Role");
+                .getAllActivePositions(Bidder_Role.NAME);
             for (Role bidderPosition : bidderPositions) {
                 if (bidderPosition != getMyAgent()) {
                     bidders.add(bidderPosition.getAID());
