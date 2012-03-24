@@ -1,4 +1,4 @@
-package example3.protocols.envelopeauction;
+package example3.protocols;
 
 import jade.lang.acl.ACLMessage;
 import thespian4jade.lang.IMessageFactory;
@@ -7,13 +7,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A 'Bid' message.
- * A 'Bid' message is sent by a bidder to an auctioneer.
+ * A 'Bid propose' message.
+ * A 'Bid propose' message is sent by a bidder to an auctioneer.
  * @author Lukáš Kúdela
  * @since 2012-01-24
  * @version %I% %G%
  */
-public class BidMessage extends TextMessage {
+public class BidProposeMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -26,7 +26,7 @@ public class BidMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public BidMessage() {
+    public BidProposeMessage() {
         super(ACLMessage.PROPOSE);
     }
     
@@ -47,7 +47,7 @@ public class BidMessage extends TextMessage {
      * @param bid the bid
      * @return this 'Bid' message (fluent interface)
      */
-    public BidMessage setBid(double bid) {
+    public BidProposeMessage setBid(double bid) {
         this.bid = bid;
         return this;
     }
@@ -90,7 +90,7 @@ public class BidMessage extends TextMessage {
      * @since
      * @version %I% %G%
      */
-    public static class Factory implements IMessageFactory<BidMessage> {
+    public static class Factory implements IMessageFactory<BidProposeMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -99,8 +99,8 @@ public class BidMessage extends TextMessage {
          * @return an empty 'Bid' message
          */
         @Override
-        public BidMessage createMessage() {
-            return new BidMessage();
+        public BidProposeMessage createMessage() {
+            return new BidProposeMessage();
         }
         
         // </editor-fold>
