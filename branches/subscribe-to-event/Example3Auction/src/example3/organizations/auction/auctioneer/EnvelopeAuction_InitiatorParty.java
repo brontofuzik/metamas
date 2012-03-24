@@ -4,7 +4,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionType;
 import example3.protocols.Protocols;
 import jade.core.AID;
 import java.util.Map;
-import thespian4jade.proto.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 
 /**
  * The 'Envelope auction' protocol initiator party.
