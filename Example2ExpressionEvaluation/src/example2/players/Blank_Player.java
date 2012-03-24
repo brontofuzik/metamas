@@ -4,7 +4,7 @@ import thespian4jade.concurrency.Future;
 import thespian4jade.concurrency.IObservable;
 import thespian4jade.concurrency.IObserver;
 import thespian4jade.core.Event;
-import thespian4jade.core.player.EventHandler;
+import thespian4jade.behaviours.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
 /**

@@ -2,7 +2,7 @@ package example2.organizations.expressionevaluation.evaluator;
 
 import example2.protocols.Protocols;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
-import thespian4jade.protocols.Responder;
+import thespian4jade.behaviours.Responder;
 
 /**
  * The 'Evaluator' role responder.
