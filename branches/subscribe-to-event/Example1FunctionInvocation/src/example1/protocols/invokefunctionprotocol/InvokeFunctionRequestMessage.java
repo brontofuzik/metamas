@@ -1,7 +1,7 @@
 package example1.protocols.invokefunctionprotocol;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.lang.TextMessage;
+import thespian4jade.language.TextMessage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
