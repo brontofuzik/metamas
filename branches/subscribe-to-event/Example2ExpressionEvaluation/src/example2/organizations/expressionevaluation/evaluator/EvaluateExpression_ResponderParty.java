@@ -6,11 +6,11 @@ import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
-import thespian4jade.protocols.ResponderParty;
-import thespian4jade.protocols.SingleSenderState;
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
-import thespian4jade.protocols.jadeextensions.IState;
-import thespian4jade.protocols.jadeextensions.StateWrapperState;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.StateWrapperState;
 
 /**
  * The 'Evaluate expression' protocol responder party.

@@ -1,6 +1,6 @@
 package example2.players;
 
-import thespian4jade.core.player.EventHandler;
+import thespian4jade.behaviours.EventHandler;
 import thespian4jade.example.RolePlayer;
 
 /**
