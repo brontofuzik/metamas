@@ -1,6 +1,7 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours.parties;
 
 import jade.core.Agent;
+import thespian4jade.protocols.Protocol;
 
 /**
  * An initiator party.

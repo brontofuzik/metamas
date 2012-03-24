@@ -3,9 +3,9 @@ package thespian4jade.protocols.organizationprotocol.enactroleprotocol;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Organization_EnactRole_ResponderParty;
 import thespian4jade.core.player.Player_EnactRole_InitiatorParty;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.protocols.ResponderParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * The 'Enact role' protocol.

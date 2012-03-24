@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.protocols.ProtocolRegistry_StaticClass;
 import thespian4jade.protocols.Protocols;
-import thespian4jade.protocols.Responder;
+import thespian4jade.behaviours.Responder;
 
 /**
  * The organization responder.

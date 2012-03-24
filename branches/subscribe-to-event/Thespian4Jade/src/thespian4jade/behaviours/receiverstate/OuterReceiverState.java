@@ -1,13 +1,12 @@
-package thespian4jade.protocols;
+package thespian4jade.behaviours.receiverstate;
 
 import thespian4jade.language.IMessageFactory;
 import jade.core.AID;
-import jade.lang.acl.ACLMessage;
 import thespian4jade.language.Message;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.protocols.jadeextensions.FSMBehaviourReceiverState;
-import thespian4jade.protocols.jadeextensions.OneShotBehaviourState;
-import thespian4jade.protocols.jadeextensions.IState;
+import thespian4jade.behaviours.jadeextensions.FSMBehaviourReceiverState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
 import java.util.ArrayList;
 import java.util.List;
 
