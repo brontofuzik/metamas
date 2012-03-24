@@ -3,9 +3,9 @@ package example3.protocols.englishauction;
 import example3.organizations.auction.auctioneer.EnglishAuction_InitiatorParty;
 import example3.organizations.auction.bidder.EnglishAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.protocols.InitiatorParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.protocols.ResponderParty;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * The 'English auction' protocol.
