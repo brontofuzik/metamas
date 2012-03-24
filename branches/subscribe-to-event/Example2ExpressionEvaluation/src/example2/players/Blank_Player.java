@@ -8,12 +8,12 @@ import thespian4jade.core.player.EventHandler;
 import thespian4jade.example.CompetencePlayer;
 
 /**
- * Player1 - the player playing the 'Evaluator' role.
+ * 'Blank' player - the player playing the 'Evaluator' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class Player1 extends CompetencePlayer<String> implements IObserver {
+public class Blank_Player extends CompetencePlayer<String> implements IObserver {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -39,7 +39,7 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
      * Initializes a new instane of the Calculator1_Player class.
      * Creates the calculator1 player who will enact the 'Evaluator' role.
      */
-    public Player1() {
+    public Blank_Player() {
         super(new RoleFullName(EVALUATOR_ROLE_FULL_NAME), EVALUATE_COMPETENCE_NAME);
     }
     
@@ -85,7 +85,7 @@ public class Player1 extends CompetencePlayer<String> implements IObserver {
      * @version %I% %G%
      */
     public static class RoleActivated_EventHandler
-        extends EventHandler<Player1> {
+        extends EventHandler<Blank_Player> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

@@ -3,12 +3,12 @@ package example2.players;
 import thespian4jade.core.Event;
 
 /**
- * Player2 - the player playing the 'Adder' role.
+ * 'Addition computer' player - the player playing the 'Adder' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class Player2 extends OperatorPlayer {
+public class AdditionComputer_Player extends OperatorPlayer {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
@@ -25,7 +25,7 @@ public class Player2 extends OperatorPlayer {
     /**
      * Initializes a new instane of the Calculator2_Player class.
      */
-    public Player2() {
+    public AdditionComputer_Player() {
         super(new RoleFullName(ADDER_ROLE_FULL_NAME));
     }
     
