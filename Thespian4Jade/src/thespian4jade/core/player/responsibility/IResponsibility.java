@@ -1,6 +1,6 @@
 package thespian4jade.core.player.responsibility;
 
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.behaviours.jadeextensions.IState;
 import java.io.Serializable;
 
 /**

@@ -1,7 +1,7 @@
 package thespian4jade.core.organization;
 
 /**
- *
+ * The 
  * @author hp
  */
 public enum Multiplicity {

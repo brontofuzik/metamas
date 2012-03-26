@@ -3,13 +3,14 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.SendAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.protocols.role.activaterole.ActivateRequestMessage;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Activate role' protocol responder party.
@@ -21,16 +22,20 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role activation; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Role_ActivateRole_ResponderParty(ACLMessage aclMessage) {
-        super(ActivateRoleProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL), aclMessage);
         
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -41,7 +46,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveActivateRequest = new ReceiveActivateRequest();
         IState sendActivateReply = new SendActivateReply();
         IState successEnd = new SuccessEnd();
@@ -56,8 +61,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         registerLastState(failureEnd);
 
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);        
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
         sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
         sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
@@ -67,21 +72,33 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
-    private class MyInitialize extends Initialize {
+    /**
+     * The 'Initialize' (initialize) state.
+     */
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Activate role' protocol (id = %1$s).",
-                getACLMessage().getConversationId()));
+                "'Activate role' protocol (id = %1$s) responder party started.",
+                getProtocolId()));
         
-            if (playerAID.equals(getMyAgent().playerAID)) {
-                // The sender player is enacting this role.
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
                 return OK;
             } else {
-                // The sender player is not enacting this role.
+                // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be activated.
                 return FAIL;
@@ -118,7 +135,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -127,16 +144,13 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending activate reply.");
         }
 
         @Override
         protected int onManager() {
-            if (getMyAgent().isActivable()) {            
-                return SendAgreeOrRefuse.AGREE;
-            } else {
-                return SendAgreeOrRefuse.REFUSE;
-            }
+            return (getMyAgent().isActivable()) ? AGREE : REFUSE;
         }
         
         @Override
@@ -146,6 +160,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Activate reply sent.");
         }
         
@@ -164,7 +179,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // Publish the 'Role activated' event.
             getMyAgent().myOrganization.publishEvent(Event.ROLE_ACTIVATED,
-                getMyAgent().getRoleName(), playerAID);
+                getMyAgent().getRoleName(), player);
             
             // LOG
             getMyAgent().logInfo(String.format(

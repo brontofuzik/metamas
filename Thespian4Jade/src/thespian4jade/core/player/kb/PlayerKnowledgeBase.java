@@ -13,98 +13,116 @@ public class PlayerKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private Hashtable<String, RoleDescription> enactedRoles = new Hashtable<String, RoleDescription>();
+    private Query query = this.new Query();
     
-    private RoleDescription activeRole;
+    private Update update = this.new Update();
+    
+    private Hashtable<String, PositionDescription> enactedRoles = new Hashtable<String, PositionDescription>();
+    
+    private PositionDescription activeRole;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    // ----- QUERY -----
-    
-    public Iterable<RoleDescription> getEnactedRoles() {
-        return enactedRoles.values();
+    public Query query() {
+        return query;
     }
     
-    public RoleDescription getEnactedRole(String roleName) {       
-        return enactedRoles.get(roleName);
+    public Update update() {
+        return update;
     }
-    
-    public RoleDescription getActiveRole() {
-        return activeRole;
-    }
-    
-    /**
-     * Queries this player knowledge base whether the
-     * player enacts a particular role.
-     * @param roleName the name of the role
-     * @return <c>true</c> if the player enacts the specified role;
-     *         <c>false</c> otherwise.
-     */
-    public boolean doesEnactRole(String roleName) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        // -------------------------
         
-        return enactedRoles.containsKey(roleName);
-    }
+    // </editor-fold>
     
-    public boolean doesPlayRole(String roleName) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        // -------------------------
+    // <editor-fold defaultstate="collapsed" desc="Classes">
+    
+    public class Query {
         
-        return activeRole != null ? roleName.equals(activeRole.getRoleName()) : false;
-    }
-    
-    public boolean canActivateRole(String roleName) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        // -------------------------
-        
-        return doesEnactRole(roleName) && !doesPlayRole(roleName);
-    }
-    
-    public boolean canDeactivateRole(String roleName) {
-        // ----- Preconditions -----
-        assert roleName != null && !roleName.isEmpty();
-        // -------------------------   
+        public Iterable<PositionDescription> getEnactedRoles() {
+            return enactedRoles.values();
+        }
 
-        return doesEnactRole(roleName) && doesPlayRole(roleName);
+        public PositionDescription getEnactedRole(String roleName) {       
+            return enactedRoles.get(roleName);
+        }
+
+        public PositionDescription getActiveRole() {
+            return activeRole;
+        }
+
+        /**
+         * Queries this player knowledge base whether the
+         * player enacts a particular role.
+         * @param roleName the name of the role
+         * @return <c>true</c> if the player enacts the specified role;
+         *         <c>false</c> otherwise.
+         */
+        public boolean doesEnactRole(String roleName) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            // -------------------------
+
+            return enactedRoles.containsKey(roleName);
+        }
+
+        public boolean doesPlayRole(String roleName) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            // -------------------------
+
+            return activeRole != null ? roleName.equals(activeRole.getRole()) : false;
+        }
+
+        public boolean canActivateRole(String roleName) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            // -------------------------
+
+            return doesEnactRole(roleName) && !doesPlayRole(roleName);
+        }
+
+        public boolean canDeactivateRole(String roleName) {
+            // ----- Preconditions -----
+            assert roleName != null && !roleName.isEmpty();
+            // -------------------------   
+
+            return doesEnactRole(roleName) && doesPlayRole(roleName);
+        }
+
+        public boolean canInvokeCompetence(String competenceName) {
+            // ----- Preconditions -----
+            assert competenceName != null && !competenceName.isEmpty();
+            // -------------------------
+
+            // TODO (priority: medium) Implement.
+            return true;
+        }
     }
     
-    public boolean canInvokeCompetence(String competenceName) {
-        // ----- Preconditions -----
-        assert competenceName != null && !competenceName.isEmpty();
-        // -------------------------
+    public class Update {
         
-        // TODO (priority: medium) Implement.
-        return true;
+        public void enactRole(String roleName, AID roleAID, String organizationName, AID organizationAID) {
+            PositionDescription roleDescription = new PositionDescription(roleAID, roleName, organizationAID);
+            enactedRoles.put(roleName, roleDescription);
+        }
+
+        public void deactRole(String roleName) {
+            enactedRoles.remove(roleName);
+        }
+
+        public void activateRole(String roleName) {
+            // ----- Preconditions -----
+            assert enactedRoles.containsKey(roleName);
+            // -------------------------
+
+            activeRole = query().getEnactedRole(roleName);
+        }
+
+        public void deactivateRole() {
+            activeRole = null;
+        }
     }
     
-    // ----- UPDATE -----
-    
-    public void enactRole(String roleName, AID roleAID, String organizationName, AID organizationAID) {
-        RoleDescription roleDescription = new RoleDescription(roleName, roleAID, organizationName, organizationAID);
-        enactedRoles.put(roleName, roleDescription);
-    }
-    
-    public void deactRole(String roleName) {
-        enactedRoles.remove(roleName);
-    }
-    
-    public void activateRole(String roleName) {
-        // ----- Preconditions -----
-        assert enactedRoles.containsKey(roleName);
-        // -------------------------
-        
-        activeRole = getEnactedRole(roleName);
-    }
-    
-    public void deactivateRole() {
-        activeRole = null;
-    }
-        
     // </editor-fold>
 }

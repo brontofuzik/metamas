@@ -2,12 +2,15 @@ package thespian4jade.core.organization;
 
 import jade.core.AID;
 import java.util.Set;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
+import thespian4jade.core.Event;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.organization.publishevent.EventMessage;
 
 /**
  * @author Lukáš Kúdela
@@ -26,7 +29,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     /**
      * The event to publish.
      */
-    private String event;
+    private Event event;
     
     /**
      * The event argument.
@@ -49,11 +52,11 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
      * @param argument the event argument
      * @param playerToExclude the player to exclude
      */
-    public Organization_PublishEvent_InitiatorParty(final String event,
+    public Organization_PublishEvent_InitiatorParty(final Event event,
         final String argument, final AID playerToExclude) {
-        super(PublishEventProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL));
         // ----- Preconditions -----
-        assert event != null && !event.isEmpty();
+        assert event != Event.NONE;
         // -------------------------
         
         this.event = event;
@@ -83,7 +86,8 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
         registerLastState(end);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendEvent);
+        initialize.registerTransition(Initialize.SOME_SUBSCRIBERS, sendEvent);
+        initialize.registerTransition(Initialize.NO_SUBSCRIBERS, sendEvent);
         sendEvent.registerDefaultTransition(end);
     }
     
@@ -94,20 +98,34 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     /**
      * The 'Initialize' (one-shot) state.
      */
-    private class Initialize extends OneShotBehaviourState {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int SOME_SUBSCRIBERS = 1;
+        public static final int NO_SUBSCRIBERS = 2;
+        // -----------------------        
+                
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
+        protected int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Publish event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
-            Set<AID> allPlayers = getMyAgent().knowledgeBase.getAllPlayers();           
-            allPlayers.remove(playerToExclude);           
-            players = allPlayers.toArray(new AID[0]);
+            // Get all players subscribed to the event.
+            Set<AID> subscribedPlayers = getMyAgent().knowledgeBase
+                .query().getPlayersSubscribedToEvent(event);           
+            subscribedPlayers.remove(playerToExclude);
+            
+            players = subscribedPlayers.toArray(new AID[0]);
+            
+            return (!subscribedPlayers.isEmpty()) ? SOME_SUBSCRIBERS : NO_SUBSCRIBERS;
         }
         
         // </editor-fold>

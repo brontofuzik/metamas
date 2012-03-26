@@ -3,9 +3,9 @@ package example3.protocols.vickreyauction;
 import example3.organizations.auction.auctioneer.VickereyAuction_InitiatorParty;
 import example3.organizations.auction.bidder.VickereyAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * The 'Vickerey auction' protocol.
@@ -15,30 +15,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class VickreyAuctionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static VickreyAuctionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private VickreyAuctionProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static VickreyAuctionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new VickreyAuctionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

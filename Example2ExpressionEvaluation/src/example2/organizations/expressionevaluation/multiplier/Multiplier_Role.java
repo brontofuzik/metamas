@@ -1,34 +1,29 @@
 package example2.organizations.expressionevaluation.multiplier;
 
-import thespian4jade.core.organization.Role;
+import example2.organizations.expressionevaluation.BinaryOperator_Role;
 
 /**
- * The 'Multiplier' role.
+ * The 'Multiplier' binary operator role.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Multiplier_Role extends Role {
+public class Multiplier_Role extends BinaryOperator_Role {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     public static final String NAME = "Multiplier_Role";
     
+    public static final String MULTIPLY_RESPONSIBILITY = "Multiply_Responsibility";
+    
     // </editor-fold>
     
-    // <editor-fold defaultstate="collapsed" desc="Methods">
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
-    protected void setup() {
-        super.setup();
-
-        // Add behaviours.
-        addBehaviour(new Multiplier_Responder());
-        logInfo("Behaviours added.");
-
-        // Add competences.
-        // No competences.
+    public String getResponsibilityName() {
+        return MULTIPLY_RESPONSIBILITY;
     }
-
+    
     // </editor-fold>
 }

@@ -1,16 +1,16 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.ReceiveAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.language.SimpleMessage;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.protocols.role.deactivaterole.DeactivateRequestMessage;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deactivate role' protocol initiator (new version).
@@ -33,7 +33,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactivateRole_InitiatorParty(String roleName) {
-        super(DeactivateRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
@@ -49,7 +49,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendDeactivateRequest = new SendDeactivateRequest();
         IState receiveDeactivateReply = new ReceiveDeactivateReply();
         IState successEnd = new SuccessEnd();
@@ -66,8 +66,8 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendDeactivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendDeactivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
 
@@ -79,19 +79,28 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Deactivate role' (%1$s) protocol.",
                 roleName));
 
-            if (getMyAgent().knowledgeBase.canDeactivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be deactivated.
@@ -168,7 +177,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.deactivateRole();
+            getMyAgent().knowledgeBase.update().deactivateRole();
         }
 
         @Override

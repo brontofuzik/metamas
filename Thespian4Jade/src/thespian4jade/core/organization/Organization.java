@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
-import thespian4jade.proto.Party;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
+import thespian4jade.core.Event;
+import thespian4jade.behaviours.parties.Party;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
 
 /**
  * An organization agent.
@@ -230,14 +232,15 @@ public abstract class Organization extends Agent {
      * @param argument the event argument
      * @param playerToExclude the payer to exlcude; more precisely its AID
      */
-    protected final void publishEvent(final String event, final String argument,
+    protected final void publishEvent(final Event event, final String argument,
         final AID playerToExclude) {
         // ----- Preconditions -----
-        assert event != null && !event.isEmpty();
+        assert event != Event.NONE;
         // -------------------------
         
         // Create a 'Publish event' protocol initiator party.
-        Party publishEventInitiator = PublishEventProtocol.getInstance()
+        Party publishEventInitiator = ProtocolRegistry
+            .getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL)
             .createInitiatorParty(event, argument, playerToExclude);
         
         // Schedule the initiator party for execution.

@@ -4,8 +4,8 @@ import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import thespian4jade.core.organization.Role;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.Protocol;
 
 /**
  * An auction initiator.

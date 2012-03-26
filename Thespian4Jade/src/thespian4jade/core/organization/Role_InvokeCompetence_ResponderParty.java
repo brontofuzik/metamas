@@ -3,20 +3,20 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.competence.ICompetence;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.SendSuccessOrFailure;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.behaviours.senderstates.SendSuccessOrFailure;
+import thespian4jade.behaviours.receiverstate.SingleReceiverState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.role.invokecompetence.InvokeCompetenceRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
+import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * An 'Invoke competence' protocol responder party (new version).
@@ -27,11 +27,11 @@ import java.lang.reflect.InvocationTargetException;
 public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable,
     TResult extends Serializable> extends ResponderParty<Role> {
  
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
+    // <editor-fold defaultstate="collapsed" desc="Fields"> 
     
     /**
-     * The player; more precisely its AID.
+     * The player requesting the competence invocation; more precisely its AID.
+     * The initiator party.
      */
     private AID player;
     
@@ -60,11 +60,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Role_InvokeCompetenceResponder class.
+     * Initializes a new instance of the Role_InvokeCompetence_ResponderParty class.
      * @param aclMessage the received ACL message
      */
     public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
-        super(InvokeCompetenceProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
         
         player = getACLMessage().getSender();
         
@@ -80,7 +80,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
         IState sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
         receiveCompetenceArgument = new ReceiveCompetenceArgument();
@@ -99,8 +99,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveInvokeCompetenceRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);       
         sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.SUCCESS, receiveCompetenceArgument);
         sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);       
@@ -118,7 +118,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         Class competenceClass = getMyAgent().competences.get(competenceName);
 //        System.out.println("----- competenceClass: " + competenceClass + " -----");
 
-        competence = createCompetence(competenceClass);
+        competence = ClassHelper.instantiateClass(competenceClass);
         
         // Register the competence-related states.
         registerState(competence);
@@ -129,58 +129,34 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         //System.out.println("----- COMPETENCE ADDED -----");
     }
     
-    /**
-     * Create a new competence from its class.
-     * @param competenceClass the competence class
-     * @return the competence instance
-     */
-    private ICompetence createCompetence(Class competenceClass) {        
-        // Get the competence constructor.
-        Constructor competenceConstructor = null;
-        try {
-            competenceConstructor = competenceClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-                
-        // Instantiate the competence.
-        ICompetence competence = null;
-        try {
-            competence = (ICompetence)competenceConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        
-        return competence;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke competence' protocol (id = %1$s).",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
-            if (player.equals(getMyAgent().playerAID)) {
-                // The sender player is enacting this role.
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
                 return OK;
             } else {
-                // The sender player is not enacting this role.
+                // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a competence cannot be invoked on a non-enacted role.
                 return FAIL;

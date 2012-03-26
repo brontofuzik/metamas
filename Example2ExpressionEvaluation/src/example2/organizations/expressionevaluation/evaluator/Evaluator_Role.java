@@ -10,7 +10,7 @@ import thespian4jade.core.organization.Role;
  */
 public class Evaluator_Role extends Role {
     
-    // <editor-fold defaultstate="collapsed" desc="Fields">
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     public static final String NAME = "Evaluator_Role";
     

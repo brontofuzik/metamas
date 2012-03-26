@@ -4,11 +4,11 @@ import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import java.util.HashMap;
 import java.util.Map;
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObservable;
-import thespian4jade.concurrency.IObserver;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObservable;
+import thespian4jade.asynchrony.IObserver;
 import thespian4jade.core.Event;
-import thespian4jade.core.player.EventHandler;
+import thespian4jade.behaviours.EventHandler;
 import thespian4jade.core.player.Player;
 
 /**
@@ -75,6 +75,10 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
+    String getAuctionOrganizationName() {
+        return auctioneerRoleFullName.getOrganizationName();
+    }
     
     /**
      * Gets the full name of the 'Auctioneer' role.
@@ -149,10 +153,6 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
         
         // Add responsibilites.
         addResponsibility(Bid_Responsibility.class);
-        
-        // Add event handlers.
-        addEventHandler(Event.ROLE_ACTIVATED, RoleActivated_EventHandler.class);
-        addEventHandler(Event.ROLE_DEACTIVATED, RoleDeactivated_EventHandler.class);
     }
     
     /**

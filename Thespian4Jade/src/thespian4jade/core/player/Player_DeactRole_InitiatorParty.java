@@ -1,16 +1,16 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
-import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.ReceiveAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.language.SimpleMessage;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.protocols.organization.deactrole.DeactRequestMessage;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deact role' protocol initiator party (new version).
@@ -36,7 +36,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactRole_InitiatorParty(String organizationName, String roleName) {
-        super(DeactRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
@@ -57,7 +57,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendDeactRequest = new SendDeactRequest();
         IState receiveDeactReply = new ReceiveDeactReply();
         IState successEnd = new SuccessEnd();
@@ -83,12 +83,21 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
                 organizationName, roleName));
@@ -178,7 +187,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.deactRole(roleName);
+            getMyAgent().knowledgeBase.update().deactRole(roleName);
         }
 
         @Override

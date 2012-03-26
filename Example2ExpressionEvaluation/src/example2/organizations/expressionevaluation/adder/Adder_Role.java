@@ -1,33 +1,28 @@
 package example2.organizations.expressionevaluation.adder;
 
-import thespian4jade.core.organization.Role;
+import example2.organizations.expressionevaluation.BinaryOperator_Role;
 
 /**
- * The 'Adder' role.
+ * The 'Adder' binary operator role.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public class Adder_Role extends Role {
+public class Adder_Role extends BinaryOperator_Role {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     public static final String NAME = "Adder_Role";
+
+    public static final String ADD_RESPONSIBILITY = "Add_Responsibility";
     
     // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Methods">
+
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     @Override
-    protected void setup() {
-        super.setup();
-
-        // Add behaviours.
-        addBehaviour(new Adder_Responder());
-        logInfo("Behaviours added.");
-
-        // Add competences.
-        // No competences.
+    public String getResponsibilityName() {
+        return ADD_RESPONSIBILITY;
     }
 
     // </editor-fold>

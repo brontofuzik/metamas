@@ -3,9 +3,10 @@ package thespian4jade.core.organization.kb;
 import jade.core.AID;
 import java.util.HashSet;
 import java.util.Set;
+import thespian4jade.core.Event;
 
 /**
- * A player description.
+ * A player description for an organization.
  * @author Lukáš Kúdela
  * @since 2011-10-18
  * @version %I% %G%
@@ -17,46 +18,71 @@ public class PlayerDescription {
     /** The AID of the player. */
     private AID playerAID;
     
-    /** The name of the player. */
-    private String name;
-    
     /** The roles the player enacts. */
     private Set<String> enactedRoles = new HashSet<String>();
+    
+    private Set<Event> subscribedEvents = new HashSet<Event>();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public PlayerDescription(AID playerAID) {
+    PlayerDescription(AID playerAID) {
         // ----- Preconditions -----
-        if (playerAID == null) {
-            throw new NullPointerException("playerAID");
-        }
+        assert playerAID != null;
         // -------------------------
         
         this.playerAID = playerAID;
-        name = playerAID.getName();
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
-    public AID getAID() {
+    AID getAID() {
         return playerAID;
-    }
-    
-    public String getName() {
-        return name;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
-            
+    
+    // ----- Query -----
+    
+    /**
+     * Determies whether the player enacts a given role.
+     * @param role the role
+     * @return <c>true</c> if the player enacts the given role;
+     *     <c>false</c> otherwise.
+     */
+    boolean doesEnactRole(String role) {
+        return enactedRoles.contains(role); 
+    }
+    
+    /**
+     * Determines whether the player is employed, i.e. if it enacts some roles
+     * in the organization.
+     * @return <c>true</c> if the player is employed; <c>false</c> otherwise.
+     */
+    boolean isEmployed() {
+        return !enactedRoles.isEmpty();
+    }
+    
+    /**
+     * Determies whether the player is subscribed to a given role.
+     * @param event the event
+     * @return <c>true</c> if the player is subscribed to the given event;
+     *     <c>false</c> otherwise.
+     */
+    boolean isSubscribedToEvent(Event event) {
+        return subscribedEvents.contains(event);
+    }
+    
+    // ----- Update -----
+    
     /**
      * Enacts a role.
-     * @param role the role being enacted 
+     * @param role the role being enacted
      */
     void enactRole(String role) {
         // ----- Preconditions -----
@@ -79,14 +105,29 @@ public class PlayerDescription {
         
         enactedRoles.remove(role);
     }
-    
+   
     /**
-     * Determines whether the player is employed by the organization
-     * owning this player info.
-     * @return <c>true</c> if the player is employed; <c>false</c> otherwise.
+     * Subscribes to an event.
+     * @param event the event being subscribed to
      */
-    boolean isEmployed() {
-        return enactedRoles.size() != 0;
+    void subscribeToEvent(Event event) {
+        // ----- Preconditions -----
+        assert event != null && event != Event.NONE;
+        // -------------------------
+        
+        subscribedEvents.add(event);
+    }
+
+    /**
+     * Unsubscribes from an event.
+     * @param event the event being unsubscribed from 
+     */
+    void unsubscribeFromEvent(Event event) {
+        // ----- Preconditions -----
+        assert event != null && event != Event.NONE;
+        // -------------------------
+        
+        subscribedEvents.remove(event);
     }
     
     // </editor-fold> 

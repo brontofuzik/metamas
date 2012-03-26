@@ -8,13 +8,14 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Logger;
 import java.io.Serializable;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
-import thespian4jade.concurrency.Future;
-import thespian4jade.proto.IResultParty;
-import thespian4jade.proto.Party;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.behaviours.parties.IResultParty;
+import thespian4jade.behaviours.parties.Party;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
 
 /**
  * A role agent.
@@ -42,7 +43,7 @@ public class Role extends Agent {
      * The position's player; more precisely its AID.
      * Run-time state.
      */
-    AID playerAID;
+    AID enactingPlayer;
     
     /**
      * The position's state.
@@ -103,11 +104,11 @@ public class Role extends Agent {
     }
     
     public AID getPlayerAID() {
-        return playerAID;
+        return enactingPlayer;
     }
     
     public void setPlayerAID(AID playerAID) {
-        this.playerAID = playerAID;
+        this.enactingPlayer = playerAID;
     }
     
     // ----- PACKAGE -----
@@ -134,7 +135,8 @@ public class Role extends Agent {
     public final <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
         // Create an 'Invoke responsibility' protocol initiator party.
-        Party invokeResponsibilityInitiator = InvokeResponsibilityProtocol.getInstance()
+        Party invokeResponsibilityInitiator = ProtocolRegistry
+            .getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL)
             .createInitiatorParty(responsibilityName, argument);
         
         // Get the inititor party result future.

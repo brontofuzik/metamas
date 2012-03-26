@@ -1,7 +1,8 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
-import thespian4jade.proto.Responder;
+import example2.protocols.Protocols;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.behaviours.Responder;
 
 /**
  * The 'Evaluator' role responder.
@@ -17,7 +18,7 @@ class Evaluator_Responder extends Responder {
      * Initializes a new instance of the Evaluator_Responder class.
      */
     Evaluator_Responder() {
-        addResponder(EvaluateExpressionProtocol.getInstance());
+        addResponder(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
     }
     
     // </editor-fold>  

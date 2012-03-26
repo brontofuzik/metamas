@@ -3,13 +3,14 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRequestMessage;
-import thespian4jade.proto.organizationprotocol.deactroleprotocol.DeactRoleProtocol;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.SendAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.protocols.organization.deactrole.DeactRequestMessage;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deact role' protocol responder party (new version).
@@ -21,7 +22,11 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role deactment; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
     
     private String roleName;
 
@@ -30,9 +35,9 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
-        super(DeactRoleProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL), aclMessage);
 
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -45,7 +50,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
      * Builds the party FSM.
      */
     private void buildFSM() {
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveDeactRequest = new ReceiveDeactRequest();
         IState sendDeactReply = new SendDeactReply();
         IState successEnd = new SuccessEnd();
@@ -61,8 +66,8 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         registerLastState(failureEnd);
         
         // Register the transisions.
-        initialize.registerTransition(MyInitialize.OK, receiveDeactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, receiveDeactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
 
@@ -74,16 +79,25 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
             
             return OK;
         }
@@ -119,7 +133,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -135,20 +149,16 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected int onManager() {
             if (getMyAgent().roles.containsKey(roleName)) {
                 // The role is defined for this organization.
-                System.out.println("----- ROLE: " + roleName + " -----");
-                System.out.println("----- PLAYER: " + playerAID + " -----");
-                if (getMyAgent().knowledgeBase.isRoleEnactedByPlayer(roleName, playerAID)) {
-                    System.out.println("----- AGREE -----");
+                if (getMyAgent().knowledgeBase.query().isRoleEnactedByPlayer(roleName, player)) {
                     // The is enacted by the player.
-                    return SendAgreeOrRefuse.AGREE;
+                    return AGREE;
                 } else {
-                    System.out.println("----- REFUSE -----");
                     // The role is not enacted by the player.
-                    return SendAgreeOrRefuse.REFUSE;
+                    return REFUSE;
                 }
             } else {
                 // The role is not defined for this organization.
-                return SendAgreeOrRefuse.REFUSE;
+                return REFUSE;
             }
         }
         
@@ -156,7 +166,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         protected void onAgree() {
             // Update the knowledge base.
             getMyAgent().knowledgeBase
-                .updateRoleIsDeacted(roleName, playerAID);
+                .update().roleIsDeacted(roleName, player);
             
             // Stop the role agent.
             // TODO (priority: medium) Implement.
@@ -187,7 +197,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         @Override
         public void action() {
             // Publish the 'Role deacted' event.
-            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, playerAID);
+            getMyAgent().publishEvent(Event.ROLE_DEACTED, roleName, player);
             
             // LOG
             getMyAgent().logInfo(String.format(

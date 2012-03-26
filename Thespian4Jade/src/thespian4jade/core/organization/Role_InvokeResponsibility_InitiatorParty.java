@@ -1,24 +1,25 @@
 package thespian4jade.core.organization;
 
 import jade.core.AID;
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ReceiveSuccessOrFailure;
-import thespian4jade.proto.SendSuccessOrFailure;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObserver;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.behaviours.receiverstate.ReceiveSuccessOrFailure;
+import thespian4jade.behaviours.senderstates.SendSuccessOrFailure;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityArgumentMessage;
+import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
+import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
 import java.io.Serializable;
-import thespian4jade.concurrency.IObservable;
-import thespian4jade.concurrency.Observable;
-import thespian4jade.proto.IResultParty;
+import thespian4jade.asynchrony.IObservable;
+import thespian4jade.asynchrony.Observable;
+import thespian4jade.behaviours.parties.IResultParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
 
 /**
  * A 'Invoke responsibility' protocol initiator party (new version).
@@ -62,12 +63,12 @@ public class Role_InvokeResponsibility_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
      * @param responsibilityName the name of the responsibility
      * @param responsibilityArgument the responsibility argument
      */
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName, TArgument responsibilityArgument) {
-        super(InvokeResponsibilityProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL));
         // ----- Preconditions -----
         assert responsibilityName != null && !responsibilityName.isEmpty();
         // -------------------------
@@ -79,11 +80,18 @@ public class Role_InvokeResponsibility_InitiatorParty
     }
     
     /**
-     * Initializes a new instance of the Role_InvokeResponsibilityInitiator class.
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
      * @param responsibilityName the name of the responsibility
      */
     public Role_InvokeResponsibility_InitiatorParty(String responsibilityName) {
         this(responsibilityName, null);
+    }
+    
+    /**
+     * Initializes a new instance of the Role_InvokeResponsibility_InitiatorParty class.
+     */
+    public Role_InvokeResponsibility_InitiatorParty() {
+        this("TO BE PROVIDED LATER", null);
     }
         
     // </editor-fold>
@@ -91,11 +99,19 @@ public class Role_InvokeResponsibility_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the responsibility result.
-     * @return the responsibility result
+     * Gets the name of the responsibility.
+     * @return the name of the responsibility
      */
-    public TResult getResponsibilityResult() {
-        return responsibilityResult;
+    public String getResponsibilityName() {
+        return responsibilityName;
+    }
+    
+    /**
+     * Sets the name of the responsibility.
+     * @param responsibilityName the name of the responsibility
+     */
+    public void setResponsibilityName(String responsibilityName) {
+        this.responsibilityName = responsibilityName;
     }
     
     /**
@@ -104,6 +120,14 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     public void setResponsibilityArgument(TArgument responsibilityArgument) {
         this.responsibilityArgument = responsibilityArgument;
+    }
+    
+    /**
+     * Gets the responsibility result.
+     * @return the responsibility result
+     */
+    public TResult getResponsibilityResult() {
+        return responsibilityResult;
     }
     
     /**
@@ -169,7 +193,7 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendResponsibilityRequest = new SendResponsibilityRequest();
         IState receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
         IState sendResponsibilityArgument = new SendResponsibilityArgument();
@@ -188,8 +212,8 @@ public class Role_InvokeResponsibility_InitiatorParty
         registerLastState(failureEnd);
         
         // Regster the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.OK, sendResponsibilityRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);        
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.SUCCESS, sendResponsibilityArgument);
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);       
@@ -202,19 +226,29 @@ public class Role_InvokeResponsibility_InitiatorParty
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        protected int doAction() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Invoke responsibility' (%1$s) protocol.",
-                responsibilityName));
+                "'Invoke responsibility' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
-            if (true) {
+            if (getMyAgent().myOrganization.knowledgeBase
+                .query().canInvokeResponsibility(responsibilityName)) {
                 // The role can invoke the responsibility.
-                player = getMyAgent().playerAID;
+                player = getMyAgent().enactingPlayer;
                 return OK;
             } else {
                 // The role can not invoke the responsibility.
