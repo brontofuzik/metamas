@@ -45,6 +45,7 @@ public /* static */ class ClassHelper {
     }
     
     /**
+     * Note: This metmod is currently not used.
      * @param object instance of a class that is a subclass of a generic class
      * @param index index of the generic type that should be instantiated
      * @return new instance of T (created by calling the default constructor)

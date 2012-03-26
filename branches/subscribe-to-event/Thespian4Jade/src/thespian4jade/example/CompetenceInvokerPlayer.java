@@ -1,17 +1,17 @@
 package thespian4jade.example;
 
 import java.io.Serializable;
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObserver;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObserver;
 
 /**
- * Competence player - a player with competence to be invoked known at compile-time.
+ * Competence-invoker player - a player with a predetermined competence to invoke.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
-    extends RolePlayer implements IObserver {
+public abstract class CompetenceInvokerPlayer<TCompetenceArgument extends Serializable>
+    extends RoleEnacterPlayer implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -21,7 +21,7 @@ public abstract class CompetencePlayer<TCompetenceArgument extends Serializable>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    protected CompetencePlayer(RoleFullName roleFullName, String competenceName) {
+    protected CompetenceInvokerPlayer(RoleFullName roleFullName, String competenceName) {
         super(roleFullName);
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();

@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * The JadeOrg DF service wrapper.
+ * The Thespian4Jade DF service wrapper.
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2011-10-29
  * @version %I% %G%

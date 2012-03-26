@@ -4,9 +4,9 @@ import jade.core.AID;
 import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
-import thespian4jade.protocols.roleprotocol.activateroleprotocol.ActivateRequestMessage;
+import thespian4jade.protocols.role.activaterole.ActivateRequestMessage;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
@@ -33,7 +33,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_ActivateRole_InitiatorParty(String roleName) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------

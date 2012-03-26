@@ -4,13 +4,13 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.ExitValueState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.protocols.organizationprotocol.subscribetoeventprotocol.SubscribeRequestMessage;
+import thespian4jade.protocols.organization.subscribetoevent.SubscribeRequestMessage;
 
 /**
  * The 'Subscribe to event' protocol responder party.
@@ -44,7 +44,7 @@ public class Organization_SubscribeToEvent_ResponderParty
      * @param message 
      */
     public Organization_SubscribeToEvent_ResponderParty(ACLMessage message) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL), message);
+        super(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL), message);
         
         player = message.getSender();
         

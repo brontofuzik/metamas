@@ -4,9 +4,9 @@ import jade.core.AID;
 import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
-import thespian4jade.protocols.organizationprotocol.deactroleprotocol.DeactRequestMessage;
+import thespian4jade.protocols.organization.deactrole.DeactRequestMessage;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
@@ -36,7 +36,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_DeactRole_InitiatorParty(String organizationName, String roleName) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();

@@ -5,12 +5,12 @@ import java.util.Set;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.protocols.organizationprotocol.publisheventprotocol.EventMessage;
+import thespian4jade.protocols.organization.publishevent.EventMessage;
 
 /**
  * @author Lukáš Kúdela
@@ -54,7 +54,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
      */
     public Organization_PublishEvent_InitiatorParty(final Event event,
         final String argument, final AID playerToExclude) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL));
         // ----- Preconditions -----
         assert event != Event.NONE;
         // -------------------------

@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.parties.Party;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
 /**
@@ -239,7 +239,7 @@ public abstract class Organization extends Agent {
         // -------------------------
         
         // Create a 'Publish event' protocol initiator party.
-        Party publishEventInitiator = ProtocolRegistry_StaticClass
+        Party publishEventInitiator = ProtocolRegistry
             .getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL)
             .createInitiatorParty(event, argument, playerToExclude);
         

@@ -2,7 +2,7 @@ package thespian4jade.core.organization;
 
 /**
  * An organization exception.
- * Currently not used.
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2011-11-11
  * @version %I% %G%

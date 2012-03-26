@@ -105,7 +105,7 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Sends a JadeOrg message.
+     * Sends a Thespian4Jade (T4J) message.
      * @param messageClass the message class
      * @param receivers the receivers. More precisely, their AIDs
      */
@@ -125,7 +125,7 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     }
     
     /**
-     * Receives a JadeOrg message.
+     * Receives a Thespian4Jade (T4J) message.
      * @param messageClass the message class
      * @return the received message
      */

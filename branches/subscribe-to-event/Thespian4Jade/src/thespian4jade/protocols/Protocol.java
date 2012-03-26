@@ -7,7 +7,7 @@ import jade.lang.acl.MessageTemplate;
 
 /**
  * An interaction protocol.
- * Design pattern: Abstract factory, Role: Abstract factory
+ * Design pattern: Abstract factory - Abstract factory (GoF)
  * @author Lukáš Kúdela
  * @since 2011-10-21
  * @version %I% %G%
