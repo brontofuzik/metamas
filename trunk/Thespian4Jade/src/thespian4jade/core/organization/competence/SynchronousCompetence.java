@@ -1,6 +1,6 @@
 package thespian4jade.core.organization.competence;
 
-import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
+import thespian4jade.behaviours.states.FSMBehaviourState;
 import java.io.Serializable;
 
 /**

@@ -1,4 +1,4 @@
-package thespian4jade.behaviours.receiverstate;
+package thespian4jade.behaviours.states.receiver;
 
 import jade.core.AID;
 import thespian4jade.language.Message;

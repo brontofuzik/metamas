@@ -16,10 +16,10 @@ import thespian4jade.core.organization.Role;
 import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.behaviours.receiverstate.SingleReceiverState;
-import thespian4jade.behaviours.senderstates.SingleSenderState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.receiver.SingleReceiverState;
+import thespian4jade.behaviours.states.sender.SingleSenderState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
 
 /**
  * The 'Sealed bid auction' protocol initiator party.

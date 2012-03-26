@@ -1,8 +1,8 @@
 package thespian4jade.behaviours;
 
-import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.states.FSMBehaviourState;
+import thespian4jade.behaviours.states.IState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
 
 /**
  * A 'State wrapper' state.

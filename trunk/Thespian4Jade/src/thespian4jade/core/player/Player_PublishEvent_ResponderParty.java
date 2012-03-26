@@ -7,8 +7,8 @@ import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
 import thespian4jade.protocols.organization.publishevent.EventMessage;
 import thespian4jade.utililites.ClassHelper;
 

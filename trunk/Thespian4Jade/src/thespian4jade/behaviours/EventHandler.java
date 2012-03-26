@@ -1,6 +1,6 @@
 package thespian4jade.behaviours;
 
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
 
 /**
  * @author Lukáš Kúdela

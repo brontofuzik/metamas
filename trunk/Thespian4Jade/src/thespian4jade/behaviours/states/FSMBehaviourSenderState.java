@@ -1,19 +1,18 @@
-package thespian4jade.behaviours.jadeextensions;
+package thespian4jade.behaviours.states;
 
 import jade.core.AID;
 import thespian4jade.language.Message;
 
 /**
- * A one-shot behaviour sender state.
+ * A FSM behaviour sender state.
  * @author Lukáš Kúdela
- * @since 2011-12-07
+ * @since 2011-12-05
  * @version %I% %G%
  */
-public abstract class OneShotBehaviourSenderState extends OneShotBehaviourState
-    implements ISenderState {
-    
+public abstract class FSMBehaviourSenderState extends FSMBehaviourState implements ISenderState {
+       
     // <editor-fold defaultstate="collapsed" desc="Methods">
-    
+
     /**
      * Sends a message.
      * @param message the message to send

@@ -10,11 +10,11 @@ import jade.lang.acl.ACLMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.InvokeResponsibilityState;
 import thespian4jade.protocols.ProtocolRegistry;
-import thespian4jade.behaviours.receiverstate.ReceiveAcceptOrRejectProposal;
+import thespian4jade.behaviours.states.receiver.ReceiveAcceptOrRejectProposal;
 import thespian4jade.behaviours.parties.ResponderParty;
-import thespian4jade.behaviours.senderstates.SingleSenderState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.sender.SingleSenderState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
 
 /**
  * The 'Envelope auction' protocol responder party.

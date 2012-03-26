@@ -1,4 +1,4 @@
-package thespian4jade.behaviours.senderstates;
+package thespian4jade.behaviours.states.sender;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
