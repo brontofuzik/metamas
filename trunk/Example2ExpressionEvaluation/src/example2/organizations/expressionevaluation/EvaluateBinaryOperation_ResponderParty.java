@@ -7,7 +7,7 @@ import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequest
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role;
-import thespian4jade.behaviours.InvokeResponsibilityState;
+import thespian4jade.behaviours.states.special.InvokeResponsibilityState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.states.sender.SingleSenderState;

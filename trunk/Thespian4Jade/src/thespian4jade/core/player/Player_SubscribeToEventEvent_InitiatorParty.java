@@ -3,7 +3,7 @@ package thespian4jade.core.player;
 import jade.core.AID;
 import thespian4jade.core.Event;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;

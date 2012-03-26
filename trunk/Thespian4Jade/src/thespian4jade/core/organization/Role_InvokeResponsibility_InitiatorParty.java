@@ -3,7 +3,7 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import thespian4jade.asynchrony.Future;
 import thespian4jade.asynchrony.IObserver;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.behaviours.states.receiver.ReceiveSuccessOrFailure;
 import thespian4jade.behaviours.states.sender.SendSuccessOrFailure;

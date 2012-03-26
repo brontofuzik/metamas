@@ -6,7 +6,7 @@ import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.behaviours.InvokeResponsibilityState;
+import thespian4jade.behaviours.states.special.InvokeResponsibilityState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.states.sender.SingleSenderState;

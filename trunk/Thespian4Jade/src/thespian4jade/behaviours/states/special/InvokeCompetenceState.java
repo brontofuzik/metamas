@@ -1,4 +1,4 @@
-package thespian4jade.behaviours;
+package thespian4jade.behaviours.states.special;
 
 import java.io.Serializable;
 import thespian4jade.core.player.Player_InvokeCompetence_InitiatorParty;

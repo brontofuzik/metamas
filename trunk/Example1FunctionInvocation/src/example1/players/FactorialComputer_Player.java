@@ -1,7 +1,7 @@
 package example1.players;
 
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.EventHandler;
+import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.example.RoleEnacterPlayer;
 
 /**

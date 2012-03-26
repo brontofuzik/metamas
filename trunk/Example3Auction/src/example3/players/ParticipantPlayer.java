@@ -8,7 +8,7 @@ import thespian4jade.asynchrony.Future;
 import thespian4jade.asynchrony.IObservable;
 import thespian4jade.asynchrony.IObserver;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.EventHandler;
+import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.core.player.Player;
 
 /**

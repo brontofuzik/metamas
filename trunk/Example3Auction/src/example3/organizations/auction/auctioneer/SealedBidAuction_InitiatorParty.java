@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import thespian4jade.core.organization.Role;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.Protocol;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;
 import thespian4jade.behaviours.states.sender.SingleSenderState;

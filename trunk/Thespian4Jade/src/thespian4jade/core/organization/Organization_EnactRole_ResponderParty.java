@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
 import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
 import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
