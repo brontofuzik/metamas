@@ -1,6 +1,6 @@
 package thespian4jade.core.organization.competence;
 
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.IState;
 import java.io.Serializable;
 
 /**

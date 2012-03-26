@@ -11,10 +11,10 @@ import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequest
 import jade.core.AID;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
-import thespian4jade.behaviours.receiverstate.SingleReceiverState;
-import thespian4jade.behaviours.senderstates.SingleSenderState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.receiver.SingleReceiverState;
+import thespian4jade.behaviours.states.sender.SingleSenderState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
 
 /**
  * @author Lukáš Kúdela

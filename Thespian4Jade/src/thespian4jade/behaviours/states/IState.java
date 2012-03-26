@@ -1,4 +1,4 @@
-package thespian4jade.behaviours.jadeextensions;
+package thespian4jade.behaviours.states;
 
 import thespian4jade.behaviours.parties.Party;
 

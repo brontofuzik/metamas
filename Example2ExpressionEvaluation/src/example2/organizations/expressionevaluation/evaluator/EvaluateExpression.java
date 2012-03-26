@@ -1,8 +1,8 @@
 package example2.organizations.expressionevaluation.evaluator;
 
-import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.states.FSMBehaviourState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
 import thespian4jade.behaviours.StateWrapperState;
 
 /**

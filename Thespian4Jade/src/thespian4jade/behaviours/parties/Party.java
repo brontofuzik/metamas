@@ -6,7 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import thespian4jade.language.Message;
 import thespian4jade.protocols.Protocol;
-import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
+import thespian4jade.behaviours.states.FSMBehaviourState;
 
 /**
  * A protocol party.

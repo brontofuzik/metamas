@@ -1,10 +1,10 @@
-package thespian4jade.behaviours.senderstates;
+package thespian4jade.behaviours.states.sender;
 
 import jade.core.AID;
 import thespian4jade.language.Message;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.behaviours.jadeextensions.FSMBehaviourSenderState;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.states.FSMBehaviourSenderState;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
 import java.util.HashMap;
 import java.util.Map;
 

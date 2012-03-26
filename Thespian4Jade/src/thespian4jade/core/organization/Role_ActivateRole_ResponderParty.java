@@ -8,9 +8,9 @@ import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.protocols.role.activaterole.ActivateRequestMessage;
-import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
-import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.states.IState;
+import thespian4jade.behaviours.states.sender.SendAgreeOrRefuse;
+import thespian4jade.behaviours.states.OneShotBehaviourState;
 
 /**
  * An 'Activate role' protocol responder party.

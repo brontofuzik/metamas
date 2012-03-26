@@ -1,4 +1,4 @@
-package thespian4jade.behaviours.jadeextensions;
+package thespian4jade.behaviours.states;
 
 import jade.core.AID;
 import thespian4jade.language.Message;
