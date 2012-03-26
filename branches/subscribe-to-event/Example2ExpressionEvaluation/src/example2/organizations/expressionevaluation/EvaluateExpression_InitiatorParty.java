@@ -8,7 +8,7 @@ import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.receiverstate.SingleReceiverState;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
@@ -35,7 +35,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateExpression_InitiatorParty() {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
         
         buildFSM();
     }

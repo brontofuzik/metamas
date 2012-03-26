@@ -1,11 +1,11 @@
 package example2.players;
 
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObservable;
-import thespian4jade.concurrency.IObserver;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObservable;
+import thespian4jade.asynchrony.IObserver;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.EventHandler;
-import thespian4jade.example.CompetencePlayer;
+import thespian4jade.example.CompetenceInvokerPlayer;
 
 /**
  * 'Blank' player - the player playing the 'Evaluator' role.
@@ -13,7 +13,7 @@ import thespian4jade.example.CompetencePlayer;
  * @since 2012-03-14
  * @version %I% %G%
  */
-public class Blank_Player extends CompetencePlayer<String> implements IObserver {
+public class Blank_Player extends CompetenceInvokerPlayer<String> implements IObserver {
 
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
