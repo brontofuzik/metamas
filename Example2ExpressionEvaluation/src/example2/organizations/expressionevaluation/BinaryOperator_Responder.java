@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation;
 
 import example2.protocols.Protocols;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.Responder;
 
 /**
@@ -16,7 +16,7 @@ public class BinaryOperator_Responder extends Responder {
      * Initializes a new instance of the BinaryOperator_Responder class.
      */
     BinaryOperator_Responder() {
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(
+        addResponder(ProtocolRegistry.getProtocol(
             Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
     }
 }

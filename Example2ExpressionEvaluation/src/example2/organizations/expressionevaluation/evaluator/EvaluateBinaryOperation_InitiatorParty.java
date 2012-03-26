@@ -10,7 +10,7 @@ import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMe
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.receiverstate.SingleReceiverState;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
@@ -56,7 +56,7 @@ public class EvaluateBinaryOperation_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateBinaryOperation_InitiatorParty(Operation operation) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
         
         this.operation = operation;
         

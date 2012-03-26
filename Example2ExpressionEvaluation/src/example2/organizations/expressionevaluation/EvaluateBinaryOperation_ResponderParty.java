@@ -8,7 +8,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.organization.Role;
 import thespian4jade.behaviours.InvokeResponsibilityState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
@@ -48,7 +48,7 @@ public class EvaluateBinaryOperation_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateBinaryOperation_ResponderParty(ACLMessage message) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL), message);
+        super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL), message);
         
         evaluator = message.getSender();
         

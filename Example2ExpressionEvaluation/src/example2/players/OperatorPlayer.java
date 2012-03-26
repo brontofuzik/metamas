@@ -1,14 +1,14 @@
 package example2.players;
 
 import thespian4jade.behaviours.EventHandler;
-import thespian4jade.example.RolePlayer;
+import thespian4jade.example.RoleEnacterPlayer;
 
 /**
  * @author Lukáš Kúdela
  * @since 2012-03-20
  * @version %I% %G%
  */
-public abstract class OperatorPlayer extends RolePlayer {
+public abstract class OperatorPlayer extends RoleEnacterPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
