@@ -9,7 +9,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.InvokeResponsibilityState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.receiverstate.ReceiveAcceptOrRejectProposal;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
@@ -56,7 +56,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * @param message the ACL message
      */
     public EnvelopeAuction_ResponderParty(ACLMessage message) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), message);
+        super(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), message);
         
         // TODO (priority: low) Consider moving this initialization to the 'MyInitialize' state.
         auctioneer = getACLMessage().getSender();

@@ -6,7 +6,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.protocols.Protocols;
 import example3.protocols.englishauction.EnglishAuctionProtocol;
 import jade.core.AID;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 
 /**
  * The 'English auction' protocol initiator party.
@@ -38,7 +38,7 @@ public class EnglishAuction_InitiatorParty extends Auction_InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public EnglishAuction_InitiatorParty() {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL));
     }
       
     // </editor-fold>
