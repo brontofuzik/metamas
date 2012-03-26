@@ -1,4 +1,4 @@
-package thespian4jade.behaviours;
+package thespian4jade.behaviours.states.special;
 
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 

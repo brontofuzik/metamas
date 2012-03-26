@@ -1,9 +1,9 @@
 package thespian4jade.core.player;
 
-import thespian4jade.behaviours.EventHandler;
+import thespian4jade.behaviours.states.special.EventHandler;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;

@@ -3,7 +3,7 @@ package thespian4jade.core.player;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
-import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.states.sender.SendSuccessOrFailure;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;

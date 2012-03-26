@@ -6,7 +6,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionType;
 import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.StateWrapperState;
+import thespian4jade.behaviours.states.special.StateWrapperState;
 
 /**
  * The 'Auction' (synchronous) competence.

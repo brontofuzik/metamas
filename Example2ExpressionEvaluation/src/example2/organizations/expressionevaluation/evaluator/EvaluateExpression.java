@@ -3,7 +3,7 @@ package example2.organizations.expressionevaluation.evaluator;
 import thespian4jade.behaviours.states.FSMBehaviourState;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.StateWrapperState;
+import thespian4jade.behaviours.states.special.StateWrapperState;
 
 /**
  * The 'State expression' (FSM) behaviour.
