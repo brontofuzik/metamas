@@ -3,8 +3,9 @@ package example3.organizations.auction.auctioneer;
 import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
-import example3.protocols.dutchauction.DutchAuctionProtocol;
+import example3.protocols.Protocols;
 import jade.core.AID;
+import thespian4jade.protocols.ProtocolRegistry;
 
 /**
  * The 'Dutch auction' protocol initiator party.
@@ -36,7 +37,7 @@ public class DutchAuction_InitiatorParty extends Auction_InitiatorParty {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public DutchAuction_InitiatorParty() {
-        super(DutchAuctionProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL));
     }
     
     // </editor-fold>

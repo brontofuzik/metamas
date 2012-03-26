@@ -1,14 +1,16 @@
 package thespian4jade.core.player;
 
+import thespian4jade.behaviours.EventHandler;
 import jade.lang.acl.ACLMessage;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.EventMessage;
-import thespian4jade.proto.organizationprotocol.publisheventprotocol.PublishEventProtocol;
+import thespian4jade.core.Event;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.organization.publishevent.EventMessage;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * @author Lukáš Kúdela
@@ -19,7 +21,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private String event;
+    private Event event;
     
     private String argument;
     
@@ -36,7 +38,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
      * @param message 
      */
     public Player_PublishEvent_ResponderParty(ACLMessage message) {
-        super(PublishEventProtocol.getInstance(), message);
+        super(ProtocolRegistry.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL), message);
         
         buildFSM();
     }
@@ -67,11 +69,11 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
      * @param event the event to handle
      * @return the selected event handler
      */
-    private EventHandler selectEventHandler(String event) {
+    private EventHandler selectEventHandler(Event event) {
         Class eventHandlerClass = getMyAgent().eventHandlers.get(event);
         if (eventHandlerClass != null) {
             // The event is handled.
-            EventHandler eventHandler = createEventHandler(eventHandlerClass);
+            EventHandler eventHandler = ClassHelper.instantiateClass(eventHandlerClass);
         
             // Register the event handler state.
             registerState(eventHandler);
@@ -85,39 +87,6 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
             // The event is ignored.
             return null;
         }
-    }
-    
-    /**
-     * Creates a new event handler - an instance of the given event handler class.
-     * @param eventHandlerClass the event handler class
-     * @return a new event handler
-     */
-    private EventHandler createEventHandler(Class eventHandlerClass) {
-        // Get the event handler constructor.
-        Constructor eventHandlerConstructor = null;
-        try {
-            eventHandlerConstructor = eventHandlerClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-        
-        // Instantiate the event handler.
-        EventHandler eventHandler = null;
-        try {
-            eventHandler = (EventHandler)eventHandlerConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-        
-        return eventHandler;
     }
     
     // </editor-fold>
@@ -151,9 +120,9 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     /**
      * The 'Select event handler' (one-shot) state.
      */
-    private class SelectEventHandler extends Initialize {
+    private class SelectEventHandler extends ExitValueState {
 
-        // <editor-fold defaultstate="collapsed" desc="Fields">
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         // ----- Exit values -----
         public static final int HANDLE_EVENT = 1;
@@ -165,7 +134,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        protected int doAction() {
             EventHandler eventHandler = selectEventHandler(event);
             if (eventHandler != null) {
                 // The event is handled.

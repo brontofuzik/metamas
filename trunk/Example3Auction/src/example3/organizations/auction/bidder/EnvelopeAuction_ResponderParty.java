@@ -1,19 +1,20 @@
 package example3.organizations.auction.bidder;
 
-import example3.players.participant.bid.BidArgument;
-import example3.players.participant.bid.BidResult;
-import example3.protocols.envelopeauction.AuctionCFPMessage;
-import example3.protocols.envelopeauction.BidMessage;
-import example3.protocols.envelopeauction.EnvelopeAuctionProtocol;
+import example3.players.bid.BidArgument;
+import example3.players.bid.BidResult;
+import example3.protocols.Protocols;
+import example3.protocols.AuctionCFPMessage;
+import example3.protocols.BidProposeMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InvokeResponsibilityState;
-import thespian4jade.proto.ReceiveAcceptOrRejectProposal;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.InvokeResponsibilityState;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.behaviours.receiverstate.ReceiveAcceptOrRejectProposal;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
 
 /**
  * The 'Envelope auction' protocol responder party.
@@ -55,7 +56,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * @param message the ACL message
      */
     public EnvelopeAuction_ResponderParty(ACLMessage message) {
-        super(EnvelopeAuctionProtocol.getInstance(), message);
+        super(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), message);
         
         // TODO (priority: low) Consider moving this initialization to the 'MyInitialize' state.
         auctioneer = getACLMessage().getSender();
@@ -72,7 +73,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Start();
         IState receiveAuctionCFP = new ReceiveAuctionCFP();
         IState invokeResponsibility_Bid = new InvokeResponsibility_Bid();
         IState sendBid = new SendBid();
@@ -91,8 +92,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, receiveAuctionCFP);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerDefaultTransition(receiveAuctionCFP);
         receiveAuctionCFP.registerDefaultTransition(invokeResponsibility_Bid);       
         invokeResponsibility_Bid.registerDefaultTransition(sendBid);        
         sendBid.registerDefaultTransition(receiveAuctionResult);        
@@ -108,17 +108,24 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * The 'Initialize' state.
      * An (initial) state in which the party is initialized and begins.
      */
-    private class MyInitialize extends Initialize {
+    private class Start extends OneShotBehaviourState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int initialize() {
+        public void action() {
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Envelope auction' protocol (id = %1$s)",
+                "'Envelope auction' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
-            
-            return OK;
         }
         
         // </editor-fold>
@@ -159,7 +166,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * Initializes a new instance of the InvokeResponsibility_Bid class.
          */
         InvokeResponsibility_Bid() {
-            super("Bid_Responsibility");
+            super(Bidder_Role.BID_RESPONSIBILITY);
         }
         
         // </editor-fold>
@@ -194,7 +201,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
      * The 'Send bid' (single-sender) state.
      * A state in which the bid is sent to the auctioneer.
      */
-    private class SendBid extends SingleSenderState<BidMessage> {
+    private class SendBid extends SingleSenderState<BidProposeMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -217,8 +224,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
          * @return the 'Bid' message
          */
         @Override
-        protected BidMessage prepareMessage() {
-            BidMessage message = new BidMessage();
+        protected BidProposeMessage prepareMessage() {
+            BidProposeMessage message = new BidProposeMessage();
             // TODO (priority: low) Also consider the situation when no bid is made.
             message.setBid(bid);
             return message;

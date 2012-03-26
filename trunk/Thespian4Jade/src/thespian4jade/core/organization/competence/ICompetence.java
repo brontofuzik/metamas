@@ -1,6 +1,6 @@
 package thespian4jade.core.organization.competence;
 
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.behaviours.jadeextensions.IState;
 import java.io.Serializable;
 
 /**
@@ -9,7 +9,8 @@ import java.io.Serializable;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public interface ICompetence<TArgument extends Serializable, TResult extends Serializable>
+public interface ICompetence
+    <TArgument extends Serializable, TResult extends Serializable>
     extends IState {
     
     void setArgument(TArgument argument);

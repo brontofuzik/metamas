@@ -3,13 +3,14 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRequestMessage;
-import thespian4jade.proto.roleprotocol.deactivateroleprotocol.DeactivateRoleProtocol;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.SendAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.protocols.role.deactivaterole.DeactivateRequestMessage;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * A 'Deactivate role' protocol responder (new version).
@@ -21,16 +22,20 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID playerAID;
+    /**
+     * The player requesting the role deactivation; more precisely its AID.
+     * The initiator party.
+     */
+    private AID player;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Role_DeactivateRole_ResponderParty(ACLMessage aclMessage) {
-        super(DeactivateRoleProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL), aclMessage);
         
-        playerAID = getACLMessage().getSender();
+        player = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -44,7 +49,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveActivateRequest = new ReceiveDeactivateRequest();
         IState sendActivateReply = new SendDeactivateReply();
         IState successEnd = new SuccessEnd();
@@ -59,8 +64,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         registerLastState(failureEnd);
 
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
         sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
         sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
@@ -70,21 +75,30 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "'Deactivate role' protocol (id = %1$s) responder party started.",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
-            if (playerAID.equals(getMyAgent().playerAID)) {
-                // The sender player is enacting this role.
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
                 return OK;
             } else {
-                // The sender player is not enacting this role.
+                // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be deactivated.
                 return FAIL;
@@ -119,7 +133,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { playerAID };
+            return new AID[] { player };
         }
         
         // </editor-fold>
@@ -134,9 +148,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         @Override
         protected int onManager() {
             if (getMyAgent().isDeactivable()) {            
-                return SendAgreeOrRefuse.AGREE;
+                return AGREE;
             } else {
-                return SendAgreeOrRefuse.REFUSE;
+                return REFUSE;
             }
         }
         
@@ -165,7 +179,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // Publish the 'Role deactivated' event.
             getMyAgent().myOrganization.publishEvent(Event.ROLE_DEACTIVATED,
-                getMyAgent().getRoleName(), playerAID);
+                getMyAgent().getRoleName(), player);
             
             // LOG
             getMyAgent().logInfo(String.format(

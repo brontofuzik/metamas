@@ -1,7 +1,10 @@
 package example3.players;
 
+import thespian4jade.core.Event;
+
 /**
- * The 'Participant1' player.
+ * 'Player1' player - a 'Participant' player playing the 'Auctioneer' role
+ * in the first round and the 'Bidder' role in the second and third rounds.
  * @author Lukáš Kúdela
  * @since 2012-01-20
  * @version %I% %G%
@@ -35,7 +38,11 @@ public class Player1 extends ParticipantPlayer {
         // Add behaviours.
         // Role enactment
         scheduleEnactRole(getAuctioneerRoleFullName(), 2000);
-        scheduleEnactRole(getBidderRoleFullName(), 3000);
+        scheduleEnactRole(getBidderRoleFullName(), 2000);
+        scheduleSubscribeToEvent(getAuctionOrganizationName(), Event.ROLE_ACTIVATED,
+            RoleActivated_EventHandler.class, 3000);
+        scheduleSubscribeToEvent(getAuctionOrganizationName(), Event.ROLE_DEACTIVATED,
+            RoleDeactivated_EventHandler.class, 3000);
         
         // Role activation
         scheduleActivateRole(getAuctioneerRoleFullName(), 8000);

@@ -1,7 +1,7 @@
 package thespian4jade.core.player.responsibility;
 
 import thespian4jade.core.player.Player;
-import thespian4jade.proto.jadeextensions.FSMBehaviourState;
+import thespian4jade.behaviours.jadeextensions.FSMBehaviourState;
 import java.io.Serializable;
 
 /**

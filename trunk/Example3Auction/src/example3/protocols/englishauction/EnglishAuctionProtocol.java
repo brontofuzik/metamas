@@ -3,9 +3,9 @@ package example3.protocols.englishauction;
 import example3.organizations.auction.auctioneer.EnglishAuction_InitiatorParty;
 import example3.organizations.auction.bidder.EnglishAuction_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * The 'English auction' protocol.
@@ -15,30 +15,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EnglishAuctionProtocol extends Protocol {
-    
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EnglishAuctionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Constructors">
-    
-    private EnglishAuctionProtocol() {
-    }
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-    
-    public static EnglishAuctionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EnglishAuctionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 

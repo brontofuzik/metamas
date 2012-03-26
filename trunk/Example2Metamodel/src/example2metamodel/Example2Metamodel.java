@@ -48,25 +48,25 @@ public class Example2Metamodel {
 
         // ---------- Players ----------
         
-        PlayerType player1PlayerType = createPlayer1PlayerType();
-        example2Mas.addPlayerType(player1PlayerType);
-        example2Mas.addPlayer(player1PlayerType.createPlayer("player1"));
+        PlayerType blankPlayerType = createBlankPlayerType();
+        example2Mas.addPlayerType(blankPlayerType);
+        example2Mas.addPlayer(blankPlayerType.createPlayer("player1"));
         
-        PlayerType player2PlayerType = createPlayer2PlayerType();
-        example2Mas.addPlayerType(player2PlayerType);
-        example2Mas.addPlayer(player2PlayerType.createPlayer("player2"));
+        PlayerType additionComputerPlayerType = createAdditionComputerPlayerType();
+        example2Mas.addPlayerType(additionComputerPlayerType);
+        example2Mas.addPlayer(additionComputerPlayerType.createPlayer("player2"));
         
-        PlayerType player3PlayerType = createPlayer3PlayerType();
-        example2Mas.addPlayerType(player3PlayerType);
-        example2Mas.addPlayer(player3PlayerType.createPlayer("player3"));
+        PlayerType subtractionComputerPlayerType = createSubtractionComputerPlayerType();
+        example2Mas.addPlayerType(subtractionComputerPlayerType);
+        example2Mas.addPlayer(subtractionComputerPlayerType.createPlayer("player3"));
         
-        PlayerType player4PlayerType = createPlayer4PlayerType();
-        example2Mas.addPlayerType(player4PlayerType);
-        example2Mas.addPlayer(player4PlayerType.createPlayer("player4"));
+        PlayerType multiplicationComputerPlayerType = createMultiplicationComputerPlayerType();
+        example2Mas.addPlayerType(multiplicationComputerPlayerType);
+        example2Mas.addPlayer(multiplicationComputerPlayerType.createPlayer("player4"));
         
-        PlayerType player5PlayerType = createPlayer5PlayerType();
-        example2Mas.addPlayerType(player5PlayerType);
-        example2Mas.addPlayer(player5PlayerType.createPlayer("player5"));
+        PlayerType divisionComputerPlayerType = createDivisionComputerPlayerType();
+        example2Mas.addPlayerType(divisionComputerPlayerType);
+        example2Mas.addPlayer(divisionComputerPlayerType.createPlayer("player5"));
         
         return example2Mas;
     }
@@ -174,52 +174,52 @@ public class Example2Metamodel {
     
     // ---------- Players ----------
 
-    private static PlayerType createPlayer1PlayerType() {
-        PlayerType player1PlayerType = new PlayerType("Player1");
-        return player1PlayerType;
+    private static PlayerType createBlankPlayerType() {
+        PlayerType blankPlayerType = new PlayerType("Blank_Player");
+        return blankPlayerType;
     }
     
-    private static PlayerType createPlayer2PlayerType() {
-        PlayerType player2PlayerType = new PlayerType("Player2");
+    private static PlayerType createAdditionComputerPlayerType() {
+        PlayerType additionComputerPlayerType = new PlayerType("AdditionComputer_Player");
 
         // The 'Add' responsibility.
         Responsibility addResponsibility = new Responsibility("Add_Responsibility",
         Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
-        player2PlayerType.addResponsibility(addResponsibility);
+        additionComputerPlayerType.addResponsibility(addResponsibility);
         
-        return player2PlayerType;
+        return additionComputerPlayerType;
     }
     
-    private static PlayerType createPlayer3PlayerType() {
-        PlayerType player3PlayerType = new PlayerType("Player3");
+    private static PlayerType createSubtractionComputerPlayerType() {
+        PlayerType subtractionComputerPlayerType = new PlayerType("SubtractionComputer_Player");
         
         // The 'Subtract' responsibility.
         Responsibility subtractResponsibility = new Responsibility("Subtract_Responsibility",
         Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
-        player3PlayerType.addResponsibility(subtractResponsibility);
+        subtractionComputerPlayerType.addResponsibility(subtractResponsibility);
         
-        return player3PlayerType;
+        return subtractionComputerPlayerType;
     }
         
-    private static PlayerType createPlayer4PlayerType() {
-        PlayerType player4PlayerType = new PlayerType("Player4");
+    private static PlayerType createMultiplicationComputerPlayerType() {
+        PlayerType multiplicationComputerPlayerType = new PlayerType("MultiplicationComputer_Player");
         
         // The 'Multiply' responsibility.
         Responsibility multiplyResponsibility = new Responsibility("Multiply_Responsibility",
         Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
-        player4PlayerType.addResponsibility(multiplyResponsibility);
+        multiplicationComputerPlayerType.addResponsibility(multiplyResponsibility);
         
-        return player4PlayerType;
+        return multiplicationComputerPlayerType;
     }
             
-    private static PlayerType createPlayer5PlayerType() {
-        PlayerType player5PlayerType = new PlayerType("Player5");
+    private static PlayerType createDivisionComputerPlayerType() {
+        PlayerType divisionComputerPlayerType = new PlayerType("DivisionComputer_Player");
         
         // The 'Divide' responsibility.
         Responsibility divideResponsibility = new Responsibility("Divide_Responsibility",
         Responsibility.ResponsibilityType.Asynchronous, "OperandPair", "Integer");
-        player5PlayerType.addResponsibility(divideResponsibility);
+        divisionComputerPlayerType.addResponsibility(divideResponsibility);
         
-        return player5PlayerType;
+        return divisionComputerPlayerType;
     }
 }

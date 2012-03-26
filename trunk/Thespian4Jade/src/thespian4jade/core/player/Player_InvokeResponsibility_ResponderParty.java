@@ -3,21 +3,20 @@ package thespian4jade.core.player;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.ResponderParty;
-import thespian4jade.proto.SendSuccessOrFailure;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityProtocol;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.InvokeResponsibilityRequestMessage;
-import thespian4jade.proto.roleprotocol.invokeresponsibilityprotocol.ResponsibilityResultMessage;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.ResponderParty;
+import thespian4jade.behaviours.senderstates.SendSuccessOrFailure;
+import thespian4jade.behaviours.receiverstate.SingleReceiverState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityArgumentMessage;
+import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
+import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.utililites.ClassHelper;
 
 /**
  * A 'Invoke responsibility' protocol responder party (new version).
@@ -31,7 +30,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The role; more precisely, its AID.
+     * The role requesting the responsibility invocation; more precisely its AID.
+     * The initiator party.
      */
     private AID role;
     
@@ -60,11 +60,11 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Player_InvokeResponsibilityResponder class.
+     * Initializes a new instance of the Player_InvokeResponsibility_ResponderParty class.
      * @param aclMessage the ACL message
      */
     public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {
-        super(InvokeResponsibilityProtocol.getInstance(), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL), aclMessage);
 
         role = getACLMessage().getSender();
         
@@ -80,7 +80,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      */
     private void buildFSM() {        
          // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
         IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
@@ -99,8 +99,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         registerLastState(failureEnd);
         
         // Register transitions.
-        initialize.registerTransition(MyInitialize.OK, receiveInvokeResponsibilityRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.OK, receiveInvokeResponsibilityRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);      
         sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.SUCCESS, receiveResponsibilityArgument);
         sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);       
@@ -118,7 +118,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
 //        System.out.println("----- responsibilityClass: " + responsibilityClass + " -----");
         
-        responsibility = createResponsibility(responsibilityClass);
+        responsibility = ClassHelper.instantiateClass(responsibilityClass);
         
         // Register the responsibility-related states.
         registerState(responsibility);
@@ -128,56 +128,30 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         responsibility.registerDefaultTransition(sendResponsibilityResult);
     }
     
-    /**
-     * Creates a new responsibility from its class.
-     * @param responsibilityClass the responsibility class
-     * @return the responsibility instnce
-     */
-    private IResponsibility createResponsibility(Class responsibilityClass) {
-        // Get the responsibility constructor.
-        Constructor responsibilityConstructor = null;
-        try {
-            responsibilityConstructor = responsibilityClass.getConstructor();
-        } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-        }
-//        System.out.println("----- responsibilityConstructor: " + responsibilityConstructor + " -----");
-        
-        // Instantiate the responsibility.
-        IResponsibility responsibility = null;
-        try {
-            responsibility = (IResponsibility)responsibilityConstructor.newInstance();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        } catch (InvocationTargetException ex) {
-            ex.printStackTrace();
-        }        
-//        System.out.println("----- responsibility: " + responsibility + " -----");
-        
-        return responsibility;
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
-                getACLMessage().getConversationId()));
+                getProtocolId()));
         
-            if (role.equals(getMyAgent().knowledgeBase.getActiveRole().getRoleAID())) {
+            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
                 // The sender role is the active role.
                 return OK;
             } else {

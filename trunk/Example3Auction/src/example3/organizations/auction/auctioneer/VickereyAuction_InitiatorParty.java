@@ -1,9 +1,10 @@
 package example3.organizations.auction.auctioneer;
 
 import example3.organizations.auction.auctioneer.auction.AuctionType;
-import example3.protocols.vickreyauction.VickreyAuctionProtocol;
+import example3.protocols.Protocols;
 import jade.core.AID;
 import java.util.Map;
+import thespian4jade.protocols.ProtocolRegistry;
 
 /**
  * The 'Vickerey auction' protocol initiator party.
@@ -17,7 +18,7 @@ public class VickereyAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public VickereyAuction_InitiatorParty() {
-        super(VickreyAuctionProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL));
     }    
     
     // </editor-fold>

@@ -3,9 +3,9 @@ package example2.protocols.evaluateexpression;
 import example2.organizations.expressionevaluation.EvaluateExpression_InitiatorParty;
 import example2.organizations.expressionevaluation.evaluator.EvaluateExpression_ResponderParty;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.Protocol;
-import thespian4jade.proto.ResponderParty;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.Protocol;
+import thespian4jade.behaviours.parties.ResponderParty;
 
 /**
  * @author Lukáš Kúdela
@@ -13,23 +13,6 @@ import thespian4jade.proto.ResponderParty;
  * @version %I% %G%
  */
 public class EvaluateExpressionProtocol extends Protocol {
-
-    // <editor-fold defaultstate="collapsed" desc="Fields">
-    
-    private static EvaluateExpressionProtocol singleton;
-    
-    // </editor-fold>
-    
-    // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
-    
-    public static EvaluateExpressionProtocol getInstance() {
-        if (singleton == null) {
-            singleton = new EvaluateExpressionProtocol();
-        }
-        return singleton;
-    }
-    
-    // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     

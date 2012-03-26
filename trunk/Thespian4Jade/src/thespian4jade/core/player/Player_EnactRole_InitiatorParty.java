@@ -1,19 +1,19 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ReceiveSuccessOrFailure;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRequestMessage;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.EnactRoleProtocol;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
-import thespian4jade.proto.organizationprotocol.enactroleprotocol.RoleAIDMessage;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.SendAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.behaviours.receiverstate.ReceiveSuccessOrFailure;
+import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
+import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
+import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.SingleReceiverState;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Enact role' protocol initiator party.
@@ -25,16 +25,25 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The organization name. */
+    /**
+     * The organization in which to enact the role; more precisely its AID.
+     * The responder party.
+     */
+    private AID organization;
+    
+    /**
+     * The name of the organization in which to enact the role.
+     */
     private String organizationName;
     
-    /** The organization AID. */
-    private AID organizationAID;
-
-    /** The role name */
+    /**
+     * The name of the role to enact.
+     */
     private String roleName;
     
-    /** The role responsibilities. */
+    /**
+     * The responsibilitties of the role.
+     */
     private String[] responsibilities;
 
     // </editor-fold>
@@ -42,7 +51,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Player_EnactRole_InitiatorParty(String organizationName, String roleName) {
-        super(EnactRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert organizationName != null && !organizationName.isEmpty();
         assert roleName != null && !roleName.isEmpty();
@@ -60,7 +69,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendEnactRequest = new SendEnactRequest();
         IState receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
         IState sendResponsibilitiesReply = new SendResponsibilitiesReply();
@@ -70,28 +79,22 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         // ------------------
 
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);     
         registerState(sendEnactRequest);
         registerState(receiveResponsibilitiesInform);
         registerState(sendResponsibilitiesReply);
-        registerState(receiveRoleAID);
-        
+        registerState(receiveRoleAID);       
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendEnactRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
-        
+        initialize.registerTransition(Initialize.OK, sendEnactRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);       
         sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
-
         receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
-        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);
-        
+        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);      
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
-
         receiveRoleAID.registerDefaultTransition(successEnd);
     }
 
@@ -99,23 +102,35 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    /**
+     * The 'My initialize' (initialize) state.
+     */
+    private class Initialize extends ExitValueState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>    
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Enact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
+                "'Enact role' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
             
 //            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages
 //                .searchOrganizationWithRole(this, organizationName, roleName);
             
             // Check if the organization exists.
-            organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-            if (organizationAID != null) {
+            organization = new AID(organizationName, AID.ISLOCALNAME);
+            if (organization != null) {
                 // The organization exists.
                 return OK;
             } else {
@@ -140,7 +155,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -149,6 +164,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending enact request.");
         }
         
@@ -162,6 +178,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Enact request sent.");
         }
 
@@ -187,7 +204,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -222,7 +239,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -271,7 +288,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -280,18 +297,20 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Receiving role AID.");
         }
         
         @Override
         protected void handleMessage(RoleAIDMessage message) {
             AID roleAID = message.getRoleAID();
-            getMyAgent().knowledgeBase.enactRole(roleName, roleAID,
-                organizationAID.getLocalName(), organizationAID);
+            getMyAgent().knowledgeBase.update().enactRole(roleName, roleAID,
+                organization.getLocalName(), organization);
         }
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Role AID received.");
         }
 

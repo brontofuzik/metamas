@@ -1,16 +1,18 @@
 package example2.organizations.expressionevaluation;
 
 import example2.organizations.expressionevaluation.evaluator.Evaluator_Role;
+import example2.protocols.Protocols;
 import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
 import example2.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
 import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
 import thespian4jade.core.organization.Role;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.SingleReceiverState;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.behaviours.receiverstate.SingleReceiverState;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
 
 /**
  * The 'Evalaute expression' protocol initiator party.
@@ -33,7 +35,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public EvaluateExpression_InitiatorParty() {
-        super(EvaluateExpressionProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
         
         buildFSM();
     }

@@ -1,23 +1,24 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObserver;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.ReceiveSuccessOrFailure;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceProtocol;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
-import thespian4jade.proto.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObserver;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.behaviours.receiverstate.ReceiveSuccessOrFailure;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.protocols.role.invokecompetence.InvokeCompetenceRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
+import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
-import thespian4jade.concurrency.IObservable;
-import thespian4jade.concurrency.Observable;
-import thespian4jade.proto.IResultParty;
+import thespian4jade.asynchrony.IObservable;
+import thespian4jade.asynchrony.Observable;
+import thespian4jade.behaviours.parties.IResultParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
 
 /**
  * An 'Invoke competence' protocol initiator party (new version).
@@ -58,12 +59,12 @@ public class Player_InvokeCompetence_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initialize a new instance of the Player_InvokeCompetenceInitiator class.
+     * Initialize a new instance of the Player_InvokeCompetence_InitiatorParty class.
      * @param competenceName the name of the competence
      * @param competenceArgument the competence argument
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName, TArgument competenceArgument) {
-        super(InvokeCompetenceProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();
         // -------------------------
@@ -75,11 +76,18 @@ public class Player_InvokeCompetence_InitiatorParty
     }
     
     /**
-     * Initializes a new instance of the Player_InvokeCompetenceInitiator class.
+     * Initializes a new instance of the Player_InvokeCompetence_InitiatorParty class.
      * @param competenceName the name of the competence
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName) {
         this(competenceName, null);
+    }
+    
+    /**
+     * Initializes a new instance of the Player_InvokeCompetence_InitiatorParty class.
+     */
+    public Player_InvokeCompetence_InitiatorParty() {
+        this("TO BE PROVIDED LATER", null);
     }
  
     // </editor-fold>
@@ -87,11 +95,19 @@ public class Player_InvokeCompetence_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
     
     /**
-     * Gets the competence result.
-     * @return the competence result
+     * Gets the name of the competence.
+     * @return the name of the competence
      */
-    public TResult getCompetenceResult() {
-        return competenceResult;
+    public String getCometenceName() {
+        return competenceName;
+    }
+    
+    /**
+     * Sets the name of the competence.
+     * @param competenceName the name of the competence
+     */
+    public void setCompetenceName(String competenceName) {
+        this.competenceName = competenceName;
     }
     
     /**
@@ -100,6 +116,14 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     public void setCompetenceArgument(TArgument competenceArgument) {
         this.competenceArgument = competenceArgument;
+    }
+    
+    /**
+     * Gets the competence result.
+     * @return the competence result
+     */
+    public TResult getCompetenceResult() {
+        return competenceResult;
     }
     
     /**
@@ -166,7 +190,7 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     private void buildFSM() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendInvokeCompetenceRequest = new SendInvokeCompetenceRequest();
         IState receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
         IState sendCompetenceArgument = new SendCompetenceArgument();
@@ -185,8 +209,8 @@ public class Player_InvokeCompetence_InitiatorParty
         registerLastState(failureEnd);
         
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendInvokeCompetenceRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.OK, sendInvokeCompetenceRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);        
         sendInvokeCompetenceRequest.registerDefaultTransition(receiveCompetenceArgumentRequest);       
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.SUCCESS, sendCompetenceArgument);
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, failureEnd);       
@@ -194,24 +218,35 @@ public class Player_InvokeCompetence_InitiatorParty
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.SUCCESS, successEnd);       
         receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.FAILURE, failureEnd);
     }
+
+
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+    
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Invoke competence' (%1$s) protocol.",
                 competenceName));
 
-            if (getMyAgent().knowledgeBase.canInvokeCompetence(competenceName)) {
+            if (getMyAgent().knowledgeBase.query().canInvokeCompetence(competenceName)) {
                 // The player can invoke the competence.
-                role = getMyAgent().knowledgeBase.getActiveRole().getRoleAID();
+                role = getMyAgent().knowledgeBase.query().getActiveRole().getAID();
                 return OK;
             } else {
                 // The player can not invoke the competence.
@@ -358,8 +393,6 @@ public class Player_InvokeCompetence_InitiatorParty
         @Override
         protected void handleSuccessMessage(CompetenceResultMessage<TResult> message) {
             competenceResult = message.getResult();
-            getMyAgent().knowledgeBase.getActiveRole()
-                .saveCompetenceResult(competenceName, message.getResult());
         }
 
         @Override

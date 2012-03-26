@@ -1,16 +1,16 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.lang.Message;
-import thespian4jade.lang.SimpleMessage;
-import thespian4jade.proto.Initialize;
-import thespian4jade.proto.InitiatorParty;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRequestMessage;
-import thespian4jade.proto.roleprotocol.activateroleprotocol.ActivateRoleProtocol;
-import thespian4jade.proto.SingleSenderState;
-import thespian4jade.proto.jadeextensions.IState;
-import thespian4jade.proto.ReceiveAgreeOrRefuse;
-import thespian4jade.proto.jadeextensions.OneShotBehaviourState;
+import thespian4jade.language.SimpleMessage;
+import thespian4jade.behaviours.ExitValueState;
+import thespian4jade.behaviours.parties.InitiatorParty;
+import thespian4jade.protocols.ProtocolRegistry;
+import thespian4jade.protocols.Protocols;
+import thespian4jade.protocols.role.activaterole.ActivateRequestMessage;
+import thespian4jade.behaviours.senderstates.SingleSenderState;
+import thespian4jade.behaviours.jadeextensions.IState;
+import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
+import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 
 /**
  * An 'Activate role' protocol initiator party (new version).
@@ -33,7 +33,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Player_ActivateRole_InitiatorParty(String roleName) {
-        super(ActivateRoleProtocol.getInstance());
+        super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
         assert roleAID != null;
         // -------------------------
@@ -49,7 +49,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
 
     private void registerStatesAndtransitions() {
         // ----- States -----
-        IState initialize = new MyInitialize();
+        IState initialize = new Initialize();
         IState sendActivateRequest = new SendActivateRequest();
         IState receiveActivateReply = new ReceiveActivateReply();
         IState successEnd = new SuccessEnd();
@@ -66,8 +66,8 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         registerLastState(failureEnd);
 
         // Register the transitions.
-        initialize.registerTransition(MyInitialize.OK, sendActivateRequest);
-        initialize.registerTransition(MyInitialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.OK, sendActivateRequest);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
         
         sendActivateRequest.registerDefaultTransition(receiveActivateReply);
 
@@ -79,20 +79,29 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyInitialize extends Initialize {
+    private class Initialize extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int OK = 1;
+        public static final int FAIL = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int initialize() {
+        public int doAction() {
             getMyAgent().logInfo(String.format(
                 "Initiating the 'Activate role' (%1$s) protocol.",
                 roleName));
 
             // Check if the role can be activated.
-            if (getMyAgent().knowledgeBase.canActivateRole(roleName)) {
+            if (getMyAgent().knowledgeBase.query().canActivateRole(roleName)) {
                 // The role can be activated.
-                roleAID = getMyAgent().knowledgeBase.getEnactedRole(roleName).getRoleAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be activated.
@@ -169,7 +178,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
          */
         @Override
         protected void handleAgreeMessage(SimpleMessage message) {
-            getMyAgent().knowledgeBase.activateRole(roleName);
+            getMyAgent().knowledgeBase.update().activateRole(roleName);
         }
 
         @Override

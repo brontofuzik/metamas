@@ -10,6 +10,14 @@ import thespian4jade.core.organization.Role;
  */
 public class Bidder_Role extends Role {
     
+    // <editor-fold defaultstate="collapsed" desc="Constant fields">
+    
+    public static final String NAME = "Bidder_Role";
+    
+    public static final String BID_RESPONSIBILITY = "Bid_Responsibility";
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     @Override
