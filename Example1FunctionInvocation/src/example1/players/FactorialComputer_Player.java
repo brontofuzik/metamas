@@ -2,7 +2,7 @@ package example1.players;
 
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.EventHandler;
-import thespian4jade.example.RolePlayer;
+import thespian4jade.example.RoleEnacterPlayer;
 
 /**
  * 'Factorial computer' player - the player playing the 'Executer' role.
@@ -10,7 +10,7 @@ import thespian4jade.example.RolePlayer;
  * @since 2011-12-31
  * @version %I% %G%
  */
-public class FactorialComputer_Player extends RolePlayer {
+public class FactorialComputer_Player extends RoleEnacterPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     

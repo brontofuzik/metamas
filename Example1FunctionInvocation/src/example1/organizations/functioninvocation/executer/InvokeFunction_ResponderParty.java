@@ -7,7 +7,7 @@ import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.behaviours.InvokeResponsibilityState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
@@ -38,7 +38,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
      * @param message the received ACL message
      */
     public InvokeFunction_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL), aclMessage);
         
         // TODO (priority: low) Consider moving this initialization to the Initialize' state.
         invokerAID = getACLMessage().getSender();
