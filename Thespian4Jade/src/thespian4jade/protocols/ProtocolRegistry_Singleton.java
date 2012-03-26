@@ -6,6 +6,8 @@ import thespian4jade.utililites.ClassHelper;
 
 /**
  * A protocol registry - singleton version.
+ * Architecture pattern: Registry (Fowler)
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2012-03-21
  * @version %I% %G%

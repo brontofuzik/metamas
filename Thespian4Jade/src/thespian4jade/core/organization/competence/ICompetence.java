@@ -9,7 +9,8 @@ import java.io.Serializable;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public interface ICompetence<TArgument extends Serializable, TResult extends Serializable>
+public interface ICompetence
+    <TArgument extends Serializable, TResult extends Serializable>
     extends IState {
     
     void setArgument(TArgument argument);

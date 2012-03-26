@@ -5,9 +5,9 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import thespian4jade.behaviours.ExitValueState;
-import thespian4jade.protocols.organizationprotocol.enactroleprotocol.EnactRequestMessage;
-import thespian4jade.protocols.organizationprotocol.enactroleprotocol.ResponsibilitiesInformMessage;
-import thespian4jade.protocols.organizationprotocol.enactroleprotocol.RoleAIDMessage;
+import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
+import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
+import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
@@ -15,7 +15,7 @@ import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.senderstates.SendSuccessOrFailure;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import thespian4jade.core.Event;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
 
@@ -42,7 +42,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
        
         player = getACLMessage().getSender();
         
@@ -250,7 +250,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             
             getMyAgent().logInfo("Role agent created.");
             
-            // Create the 'RoleAID' JadeOrg message.
+            // Create the 'RoleAID' message.
             RoleAIDMessage roleAIDMessage = new RoleAIDMessage();
             roleAIDMessage.setRoleAID(role.getAID());
 

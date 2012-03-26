@@ -11,10 +11,10 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
-import thespian4jade.concurrency.Future;
+import thespian4jade.asynchrony.Future;
 import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.behaviours.parties.Party;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
 /**
@@ -135,7 +135,7 @@ public class Role extends Agent {
     public final <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeResponsibility(String responsibilityName, TArgument argument) {
         // Create an 'Invoke responsibility' protocol initiator party.
-        Party invokeResponsibilityInitiator = ProtocolRegistry_StaticClass
+        Party invokeResponsibilityInitiator = ProtocolRegistry
             .getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL)
             .createInitiatorParty(responsibilityName, argument);
         

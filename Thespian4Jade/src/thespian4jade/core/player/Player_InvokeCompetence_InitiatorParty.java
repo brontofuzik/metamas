@@ -1,23 +1,23 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.concurrency.Future;
-import thespian4jade.concurrency.IObserver;
+import thespian4jade.asynchrony.Future;
+import thespian4jade.asynchrony.IObserver;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.behaviours.receiverstate.ReceiveSuccessOrFailure;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
+import thespian4jade.protocols.role.invokecompetence.InvokeCompetenceRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
+import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
-import thespian4jade.concurrency.IObservable;
-import thespian4jade.concurrency.Observable;
+import thespian4jade.asynchrony.IObservable;
+import thespian4jade.asynchrony.Observable;
 import thespian4jade.behaviours.parties.IResultParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
 /**
@@ -64,7 +64,7 @@ public class Player_InvokeCompetence_InitiatorParty
      * @param competenceArgument the competence argument
      */
     public Player_InvokeCompetence_InitiatorParty(String competenceName, TArgument competenceArgument) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
         // ----- Preconditions -----
         assert competenceName != null && !competenceName.isEmpty();
         // -------------------------

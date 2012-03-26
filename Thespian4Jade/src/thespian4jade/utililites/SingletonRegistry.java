@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * A singleton registry.
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%

@@ -9,12 +9,12 @@ import thespian4jade.behaviours.senderstates.SendSuccessOrFailure;
 import thespian4jade.behaviours.receiverstate.SingleReceiverState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.InvokeCompetenceRequestMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceArgumentMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.ArgumentRequestMessage;
-import thespian4jade.protocols.roleprotocol.invokecompetenceprotocol.CompetenceResultMessage;
+import thespian4jade.protocols.role.invokecompetence.InvokeCompetenceRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
+import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
+import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
 
@@ -64,7 +64,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      * @param aclMessage the received ACL message
      */
     public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
         
         player = getACLMessage().getSender();
         

@@ -8,11 +8,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import thespian4jade.concurrency.Future;
+import thespian4jade.asynchrony.Future;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.behaviours.parties.Party;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
 /**
@@ -74,7 +74,7 @@ public abstract class Player extends Agent {
     public final void enactRole(final String organizationName,
         final String roleName) {
         // Create an 'Enact role' protocol initiator party.
-        Party enactRoleInitiator = ProtocolRegistry_StaticClass
+        Party enactRoleInitiator = ProtocolRegistry
             .getProtocol(Protocols.ENACT_ROLE_PROTOCOL)
             .createInitiatorParty(organizationName, roleName);
         
@@ -90,7 +90,7 @@ public abstract class Player extends Agent {
     public final void deactRole(final String organizationName,
         final String roleName) {
         // Create a 'Deact role' protocol initiator party.
-        Party deactRoleInitiator = ProtocolRegistry_StaticClass
+        Party deactRoleInitiator = ProtocolRegistry
             .getProtocol(Protocols.DEACT_ROLE_PROTOCOL)
             .createInitiatorParty(organizationName, roleName);
         
@@ -104,7 +104,7 @@ public abstract class Player extends Agent {
      */
     public final void activateRole(final String roleName) {
         // Create a 'Activate role' potocol initiator party.
-        Party activateRoleInitiator = ProtocolRegistry_StaticClass
+        Party activateRoleInitiator = ProtocolRegistry
             .getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL)
             .createInitiatorParty(roleName);
         
@@ -118,7 +118,7 @@ public abstract class Player extends Agent {
      */
     public final void deactivateRole(final String roleName) {
         // Create a 'Deactivate role' protocol initiator party.
-        Party deactivateRoleInitiator = ProtocolRegistry_StaticClass
+        Party deactivateRoleInitiator = ProtocolRegistry
             .getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL)
             .createInitiatorParty(roleName);
         
@@ -134,7 +134,7 @@ public abstract class Player extends Agent {
     public final <TArgument extends Serializable, TResult extends Serializable>
         Future<TResult> invokeCompetence(final String competenceName, final TArgument argument) {
         // Create an 'Invoke competence' protocol initiator party.
-        Party invokeCompetenceInitiator = ProtocolRegistry_StaticClass
+        Party invokeCompetenceInitiator = ProtocolRegistry
             .getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL)
             .createInitiatorParty(competenceName, argument);
         
@@ -150,7 +150,7 @@ public abstract class Player extends Agent {
     public final void subscribeToEvent(String organizationName, Event event,
         Class eventHandler) {
         // Create a 'Subscribe to event' protocol initiator party.
-        Party subscribeToEventInitiator = ProtocolRegistry_StaticClass
+        Party subscribeToEventInitiator = ProtocolRegistry
             .getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL)
             .createInitiatorParty(organizationName, event, eventHandler);
         

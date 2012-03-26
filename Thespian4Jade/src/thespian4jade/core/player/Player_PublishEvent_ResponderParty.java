@@ -4,12 +4,12 @@ import thespian4jade.behaviours.EventHandler;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.ExitValueState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
 import thespian4jade.behaviours.jadeextensions.IState;
-import thespian4jade.protocols.organizationprotocol.publisheventprotocol.EventMessage;
+import thespian4jade.protocols.organization.publishevent.EventMessage;
 import thespian4jade.utililites.ClassHelper;
 
 /**
@@ -38,7 +38,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
      * @param message 
      */
     public Player_PublishEvent_ResponderParty(ACLMessage message) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL), message);
+        super(ProtocolRegistry.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL), message);
         
         buildFSM();
     }

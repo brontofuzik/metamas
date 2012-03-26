@@ -4,10 +4,10 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.ExitValueState;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
-import thespian4jade.protocols.roleprotocol.activateroleprotocol.ActivateRequestMessage;
+import thespian4jade.protocols.role.activaterole.ActivateRequestMessage;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.senderstates.SendAgreeOrRefuse;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
@@ -33,7 +33,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     public Role_ActivateRole_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL), aclMessage);
+        super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL), aclMessage);
         
         player = getACLMessage().getSender();
         

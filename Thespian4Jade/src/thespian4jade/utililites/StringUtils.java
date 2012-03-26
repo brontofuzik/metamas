@@ -10,6 +10,7 @@ import java.util.Iterator;
  * @version %I% %G%
  */
 public /* static */ class StringUtils {
+    
     public static String join(Iterable objects, String delimiter) {
         Iterator iterator = objects.iterator();       
         if (!iterator.hasNext()) {

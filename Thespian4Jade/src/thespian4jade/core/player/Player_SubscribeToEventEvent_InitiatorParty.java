@@ -5,13 +5,13 @@ import thespian4jade.core.Event;
 import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.receiverstate.ReceiveAgreeOrRefuse;
 import thespian4jade.behaviours.senderstates.SingleSenderState;
 import thespian4jade.behaviours.jadeextensions.IState;
 import thespian4jade.behaviours.jadeextensions.OneShotBehaviourState;
-import thespian4jade.protocols.organizationprotocol.subscribetoeventprotocol.SubscribeRequestMessage;
+import thespian4jade.protocols.organization.subscribetoevent.SubscribeRequestMessage;
 
 /**
  * The 'Subscribe to event' protocol initiator party.
@@ -57,7 +57,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
      */
     public Player_SubscribeToEventEvent_InitiatorParty(String organizationName,
         Event event, Class eventHandlerClass) {
-        super(ProtocolRegistry_StaticClass.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
+        super(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
         
         this.organizationName = organizationName;
         this.event = event;

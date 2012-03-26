@@ -1,6 +1,6 @@
 package thespian4jade.behaviours.parties;
 
-import thespian4jade.concurrency.Future;
+import thespian4jade.asynchrony.Future;
 
 /**
  * @author Lukáš Kúdela
