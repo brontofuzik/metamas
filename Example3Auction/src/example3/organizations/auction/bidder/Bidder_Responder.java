@@ -5,7 +5,7 @@ import example3.protocols.dutchauction.DutchAuctionProtocol;
 import example3.protocols.englishauction.EnglishAuctionProtocol;
 import example3.protocols.vickreyauction.VickreyAuctionProtocol;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.protocols.ProtocolRegistry_StaticClass;
+import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.Responder;
 
 /**
@@ -19,10 +19,10 @@ class Bidder_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Bidder_Responder() {
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry_StaticClass.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL), ACLMessage.CFP);
+        addResponder(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), ACLMessage.CFP);
+        addResponder(ProtocolRegistry.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL), ACLMessage.CFP);
+        addResponder(ProtocolRegistry.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL), ACLMessage.CFP);
+        addResponder(ProtocolRegistry.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL), ACLMessage.CFP);
     }
      
     // </editor-fold>
