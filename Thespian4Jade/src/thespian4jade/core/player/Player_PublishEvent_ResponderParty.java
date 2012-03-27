@@ -64,31 +64,6 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         selectEventHandler.registerTransition(SelectEventHandler.IGNORE_EVENT, end);
     }
     
-    /**
-     * Selects the event handler handling the given event.
-     * @param event the event to handle
-     * @return the selected event handler
-     */
-    private EventHandler selectEventHandler(Event event) {
-        Class eventHandlerClass = getMyAgent().eventHandlers.get(event);
-        if (eventHandlerClass != null) {
-            // The event is handled.
-            EventHandler eventHandler = ClassHelper.instantiateClass(eventHandlerClass);
-        
-            // Register the event handler state.
-            registerState(eventHandler);
-
-            // Register the transitions.
-            selectEventHandler.registerTransition(SelectEventHandler.HANDLE_EVENT, eventHandler);
-            eventHandler.registerDefaultTransition(end);
-
-            return eventHandler;
-        } else {
-            // The event is ignored.
-            return null;
-        }
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
@@ -135,9 +110,18 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         
         @Override
         protected int doAction() {
-            EventHandler eventHandler = selectEventHandler(event);
-            if (eventHandler != null) {
+            Class eventHandlerClass = getMyAgent().eventHandlers.get(event);
+            if (eventHandlerClass != null) {
                 // The event is handled.
+                EventHandler eventHandler = ClassHelper.instantiateClass(eventHandlerClass);
+
+                // Register the event handler state.
+                registerState(eventHandler);
+
+                // Register the transitions.
+                selectEventHandler.registerTransition(SelectEventHandler.HANDLE_EVENT, eventHandler);
+                eventHandler.registerDefaultTransition(end);
+
                 eventHandler.setArgument(argument);
                 return HANDLE_EVENT;
             } else {
