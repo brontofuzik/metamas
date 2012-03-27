@@ -57,20 +57,16 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         // ------------------
 
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);   
         registerState(sendActivateRequest);
-        registerState(receiveActivateReply);
-        
+        registerState(receiveActivateReply);      
         registerLastState(successEnd);
         registerLastState(failureEnd);
 
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        
+        initialize.registerTransition(Initialize.FAIL, failureEnd);     
         sendActivateRequest.registerDefaultTransition(receiveActivateReply);
-
         receiveActivateReply.registerTransition(ReceiveActivateReply.AGREE, successEnd); 
         receiveActivateReply.registerTransition(ReceiveActivateReply.REFUSE, failureEnd);
     }

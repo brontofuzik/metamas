@@ -2,7 +2,6 @@ package thespian4jade.behaviours.states.sender;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.language.Message;
 import thespian4jade.language.SimpleMessage;
 
 /**
