@@ -14,6 +14,7 @@ import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
 import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
+import thespian4jade.behaviours.states.special.StateWrapperState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
@@ -41,14 +42,19 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     private String competenceName;
     
     /**
+     * The competence argument.
+     */
+    private TArgument argument;
+    
+    /**
+     * The competence result.
+     */
+    private TResult result;
+    
+    /**
      * The 'Receive competence argument' state.
      */
     private IState receiveCompetenceArgument;
-    
-    /**
-     * The competence state.
-     */
-    private ICompetence competence;
     
     /**
      * The 'Send competence result' state.
@@ -82,6 +88,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // ----- States -----
         IState initialize = new Initialize();
         IState receiveInvokeCompetenceRequest = new ReceiveInvokeCompetenceRequest();
+        IState selectCompetence = new SelectCompetence();
         IState sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
         receiveCompetenceArgument = new ReceiveCompetenceArgument();
         sendCompetenceResult = new SendCompetenceResult();
@@ -91,7 +98,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         // Register states.
         registerFirstState(initialize);       
-        registerState(receiveInvokeCompetenceRequest);      
+        registerState(receiveInvokeCompetenceRequest);   
+        registerState(selectCompetence);
         registerState(sendCompetenceArgumentRequest);
         registerState(receiveCompetenceArgument);
         registerState(sendCompetenceResult);       
@@ -100,33 +108,12 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         // Register transitions.
         initialize.registerTransition(Initialize.OK, receiveInvokeCompetenceRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);       
-        receiveInvokeCompetenceRequest.registerDefaultTransition(sendCompetenceArgumentRequest);       
-        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.SUCCESS, receiveCompetenceArgument);
-        sendCompetenceArgumentRequest.registerTransition(SendCompetenceArgumentRequest.FAILURE, failureEnd);       
-        sendCompetenceResult.registerTransition(SendCompetenceResult.SUCCESS, successEnd);
-        sendCompetenceResult.registerTransition(SendCompetenceResult.FAILURE, failureEnd);
-    }
-    
-    /**
-     * Selects a competence specified by its name.
-     * @param competenceName the name of the competence to select
-     */
-    private void selectCompetence(String competenceName) {
-//        System.out.println("----- competenceName: " + competenceName + " -----");
-        
-        Class competenceClass = getMyAgent().competences.get(competenceName);
-//        System.out.println("----- competenceClass: " + competenceClass + " -----");
-
-        competence = ClassHelper.instantiateClass(competenceClass);
-        
-        // Register the competence-related states.
-        registerState(competence);
-        
-        // Register the competence-related transitions.
-        receiveCompetenceArgument.registerDefaultTransition(competence);
-        competence.registerDefaultTransition(sendCompetenceResult);
-        //System.out.println("----- COMPETENCE ADDED -----");
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        receiveInvokeCompetenceRequest.registerDefaultTransition(selectCompetence);
+        selectCompetence.registerTransition(SelectCompetence.COMPETENCE_EXISTS, sendCompetenceArgumentRequest);
+        selectCompetence.registerTransition(SelectCompetence.COMPETENCE_DOES_NOT_EXIST, failureEnd);
+        sendCompetenceArgumentRequest.registerDefaultTransition(receiveCompetenceArgument);
+        sendCompetenceResult.registerDefaultTransition(successEnd);
     }
     
     // </editor-fold>
@@ -175,10 +162,44 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
             InvokeCompetenceRequestMessage message = new InvokeCompetenceRequestMessage();
             message.parseACLMessage(getACLMessage());
             
-            competenceName = message.getCompetence();                       
-            selectCompetence(competenceName);
+            competenceName = message.getCompetence();                      
         }
         
+        // </editor-fold>
+    }
+    
+    private class SelectCompetence extends ExitValueState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        static final int COMPETENCE_EXISTS = 1;
+        static final int COMPETENCE_DOES_NOT_EXIST = 2;
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected int doAction() {
+            Class competenceClass = getMyAgent().competences.get(competenceName);
+            if (competenceClass != null) {
+                // The competence exsits.
+                ICompetence competence = ClassHelper.instantiateClass(competenceClass);
+                CompetenceWrapperState competenceWrapper = new CompetenceWrapperState(competence);
+        
+                // Register the competence-related states.
+                registerState(competenceWrapper);
+        
+                // Register the competence-related transitions.
+                receiveCompetenceArgument.registerDefaultTransition(competenceWrapper);
+                competenceWrapper.registerDefaultTransition(sendCompetenceResult);
+                return COMPETENCE_EXISTS;
+            }   else {
+                // The competence does not exist.
+                return COMPETENCE_DOES_NOT_EXIST;
+            }
+        }
+    
         // </editor-fold>
     }
     
@@ -198,6 +219,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Send competence argument request.");
         }
 
@@ -214,6 +236,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Competence argument request sent.");
         }
         
@@ -244,17 +267,44 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Receiving competence argument.");
         }
         
         @Override
         protected void handleMessage(CompetenceArgumentMessage message) {
-            competence.setArgument(message.getArgument());
+            argument = (TArgument)message.getArgument();
         }
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Competence argument received.");
+        }
+        
+        // </editor-fold>
+    }
+      
+    private class CompetenceWrapperState extends StateWrapperState<ICompetence> {
+
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        CompetenceWrapperState(ICompetence competence) {
+            super(competence);
+        } 
+
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void setWrappedStateArgument(ICompetence competence) {
+            competence.setArgument(argument);
+        }
+
+        @Override
+        protected void getWrappedStateResult(ICompetence competence) {
+            result = (TResult)competence.getResult();
         }
         
         // </editor-fold>
@@ -276,6 +326,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending competence result.");
         }
 
@@ -287,12 +338,13 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         @Override
         protected CompetenceResultMessage prepareMessage() {
             CompetenceResultMessage message = new CompetenceResultMessage();
-            message.setResult(competence.getResult());
+            message.setResult(result);
             return message;
         }
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Competence result sent.");
         }
         
@@ -305,7 +357,10 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke competence' responder party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke competence' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
@@ -317,7 +372,10 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke competence' responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke competence' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>
