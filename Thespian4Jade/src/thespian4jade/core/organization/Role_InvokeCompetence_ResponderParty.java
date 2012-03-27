@@ -120,6 +120,9 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' (exit value) state.
+     */
     private class Initialize extends ExitValueState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -135,6 +138,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke competence' protocol (id = %1$s).",
                 getProtocolId()));
@@ -153,6 +157,9 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive invoke competence request' (one-shot) state. 
+     */
     private class ReceiveInvokeCompetenceRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -168,12 +175,17 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
     
+    /**
+     * The 'Select competence' (exit value) state.
+     */
     private class SelectCompetence extends ExitValueState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
+        // ----- Exit values -----
         static final int COMPETENCE_EXISTS = 1;
         static final int COMPETENCE_DOES_NOT_EXIST = 2;
+        // -----------------------
         
         // </editor-fold>
         
@@ -202,7 +214,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
         // </editor-fold>
     }
-    
+   
     private class SendCompetenceArgumentRequest
         extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
@@ -244,7 +256,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     }
     
     private class ReceiveCompetenceArgument
-        extends SingleReceiverState<CompetenceArgumentMessage> {
+        extends SingleReceiverState<CompetenceArgumentMessage<TArgument>> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -272,8 +284,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         }
         
         @Override
-        protected void handleMessage(CompetenceArgumentMessage message) {
-            argument = (TArgument)message.getArgument();
+        protected void handleMessage(CompetenceArgumentMessage<TArgument> message) {
+            argument = message.getArgument();
         }
 
         @Override
@@ -285,7 +297,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
       
-    private class CompetenceWrapperState extends StateWrapperState<ICompetence> {
+    private class CompetenceWrapperState
+        extends StateWrapperState<ICompetence<TArgument, TResult>> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -298,13 +311,13 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(ICompetence competence) {
+        protected void setWrappedStateArgument(ICompetence<TArgument, TResult> competence) {
             competence.setArgument(argument);
         }
 
         @Override
-        protected void getWrappedStateResult(ICompetence competence) {
-            result = (TResult)competence.getResult();
+        protected void getWrappedStateResult(ICompetence<TArgument, TResult> competence) {
+            result = competence.getResult();
         }
         
         // </editor-fold>

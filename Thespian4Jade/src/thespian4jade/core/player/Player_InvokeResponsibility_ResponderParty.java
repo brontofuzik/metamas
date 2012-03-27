@@ -14,6 +14,7 @@ import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
 import java.io.Serializable;
+import thespian4jade.behaviours.states.special.StateWrapperState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
@@ -41,14 +42,19 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     private String responsibilityName;
     
     /**
+     * The responsibility argument.
+     */
+    private TArgument argument;
+    
+    /**
+     * The responsibility result.
+     */
+    private TResult result;
+    
+    /**
      * The 'Receive responsibility argument' state.
      */
     private IState receiveResponsibilityArgument;
-    
-    /**
-     * The responsibility state.
-     */
-    private IResponsibility<TArgument, TResult> responsibility;
     
     /**
      * The 'Send responsibility result' state.
@@ -82,6 +88,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
          // ----- States -----
         IState initialize = new Initialize();
         IState receiveInvokeResponsibilityRequest = new ReceiveInvokeResponsibilityRequest();
+        IState selectResponsibility = new SelectResponsibility();
         IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
         sendResponsibilityResult = new SendResponsibilityResult();
@@ -91,7 +98,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         // Register states.
         registerFirstState(initialize);        
-        registerState(receiveInvokeResponsibilityRequest);    
+        registerState(receiveInvokeResponsibilityRequest);
+        registerState(selectResponsibility);
         registerState(sendResponsibilityArgumentRequest);
         registerState(receiveResponsibilityArgument);
         registerState(sendResponsibilityResult);      
@@ -100,38 +108,21 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         // Register transitions.
         initialize.registerTransition(Initialize.OK, receiveInvokeResponsibilityRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);       
-        receiveInvokeResponsibilityRequest.registerDefaultTransition(sendResponsibilityArgumentRequest);      
-        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.SUCCESS, receiveResponsibilityArgument);
-        sendResponsibilityArgumentRequest.registerTransition(SendResponsibilityArgumentRequest.FAILURE, failureEnd);       
-        sendResponsibilityResult.registerTransition(SendResponsibilityResult.SUCCESS, successEnd);
-        sendResponsibilityResult.registerTransition(SendResponsibilityResult.FAILURE, failureEnd);
-    }
-    
-    /**
-     * Selets a responsibility specified by its name
-     * @param responsibilityName the name of the responsibility to select
-     */
-    private void selectResponsibility(String responsibilityName) {
-//        System.out.println("----- responsibilityName: " + responsibilityName + " -----");
-        
-        Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
-//        System.out.println("----- responsibilityClass: " + responsibilityClass + " -----");
-        
-        responsibility = ClassHelper.instantiateClass(responsibilityClass);
-        
-        // Register the responsibility-related states.
-        registerState(responsibility);
-        
-        // Register the responsibility-related transitions.
-        receiveResponsibilityArgument.registerDefaultTransition(responsibility);
-        responsibility.registerDefaultTransition(sendResponsibilityResult);
+        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        receiveInvokeResponsibilityRequest.registerDefaultTransition(selectResponsibility);
+        selectResponsibility.registerTransition(SelectResponsibility.RESPONSIBILITY_EXISTS, sendResponsibilityArgumentRequest);
+        selectResponsibility.registerTransition(SelectResponsibility.RESPONSIBILITY_DOES_NOT_EXIST, failureEnd);
+        sendResponsibilityArgumentRequest.registerDefaultTransition(receiveResponsibilityArgument);
+        sendResponsibilityResult.registerDefaultTransition(successEnd);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' (exit value) state.
+     */
     private class Initialize extends ExitValueState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -147,6 +138,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
 
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
                 "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
                 getProtocolId()));
@@ -165,6 +157,9 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive invoke responsibility request' (one-shot) state.
+     */
     private class ReceiveInvokeResponsibilityRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -175,9 +170,48 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
             message.parseACLMessage(getACLMessage());
             
             responsibilityName = message.getResponsibility();         
-            selectResponsibility(responsibilityName);
         }
         
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Select responsbility' (exit value) state.
+     */
+    private class SelectResponsibility extends ExitValueState {
+
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        static final int RESPONSIBILITY_EXISTS = 1;
+        static final int RESPONSIBILITY_DOES_NOT_EXIST = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected int doAction() {
+            Class responsibilityClass = getMyAgent().responsibilities.get(responsibilityName);
+            if (responsibilityClass != null) {
+                // The responsibility exsits.
+                IResponsibility responsibility = ClassHelper.instantiateClass(responsibilityClass);
+                ResponsibilityWrapperState responsibilityWrapper = new ResponsibilityWrapperState(responsibility);
+        
+                // Register the responsibility-related states.
+                registerState(responsibilityWrapper);
+        
+                // Register the responsibility-related transitions.
+                receiveResponsibilityArgument.registerDefaultTransition(responsibilityWrapper);
+                responsibilityWrapper.registerDefaultTransition(sendResponsibilityResult);
+                return RESPONSIBILITY_EXISTS;
+            }   else {
+                // The responsibility does not exist.
+                return RESPONSIBILITY_DOES_NOT_EXIST;
+            }
+        }
+    
         // </editor-fold>
     }
     
@@ -197,6 +231,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
 
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Send responsibility argument request.");
         }
 
@@ -213,6 +248,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Responsibility argument request sent.");
         }
         
@@ -243,6 +279,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Receiving responsibility argument.");
         }
         
@@ -252,7 +289,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
          */
         @Override
         protected void handleMessage(ResponsibilityArgumentMessage<TArgument> message) {
-            responsibility.setArgument(message.getArgument());
+            argument = message.getArgument();
         }
 
         @Override
@@ -262,6 +299,33 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         // </editor-fold>
     }
+    
+    private class ResponsibilityWrapperState
+        extends StateWrapperState<IResponsibility<TArgument, TResult>> {
+
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
+        
+        ResponsibilityWrapperState(IResponsibility responsibility) {
+            super(responsibility);
+        } 
+
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        protected void setWrappedStateArgument(IResponsibility<TArgument, TResult> responsibility) {
+            responsibility.setArgument(argument);
+        }
+
+        @Override
+        protected void getWrappedStateResult(IResponsibility<TArgument, TResult> responsibility) {
+            result = responsibility.getResult();
+        }
+        
+        // </editor-fold>
+    }
+    
     
     private class SendResponsibilityResult
         extends SendSuccessOrFailure<ResponsibilityResultMessage> {
@@ -279,6 +343,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         @Override
         protected void onEntry() {
+            // LOG
             getMyAgent().logInfo("Sending responsibility result.");
         }
 
@@ -290,37 +355,50 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         @Override
         protected ResponsibilityResultMessage prepareMessage() {
             ResponsibilityResultMessage message = new ResponsibilityResultMessage();
-            message.setResult(responsibility.getResult());
+            message.setResult(result);
             return message;
         }
 
         @Override
         protected void onExit() {
+            // LOG
             getMyAgent().logInfo("Responsibility result sent.");
         }
         
         // </editor-fold>
     }
     
+    /**
+     * The 'Success end' (one-shot) state.
+     */
     private class SuccessEnd extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke responsibility' responder party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke responsibility' protocol (id = %1$s) responder party succeeded.",
+                getProtocolId()));
         }
         
         // </editor-fold>
     }
     
+    /**
+     * The 'Failure end' (one-shot) state.
+     */
     private class FailureEnd extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("The 'Invoke responsibility' responder party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Invoke competence' protocol (id = %1$s) responder party failed.",
+                getProtocolId()));
         }
         
         // </editor-fold>
