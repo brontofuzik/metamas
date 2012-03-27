@@ -57,20 +57,16 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         IState failureEnd = new FailureEnd();
 
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);      
         registerState(receiveDeactRequest);
-        registerState(sendDeactReply);
-        
+        registerState(sendDeactReply);      
         registerLastState(successEnd);
         registerLastState(failureEnd);
         
         // Register the transisions.
         initialize.registerTransition(Initialize.OK, receiveDeactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        
+        initialize.registerTransition(Initialize.FAIL, failureEnd);      
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
-
         sendDeactReply.registerTransition(SendAgreeOrRefuse.AGREE, successEnd);
         sendDeactReply.registerTransition(SendAgreeOrRefuse.REFUSE, failureEnd);
     }
