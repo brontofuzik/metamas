@@ -109,12 +109,11 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int doAction() {
-            DeactivateRequestMessage message = new DeactivateRequestMessage();
-            message.parseACLMessage(getACLMessage());
-            
+        public int doAction() {            
             if (player.equals(getMyAgent().enactingPlayer)) {
                 // The initiator player is enacting this role.
+                DeactivateRequestMessage message = new DeactivateRequestMessage();
+                message.parseACLMessage(getACLMessage());
                 return ROLE_ENACTED;
             } else {
                 // The initiator player is not enacting this role.

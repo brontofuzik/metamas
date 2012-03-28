@@ -45,9 +45,7 @@ public class Organization_SubscribeToEvent_ResponderParty
      */
     public Organization_SubscribeToEvent_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL), message);
-        
-        player = message.getSender();
-        
+       
         buildFSM();
     }
     
@@ -63,22 +61,22 @@ public class Organization_SubscribeToEvent_ResponderParty
         IState initialize = new Initialize();
         IState receiveSubscribeRequest = new ReceiveSubscribeRequest();
         IState sendSubscribeReply = new SendSubscribeReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState subscribedToEvent = new SubscribedToEvent();
+        IState notSubscribedToEvent = new NotSubscribedToEvent();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);
         registerState(receiveSubscribeRequest);
         registerState(sendSubscribeReply);
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(subscribedToEvent);
+        registerLastState(notSubscribedToEvent);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, receiveSubscribeRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        receiveSubscribeRequest.registerDefaultTransition(sendSubscribeReply);
-        sendSubscribeReply.registerDefaultTransition(successEnd);
+        initialize.registerDefaultTransition(receiveSubscribeRequest);
+        receiveSubscribeRequest.registerTransition(ReceiveSubscribeRequest.PLAYER_IS_EMPLOYED, sendSubscribeReply);
+        receiveSubscribeRequest.registerTransition(ReceiveSubscribeRequest.PLAYER_IS_NOT_EMPLOYED, notSubscribedToEvent);
+        sendSubscribeReply.registerDefaultTransition(subscribedToEvent);
     }
     
     // </editor-fold>
@@ -88,13 +86,36 @@ public class Organization_SubscribeToEvent_ResponderParty
     /**
      * The 'Initialize' (initialize) state.
      */
-    private class Initialize extends ExitValueState {
+    private class Initialize extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Subscribe to event' protocol (id = %1$s) responder party started.",
+                getProtocolId()));
+        
+            player = getACLMessage().getSender();
+        }
+        
+        // </editor-fold>
+
+
+    }
+    
+    /**
+     * The 'Receive subscribe request' (single receiver) message.
+     */
+    private class ReceiveSubscribeRequest
+        extends ExitValueState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
+        static final int PLAYER_IS_EMPLOYED = 1;
+        static final int PLAYER_IS_NOT_EMPLOYED = 2;
         // -----------------------
         
         // </editor-fold>
@@ -102,39 +123,19 @@ public class Organization_SubscribeToEvent_ResponderParty
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int doAction() {
-            getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) responder party started.",
-                getProtocolId()));
-        
-            if (getMyAgent().knowledgeBase.query().doesPlayerEnact(player)) {
+        public int doAction() {   
+            if (getMyAgent().knowledgeBase.query().doesPlayerEnact(player)) {         
                 // The initiator player is employed (enacts a role) in this organization.
-                return OK;
+                SubscribeRequestMessage message = new SubscribeRequestMessage();
+                message.parseACLMessage(getACLMessage());
+                event = message.getEvent();
+                return PLAYER_IS_EMPLOYED;
             } else {
                 // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be activated.
-                return FAIL;
+                return PLAYER_IS_NOT_EMPLOYED;
             }
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Receive subscribe request' (single receiver) message.
-     */
-    private class ReceiveSubscribeRequest
-        extends OneShotBehaviourState {
-
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            SubscribeRequestMessage message = new SubscribeRequestMessage();
-            message.parseACLMessage(getACLMessage());
-            
-            event = message.getEvent();
         }
         
         // </editor-fold>
@@ -182,9 +183,9 @@ public class Organization_SubscribeToEvent_ResponderParty
     }
     
     /**
-     * The 'Success end' (one-shot) state.
+     * The 'Subscribed to event' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class SubscribedToEvent extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -192,7 +193,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) responder party succeeded.",
+                "'Subscribe to event' protocol (id = %1$s) responder party ended: subscribed to event.",
                 getProtocolId()));
         }
         
@@ -200,9 +201,9 @@ public class Organization_SubscribeToEvent_ResponderParty
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
+     * The 'Not subscribed to event' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class NotSubscribedToEvent extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -210,7 +211,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) responder party failure.",
+                "'Subscribe to event' protocol (id = %1$s) responder party ended: not subscribed to event.",
                 getProtocolId()));
         }
         
