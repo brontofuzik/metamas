@@ -1,0 +1,6 @@
+To-do:
+
+* Register the organization type with directory facilitator and create the organization instances at run-time.
+* An organization can initiate the 'Enact role' protocol and a role can initiate the 'Activate role' protocol.
+* Employ the message classes fluent interfaces.
+* Consider introducing sequential state/party.
