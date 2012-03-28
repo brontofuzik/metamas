@@ -3,7 +3,6 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
@@ -37,8 +36,6 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL), aclMessage);
 
-        player = getACLMessage().getSender();
-
         buildFSM();
     }
     
@@ -53,49 +50,39 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         IState initialize = new Initialize();
         IState receiveDeactRequest = new ReceiveDeactRequest();
         IState sendDeactReply = new SendDeactReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleDeacted = new SuccessEnd();
+        IState roleEnacted = new FailureEnd();
 
         // Register the states.
         registerFirstState(initialize);      
         registerState(receiveDeactRequest);
         registerState(sendDeactReply);      
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleDeacted);
+        registerLastState(roleEnacted);
         
         // Register the transisions.
-        initialize.registerTransition(Initialize.OK, receiveDeactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);      
+        initialize.registerDefaultTransition(receiveDeactRequest);    
         receiveDeactRequest.registerDefaultTransition(sendDeactReply);
-        sendDeactReply.registerTransition(SendAgreeOrRefuse.AGREE, successEnd);
-        sendDeactReply.registerTransition(SendAgreeOrRefuse.REFUSE, failureEnd);
+        sendDeactReply.registerTransition(SendAgreeOrRefuse.AGREE, roleDeacted);
+        sendDeactReply.registerTransition(SendAgreeOrRefuse.REFUSE, roleEnacted);
     }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends ExitValueState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
-        // -----------------------
-        
-        // </editor-fold>
+    private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
-        
+
         @Override
-        public int doAction() {
+        public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
             
-            return OK;
+            player = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -113,6 +100,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         public void action() {
             DeactRequestMessage message = new DeactRequestMessage();
             message.parseACLMessage(getACLMessage());
+            
             roleName = message.getRoleName();
         }
         
@@ -183,8 +171,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     }
     
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Deact role' responder party succeedes.
+     * The 'Role deacted' final (one-shot) state.
      */
     private class SuccessEnd extends OneShotBehaviourState {      
         
@@ -197,7 +184,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deact role' protocol (id = %1$s) responder party succeeded.",
+                "'Deact role' protocol (id = %1$s) responder party ended; role was enacted.",
                 getProtocolId()));
         }
         
@@ -205,8 +192,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     }
     
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Deact role' responder party fails.
+     * The 'Role Not Deacted' final (one-shot) state.
      */
     private class FailureEnd extends OneShotBehaviourState {
         
@@ -216,7 +202,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deact role' protocol (id = %1$s) responder party failed.",
+                "'Deact role' protocol (id = %1$s) responder party ended; role was not enacted.",
                 getProtocolId()));
         }
         

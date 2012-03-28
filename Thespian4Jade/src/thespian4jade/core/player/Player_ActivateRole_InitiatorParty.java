@@ -1,6 +1,7 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
+import jade.core.behaviours.OneShotBehaviour;
 import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
@@ -54,23 +55,22 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         IState initialize = new Initialize();
         IState sendActivateRequest = new SendActivateRequest();
         IState receiveActivateReply = new ReceiveActivateReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleActivated = new RoleActivated();
+        IState roleNotActivated = new RoleNotActivated();
         // ------------------
 
         // Register the states.
         registerFirstState(initialize);   
         registerState(sendActivateRequest);
         registerState(receiveActivateReply);      
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleActivated);
+        registerLastState(roleNotActivated);
 
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, sendActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);     
+        initialize.registerDefaultTransition(sendActivateRequest); 
         sendActivateRequest.registerDefaultTransition(receiveActivateReply);
-        receiveActivateReply.registerTransition(ReceiveActivateReply.AGREE, successEnd); 
-        receiveActivateReply.registerTransition(ReceiveActivateReply.REFUSE, failureEnd);
+        receiveActivateReply.registerTransition(ReceiveActivateReply.AGREE, roleActivated); 
+        receiveActivateReply.registerTransition(ReceiveActivateReply.REFUSE, roleNotActivated);
     }
 
     // </editor-fold>
@@ -86,7 +86,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         public static final int FAIL = 2;
         // -----------------------
         
-        // </editor-fold>
+        // </editor-fold>  
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -94,7 +94,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         public int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Activate role' protocol (id = %1$s) iniitator party started.",
+                "'Activate role' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
 
             // Check if the role can be activated.
@@ -188,32 +188,36 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     }
         
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Activate role' protocol initiator party succeeds.
+     * The 'Role activated' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleActivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role initiator party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) initiator party ended; role was actiavted.",
+                getProtocolId()));
         }
 
         // </editor-fold>
     }
         
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Activate role' protocol initiator party fails.
+     * The 'Role activated' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotActivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Activate role initiator party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Activate role' protocol (id = %1$s) initiator party ended; role was not actiavted.",
+                getProtocolId()));
         }
 
         // </editor-fold>

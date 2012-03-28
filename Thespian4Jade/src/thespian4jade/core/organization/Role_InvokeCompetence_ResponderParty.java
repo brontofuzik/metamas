@@ -71,9 +71,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
      */
     public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
-        
-        player = getACLMessage().getSender();
-        
+                
         buildFSM();
     }
     
@@ -92,8 +90,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         IState sendCompetenceArgumentRequest = new SendCompetenceArgumentRequest();
         receiveCompetenceArgument = new ReceiveCompetenceArgument();
         sendCompetenceResult = new SendCompetenceResult();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState competenceInvoked = new CompetenceInvoked();
+        IState competenceNotInvoked = new CompetenceNotInvoked();
         // ------------------
         
         // Register states.
@@ -103,17 +101,17 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         registerState(sendCompetenceArgumentRequest);
         registerState(receiveCompetenceArgument);
         registerState(sendCompetenceResult);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(competenceInvoked);
+        registerLastState(competenceNotInvoked);
         
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveInvokeCompetenceRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        receiveInvokeCompetenceRequest.registerDefaultTransition(selectCompetence);
+        initialize.registerDefaultTransition(receiveInvokeCompetenceRequest);
+        receiveInvokeCompetenceRequest.registerTransition(ReceiveInvokeCompetenceRequest.ROLE_ACTIVE, selectCompetence);
+        receiveInvokeCompetenceRequest.registerTransition(ReceiveInvokeCompetenceRequest.ROLE_NOT_ACTIVE, competenceNotInvoked);
         selectCompetence.registerTransition(SelectCompetence.COMPETENCE_EXISTS, sendCompetenceArgumentRequest);
-        selectCompetence.registerTransition(SelectCompetence.COMPETENCE_DOES_NOT_EXIST, failureEnd);
+        selectCompetence.registerTransition(SelectCompetence.COMPETENCE_DOES_NOT_EXIST, competenceNotInvoked);
         sendCompetenceArgumentRequest.registerDefaultTransition(receiveCompetenceArgument);
-        sendCompetenceResult.registerDefaultTransition(successEnd);
+        sendCompetenceResult.registerDefaultTransition(competenceInvoked);
     }
     
     // </editor-fold>
@@ -121,37 +119,20 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (exit value) state.
+     * The 'Initialize' initial (exit value) state.
      */
-    private class Initialize extends ExitValueState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
-        // -----------------------
-        
-        // </editor-fold>
+    private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int doAction() {
+        public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Invoke competence' protocol (id = %1$s).",
+                "'Invoke competence' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
         
-            if (player.equals(getMyAgent().enactingPlayer)) {
-                // The initiator player is enacting this role.
-                return OK;
-            } else {
-                // The initiator player is not enacting this role.
-                // TODO (priority: low) Send a message to the player exaplaining
-                // that a competence cannot be invoked on a non-enacted role.
-                return FAIL;
-            }
+            player = getACLMessage().getSender();
         }      
     
         // </editor-fold>
@@ -160,16 +141,34 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     /**
      * The 'Receive invoke competence request' (one-shot) state. 
      */
-    private class ReceiveInvokeCompetenceRequest extends OneShotBehaviourState {
+    private class ReceiveInvokeCompetenceRequest extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        public static final int ROLE_ACTIVE = 1;
+        public static final int ROLE_NOT_ACTIVE = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            InvokeCompetenceRequestMessage message = new InvokeCompetenceRequestMessage();
-            message.parseACLMessage(getACLMessage());
+        protected int doAction() {
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is enacting this role.
+                InvokeCompetenceRequestMessage message = new InvokeCompetenceRequestMessage();
+                message.parseACLMessage(getACLMessage());
             
-            competenceName = message.getCompetence();                      
+                competenceName = message.getCompetence();  
+                return ROLE_ACTIVE;
+            } else {
+                // The initiator player is not enacting this role.
+                // TODO (priority: low) Send a message to the player exaplaining
+                // that a competence cannot be invoked on a non-enacted role.
+                return ROLE_NOT_ACTIVE;
+            }          
         }
         
         // </editor-fold>
@@ -364,7 +363,10 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
     
-    private class SuccessEnd extends OneShotBehaviourState {
+    /**
+     * The 'Competence invoked' final (one-shot) state.
+     */
+    private class CompetenceInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -372,14 +374,17 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) responder party succeeded.",
+                "'Invoke competence' protocol (id = %1$s) responder party ended; competence was invoked.",
                 getProtocolId()));
         }
         
         // </editor-fold>
     }
     
-    private class FailureEnd extends OneShotBehaviourState {
+    /**
+     * The 'Competence not invoked' final (one-shot) state.
+     */
+    private class CompetenceNotInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -387,7 +392,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) responder party failed.",
+                "'Invoke competence' protocol (id = %1$s) responder party ended; compatence was not invoked.",
                 getProtocolId()));
         }
         

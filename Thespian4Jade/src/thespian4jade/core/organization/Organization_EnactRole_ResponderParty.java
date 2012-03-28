@@ -4,7 +4,6 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
 import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
 import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
@@ -43,8 +42,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
-       
-        player = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -63,8 +60,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         IState sendResponsibilitiesInform = new SendResponsibilitiesInform();
         IState receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
         IState sendRoleAID = new SendRoleAID();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleEnacted = new RoleEnacted();
+        IState roleNotEnacted = new RoleNotEnacted();
         // ------------------
         
         // Register the states.
@@ -73,45 +70,35 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         registerState(sendResponsibilitiesInform);
         registerState(receiveResponsibilitiesReply);
         registerState(sendRoleAID);     
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleEnacted);
+        registerLastState(roleNotEnacted);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.OK, receiveEnactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);     
+        initialize.registerDefaultTransition(receiveEnactRequest);  
         receiveEnactRequest.registerDefaultTransition(sendResponsibilitiesInform);
         sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.SUCCESS, receiveResponsibilitiesReply);
-        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, failureEnd);       
+        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, roleNotEnacted);       
         receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.AGREE, sendRoleAID);
-        receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.REFUSE, failureEnd);   
-        sendRoleAID.registerDefaultTransition(successEnd);
+        receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.REFUSE, roleNotEnacted);   
+        sendRoleAID.registerDefaultTransition(roleEnacted);
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends ExitValueState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
-        // -----------------------
-        
-        // </editor-fold>
+    private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int doAction() {
+        public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
             
-            return OK;
+            player = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -122,9 +109,11 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        public void action() {
+        public void action() {  
+            // Receive the 'Enact request' message.
             EnactRequestMessage message = new EnactRequestMessage();
             message.parseACLMessage(getACLMessage());
+            
             roleName = message.getRoleName();
         }
         
@@ -279,10 +268,9 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     }
     
     /**
-     * The 'Success end' state.
-     * A state in which the 'Enact role' responder party succeedes.
+     * The 'Role enacted' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleEnacted extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -293,7 +281,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) responder party succeeded.",
+                "'Enact role' protocol (id = %1$s) responder party ended; role was enacted.",
                 getProtocolId()));
         }
 
@@ -301,10 +289,9 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     }
 
     /**
-     * The 'Failure end' state.
-     * A state in which the 'Enact role' responder party fails.
+     * The 'Role not enacted' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotEnacted extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -312,7 +299,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) responder party failed.",
+                "'Enact role' protocol (id = %1$s) responder party ended; role was not enacted.",
                 getProtocolId()));
         }
 

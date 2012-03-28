@@ -45,6 +45,11 @@ public class Player_SubscribeToEventEvent_InitiatorParty
      */
     private final Class eventHandlerClass;
     
+    /**
+     * The error message.
+     */
+    private String errorMessage;
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -78,22 +83,22 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         IState initialize = new Initialize();
         IState sendSubscribeRequest = new SendSubscribeRequest();
         IState receiveSubscribeReply = new ReceiveSubscribeReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState eventSubscribedTo = new EventSubscribedTo();
+        IState eventNotSubscribedTo = new EventNotSubscribedTo();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);
         registerState(sendSubscribeRequest);
         registerState(receiveSubscribeReply);
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(eventSubscribedTo);
+        registerLastState(eventNotSubscribedTo);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendSubscribeRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.FAIL, eventNotSubscribedTo);
         sendSubscribeRequest.registerDefaultTransition(receiveSubscribeReply);
-        receiveSubscribeReply.registerDefaultTransition(successEnd);
+        receiveSubscribeReply.registerDefaultTransition(eventSubscribedTo);
     }
     
     // </editor-fold>
@@ -115,6 +120,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         
         @Override
         protected int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
                 "'Subscribe to event' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
@@ -126,8 +132,8 @@ public class Player_SubscribeToEventEvent_InitiatorParty
                 return OK;
             } else {
                 // The organization does not exist.
-                String message = String.format(
-                    "Error enacting a role. The organization '%1$s' does not exist.",
+                errorMessage = String.format(
+                    "Can not subscribe to event, because the organization called '%1$s' does not exist.",
                     organizationName);
                 return FAIL;
             }
@@ -212,9 +218,9 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     }
     
     /**
-     * The 'Success end' (one-shot) state.
+     * The 'Event subscribed to' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class EventSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -222,7 +228,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) initiator party succeeded.",
+                "'Subscribe to event' protocol (id = %1$s) initiator party ended; event subscribed to.",
                 getProtocolId()));
         }
         
@@ -230,9 +236,9 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
+     * The 'Event not subscribed to' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class EventNotSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -240,7 +246,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) initiator party failed.",
+                "'Subscribe to event' protocol (id = %1$s) initiator party ended: event not subscribed to.",
                 getProtocolId()));
         }
         

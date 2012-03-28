@@ -52,6 +52,11 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     private TResult competenceResult;
     
+    /**
+     * The error message.
+     */
+    private String errorMessage;
+    
     private IObservable observable = new Observable();
     
     // </editor-fold>
@@ -195,8 +200,8 @@ public class Player_InvokeCompetence_InitiatorParty
         IState receiveCompetenceArgumentRequest = new ReceiveCompetenceArgumentRequest();
         IState sendCompetenceArgument = new SendCompetenceArgument();
         IState receiveCompetenceResult = new ReceiveCompetenceResult();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState competenceInvoked = new CompetenceInvoked();
+        IState competenceNotInvoked = new CompetenceNotInvoked();
         // ------------------
         
         // Register the states.
@@ -205,21 +210,19 @@ public class Player_InvokeCompetence_InitiatorParty
         registerState(receiveCompetenceArgumentRequest);
         registerState(sendCompetenceArgument);
         registerState(receiveCompetenceResult);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(competenceInvoked);
+        registerLastState(competenceNotInvoked);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendInvokeCompetenceRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);        
+        initialize.registerTransition(Initialize.FAIL, competenceNotInvoked);        
         sendInvokeCompetenceRequest.registerDefaultTransition(receiveCompetenceArgumentRequest);       
         receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.SUCCESS, sendCompetenceArgument);
-        receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, failureEnd);       
+        receiveCompetenceArgumentRequest.registerTransition(ReceiveCompetenceArgumentRequest.FAILURE, competenceNotInvoked);       
         sendCompetenceArgument.registerDefaultTransition(receiveCompetenceResult);        
-        receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.SUCCESS, successEnd);       
-        receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.FAILURE, failureEnd);
+        receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.SUCCESS, competenceInvoked);       
+        receiveCompetenceResult.registerTransition(ReceiveCompetenceResult.FAILURE, competenceNotInvoked);
     }
-
-
     
     // </editor-fold>
     
@@ -240,9 +243,10 @@ public class Player_InvokeCompetence_InitiatorParty
         
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Invoke competence' (%1$s) protocol.",
-                competenceName));
+                "'Invoke competence' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
             if (getMyAgent().knowledgeBase.query().canInvokeCompetence(competenceName)) {
                 // The player can invoke the competence.
@@ -250,9 +254,9 @@ public class Player_InvokeCompetence_InitiatorParty
                 return OK;
             } else {
                 // The player can not invoke the competence.
-                String message = String.format(
-                    "I cannot invoke the competence '%1$s'.",
-                    competenceName);
+                errorMessage = String.format(
+                    "Competence can not be invoked, because the role called %1$s is not active.",
+                    role.getLocalName());
                 return FAIL;
             }
         }
@@ -404,10 +408,9 @@ public class Player_InvokeCompetence_InitiatorParty
     }
     
     /**
-     * The 'Success end' (one-shot) state.
-     * A state in which the party succeeds.
+     * The 'Competence invoked' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class CompetenceInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -419,7 +422,7 @@ public class Player_InvokeCompetence_InitiatorParty
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) initiator party succeeded.",
+                "'Invoke competence' protocol (id = %1$s) initiator party ended; competence was invoked.",
                 getProtocolId()));
         }
         
@@ -427,10 +430,9 @@ public class Player_InvokeCompetence_InitiatorParty
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
-     * A state in which the party fails.
+     * The 'Competence not invoked' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class CompetenceNotInvoked extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -442,7 +444,7 @@ public class Player_InvokeCompetence_InitiatorParty
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) initiator party failed.",
+                "'Invoke competence' protocol (id = %1$s) initiator party ended; compatence was not invoked.",
                 getProtocolId()));
         }
         

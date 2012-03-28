@@ -34,8 +34,6 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
 
     public Role_DeactivateRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL), aclMessage);
-        
-        player = getACLMessage().getSender();
 
         buildFSM();
     }
@@ -52,36 +50,58 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         IState initialize = new Initialize();
         IState receiveActivateRequest = new ReceiveDeactivateRequest();
         IState sendActivateReply = new SendDeactivateReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleDeactivated = new RoleDeactivated();
+        IState roleNotDeactivated = new RoleNotDeactivated();
         // ------------------
 
         // Register states.
         registerFirstState(initialize);        
         registerState(receiveActivateRequest);
         registerState(sendActivateReply);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleDeactivated);
+        registerLastState(roleNotDeactivated);
 
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);       
-        receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
-        sendActivateReply.registerTransition(SendDeactivateReply.AGREE, successEnd);
-        sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, failureEnd);
+        initialize.registerDefaultTransition(receiveActivateRequest);
+        receiveActivateRequest.registerTransition(ReceiveDeactivateRequest.ROLE_ENACTED, sendActivateReply);  
+        receiveActivateRequest.registerTransition(ReceiveDeactivateRequest.ROLE_NOT_ENACTED, roleNotDeactivated);     
+        sendActivateReply.registerTransition(SendDeactivateReply.AGREE, roleDeactivated);
+        sendActivateReply.registerTransition(SendDeactivateReply.REFUSE, roleNotDeactivated);
     }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class Initialize extends ExitValueState {
+    private class Initialize extends OneShotBehaviourState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deactivate role' protocol (id = %1$s) responder party started.",
+                getProtocolId()));
+        
+            player = getACLMessage().getSender();
+            
+
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Receive deactivate request' (exit value) state.
+     */
+    private class ReceiveDeactivateRequest extends ExitValueState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
         
         // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
+        static final int ROLE_ENACTED = 1;
+        static final int ROLE_NOT_ENACTED = 2;
         // -----------------------
         
         // </editor-fold>
@@ -89,36 +109,18 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int doAction() {
-            getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) responder party started.",
-                getProtocolId()));
-        
+        public int doAction() {            
             if (player.equals(getMyAgent().enactingPlayer)) {
                 // The initiator player is enacting this role.
-                return OK;
+                DeactivateRequestMessage message = new DeactivateRequestMessage();
+                message.parseACLMessage(getACLMessage());
+                return ROLE_ENACTED;
             } else {
                 // The initiator player is not enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be deactivated.
-                return FAIL;
+                return ROLE_NOT_ENACTED;
             }
-        }
-        
-        // </editor-fold>
-    }
-    
-    /**
-     * The 'Receive deactivate request' (single receiver) state.
-     */
-    private class ReceiveDeactivateRequest extends OneShotBehaviourState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Methods">
-        
-        @Override
-        public void action() {
-            DeactivateRequestMessage message = new DeactivateRequestMessage();
-            message.parseACLMessage(getACLMessage());
         }
         
         // </editor-fold>
@@ -168,10 +170,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     }
     
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party succeeds.
+     * The 'Role deactivated' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleDeactivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -183,7 +184,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) responder party succeeded.",
+                "'Deactivate role' protocol (id = %1$s) responder party ended; role was deactivated.",
                 getProtocolId()));
         }
 
@@ -191,10 +192,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     }
         
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Deactivate role' protocol responder party fails.
+     * The 'Role not deactivated' (simple) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotDeactivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -202,7 +202,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) responder party failed.",
+                "'Deactivate role' protocol (id = %1$s) responder party ended; role was not deactivated.",
                 getProtocolId()));
         }
 
