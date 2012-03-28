@@ -95,10 +95,10 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
                 getProtocolId()));
         
             if (player.equals(getMyAgent().enactingPlayer)) {
-                // The initiator player is enacting this role.
+                // The initiator player is the player enacting this role.
                 return OK;
             } else {
-                // The initiator player is not enacting this role.
+                // The initiator player is not the player enacting this role.
                 // TODO (priority: low) Send a message to the player exaplaining
                 // that a non-enacted role cannot be activated.
                 return FAIL;
