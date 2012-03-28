@@ -1,7 +1,9 @@
 package thespian4jade.core.player;
 
+import jade.core.AID;
 import thespian4jade.behaviours.states.special.EventHandler;
 import jade.lang.acl.ACLMessage;
+import jade.mtp.InChannel;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -21,13 +23,18 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The initiating organization; more precisely, its AID.
+     */
+    private AID organization;
+    
     private Event event;
     
     private String argument;
     
     private IState selectEventHandler;
     
-    private IState end;
+    private IState eventPublished;
     
     // </editor-fold>
     
@@ -49,19 +56,22 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     private void buildFSM() {
         // ----- State -----
+        IState initialize = new Initialize();
         IState receiveEvent = new ReceiveEvent();
         selectEventHandler = new SelectEventHandler();
-        end = new End();
+        eventPublished = new EventPublished();
         // -----------------
         
         // Registers the states.
-        registerFirstState(receiveEvent);
+        registerFirstState(initialize);
+        registerState(receiveEvent);
         registerState(selectEventHandler);
-        registerLastState(end);
+        registerLastState(eventPublished);
         
         // Register the transitions.
+        initialize.registerDefaultTransition(receiveEvent);
         receiveEvent.registerDefaultTransition(selectEventHandler);
-        selectEventHandler.registerTransition(SelectEventHandler.IGNORE_EVENT, end);
+        selectEventHandler.registerTransition(SelectEventHandler.IGNORE_EVENT, eventPublished);
     }
     
     // </editor-fold>
@@ -69,9 +79,9 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Receive event' (one-shot) state.
+     * The 'Initialize' initial (one-shot) state.
      */
-    private class ReceiveEvent extends OneShotBehaviourState {
+    private class Initialize extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -82,6 +92,21 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
                 "'Publish event' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
             
+            organization = getACLMessage().getSender();
+        }
+        
+        // </editor-fold>
+    }
+    
+    /**
+     * The 'Receive event' (one-shot) state.
+     */
+    private class ReceiveEvent extends OneShotBehaviourState {
+
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+        
+        @Override
+        public void action() {  
             EventMessage message = new EventMessage();
             message.parseACLMessage(getACLMessage());
             
@@ -120,7 +145,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
 
                 // Register the transitions.
                 selectEventHandler.registerTransition(SelectEventHandler.HANDLE_EVENT, eventHandler);
-                eventHandler.registerDefaultTransition(end);
+                eventHandler.registerDefaultTransition(eventPublished);
 
                 eventHandler.setArgument(argument);
                 return HANDLE_EVENT;
@@ -134,9 +159,9 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'Event published' final (one-shot) state.
      */
-    private class End extends OneShotBehaviourState {
+    private class EventPublished extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         

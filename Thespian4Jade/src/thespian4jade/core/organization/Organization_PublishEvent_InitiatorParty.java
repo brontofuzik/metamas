@@ -77,18 +77,17 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
         // ----- States -----
         IState initialize = new Initialize();
         IState sendEvent = new SendEvent();
-        IState end = new End();
+        IState eventPublished = new EventPublished();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);
         registerState(sendEvent);
-        registerLastState(end);
+        registerLastState(eventPublished);
         
         // Register the transitions.
-        initialize.registerTransition(Initialize.SOME_SUBSCRIBERS, sendEvent);
-        initialize.registerTransition(Initialize.NO_SUBSCRIBERS, sendEvent);
-        sendEvent.registerDefaultTransition(end);
+        initialize.registerDefaultTransition(sendEvent);
+        sendEvent.registerDefaultTransition(eventPublished);
     }
     
     // </editor-fold>
@@ -98,21 +97,12 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     /**
      * The 'Initialize' (one-shot) state.
      */
-    private class Initialize extends ExitValueState {
-
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int SOME_SUBSCRIBERS = 1;
-        public static final int NO_SUBSCRIBERS = 2;
-        // -----------------------        
-                
-        // </editor-fold>
+    private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected int doAction() {
+        public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
                 "'Publish event' protocol (id = %1$s) initiator party started.",
@@ -124,8 +114,6 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
             subscribedPlayers.remove(playerToExclude);
             
             players = subscribedPlayers.toArray(new AID[0]);
-            
-            return (!subscribedPlayers.isEmpty()) ? SOME_SUBSCRIBERS : NO_SUBSCRIBERS;
         }
         
         // </editor-fold>
@@ -172,9 +160,9 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'Event published' final (one-shot) state.
      */
-    private class End extends OneShotBehaviourState {
+    private class EventPublished extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -182,7 +170,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Publish event' protocol (id = %1$s) initiator party ended.",
+                "'Publish event' protocol (id = %1$s) initiator party ended: event published.",
                 getProtocolId()));
         }
         
