@@ -22,15 +22,26 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    /** The organization name. */
+    /**
+     * The organization name.
+     */
     private String organizationName;
     
-    /** The organization AID */
+    /**
+     * The organization AID.
+     */
     private AID organizationAID;
 
-    /** The role name */
+    /**
+     * The role name.
+     */
     private String roleName;
 
+    /**
+     * The error message.
+     */
+    private String errorMessage;
+    
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -60,23 +71,23 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         IState initialize = new Initialize();
         IState sendDeactRequest = new SendDeactRequest();
         IState receiveDeactReply = new ReceiveDeactReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleDeacted = new RoleDeacted();
+        IState roleNotDeacted = new RoleNotDeacted();
         // ------------------
 
         // Register the states.
         registerFirstState(initialize);       
         registerState(sendDeactRequest);
         registerState(receiveDeactReply);        
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleDeacted);
+        registerLastState(roleNotDeacted);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendDeactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.FAIL, roleNotDeacted);       
         sendDeactRequest.registerDefaultTransition(receiveDeactReply);            
-        receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, successEnd);
-        receiveDeactReply.registerTransition(ReceiveDeactReply.REFUSE, failureEnd);
+        receiveDeactReply.registerTransition(ReceiveDeactReply.AGREE, roleDeacted);
+        receiveDeactReply.registerTransition(ReceiveDeactReply.REFUSE, roleNotDeacted);
     }
     
     // </editor-fold>
@@ -98,9 +109,10 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
 
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
+                "'Deact role' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
 //            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages
@@ -112,8 +124,8 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
                 return OK;
             } else {
                 // The organization does not exist.
-                String message = String.format(
-                    "Error deacting a role. The organization '%1$s' does not exist.",
+                errorMessage = String.format(
+                    "Role can not be deacted, because the organization called '%1$s' does not exist.",
                     organizationName);
                 return FAIL;
             }
@@ -199,32 +211,36 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Deact role' initiator party succeedes.
+     * The 'Role deacted' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleDeacted extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role initiator party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) initiator party ended; role was enacted.",
+                getProtocolId()));
         }
         
         // </editor-fold>
     }
     
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Deact role' initiator party fails.
+     * The 'Role not deacted' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotDeacted extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role initiator party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) initiator party ended; role was not enacted.",
+                getProtocolId()));
         }
         
         // </editor-fold>

@@ -45,6 +45,11 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
      * The responsibilitties of the role.
      */
     private String[] responsibilities;
+    
+    /**
+     * The error message.
+     */
+    private String errorMessage;
 
     // </editor-fold>
     
@@ -74,8 +79,8 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         IState receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
         IState sendResponsibilitiesReply = new SendResponsibilitiesReply();
         IState receiveRoleAID = new ReceiveRoleAID();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleEnacted = new RoleEnacted();
+        IState roleNotEnacted = new RoleNotEnacted();
         // ------------------
 
         // Register the states.
@@ -84,18 +89,18 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         registerState(receiveResponsibilitiesInform);
         registerState(sendResponsibilitiesReply);
         registerState(receiveRoleAID);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleEnacted);
+        registerLastState(roleNotEnacted);
 
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendEnactRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);       
+        initialize.registerTransition(Initialize.FAIL, roleNotEnacted);       
         sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
         receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
-        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, failureEnd);      
+        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, roleNotEnacted);      
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
-        sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, failureEnd);
-        receiveRoleAID.registerDefaultTransition(successEnd);
+        sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, roleNotEnacted);
+        receiveRoleAID.registerDefaultTransition(roleEnacted);
     }
 
     // </editor-fold>
@@ -103,7 +108,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'My initialize' (initialize) state.
+     * The 'Initialize' initial (exit value) state.
      */
     private class Initialize extends ExitValueState {
     
@@ -121,6 +126,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         @Override
         public int doAction() {
             getMyAgent().logInfo(String.format(
+                // LOG
                 "'Enact role' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
             
@@ -135,8 +141,8 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
                 return OK;
             } else {
                 // The organization does not exist.
-                String message = String.format(
-                    "Error enacting a role. The organization '%1$s' does not exist.",
+                errorMessage = String.format(
+                    "Role can not be enacted, because the organization called '%1$s' does not exist.",
                     organizationName);
                 return FAIL;
             }
@@ -318,32 +324,36 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'SuccessEnd successEnd' state.
-     * A state in which the 'Enact' protocol initiator party ends.
+     * The 'Role enacted' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleEnacted extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role initiator party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) initiator party ended; role was enacted.",
+                getProtocolId()));
         }
 
         // </editor-fold>
     }
 
     /**
-     * The 'Fail successEnd' state.
-     * A state in which the 'Enact' protocol initiator party ends.
+     * The 'Role not enacted' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotEnacted extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Enact role initiator party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Enact role' protocol (id = %1$s) initiator party ended; role was not enacted.",
+                getProtocolId()));
         }
 
         // </editor-fold>
