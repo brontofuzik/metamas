@@ -184,7 +184,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) responder party ended: role was deactivated.",
+                "'Deactivate role' protocol (id = %1$s) responder party ended; role was deactivated.",
                 getProtocolId()));
         }
 
@@ -202,7 +202,7 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) responder party ended: role was not deactivated.",
+                "'Deactivate role' protocol (id = %1$s) responder party ended; role was not deactivated.",
                 getProtocolId()));
         }
 
