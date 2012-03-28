@@ -108,12 +108,11 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         // <editor-fold defaultstate="collapsed" desc="Methods">
        
         @Override
-        protected int doAction() {
-            ActivateRequestMessage message = new ActivateRequestMessage();
-            message.parseACLMessage(getACLMessage());
-            
+        protected int doAction() {            
             if (player.equals(getMyAgent().enactingPlayer)) {
                 // The initiator player is the player enacting this role.
+                ActivateRequestMessage message = new ActivateRequestMessage();
+                message.parseACLMessage(getACLMessage());
                 return ROLE_ENACTED;
             } else {
                 // The initiator player is not the player enacting this role.
