@@ -392,7 +392,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) responder party failed; compatence was not invoked.",
+                "'Invoke competence' protocol (id = %1$s) responder party ended; compatence was not invoked.",
                 getProtocolId()));
         }
         

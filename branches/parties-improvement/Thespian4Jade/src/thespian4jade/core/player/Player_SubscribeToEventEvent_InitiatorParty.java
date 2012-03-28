@@ -83,22 +83,22 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         IState initialize = new Initialize();
         IState sendSubscribeRequest = new SendSubscribeRequest();
         IState receiveSubscribeReply = new ReceiveSubscribeReply();
-        IState subscribedToEvent = new SubcribedToEvent();
-        IState notSubscribedToEvent = new NotSubscribedToEvent();
+        IState eventSubscribedTo = new EventSubscribedTo();
+        IState eventNotSubscribedTo = new EventNotSubscribedTo();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);
         registerState(sendSubscribeRequest);
         registerState(receiveSubscribeReply);
-        registerLastState(subscribedToEvent);
-        registerLastState(notSubscribedToEvent);
+        registerLastState(eventSubscribedTo);
+        registerLastState(eventNotSubscribedTo);
         
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendSubscribeRequest);
-        initialize.registerTransition(Initialize.FAIL, notSubscribedToEvent);
+        initialize.registerTransition(Initialize.FAIL, eventNotSubscribedTo);
         sendSubscribeRequest.registerDefaultTransition(receiveSubscribeReply);
-        receiveSubscribeReply.registerDefaultTransition(subscribedToEvent);
+        receiveSubscribeReply.registerDefaultTransition(eventSubscribedTo);
     }
     
     // </editor-fold>
@@ -218,9 +218,9 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     }
     
     /**
-     * The 'Subscribed to event' final (one-shot) state.
+     * The 'Event subscribed to' final (one-shot) state.
      */
-    private class SubcribedToEvent extends OneShotBehaviourState {
+    private class EventSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -228,7 +228,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) initiator party ended: subscribed to event.",
+                "'Subscribe to event' protocol (id = %1$s) initiator party ended; event subscribed to.",
                 getProtocolId()));
         }
         
@@ -236,9 +236,9 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     }
     
     /**
-     * The 'Not Subscribed to event' final (one-shot) state.
+     * The 'Event not subscribed to' final (one-shot) state.
      */
-    private class NotSubscribedToEvent extends OneShotBehaviourState {
+    private class EventNotSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -246,7 +246,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) initiator party failed: not subscribed to event.",
+                "'Subscribe to event' protocol (id = %1$s) initiator party ended: event not subscribed to.",
                 getProtocolId()));
         }
         

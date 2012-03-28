@@ -169,7 +169,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Publish event' protocol (id = %1$s) responder party ended.",
+                "'Publish event' protocol (id = %1$s) responder party ended; event published",
                 getProtocolId()));
         }
         

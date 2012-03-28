@@ -111,8 +111,8 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         public int doAction() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Deact role' (%1$s.%2$s) protocol.",
-                organizationName, roleName));
+                "'Deact role' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
 //            // TAG YELLOW-PAGES
 //            DFAgentDescription organization = YellowPages

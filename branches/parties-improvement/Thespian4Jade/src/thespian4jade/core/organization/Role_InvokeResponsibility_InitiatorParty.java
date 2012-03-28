@@ -460,7 +460,7 @@ public class Role_InvokeResponsibility_InitiatorParty
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke responsibility' protocol (id = %1$s) initiator party ended: responsibility was not invoked.",
+                "'Invoke responsibility' protocol (id = %1$s) initiator party ended; responsibility was not invoked.",
                 getProtocolId()));
         }
         
