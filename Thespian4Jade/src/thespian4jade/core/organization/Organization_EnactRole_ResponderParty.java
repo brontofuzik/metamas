@@ -42,8 +42,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
-       
-
         
         buildFSM();
     }
@@ -99,6 +97,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             getMyAgent().logInfo(String.format(
                 "'Enact role' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
+            
+            player = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -114,7 +114,6 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             EnactRequestMessage message = new EnactRequestMessage();
             message.parseACLMessage(getACLMessage());
             
-            player = getACLMessage().getSender();
             roleName = message.getRoleName();
         }
         
@@ -282,7 +281,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) responder party ended; the role was enacted.",
+                "'Enact role' protocol (id = %1$s) responder party ended; role was enacted.",
                 getProtocolId()));
         }
 
@@ -300,7 +299,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) responder party ended; the role was not enacted.",
+                "'Enact role' protocol (id = %1$s) responder party ended; role was not enacted.",
                 getProtocolId()));
         }
 

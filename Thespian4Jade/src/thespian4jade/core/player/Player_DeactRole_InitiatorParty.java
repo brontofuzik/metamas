@@ -219,7 +219,10 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role initiator party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) initiator party ended; role was enacted.",
+                getProtocolId()));
         }
         
         // </editor-fold>
@@ -234,7 +237,10 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         public void action() {
-            getMyAgent().logInfo("Deact role initiator party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deact role' protocol (id = %1$s) initiator party ended; role was not enacted.",
+                getProtocolId()));
         }
         
         // </editor-fold>

@@ -35,8 +35,6 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     public Role_ActivateRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL), aclMessage);
         
-        player = getACLMessage().getSender();
-        
         buildFSM();
     }
 
@@ -49,23 +47,23 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         IState initialize = new Initialize();
         IState receiveActivateRequest = new ReceiveActivateRequest();
         IState sendActivateReply = new SendActivateReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleActivated = new RoleActivated();
+        IState roleNotActivated = new RoleNotActivated();
         // ------------------
 
         // Register states.
         registerFirstState(initialize);       
         registerState(receiveActivateRequest);
         registerState(sendActivateReply);        
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleActivated);
+        registerLastState(roleNotActivated);
 
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveActivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);        
-        receiveActivateRequest.registerDefaultTransition(sendActivateReply);       
-        sendActivateReply.registerTransition(SendActivateReply.AGREE, successEnd);
-        sendActivateReply.registerTransition(SendActivateReply.REFUSE, failureEnd);
+        initialize.registerDefaultTransition(receiveActivateRequest);
+        receiveActivateRequest.registerTransition(ReceiveActivateRequest.ROLE_ENACTED, sendActivateReply);
+        receiveActivateRequest.registerTransition(ReceiveActivateRequest.ROLE_NOT_ENACTED, roleNotActivated);       
+        sendActivateReply.registerTransition(SendActivateReply.AGREE, roleActivated);
+        sendActivateReply.registerTransition(SendActivateReply.REFUSE, roleNotActivated);
     }
 
     // </editor-fold>
@@ -73,36 +71,20 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
     /**
-     * The 'Initialize' (initialize) state.
+     * The 'Initialize' initial (one-shot) state.
      */
-    private class Initialize extends ExitValueState {
-        
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
-        // -----------------------
-        
-        // </editor-fold>
+    private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public int doAction() {
+        public void action() {
+            // LOG
             getMyAgent().logInfo(String.format(
                 "'Activate role' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
-        
-            if (player.equals(getMyAgent().enactingPlayer)) {
-                // The initiator player is the player enacting this role.
-                return OK;
-            } else {
-                // The initiator player is not the player enacting this role.
-                // TODO (priority: low) Send a message to the player exaplaining
-                // that a non-enacted role cannot be activated.
-                return FAIL;
-            }
+            
+            player = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -112,14 +94,33 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
      * The 'Receive activate request' (single receiver) state.
      * A state in which the 'Activate request' message is received.
      */
-    private class ReceiveActivateRequest extends OneShotBehaviourState {
+    private class ReceiveActivateRequest extends ExitValueState {
 
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        static final int ROLE_ENACTED = 1;
+        static final int ROLE_NOT_ENACTED = 2;
+        // -----------------------
+        
+        // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Methods">
        
         @Override
-        public void action() {
+        protected int doAction() {
             ActivateRequestMessage message = new ActivateRequestMessage();
             message.parseACLMessage(getACLMessage());
+            
+            if (player.equals(getMyAgent().enactingPlayer)) {
+                // The initiator player is the player enacting this role.
+                return ROLE_ENACTED;
+            } else {
+                // The initiator player is not the player enacting this role.
+                // TODO (priority: low) Send a message to the player exaplaining
+                // that a non-enacted role cannot be activated.
+                return ROLE_NOT_ENACTED;
+            }
         }
 
         // </editor-fold>
@@ -168,10 +169,9 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     }
 
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Activate role' protocol responder party secceeds.
+     * The 'Role activated' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleActivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -183,7 +183,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Activate role' protocol (id = %1$s) responder party succeeded.",
+                "'Activate role' protocol (id = %1$s) responder party ended; role was activated.",
                 getProtocolId()));
         }
 
@@ -191,10 +191,9 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     }
 
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Activate role' protocol responder party fails.
+     * The 'Role not activated' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotActivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -202,7 +201,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Activate role' protocol (id = %1$s) responder party failed.",
+                "'Activate role' protocol (id = %1$s) responder party ended; role was not activated.",
                 getProtocolId()));
         }
 

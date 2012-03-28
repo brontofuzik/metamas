@@ -3,7 +3,6 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.parties.ResponderParty;
@@ -82,6 +81,8 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             getMyAgent().logInfo(String.format(
                 "'Deact role' protocol (id = %1$s) responder party started.",
                 getProtocolId()));
+            
+            player = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -100,7 +101,6 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             DeactRequestMessage message = new DeactRequestMessage();
             message.parseACLMessage(getACLMessage());
             
-            player = message.getSender();
             roleName = message.getRoleName();
         }
         
@@ -184,7 +184,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deact role' protocol (id = %1$s) responder party succeeded.",
+                "'Deact role' protocol (id = %1$s) responder party ended; role was enacted.",
                 getProtocolId()));
         }
         
@@ -202,7 +202,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deact role' protocol (id = %1$s) responder party failed.",
+                "'Deact role' protocol (id = %1$s) responder party ended; role was not enacted.",
                 getProtocolId()));
         }
         
