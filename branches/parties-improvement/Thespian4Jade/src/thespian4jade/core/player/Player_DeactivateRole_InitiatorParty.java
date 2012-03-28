@@ -52,23 +52,23 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         IState initialize = new Initialize();
         IState sendDeactivateRequest = new SendDeactivateRequest();
         IState receiveDeactivateReply = new ReceiveDeactivateReply();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState roleDeactivated = new RoleDeactivated();
+        IState roleNotDeactivated = new RoleNotDeactivated();
         // ------------------
 
         // Register the states.
         registerFirstState(initialize);     
         registerState(sendDeactivateRequest);
         registerState(receiveDeactivateReply);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(roleDeactivated);
+        registerLastState(roleNotDeactivated);
 
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendDeactivateRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);      
+        initialize.registerTransition(Initialize.FAIL, roleNotDeactivated);      
         sendDeactivateRequest.registerDefaultTransition(receiveDeactivateReply);
-        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.AGREE, successEnd); 
-        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.REFUSE, failureEnd);
+        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.AGREE, roleDeactivated); 
+        receiveDeactivateReply.registerTransition(ReceiveDeactivateReply.REFUSE, roleNotDeactivated);
     }
 
     // </editor-fold>
@@ -90,9 +90,10 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Deactivate role' (%1$s) protocol.",
-                roleName));
+                "'Deactivate role' protocol (id = %1$s) initiator party started.",
+                getProtocolId()));
 
             if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
@@ -185,32 +186,36 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     }
     
     /**
-     * The 'Success end' (simple) state.
-     * A state in which the 'Deactivate role' protocol initiator party succeeds.
+     * The 'Role deactivated' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class RoleDeactivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role initiator party succeeded.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended: role was deactivated.",
+                getProtocolId()));
         }
 
         // </editor-fold>
     }
         
     /**
-     * The 'Failure end' (simple) state.
-     * A state in which the 'Deactivate role' protocol initiator party fails.
+     * The 'Role deactivated' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class RoleNotDeactivated extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
         public void action() {
-            getMyAgent().logInfo("Deactivate role initiator party failed.");
+            // LOG
+            getMyAgent().logInfo(String.format(
+                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended: role was not deactivated.",
+                getProtocolId()));
         }
 
         // </editor-fold>

@@ -91,7 +91,7 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     }
     
     /**
-     * The 'Receive activate request' (single receiver) state.
+     * The 'Receive activate request' (exit value) state.
      * A state in which the 'Activate request' message is received.
      */
     private class ReceiveActivateRequest extends ExitValueState {
