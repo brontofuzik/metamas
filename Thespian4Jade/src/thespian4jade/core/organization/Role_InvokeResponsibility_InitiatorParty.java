@@ -1,6 +1,7 @@
 package thespian4jade.core.organization;
 
 import jade.core.AID;
+import java.io.Serializable;
 import thespian4jade.asynchrony.Future;
 import thespian4jade.asynchrony.IObserver;
 import thespian4jade.behaviours.states.special.ExitValueState;
@@ -14,7 +15,6 @@ import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityArgumentM
 import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
-import java.io.Serializable;
 import thespian4jade.asynchrony.IObservable;
 import thespian4jade.asynchrony.Observable;
 import thespian4jade.behaviours.parties.IResultParty;
@@ -52,6 +52,8 @@ public class Role_InvokeResponsibility_InitiatorParty
      * The serializable responsibility argument.
      */
     private TResult responsibilityResult;
+    
+    private String errorMessage;
     
     /**
      * The observable helper.
@@ -198,8 +200,8 @@ public class Role_InvokeResponsibility_InitiatorParty
         IState receiveResponsibilityArgumentRequest = new ReceiveResponsibilityArgumentRequest();
         IState sendResponsibilityArgument = new SendResponsibilityArgument();
         IState receiveResponsibilityResult = new ReceiveResponsibilityResult();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState responsibilityInvoked = new ResponsibilityInvoked();
+        IState responsibilityNotInvoked = new ResponsibilityNotInvoked();
         // ------------------
         
         // Register the states.
@@ -208,24 +210,27 @@ public class Role_InvokeResponsibility_InitiatorParty
         registerState(receiveResponsibilityArgumentRequest);
         registerState(sendResponsibilityArgument);
         registerState(receiveResponsibilityResult);       
-        registerLastState(successEnd);
-        registerLastState(failureEnd);
+        registerLastState(responsibilityInvoked);
+        registerLastState(responsibilityNotInvoked);
         
         // Regster the transitions.
         initialize.registerTransition(Initialize.OK, sendResponsibilityRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
+        initialize.registerTransition(Initialize.FAIL, responsibilityNotInvoked);
         sendResponsibilityRequest.registerDefaultTransition(receiveResponsibilityArgumentRequest);        
         receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.SUCCESS, sendResponsibilityArgument);
-        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, failureEnd);       
+        receiveResponsibilityArgumentRequest.registerTransition(ReceiveResponsibilityArgumentRequest.FAILURE, responsibilityNotInvoked);       
         sendResponsibilityArgument.registerDefaultTransition(receiveResponsibilityResult);
-        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.SUCCESS, successEnd);
-        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.FAILURE, failureEnd);
+        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.SUCCESS, responsibilityInvoked);
+        receiveResponsibilityResult.registerTransition(ReceiveResponsibilityResult.FAILURE, responsibilityNotInvoked);
     }
  
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit-value) state.
+     */
     private class Initialize extends ExitValueState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -241,6 +246,7 @@ public class Role_InvokeResponsibility_InitiatorParty
         
         @Override
         protected int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
                 "'Invoke responsibility' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
@@ -252,9 +258,7 @@ public class Role_InvokeResponsibility_InitiatorParty
                 return OK;
             } else {
                 // The role can not invoke the responsibility.
-                String message = String.format(
-                    "I cannot invoke the responsibility '%1$s'.",
-                    responsibilityName);
+                errorMessage = "Competence can not be invoked, because ... TODO.";
                 return FAIL;
             }
         }
@@ -419,10 +423,9 @@ public class Role_InvokeResponsibility_InitiatorParty
     }
     
     /**
-     * The 'Success end' (one-shot) state.
-     * A state in which the party succeeds.
+     * The 'Responsibility invoked' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class ResponsibilityInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -434,7 +437,7 @@ public class Role_InvokeResponsibility_InitiatorParty
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke responsibility' protocol (id = %1$s) initiator party succeeded.",
+                "'Invoke responsibility' protocol (id = %1$s) initiator party ended; responsibility was invoked.",
                 getProtocolId()));
         }
         
@@ -442,10 +445,10 @@ public class Role_InvokeResponsibility_InitiatorParty
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
+     * The 'Responsibility not invoked' final (one-shot) state.
      * A state in which the party fails.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class ResponsibilityNotInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -457,7 +460,7 @@ public class Role_InvokeResponsibility_InitiatorParty
             
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke responsibility' protocol (id = %1$s) initiator party failed.",
+                "'Invoke responsibility' protocol (id = %1$s) initiator party ended: responsibility was not invoked.",
                 getProtocolId()));
         }
         

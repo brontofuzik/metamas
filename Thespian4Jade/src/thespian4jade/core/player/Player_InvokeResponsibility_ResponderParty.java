@@ -1,19 +1,19 @@
 package thespian4jade.core.player;
 
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.player.responsibility.IResponsibility;
 import jade.core.AID;
+import java.io.Serializable;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.states.sender.SendSuccessOrFailure;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
+import thespian4jade.core.player.responsibility.IResponsibility;
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityArgumentMessage;
 import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
-import java.io.Serializable;
 import thespian4jade.behaviours.states.special.StateWrapperState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
@@ -71,8 +71,6 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
      */
     public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL), aclMessage);
-
-        role = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -92,8 +90,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         IState sendResponsibilityArgumentRequest = new SendResponsibilityArgumentRequest();
         receiveResponsibilityArgument = new ReceiveResponsibilityArgument();
         sendResponsibilityResult = new SendResponsibilityResult();
-        IState successEnd = new SuccessEnd();
-        IState failureEnd = new FailureEnd();
+        IState responsibilityInvoked = new ResponsibilityInvoked();
+        IState responsibilityNotInvoked = new ResponsibilityNotInvoked();
         // ------------------
         
         // Register states.
@@ -103,17 +101,17 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         registerState(sendResponsibilityArgumentRequest);
         registerState(receiveResponsibilityArgument);
         registerState(sendResponsibilityResult);      
-        registerLastState(successEnd);     
-        registerLastState(failureEnd);
+        registerLastState(responsibilityInvoked);     
+        registerLastState(responsibilityNotInvoked);
         
         // Register transitions.
-        initialize.registerTransition(Initialize.OK, receiveInvokeResponsibilityRequest);
-        initialize.registerTransition(Initialize.FAIL, failureEnd);
-        receiveInvokeResponsibilityRequest.registerDefaultTransition(selectResponsibility);
+        initialize.registerDefaultTransition(receiveInvokeResponsibilityRequest);
+        receiveInvokeResponsibilityRequest.registerTransition(ReceiveInvokeResponsibilityRequest.ROLE_IS_ACTIVE, selectResponsibility);
+        receiveInvokeResponsibilityRequest.registerTransition(ReceiveInvokeResponsibilityRequest.ROLE_IS_NOT_ACTIVE, responsibilityNotInvoked);
         selectResponsibility.registerTransition(SelectResponsibility.RESPONSIBILITY_EXISTS, sendResponsibilityArgumentRequest);
-        selectResponsibility.registerTransition(SelectResponsibility.RESPONSIBILITY_DOES_NOT_EXIST, failureEnd);
+        selectResponsibility.registerTransition(SelectResponsibility.RESPONSIBILITY_DOES_NOT_EXIST, responsibilityNotInvoked);
         sendResponsibilityArgumentRequest.registerDefaultTransition(receiveResponsibilityArgument);
-        sendResponsibilityResult.registerDefaultTransition(successEnd);
+        sendResponsibilityResult.registerDefaultTransition(responsibilityInvoked);
     }
     
     // </editor-fold>
@@ -121,37 +119,20 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (exit value) state.
+     * The 'Initialize' initial (one-shot) state.
      */
-    private class Initialize extends ExitValueState {
+    private class Initialize extends OneShotBehaviourState {
 
-        // <editor-fold defaultstate="collapsed" desc="Constant fields">
-        
-        // ----- Exit values -----
-        public static final int OK = 1;
-        public static final int FAIL = 2;
-        // -----------------------
-        
-        // </editor-fold>
-        
         // <editor-fold defaultstate="collapsed" desc="Methods">
-
+        
         @Override
-        public int doAction() {
+        public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "Responding to the 'Invoke responsibility' protocol (id = %1$s).",
+                "'Invoke responsibility' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
         
-            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
-                // The sender role is the active role.
-                return OK;
-            } else {
-                // The sender role is not the active role.
-                // TODO (priority: low) Send a message to the role exaplaining
-                // that a responsibility cannot be invoked by a non-activated role.
-                return FAIL;
-            }
+            role = getACLMessage().getSender();
         }
         
         // </editor-fold>
@@ -160,16 +141,33 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     /**
      * The 'Receive invoke responsibility request' (one-shot) state.
      */
-    private class ReceiveInvokeResponsibilityRequest extends OneShotBehaviourState {
+    private class ReceiveInvokeResponsibilityRequest extends ExitValueState {
+        
+        // <editor-fold defaultstate="collapsed" desc="Constant fields">
+        
+        // ----- Exit values -----
+        static final int ROLE_IS_ACTIVE = 1;
+        static final int ROLE_IS_NOT_ACTIVE = 2;
+        // -----------------------
+        
+        // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        public void action() {
-            InvokeResponsibilityRequestMessage message = new InvokeResponsibilityRequestMessage();
-            message.parseACLMessage(getACLMessage());
-            
-            responsibilityName = message.getResponsibility();         
+        protected int doAction() {
+            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
+                // The sender role is the active role.
+                InvokeResponsibilityRequestMessage message = new InvokeResponsibilityRequestMessage();
+                message.parseACLMessage(getACLMessage());   
+                responsibilityName = message.getResponsibility();    
+                return ROLE_IS_ACTIVE;
+            } else {
+                // The sender role is not the active role.
+                // TODO (priority: low) Send a message to the role exaplaining
+                // that a responsibility cannot be invoked by a non-activated role.
+                return ROLE_IS_NOT_ACTIVE;
+            }
         }
         
         // </editor-fold>
@@ -369,9 +367,9 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * The 'Success end' (one-shot) state.
+     * The 'Responsibility invoked' final (one-shot) state.
      */
-    private class SuccessEnd extends OneShotBehaviourState {
+    private class ResponsibilityInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -379,7 +377,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke responsibility' protocol (id = %1$s) responder party succeeded.",
+                "'Invoke responsibility' protocol (id = %1$s) responder party ended; responsibility was invoked.",
                 getProtocolId()));
         }
         
@@ -387,9 +385,9 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
+     * The 'Responsibility not invoked' final (one-shot) state.
      */
-    private class FailureEnd extends OneShotBehaviourState {
+    private class ResponsibilityNotInvoked extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -397,7 +395,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Invoke competence' protocol (id = %1$s) responder party failed.",
+                "'Invoke competence' protocol (id = %1$s) responder party ended; responsibility was not invoked.",
                 getProtocolId()));
         }
         
