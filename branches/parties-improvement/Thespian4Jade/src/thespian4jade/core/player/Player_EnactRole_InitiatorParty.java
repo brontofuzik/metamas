@@ -108,7 +108,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'My initialize' (initialize) state.
+     * The 'Initialize' initial (exit value) state.
      */
     private class Initialize extends ExitValueState {
     
@@ -324,7 +324,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Role enacted' (one-shot) state.
+     * The 'Role enacted' final (one-shot) state.
      */
     private class RoleEnacted extends OneShotBehaviourState {
 
@@ -342,7 +342,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
 
     /**
-     * The 'Role not enacted' (one-shot) state.
+     * The 'Role not enacted' final (one-shot) state.
      */
     private class RoleNotEnacted extends OneShotBehaviourState {
 
