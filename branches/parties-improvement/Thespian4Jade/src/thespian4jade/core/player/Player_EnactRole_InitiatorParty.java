@@ -334,7 +334,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) initiator party ended; the role was enacted.",
+                "'Enact role' protocol (id = %1$s) initiator party ended; role was enacted.",
                 getProtocolId()));
         }
 
@@ -352,7 +352,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Enact role' protocol (id = %1$s) initiator party ended; the role was not enacted.",
+                "'Enact role' protocol (id = %1$s) initiator party ended; role was not enacted.",
                 getProtocolId()));
         }
 
