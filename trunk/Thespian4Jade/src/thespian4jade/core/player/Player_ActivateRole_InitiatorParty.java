@@ -27,6 +27,8 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     
     /** The role AID. */
     private AID roleAID;
+    
+    private String errorMessage;
 
     // </editor-fold>
 
@@ -90,9 +92,10 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         public int doAction() {
+            // LOG
             getMyAgent().logInfo(String.format(
-                "Initiating the 'Activate role' (%1$s) protocol.",
-                roleName));
+                "'Activate role' protocol (id = %1$s) iniitator party started.",
+                getProtocolId()));
 
             // Check if the role can be activated.
             if (getMyAgent().knowledgeBase.query().canActivateRole(roleName)) {
@@ -101,8 +104,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
                 return OK;
             } else {
                 // The role can not be activated.
-                String message = String.format("Error activating the role '%1$s'. It is not enacted.",
-                    roleName);
+                errorMessage = "Role can not be activated because it it not enacted.";
                 return FAIL;
             }
         }
