@@ -196,7 +196,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended: role was deactivated.",
+                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended; role was deactivated.",
                 getProtocolId()));
         }
 
@@ -214,7 +214,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended: role was not deactivated.",
+                "'Deactivate role' protocol (id = %1$s) protocol initiator party ended; role was not deactivated.",
                 getProtocolId()));
         }
 

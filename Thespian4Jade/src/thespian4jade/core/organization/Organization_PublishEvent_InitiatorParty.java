@@ -170,7 +170,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Publish event' protocol (id = %1$s) initiator party ended: event published.",
+                "'Publish event' protocol (id = %1$s) initiator party ended; event published.",
                 getProtocolId()));
         }
         

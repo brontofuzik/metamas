@@ -61,22 +61,22 @@ public class Organization_SubscribeToEvent_ResponderParty
         IState initialize = new Initialize();
         IState receiveSubscribeRequest = new ReceiveSubscribeRequest();
         IState sendSubscribeReply = new SendSubscribeReply();
-        IState subscribedToEvent = new SubscribedToEvent();
-        IState notSubscribedToEvent = new NotSubscribedToEvent();
+        IState eventSubscribedTo = new EventSubscribedTo();
+        IState eventNotSubscribedTo = new EventNotSubscribedTo();
         // ------------------
         
         // Register the states.
         registerFirstState(initialize);
         registerState(receiveSubscribeRequest);
         registerState(sendSubscribeReply);
-        registerLastState(subscribedToEvent);
-        registerLastState(notSubscribedToEvent);
+        registerLastState(eventSubscribedTo);
+        registerLastState(eventNotSubscribedTo);
         
         // Register the transitions.
         initialize.registerDefaultTransition(receiveSubscribeRequest);
         receiveSubscribeRequest.registerTransition(ReceiveSubscribeRequest.PLAYER_IS_EMPLOYED, sendSubscribeReply);
-        receiveSubscribeRequest.registerTransition(ReceiveSubscribeRequest.PLAYER_IS_NOT_EMPLOYED, notSubscribedToEvent);
-        sendSubscribeReply.registerDefaultTransition(subscribedToEvent);
+        receiveSubscribeRequest.registerTransition(ReceiveSubscribeRequest.PLAYER_IS_NOT_EMPLOYED, eventNotSubscribedTo);
+        sendSubscribeReply.registerDefaultTransition(eventSubscribedTo);
     }
     
     // </editor-fold>
@@ -183,9 +183,9 @@ public class Organization_SubscribeToEvent_ResponderParty
     }
     
     /**
-     * The 'Subscribed to event' final (one-shot) state.
+     * The 'Event subscribed to' final (one-shot) state.
      */
-    private class SubscribedToEvent extends OneShotBehaviourState {
+    private class EventSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -193,7 +193,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) responder party ended: subscribed to event.",
+                "'Subscribe to event' protocol (id = %1$s) responder party ended; event subscribed to.",
                 getProtocolId()));
         }
         
@@ -203,7 +203,7 @@ public class Organization_SubscribeToEvent_ResponderParty
     /**
      * The 'Not subscribed to event' final (one-shot) state.
      */
-    private class NotSubscribedToEvent extends OneShotBehaviourState {
+    private class EventNotSubscribedTo extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -211,7 +211,7 @@ public class Organization_SubscribeToEvent_ResponderParty
         public void action() {
             // LOG
             getMyAgent().logInfo(String.format(
-                "'Subscribe to event' protocol (id = %1$s) responder party ended: not subscribed to event.",
+                "'Subscribe to event' protocol (id = %1$s) responder party ended; event not subscribed to.",
                 getProtocolId()));
         }
         
