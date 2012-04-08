@@ -1,6 +1,6 @@
 package example1.organizations.functioninvocation;
 
-import example1.organizations.functioninvocation.executor.Executer_Role;
+import example1.organizations.functioninvocation.executor.Executor_Role;
 import example1.organizations.functioninvocation.invoker.Invoker_Role;
 import thespian4jade.core.organization.Organization;
 
@@ -20,7 +20,7 @@ public class FunctionInvocation_Organization extends Organization {
         
         // Add roles.
         addRole(Invoker_Role.class);
-        addRole(Executer_Role.class);
+        addRole(Executor_Role.class);
         logInfo("Roles added.");
     }
     

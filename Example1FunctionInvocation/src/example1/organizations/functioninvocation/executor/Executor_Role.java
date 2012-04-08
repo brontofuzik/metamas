@@ -7,16 +7,16 @@ package example1.organizations.functioninvocation.executor;
 import thespian4jade.core.organization.Role;
 
 /**
- * An Executer role.
+ * An Executor role.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
  */
-public class Executer_Role extends Role {
+public class Executor_Role extends Role {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    public static final String NAME = "Executer_Role";
+    public static final String NAME = "Executor_Role";
     
     public static final String EXECUTE_RESPONSIBILITY = "ExecuteFunction_Responsibility";
     
@@ -29,7 +29,7 @@ public class Executer_Role extends Role {
         super.setup();
 
         // Add behaviours.
-        addBehaviour(new Executer_Responder());
+        addBehaviour(new Executor_Responder());
         logInfo("Behaviours added.");
 
         // Add competences.

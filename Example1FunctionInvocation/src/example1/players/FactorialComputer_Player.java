@@ -5,7 +5,7 @@ import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.example.RoleEnacterPlayer;
 
 /**
- * 'Factorial computer' player - the player playing the 'Executer' role.
+ * 'Factorial computer' player - the player playing the 'Executor' role.
  * @author Lukáš Kúdela
  * @since 2011-12-31
  * @version %I% %G%
@@ -14,19 +14,19 @@ public class FactorialComputer_Player extends RoleEnacterPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
-    private static final String EXECUTER_ROLE_FULL_NAME
-        = "functionInvocation_Organization.Executer_Role";
+    private static final String EXECUTOR_ROLE_FULL_NAME
+        = "functionInvocation_Organization.Executor_Role";
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Executer role.
+     * Creates a new Demo player who will enact the Executor role.
      * @param roleFullName the full name of the role to enact and activate
      */
     public FactorialComputer_Player() {
-        super(new RoleFullName(EXECUTER_ROLE_FULL_NAME));
+        super(new RoleFullName(EXECUTOR_ROLE_FULL_NAME));
     }
     
     // </editor-fold>

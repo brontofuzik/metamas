@@ -89,7 +89,7 @@ public class Blank_Player extends CompetenceInvokerPlayer implements IObserver {
          */
         @Override
         protected void handleEvent(String roleName) {
-            if (roleName.equals("Executer_Role")) {
+            if (roleName.equals("Executor_Role")) {
                 // Set the 'Invoke function' competence argument. 
                 Integer invokeFunctionArgument = new Integer(10);
                 System.out.println("----- Invoke function argument: " + invokeFunctionArgument + " -----");

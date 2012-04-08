@@ -19,7 +19,7 @@ import thespian4jade.behaviours.states.IState;
  * @since 2012-01-02
  * @version %I% %G%
  */
-public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role> {
+public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -113,7 +113,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executer_Role>
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeResponsibility_ExecuteFunction() {
-            super(Executer_Role.EXECUTE_RESPONSIBILITY);
+            super(Executor_Role.EXECUTE_RESPONSIBILITY);
         }
         
         // </editor-fold>

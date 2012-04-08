@@ -1,12 +1,10 @@
 package example1.organizations.functioninvocation.invoker;
 
-import example1.organizations.functioninvocation.executor.Executer_Role;
+import example1.organizations.functioninvocation.executor.Executor_Role;
 import example1.protocols.Protocols;
-import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
-import thespian4jade.core.organization.Role;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;
@@ -24,7 +22,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID executerAID;
+    private AID executorAID;
     
     private int argument;
     
@@ -97,9 +95,9 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
                 "Initiating the 'Invoke function' protocol (id = %1$s)",
                 getProtocolId()));
             
-            // Get an active 'Executer' position.
-            executerAID = getMyAgent().getMyOrganization()
-                .getActivePosition(Executer_Role.NAME).getAID();
+            // Get an active 'Executor' position.
+            executorAID = getMyAgent().getMyOrganization()
+                .getActivePosition(Executor_Role.NAME).getAID();
         }
         
         // </editor-fold>
@@ -111,7 +109,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { executerAID };
+            return new AID[] { executorAID };
         }
         
         // </editor-fold>
@@ -156,7 +154,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { executerAID };
+            return new AID[] { executorAID };
         }
         
         // </editor-fold>
