@@ -14,6 +14,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class EvaluateExpressionProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public EvaluateExpressionProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override

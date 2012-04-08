@@ -15,7 +15,7 @@ class Executer_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Executer_Responder() {
-        addResponder(ProtocolRegistry.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL));
     }
      
     // </editor-fold>

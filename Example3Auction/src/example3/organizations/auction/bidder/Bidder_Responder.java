@@ -19,10 +19,10 @@ class Bidder_Responder extends Responder {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     Bidder_Responder() {
-        addResponder(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL), ACLMessage.CFP);
-        addResponder(ProtocolRegistry.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL), ACLMessage.CFP);
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL));
+//        addProtocol(ProtocolRegistry.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL));
+//        addProtocol(ProtocolRegistry.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL));
     }
      
     // </editor-fold>

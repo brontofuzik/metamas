@@ -16,6 +16,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class EnvelopeAuctionProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public EnvelopeAuctionProtocol() {
+        super(ACLMessage.CFP);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**

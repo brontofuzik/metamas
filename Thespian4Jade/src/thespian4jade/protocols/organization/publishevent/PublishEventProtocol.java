@@ -17,6 +17,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class PublishEventProtocol extends Protocol {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public PublishEventProtocol() {
+        super(ACLMessage.INFORM);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**

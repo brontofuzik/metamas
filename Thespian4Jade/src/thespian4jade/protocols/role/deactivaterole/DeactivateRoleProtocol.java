@@ -18,6 +18,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class DeactivateRoleProtocol extends Protocol {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public DeactivateRoleProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**

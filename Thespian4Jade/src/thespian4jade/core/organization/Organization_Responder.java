@@ -19,9 +19,9 @@ public class Organization_Responder extends Responder {
      * Configures the organization responder - adds individual protocol responders.
      */
     Organization_Responder() {
-        addResponder(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL));
     }
 
     // </editor-fold>

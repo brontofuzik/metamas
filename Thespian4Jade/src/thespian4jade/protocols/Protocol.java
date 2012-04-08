@@ -14,6 +14,20 @@ import jade.lang.acl.MessageTemplate;
  */
 public abstract class Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Fields">
+    
+    private int performative;
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    protected Protocol(int performative) {
+        this.performative = performative;
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
@@ -30,6 +44,10 @@ public abstract class Protocol {
      */
     public MessageTemplate getTemplate() {
         return MessageTemplate.MatchProtocol(getName());
+    }
+    
+    public int getPerformative() {
+        return performative;
     }
     
     // </editor-fold>

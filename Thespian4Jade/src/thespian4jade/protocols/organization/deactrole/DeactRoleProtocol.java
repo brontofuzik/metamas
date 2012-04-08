@@ -17,6 +17,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class DeactRoleProtocol extends Protocol {   
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public DeactRoleProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**

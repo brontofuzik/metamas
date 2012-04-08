@@ -19,9 +19,9 @@ public class Role_Responder extends Responder {
      * Configures the role responder - adds individual protocol responders.
      */
     Role_Responder() {
-        addResponder(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL));
-        addResponder(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL));
+        addProtocol(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL));
     }
         
     // </editor-fold>
