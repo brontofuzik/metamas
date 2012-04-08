@@ -16,6 +16,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class VickreyAuctionProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public VickreyAuctionProtocol() {
+        super(ACLMessage.CFP);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override

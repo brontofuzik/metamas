@@ -26,28 +26,19 @@ public abstract class Responder extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Adds a single responder responding to a given protocol and performative.
+     * Adds a responder responding to a given protocol and the REQUEST performative.
      * @param protocol the protocol
-     * @param performative the performative
      */
-    protected void addResponder(Protocol protocol, int performative) {
+    protected void addProtocol(Protocol protocol) {
         // ----- Preconditions -----
         if (protocol == null) {
             throw new IllegalArgumentException("protocol");
         }
         // -------------------------
         
-        ResponderState responder = new ResponderState(protocol, performative);     
+        ResponderState responder = new ResponderState(protocol, protocol.getPerformative());     
         ResponderStateHolder responders = (ResponderStateHolder)getState(ResponderStateHolder.NAME);
         responders.addSubBehaviour(responder);
-    }
-    
-    /**
-     * Adds a responder responding to a given protocol and the REQUEST performative.
-     * @param protocol the protocol
-     */
-    protected void addResponder(Protocol protocol) {
-        addResponder(protocol, ACLMessage.REQUEST);
     }
     
     /**

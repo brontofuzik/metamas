@@ -16,6 +16,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class EnglishAuctionProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public EnglishAuctionProtocol() {
+        super(ACLMessage.CFP);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**

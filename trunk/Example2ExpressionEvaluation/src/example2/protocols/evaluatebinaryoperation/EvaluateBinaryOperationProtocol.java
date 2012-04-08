@@ -16,6 +16,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */  
 public class EvaluateBinaryOperationProtocol extends Protocol {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public EvaluateBinaryOperationProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     @Override

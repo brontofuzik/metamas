@@ -18,6 +18,14 @@ import java.io.Serializable;
  */
 public class InvokeCompetenceProtocol extends Protocol {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public InvokeCompetenceProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**

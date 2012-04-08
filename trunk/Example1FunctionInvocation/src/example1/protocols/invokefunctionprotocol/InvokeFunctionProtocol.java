@@ -16,6 +16,14 @@ import thespian4jade.behaviours.parties.ResponderParty;
  */
 public class InvokeFunctionProtocol extends Protocol {
     
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public InvokeFunctionProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     private static InvokeFunctionProtocol singleton;

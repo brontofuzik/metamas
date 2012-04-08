@@ -21,6 +21,14 @@ import java.io.Serializable;
  */
 public class InvokeResponsibilityProtocol extends Protocol {
 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    
+    public InvokeResponsibilityProtocol() {
+        super(ACLMessage.REQUEST);
+    }
+    
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
