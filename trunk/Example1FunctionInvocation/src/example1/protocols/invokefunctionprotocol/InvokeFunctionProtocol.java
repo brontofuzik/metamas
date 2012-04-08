@@ -1,6 +1,6 @@
 package example1.protocols.invokefunctionprotocol;
 
-import example1.organizations.functioninvocation.executer.InvokeFunction_ResponderParty;
+import example1.organizations.functioninvocation.executor.InvokeFunction_ResponderParty;
 import example1.organizations.functioninvocation.invoker.InvokeFunction_InitiatorParty;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.behaviours.parties.InitiatorParty;

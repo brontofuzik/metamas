@@ -1,6 +1,6 @@
 package example1.organizations.functioninvocation;
 
-import example1.organizations.functioninvocation.executer.Executer_Role;
+import example1.organizations.functioninvocation.executor.Executer_Role;
 import example1.organizations.functioninvocation.invoker.Invoker_Role;
 import thespian4jade.core.organization.Organization;
 

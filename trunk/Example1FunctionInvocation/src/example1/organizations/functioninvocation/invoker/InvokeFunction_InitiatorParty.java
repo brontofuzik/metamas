@@ -1,6 +1,6 @@
 package example1.organizations.functioninvocation.invoker;
 
-import example1.organizations.functioninvocation.executer.Executer_Role;
+import example1.organizations.functioninvocation.executor.Executer_Role;
 import example1.protocols.Protocols;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
