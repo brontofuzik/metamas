@@ -95,7 +95,7 @@ public class Example1Metamodel {
         
         // ---------- Roles ----------
         invokeFunctionOrganizationType.addRole(createInvokerRole());
-        invokeFunctionOrganizationType.addRole(createExecuterRole());
+        invokeFunctionOrganizationType.addRole(createExecutorRole());
         
         return invokeFunctionOrganizationType;
     }
@@ -116,9 +116,9 @@ public class Example1Metamodel {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     
-    private static Role createExecuterRole() {
-        Role executerRole = new Role("Executer_Role");
-        return executerRole;
+    private static Role createExecutorRole() {
+        Role executorRole = new Role("Executor_Role");
+        return executorRole;
     }
     
     // ---------- Players ----------
