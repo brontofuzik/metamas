@@ -4,7 +4,8 @@ import thespian4jade.core.Event;
 import thespian4jade.core.player.Player;
 
 /**
- * Role-enacter player - a player with predtermined role to enact.
+ * Role-enacter player - a player whose intention is to enact a role
+ * in an organization, and both the role and the organization are predetermined.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
@@ -14,7 +15,7 @@ public class RoleEnacterPlayer extends Player {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The full name of the role to enact and activate.
+     * The full name of the role to enact.
      */
     private RoleFullName roleFullName;   
     
@@ -23,8 +24,8 @@ public class RoleEnacterPlayer extends Player {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new instance of the Demo_Player class.
-     * @param roleFullName the full name of the role to enact and activate
+     * Initializes a new instance of the RoleEnacterPlayer class.
+     * @param roleFullName the full name of the role to enact
      */
     public RoleEnacterPlayer(RoleFullName roleFullName) {
         // ----- Preconditions -----

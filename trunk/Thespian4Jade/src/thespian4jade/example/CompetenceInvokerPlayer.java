@@ -5,22 +5,32 @@ import thespian4jade.asynchrony.Future;
 import thespian4jade.asynchrony.IObserver;
 
 /**
- * Competence-invoker player - a player with a predetermined competence to invoke.
+ * Competence-invoker player---a player who intends to invoke a predetermined
+ * competence.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%
  */
-public abstract class CompetenceInvokerPlayer<TCompetenceArgument extends Serializable>
+public abstract class CompetenceInvokerPlayer
+    <TCompetenceArgument extends Serializable>
     extends RoleEnacterPlayer implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The name of the competence.
+     */
     private String competenceName;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the CompetenceInvokerPlayer class.
+     * @param roleFullName the full name of the role to enact
+     * @param competenceName the name of the competence to invoke
+     */
     protected CompetenceInvokerPlayer(RoleFullName roleFullName, String competenceName) {
         super(roleFullName);
         // ----- Preconditions -----
