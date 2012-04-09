@@ -47,7 +47,6 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TODO!!! Replace with onAcceptProposal().
     /**
      * Handles the received ACCEPT-PROPOSAL message.
      * @param message the recived ACCEPT-PROPOSAL message
@@ -56,7 +55,6 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
         // Do nothing.
     }
     
-    // TODO!!! Replace with onRejectProposal().
     /**
      * Handles the recevied REJECT-PROPOSAL message.
      * @param message the received REJECT-PROPOSAL message

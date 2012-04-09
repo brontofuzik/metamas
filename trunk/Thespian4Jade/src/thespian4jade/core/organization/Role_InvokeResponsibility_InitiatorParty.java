@@ -241,13 +241,13 @@ public class Role_InvokeResponsibility_InitiatorParty
                 getProtocolId()));
 
             if (getMyAgent().myOrganization.knowledgeBase
-                .query().canInvokeResponsibility(responsibilityName)) {
+                .query().canInvokeResponsibility(player, responsibilityName)) {
                 // The role can invoke the responsibility.
                 player = getMyAgent().enactingPlayer;
                 return OK;
             } else {
                 // The role can not invoke the responsibility.
-                errorMessage = "Competence can not be invoked, because ... TODO.";
+                errorMessage = "Responsibility can not be invoked, because ... TODO.";
                 return FAIL;
             }
         }
