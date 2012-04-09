@@ -3,7 +3,7 @@ package example1.organizations.functioninvocation.invoker;
 import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
  * The 'Invoke function' (synchronous) competence.
@@ -51,7 +51,7 @@ public class InvokeFunction_Competence extends SynchronousCompetence<Integer, In
      * The 'Invoke function initiator party' (state wrapper) state. 
      */
     private class InvokeFunctionInitiatorWrapper
-        extends StateWrapperState<InvokeFunction_InitiatorParty> {
+        extends WrapperState<InvokeFunction_InitiatorParty> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -67,12 +67,12 @@ public class InvokeFunction_Competence extends SynchronousCompetence<Integer, In
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(InvokeFunction_InitiatorParty wrappedState) {
+        protected void doActionBefore(InvokeFunction_InitiatorParty wrappedState) {
             wrappedState.setArgument(getArgument());
         }
 
         @Override
-        protected void getWrappedStateResult(InvokeFunction_InitiatorParty wrappedState) {
+        protected void doActionAfter(InvokeFunction_InitiatorParty wrappedState) {
             setResult(wrappedState.getResult());
         }
     

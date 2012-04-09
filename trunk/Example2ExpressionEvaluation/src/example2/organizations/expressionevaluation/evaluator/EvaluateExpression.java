@@ -3,7 +3,7 @@ package example2.organizations.expressionevaluation.evaluator;
 import thespian4jade.behaviours.states.FSMBehaviourState;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
  * The 'State expression' (FSM) behaviour.
@@ -136,7 +136,7 @@ public class EvaluateExpression extends FSMBehaviourState {
      * The 'Evaluate binary operation initiator party' (wrapper) state.
      */
     private class EvaluateBinaryOperationInitiatorWrapper
-        extends StateWrapperState<EvaluateBinaryOperation_InitiatorParty> {
+        extends WrapperState<EvaluateBinaryOperation_InitiatorParty> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -149,13 +149,13 @@ public class EvaluateExpression extends FSMBehaviourState {
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(EvaluateBinaryOperation_InitiatorParty wrappedState) {
+        protected void doActionBefore(EvaluateBinaryOperation_InitiatorParty wrappedState) {
             wrappedState.setOperand1(operand1);
             wrappedState.setOperand2(operand2);
         }
 
         @Override
-        protected void getWrappedStateResult(EvaluateBinaryOperation_InitiatorParty wrappedState) {
+        protected void doActionAfter(EvaluateBinaryOperation_InitiatorParty wrappedState) {
             value = wrappedState.getResult();
         }
         

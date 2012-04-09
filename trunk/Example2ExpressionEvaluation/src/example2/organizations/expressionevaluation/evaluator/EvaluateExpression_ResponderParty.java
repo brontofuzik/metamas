@@ -10,7 +10,7 @@ import thespian4jade.behaviours.parties.ResponderParty;
 import thespian4jade.behaviours.states.sender.SingleSenderState;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
  * The 'Evaluate expression' protocol responder party.
@@ -112,7 +112,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
      * The 'Evaluate expression' (wrapper) state.
      */
     private class EvaluteExpressionWrapper
-        extends StateWrapperState<EvaluateExpression> {
+        extends WrapperState<EvaluateExpression> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -125,12 +125,12 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
         // <editor-fold defaultstate="collapsed" desc="Methods">
 
         @Override
-        protected void setWrappedStateArgument(EvaluateExpression wrappedState) {
+        protected void doActionBefore(EvaluateExpression wrappedState) {
             wrappedState.setExpression(expression);
         }
 
         @Override
-        protected void getWrappedStateResult(EvaluateExpression wrappedState) {
+        protected void doActionAfter(EvaluateExpression wrappedState) {
             value = wrappedState.getValue();
         }
         

@@ -3,7 +3,7 @@ package example2.organizations.expressionevaluation.evaluator;
 import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
  * The 'Evaluate' (synchronous) competence.
@@ -51,7 +51,7 @@ public class Evaluate_Competence extends SynchronousCompetence<String, Integer> 
      * The 'Evaluate expression' (state wrapper) state.
      */
     private class EvaluateExpressionWrapper
-        extends StateWrapperState<EvaluateExpression> {
+        extends WrapperState<EvaluateExpression> {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
@@ -67,12 +67,12 @@ public class Evaluate_Competence extends SynchronousCompetence<String, Integer> 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(EvaluateExpression wrappedState) {
+        protected void doActionBefore(EvaluateExpression wrappedState) {
             wrappedState.setExpression(getArgument());
         }
 
         @Override
-        protected void getWrappedStateResult(EvaluateExpression wrappedState) {
+        protected void doActionAfter(EvaluateExpression wrappedState) {
             setResult(new Integer(wrappedState.getValue()));
         }
         

@@ -28,7 +28,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The aucitoneer. More precisely, its AID.
+     * The aucitoneer; more precisely, its AID.
      */
     private AID auctioneer;
     
