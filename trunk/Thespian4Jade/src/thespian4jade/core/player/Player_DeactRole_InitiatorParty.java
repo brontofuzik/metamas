@@ -182,7 +182,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     
     /**
      * The 'Receive deact reply' (receive-agree-or-refuse) state.
-     * A state in which the 'Deact reply' message is received.
+     * A state in which the reply message (AGREE or REFUSE) is received.
      */
     private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
 

@@ -40,8 +40,7 @@ public class Organization_SubscribeToEvent_ResponderParty
     
     /**
      * Initializes a new instance of the Organization_SubscribeToEvent_ResponderParty class.
-     * Creates a new 'Subscribe to event' protocol responder party.
-     * @param message 
+     * @param message the ACL message initiating the protocol.
      */
     public Organization_SubscribeToEvent_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.SUBSCRIBE_TO_EVENT_PROTOCOL), message);
@@ -84,7 +83,8 @@ public class Organization_SubscribeToEvent_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (initialize) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
         
@@ -106,7 +106,8 @@ public class Organization_SubscribeToEvent_ResponderParty
     }
     
     /**
-     * The 'Receive subscribe request' (single receiver) message.
+     * The 'Receive subscribe request' (single receiver) state.
+     * A state in which the 'Subscribe request' message is received.
      */
     private class ReceiveSubscribeRequest
         extends ExitValueState {
@@ -142,7 +143,8 @@ public class Organization_SubscribeToEvent_ResponderParty
     }
 
     /**
-     * The 'Send subscribe reply' (send AGREE or REFUSE) message.
+     * The 'Send subscribe reply' (send-agree-or-refuse) state.
+     * A state in which the reply message (AGREE or REFUSE) is sent.
      */
     private class SendSubscribeReply extends SendAgreeOrRefuse {
 

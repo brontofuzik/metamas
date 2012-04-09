@@ -2,7 +2,6 @@ package thespian4jade.core.player;
 
 import jade.core.AID;
 import thespian4jade.core.Event;
-import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -56,7 +55,6 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     
     /**
      * Initializes a new instance of the Player_SubscribeToEventEvent_InitiatorParty class.
-     * Creates a new 'Subscribe to event' protocol initiator party.
      * @param organizationName the name of the organization to subscribe to
      * @param event the event to subscribe to
      */
@@ -105,6 +103,10 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends ExitValueState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -144,6 +146,7 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     
     /**
      * The 'Send subscribe request' (single sender) state.
+     * A state in which the 'Subscribe request' message is sent.
      */
     private class SendSubscribeRequest extends SingleSenderState<SubscribeRequestMessage> {
 
@@ -182,7 +185,8 @@ public class Player_SubscribeToEventEvent_InitiatorParty
     }
     
     /**
-     * The 'Receive subscribe request' (receive AGREE or REFUSE) state.
+     * The 'Receive subscribe reply' (receive-agree-or-refuse) state.
+     * A state in which the reply message (AGREE or REFUSE) is received.
      */
     private class ReceiveSubscribeReply extends ReceiveAgreeOrRefuse {
 
