@@ -236,9 +236,10 @@ public class Player_InvokeCompetence_InitiatorParty
                 "'Invoke competence' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
 
-            if (getMyAgent().knowledgeBase.query().canInvokeCompetence(competenceName)) {
+            // TODO (priority: low) Determine if the competence can be invoked.
+            if (true) {
                 // The player can invoke the competence.
-                role = getMyAgent().knowledgeBase.query().getActiveRole().getAID();
+                role = getMyAgent().knowledgeBase.query().getActivePosition().getAID();
                 return OK;
             } else {
                 // The player can not invoke the competence.

@@ -156,7 +156,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         
         @Override
         protected int doAction() {
-            if (role.equals(getMyAgent().knowledgeBase.query().getActiveRole().getAID())) {
+            if (role.equals(getMyAgent().knowledgeBase.query().getActivePosition().getAID())) {
                 // The sender role is the active role.
                 InvokeResponsibilityRequestMessage message = new InvokeResponsibilityRequestMessage();
                 message.parseACLMessage(getACLMessage());   

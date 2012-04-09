@@ -240,8 +240,8 @@ public class Role_InvokeResponsibility_InitiatorParty
                 "'Invoke responsibility' protocol (id = %1$s) initiator party started.",
                 getProtocolId()));
 
-            if (getMyAgent().myOrganization.knowledgeBase
-                .query().canInvokeResponsibility(player, responsibilityName)) {
+            // TODO (priority: low) Determine if the responsbility can be invoked.
+            if (true) {
                 // The role can invoke the responsibility.
                 player = getMyAgent().enactingPlayer;
                 return OK;

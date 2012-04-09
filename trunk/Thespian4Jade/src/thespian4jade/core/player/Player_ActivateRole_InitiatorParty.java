@@ -100,7 +100,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
             // Check if the role can be activated.
             if (getMyAgent().knowledgeBase.query().canActivateRole(roleName)) {
                 // The role can be activated.
-                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be activated.
