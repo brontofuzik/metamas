@@ -14,6 +14,12 @@ import java.util.ArrayList;
  */
 public /* static */ class ClassHelper {
 
+    /**
+     * Instantiates a clas.
+     * @param <T> The type of the class
+     * @param clazz the class to instantiate
+     * @return an instance of the clas
+     */
     public static <T> T instantiateClass(Class clazz) {
         // Get the default constructor.
         Constructor constructor = null;
@@ -45,7 +51,8 @@ public /* static */ class ClassHelper {
     }
     
     /**
-     * Note: This metmod is currently not used.
+     * Creates an instance of a template (class) in a generic class.
+     * Note: This method is currently not used.
      * @param object instance of a class that is a subclass of a generic class
      * @param index index of the generic type that should be instantiated
      * @return new instance of T (created by calling the default constructor)
@@ -76,6 +83,13 @@ public /* static */ class ClassHelper {
         }
     }
     
+    /**
+     * Creates an instance of a template (class) in a generic class.
+     * Note: This method is currently not used.
+     * @param object instance of a class that is a subclass of a generic class
+     * @return new instance of T (created by calling the default constructor)
+     * @throws RuntimeException if T has no accessible default constructor
+     */
     @SuppressWarnings("unchecked")
     public static <T> T createTemplateInstance(Object object) {
         return createTemplateInstance(object, 0);
