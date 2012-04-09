@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  * @since 2011-10-29
  * @version %I% %G%
  */
-public class YellowPages {
+public /* static */ class YellowPages {
     
     public static DFAgentDescription searchOrganizationWithRole(Agent searcher, String organizationName, String roleName) {
         DFAgentDescription organizationTemplate = createOrganizationTemplate();
@@ -43,6 +43,8 @@ public class YellowPages {
         }
         return null;
     }
+    
+    // ----- PRIVATE -----
     
     private static DFAgentDescription createOrganizationTemplate() {
         DFAgentDescription organizationTemplate = new DFAgentDescription();

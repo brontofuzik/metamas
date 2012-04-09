@@ -15,7 +15,8 @@ import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
 /**
- * A player agent.
+ * A player.
+ * The class represents a player type and its instances represent the player tokens.
  * @author Lukáš Kúdela
  * @since 2011-10-17
  * @version %I% %G%
@@ -24,19 +25,22 @@ public abstract class Player extends Agent {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    /** The responsibilities (classes). */
-    Map<String, Class> responsibilities = new HashMap<String, Class>();
+    /**
+     * The player type's responsibilities.
+     */
+    final Map<String, Class> responsibilities = new HashMap<String, Class>();
     
-    /** The event handlers (classes). */
-    Map<Event, Class> eventHandlers = new HashMap<Event, Class>();
+    /**
+     * The player's event handlers.
+     */
+    final Map<Event, Class> eventHandlers = new HashMap<Event, Class>();
     
-    /** The knowledge base. */
-    PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
+    /**
+     * The knowledge base.
+     */
+    final PlayerKnowledgeBase knowledgeBase = new PlayerKnowledgeBase();
     
     // ----- PRIVATE -----
-
-    // TAG OBSOLETE
-//    private Player_Initiator initiator = new Player_Initiator(this);
     
     /** The logger. */
     private Logger logger;
@@ -147,6 +151,12 @@ public abstract class Player extends Agent {
         return future;
     }
     
+    /**
+     * Subscribes to an event.
+     * @param organizationName the name of the organization
+     * @param event the event to subscribe to
+     * @param eventHandler the event handler
+     */
     public final void subscribeToEvent(String organizationName, Event event,
         Class eventHandler) {
         // Create a 'Subscribe to event' protocol initiator party.
@@ -172,13 +182,17 @@ public abstract class Player extends Agent {
     }
     
     /**
-     * Logs an INFO-level message.
+     * Logs a message at the INFO level.
      * @param message the message to log
      */
     public void logInfo(String message) {
         log(Level.INFO, message);
     }
     
+    /**
+     * Logs a SEVERE-level message.
+     * @param message 
+     */
     public void logSevere(String message) {
         log(Level.SEVERE, message);
     }
@@ -298,10 +312,10 @@ public abstract class Player extends Agent {
      * @param timeout the timeout of execution
      */
     protected final void scheduleEnactRole(final RoleFullName roleFullName, final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
+        addBehaviour(new WakerBehaviour(this, timeout) {    
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().enactRole(roleFullName.getOrganizationName(),
+                ((Player)myAgent).enactRole(roleFullName.getOrganizationName(),
                     roleFullName.getRoleName());
             }
         });
@@ -315,10 +329,10 @@ public abstract class Player extends Agent {
      */
     protected final void scheduleDeactRole(final RoleFullName roleFullName,
         final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+        addBehaviour(new WakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().deactRole(roleFullName.getOrganizationName(),
+                ((Player)myAgent).deactRole(roleFullName.getOrganizationName(),
                     roleFullName.getRoleName());
             }
         });
@@ -332,10 +346,10 @@ public abstract class Player extends Agent {
      */
     protected final void scheduleActivateRole(final RoleFullName roleFullName,
         final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {            
+        addBehaviour(new WakerBehaviour(this, timeout) {            
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().activateRole(roleFullName.getRoleName());
+                ((Player)myAgent).activateRole(roleFullName.getRoleName());
             }
         });
     }
@@ -347,10 +361,10 @@ public abstract class Player extends Agent {
      */
     protected final void scheduleDeactivateRole(final RoleFullName roleFullName,
         final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+        addBehaviour(new WakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().deactivateRole(roleFullName.getRoleName());
+                ((Player)myAgent).deactivateRole(roleFullName.getRoleName());
             }
         });
     }
@@ -364,10 +378,10 @@ public abstract class Player extends Agent {
     protected final <TArgument extends Serializable> void scheduleInvokeCompetence(
         final String competenceName, final TArgument argument,
         final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {
+        addBehaviour(new WakerBehaviour(this, timeout) {
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().invokeCompetence(competenceName, argument);
+                ((Player)myAgent).invokeCompetence(competenceName, argument);
             }
         });
     }
@@ -381,10 +395,10 @@ public abstract class Player extends Agent {
      */
     protected final void scheduleSubscribeToEvent(final String organizationName,
         final Event event, final Class eventHandlerClass, final int timeout) {
-        addBehaviour(new PlayerWakerBehaviour(this, timeout) {    
+        addBehaviour(new WakerBehaviour(this, timeout) {    
             @Override
             protected void handleElapsedTimeout() {
-                getMyPlayer().subscribeToEvent(organizationName, event, eventHandlerClass);
+                ((Player)myAgent).subscribeToEvent(organizationName, event, eventHandlerClass);
             }
         });
     }
@@ -393,44 +407,42 @@ public abstract class Player extends Agent {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    protected abstract class PlayerWakerBehaviour extends WakerBehaviour {
-    
-        // <editor-fold defaultstate="collapsed" desc="Constructors">
-        
-        protected PlayerWakerBehaviour(Player player, int timeout) {
-            super(player, timeout);
-        }
-        
-        // </editor-fold>
-        
-        // <editor-fold defaultstate="collapsed" desc="Getters and setters">
-        
-        protected Player getMyPlayer() {
-            return (Player)myAgent;
-        }
-        
-        // </editor-fold>
-    }
-    
+    /**
+     * A full role name is the name of the role qualified with the name of
+     * the organization.
+     */
     protected static class RoleFullName {
         
         // <editor-fold defaultstate="collapsed" desc="Fields">
         
-        /** The name of organization instance. */
+        /**
+         * The name of organization.
+         */
         private String organizationName;
         
-        /** The name of roleToDeact class. */
+        /**
+         * The name of the role.
+         */
         private String roleName;
         
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
+        /**
+         * Initializes a new instance of the RoleFullName class.
+         * @param organizationName the name of the organziation
+         * @param roleName the name of the role
+         */
         public RoleFullName(String organizationName, String roleName) {
             this.organizationName = organizationName;
             this.roleName = roleName;
         }
             
+        /**
+         * Initializes a new instance of the RoleFullName class.
+         * @param roleFullName the string representing the full name of the role
+         */
         public RoleFullName(String roleFullName) {
             String[] nameParts = roleFullName.split("\\.");
             organizationName = nameParts[0];
@@ -441,10 +453,18 @@ public abstract class Player extends Agent {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
         
+        /**
+         * Gets the name of the organization.
+         * @return the name of the organization
+         */
         public String getOrganizationName() {
             return organizationName;
         }
         
+        /**
+         * Gets the name of the role.
+         * @return the name of the role
+         */
         public String getRoleName() {
             return roleName;
         }

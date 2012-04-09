@@ -34,12 +34,19 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
      */
     private AID player;
 
+    /**
+     * The name of the role to enact.
+     */
     private String roleName;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Organization_EnactRole_ResponderParty class.
+     * @param aclMessage the ACL message initiating the protocol
+     */
     public Organization_EnactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL), aclMessage);
         
@@ -87,6 +94,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -104,6 +115,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive enact request' (sone-shot) state.
+     * A state in which the 'Enact' request is received.
+     */
     private class ReceiveEnactRequest extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -120,6 +135,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // </editor-fold>        
     }
     
+    /**
+     * The 'Send responsibilities' (send-success-or-failure) state.
+     * A state in which the 'Responsibilities' message is sent.
+     */
     private class SendResponsibilities
         extends SendSuccessOrFailure<ResponsibilitiesMessage> {
         
@@ -173,6 +192,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive responsibilities reply' (receive-agree-or-refuse) state.
+     * A state in which the 'Agree' or 'Refuse' message is received.
+     */
     private class ReceiveResponsibilitiesReply extends ReceiveAgreeOrRefuse {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -199,6 +222,10 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // </editor-fold>
     }
     
+    /**
+     * The 'Send role AID' (single sender) state.
+     * A state in which the 'Role AID' message is sent.
+     */
     private class SendRoleAID extends SingleSenderState<RoleAIDMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -229,7 +256,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
             getMyAgent().addPosition(role);
             
             // Link the position to its player.
-            role.setPlayerAID(player);
+            role.setEnactingPlayer(player);
             
             // Start the role agent.
             startRoleAgent(role);

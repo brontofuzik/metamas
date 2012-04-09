@@ -1,11 +1,10 @@
 package thespian4jade.core.organization;
 
 /**
- * A role definition.
  * A role definition consists of:
  * - the role class,
- * - the role responsibilites and
- * - the role multiplicity.
+ * - role multiplicity and
+ * - the role responsibilites.
  */
 class RoleDefinition {
 
@@ -30,6 +29,12 @@ class RoleDefinition {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the RoleDefinition class.
+     * @param roleClass the role class
+     * @param multiplicity the role multiplicity
+     * @param responsibilites the role responsibilities 
+     */
     RoleDefinition(Class roleClass, RoleMultiplicity multiplicity, String[] responsibilites) {
         // ----- Preconditions -----
         if (roleClass == null) {
@@ -45,14 +50,28 @@ class RoleDefinition {
         this.responsibilites = responsibilites;
     }
 
+    /**
+     * Initializes a new instance of the RoleDefinition class.
+     * @param roleClass the role class
+     * @param multiplicity the role multiplicity
+     */
     RoleDefinition(Class roleClass, RoleMultiplicity multiplicity) {
         this(roleClass, multiplicity, new String[] {});
     }
 
+    /**
+     * Initializes a new instance of the RoleDefinition class.
+     * @param roleClass the role class
+     * @param responsibilities the role responsibilities
+     */
     RoleDefinition(Class roleClass, String[] responsibilities) {
         this(roleClass, RoleMultiplicity.SINGLE, responsibilities);
     }
 
+    /**
+     * Initializes a new instance of the RoleDefinition class.
+     * @param roleClass the role class
+     */
     RoleDefinition(Class roleClass) {
         this(roleClass, RoleMultiplicity.SINGLE, new String[] {});
     }
