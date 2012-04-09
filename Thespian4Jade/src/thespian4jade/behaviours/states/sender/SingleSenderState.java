@@ -22,6 +22,9 @@ public abstract class SingleSenderState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new insatnce of the SingleSenderState class.
+     */
     protected SingleSenderState() {        
         addSender(SINGLE_SENDER, new SingleSender());
         
@@ -32,23 +35,38 @@ public abstract class SingleSenderState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the receivers; more precisely, their AIDs.
+     * @return the receivers; more precisely, their AIDs
+     */
     protected abstract AID[] getReceivers();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
+    /**
+     * Returns the event determining the only inner sender state.
+     * @return the event determining the only inner sender stat
+     */
     @Override
     protected int onManager() {
         return SINGLE_SENDER;
     }
     
+    /**
+     * Override this method to prepare the mesasge to be sent.
+     * @return the message to be sent
+     */
     protected abstract TMessage prepareMessage();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Single' (inner sender) state.
+     */
     private class SingleSender extends InnerSenderState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">

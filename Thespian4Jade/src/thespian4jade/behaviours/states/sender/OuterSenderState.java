@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A top-level sender state.
+ * An outer sender state.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
@@ -18,18 +18,32 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The inner sender states.
+     */
     private Map<Integer, InnerSenderState> senders = new HashMap<Integer, InnerSenderState>();
     
+    /**
+     * The exit value.
+     */
     private int exitValue;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the exit value.
+     * @return the exit value
+     */
     protected int getExitValue() {
         return exitValue;
     }
     
+    /**
+     * Sets the exit value.
+     * @param exitValue the exit value
+     */
     protected void setExitValue(int exitValue) {
         this.exitValue = exitValue;
     }
@@ -43,8 +57,13 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         return getExitValue();
     }
     
-    // ---------- PROTECTED ----------
+    // ----- PROTECTED -----
     
+    /**
+     * Adds an inner sender state triggered by an event.
+     * @param event the event triggering the inner sender state
+     * @param sender the innder sender state to be added
+     */
     protected void addSender(int event, InnerSenderState sender) {
         // ----- Preconditions -----
         if (sender == null) {
@@ -86,16 +105,31 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         }
     }
     
+    /**
+     * Override this method to perform some action on entering the state.
+     */
     protected abstract void onEntry();
     
+    /**
+     * Override this method to return the outer sender state event.
+     * The outer sender state event determines which inner sender state
+     * will be selected.
+     * @return the outer sender state event
+     */
     protected abstract int onManager();
     
+    /**
+     * Override this method to perform some action on exiting the state.
+     */
     protected abstract void onExit();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Entry' (one-shot) state.
+     */
     protected class EntryState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -108,6 +142,9 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // </editor-fold>
     }
     
+    /**
+     * The 'Manager' (one-shot) state.
+     */
     protected class ManagerState extends OneShotBehaviourState {
              
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -198,6 +235,9 @@ public abstract class OuterSenderState extends FSMBehaviourSenderState {
         // </editor-fold>
     }
     
+    /**
+     * The 'Exit' (one-shot) state.
+     */
     protected class ExitState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
