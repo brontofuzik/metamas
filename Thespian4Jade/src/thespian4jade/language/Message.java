@@ -4,7 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 /**
- * A message in an interaction protocol.
+ * A message exchanged in a protocol.
  * @author Lukáš Kúdela
  * @since 2011-10-21
  * @version %I% %G%
@@ -14,7 +14,7 @@ public abstract class Message {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The performative.
+     * The performative of the corresponding ACL message.
      */
     private int performative;
     
@@ -29,7 +29,7 @@ public abstract class Message {
     
     /**
      * Initializes a new instance of the Message class.
-     * @param performative 
+     * @param performative the performative of the corresponding message
      */
     protected Message(int performative) {
         this.performative = performative;
@@ -40,7 +40,7 @@ public abstract class Message {
     // <editor-fold defaultstate="collapsed" desc="Getters and Setters">
 
     /**
-     * Gets the performative.
+     * Gets the performative of the corresponding ACL message.
      * @return the performative
      */
     public int getPerformative() {
@@ -49,7 +49,7 @@ public abstract class Message {
     
     /**
      * Gets the sender; more precisely its AID.
-     * @return the sender; more precisely its AID
+     * @return the sender
      */
     public AID getSender() {
         return sender;
@@ -57,7 +57,7 @@ public abstract class Message {
     
     /**
      * Sets the sender; more precisely its AID.
-     * @param sender the sender; more precsely its AID
+     * @param sender the sender
      */
     public void setSender(AID sender) {
         this.sender = sender;
@@ -68,14 +68,14 @@ public abstract class Message {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Generates the ACL message.
-     * @return the generated ACL message
+     * Generates the corresponding ACL message.
+     * @return the corresponding ACL message
      */
     public abstract ACLMessage generateACLMessage();
     
     /**
-     * Parses the ACL message
-     * @param aclMessage the ACL message to parse
+     * Parses the corresponding ACL message.
+     * @param aclMessage the corresponding ACL message
      */
     public abstract void parseACLMessage(ACLMessage aclMessage);
     
