@@ -6,7 +6,10 @@ import thespian4jade.language.IMessageFactory;
 import java.io.Serializable;
 
 /**
- * A 'Competence argument' (binary) message.
+ * A 'Competence argument' (binary) message is sent by the 'Invoke competence'
+ * initiator party (a player) to the responder party (a role) and carries
+ * the competence argument.
+ * @param <TArgument> the competence argument type
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
@@ -17,7 +20,7 @@ public class CompetenceArgumentMessage<TArgument extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The (serializable) competence argument.
+     * The competence argument.
      */
     private TArgument argument;
     
@@ -26,7 +29,8 @@ public class CompetenceArgumentMessage<TArgument extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the CompetenceArgumentMessage class.
+     * Initializes a new instance of the InvokeCompetenceRequestMessage class.
+     * The corresponding ACL message has the INFORM performative.
      */
     public CompetenceArgumentMessage() {
         super(ACLMessage.INFORM);
@@ -47,7 +51,7 @@ public class CompetenceArgumentMessage<TArgument extends Serializable>
     /**
      * Sets the competence argument
      * @param argument the competence argument
-     * @return this 'Competence argument' message (fluent interface)
+     * @return this 'Competence argument' message (Design pattern: Fluent interface)
      */
     public CompetenceArgumentMessage setArgument(TArgument argument) {
         this.argument = argument;
@@ -59,8 +63,8 @@ public class CompetenceArgumentMessage<TArgument extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Gets the (serializable) content object.
-     * @return the (serializable) content object
+     * Gets the content object for the ACL message.
+     * @return the content object for the ACL message
      */
     @Override
     protected Serializable getContentObject() {
@@ -68,8 +72,8 @@ public class CompetenceArgumentMessage<TArgument extends Serializable>
     }
 
     /**
-     * Sets the (serializable) content object
-     * @param contentObject the (serializable) content object
+     * Sets the content object from the ACL message.
+     * @param contentObject the content object from the ACL message
      */
     @Override
     protected void setContentObject(Serializable contentObject) {

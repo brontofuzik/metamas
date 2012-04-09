@@ -66,16 +66,16 @@ public abstract class Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Creates an initiator party.
+     * Creates a new initiator party
      * @param arguments the initiator party's contructor arguments
-     * @returns an initiator party
+     * @returns a new initiator party
      */
     public abstract InitiatorParty createInitiatorParty(Object... arguments);
     
     /**
-     * Creates a responder party.
+     * Creates a new responder party party.
      * @param message the ACL message to which the responder party responds
-     * @returns a responder party
+     * @returns a new responder party
      */
     public abstract ResponderParty createResponderParty(ACLMessage message);
     

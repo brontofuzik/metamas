@@ -23,7 +23,7 @@ public abstract class SingleSenderState<TMessage extends Message>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new insatnce of the SingleSenderState class.
+     * Initializes a new instance of the SingleSenderState class.
      */
     protected SingleSenderState() {        
         addSender(SINGLE_SENDER, new SingleSender());

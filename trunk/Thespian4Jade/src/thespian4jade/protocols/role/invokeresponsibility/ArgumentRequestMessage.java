@@ -5,7 +5,9 @@ import thespian4jade.language.IMessageFactory;
 import thespian4jade.language.SimpleMessage;
 
 /**
- * 
+ * An 'Argument request' (simple) message is sent by the 'Invoke responsibility'
+ * responder party (a player) to the initiator party (a role) and contains a
+ * request to provide the responsibility argument.
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
@@ -20,6 +22,10 @@ public class ArgumentRequestMessage extends SimpleMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the ArgumentRequestMessage class.
+     * The corresponding ACL message has the REQUEST performative.
+     */
     public ArgumentRequestMessage() {
         super(ACLMessage.REQUEST);
         setContent(CONTENT);
@@ -30,7 +36,7 @@ public class ArgumentRequestMessage extends SimpleMessage {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * A 'Argument request' message factory.
+     * An 'Argument request' message factory.
      * @author Lukáš Kúdela
      * @since
      * @version %I% %G%

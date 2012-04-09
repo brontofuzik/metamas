@@ -161,7 +161,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
                 InvokeCompetenceRequestMessage message = new InvokeCompetenceRequestMessage();
                 message.parseACLMessage(getACLMessage());
             
-                competenceName = message.getCompetence();  
+                competenceName = message.getCompetenceName();  
                 return ROLE_ACTIVE;
             } else {
                 // The initiator player is not enacting this role.

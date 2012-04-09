@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
-import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
+import thespian4jade.protocols.organization.enactrole.ResponsibilitiesMessage;
 import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
 import thespian4jade.behaviours.states.IState;
 import thespian4jade.behaviours.states.sender.SingleSenderState;
@@ -57,7 +57,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // ----- States -----
         IState initialize = new Initialize();
         IState receiveEnactRequest = new ReceiveEnactRequest();
-        IState sendResponsibilitiesInform = new SendResponsibilitiesInform();
+        IState sendResponsibilities = new SendResponsibilities();
         IState receiveResponsibilitiesReply = new ReceiveResponsibilitiesReply();
         IState sendRoleAID = new SendRoleAID();
         IState roleEnacted = new RoleEnacted();
@@ -67,7 +67,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // Register the states.
         registerFirstState(initialize);        
         registerState(receiveEnactRequest);
-        registerState(sendResponsibilitiesInform);
+        registerState(sendResponsibilities);
         registerState(receiveResponsibilitiesReply);
         registerState(sendRoleAID);     
         registerLastState(roleEnacted);
@@ -75,9 +75,9 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         
         // Register the transitions.
         initialize.registerDefaultTransition(receiveEnactRequest);  
-        receiveEnactRequest.registerDefaultTransition(sendResponsibilitiesInform);
-        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.SUCCESS, receiveResponsibilitiesReply);
-        sendResponsibilitiesInform.registerTransition(SendResponsibilitiesInform.FAILURE, roleNotEnacted);       
+        receiveEnactRequest.registerDefaultTransition(sendResponsibilities);
+        sendResponsibilities.registerTransition(SendResponsibilities.SUCCESS, receiveResponsibilitiesReply);
+        sendResponsibilities.registerTransition(SendResponsibilities.FAILURE, roleNotEnacted);       
         receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.AGREE, sendRoleAID);
         receiveResponsibilitiesReply.registerTransition(ReceiveResponsibilitiesReply.REFUSE, roleNotEnacted);   
         sendRoleAID.registerDefaultTransition(roleEnacted);
@@ -120,8 +120,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         // </editor-fold>        
     }
     
-    private class SendResponsibilitiesInform
-        extends SendSuccessOrFailure<ResponsibilitiesInformMessage> {
+    private class SendResponsibilities
+        extends SendSuccessOrFailure<ResponsibilitiesMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
@@ -158,9 +158,9 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
         }
         
         @Override
-        protected ResponsibilitiesInformMessage prepareMessage() {
+        protected ResponsibilitiesMessage prepareMessage() {
             // Create the 'Responsibilities inform' message.
-            ResponsibilitiesInformMessage message = new ResponsibilitiesInformMessage();
+            ResponsibilitiesMessage message = new ResponsibilitiesMessage();
             message.setResponsibilities(getMyAgent().roles.get(roleName).getResponsibilities());
             return message;
         }

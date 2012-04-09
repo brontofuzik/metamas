@@ -19,6 +19,11 @@ public class DeactRoleProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the DeactRoleProtocol class.
+     * The 'Deact role' protocol is initiated by an ACL message with the REQUEST
+     * performative.
+     */
     public DeactRoleProtocol() {
         super(ACLMessage.REQUEST);
     }
@@ -28,9 +33,12 @@ public class DeactRoleProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Creates an initiator party.
-     * @param arguments the initiator party's contructor arguments
-     * @returns an initiator party
+     * Creates a new 'Deact role' protocol initiator party.
+     * @param arguments the 'Deact role' protocol initiator party's contructor
+     * arguments:
+     *     1) name of the organization, and
+     *     2) name of the role
+     * @returns a new 'Deact role' protocol initiator party
      */
     @Override
     public InitiatorParty createInitiatorParty(Object... arguments) {
@@ -40,9 +48,10 @@ public class DeactRoleProtocol extends Protocol {
     }
     
     /**
-     * Creates a responder party.
-     * @param message the ACL message
-     * @returns a responder party
+     * Creates a new 'Deact role' protocol responder party.
+     * @param message the ACL message to which the 'Deact role' protocol
+     * responder party responds
+     * @returns a new 'Deact role' protocol responder party
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {
