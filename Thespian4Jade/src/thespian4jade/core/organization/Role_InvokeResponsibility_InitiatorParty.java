@@ -17,7 +17,6 @@ import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityReq
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
 import thespian4jade.asynchrony.IObservable;
 import thespian4jade.asynchrony.Observable;
-import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
@@ -29,7 +28,7 @@ import thespian4jade.protocols.Protocols;
  */
 public class Role_InvokeResponsibility_InitiatorParty
     <TArgument extends Serializable, TResult extends Serializable>
-    extends InitiatorParty<Role> implements IResultParty<TResult>, IObservable {
+    extends InitiatorParty<Role> implements IObservable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -132,15 +131,6 @@ public class Role_InvokeResponsibility_InitiatorParty
         return responsibilityResult;
     }
     
-    /**
-     * Gets the result.
-     * @return the result
-     */
-    @Override
-    public TResult getResult() {
-        return getResponsibilityResult();
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -150,7 +140,6 @@ public class Role_InvokeResponsibility_InitiatorParty
      * The IResultParty method.
      * @return the reuslt future
      */
-    @Override
     public Future getResultFuture() {
         Future<TResult> future = new Future();
         addObserver(future);

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.asynchrony.Future;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.behaviours.parties.Party;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
@@ -139,7 +138,8 @@ public abstract class Player extends Agent {
             .createInitiatorParty(competenceName, argument);
         
         // Get the inititor party result future.
-        Future<TResult> future = ((IResultParty)invokeCompetenceInitiator).getResultFuture();
+        Future<TResult> future = ((Player_InvokeCompetence_InitiatorParty)
+            invokeCompetenceInitiator).getResultFuture();
         
         // Schedule the initiator party for execution.
         addBehaviour(invokeCompetenceInitiator);

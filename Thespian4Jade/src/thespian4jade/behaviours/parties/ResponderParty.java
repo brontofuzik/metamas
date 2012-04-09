@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import thespian4jade.protocols.Protocol;
 
 /**
- * A responder party.
+ * An responder party---a party that responds to a protocol.
  * @author Lukáš Kúdela
  * @since 2012-01-09
  * @version %I% %G%

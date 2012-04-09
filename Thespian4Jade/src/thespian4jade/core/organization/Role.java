@@ -12,7 +12,6 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.logging.Level;
 import thespian4jade.asynchrony.Future;
-import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.behaviours.parties.Party;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
@@ -140,7 +139,8 @@ public class Role extends Agent {
             .createInitiatorParty(responsibilityName, argument);
         
         // Get the inititor party result future.
-        Future<TResult> future = ((IResultParty)invokeResponsibilityInitiator).getResultFuture();
+        Future<TResult> future = ((Role_InvokeResponsibility_InitiatorParty)
+            invokeResponsibilityInitiator).getResultFuture();
         
         // Schedule the initiator party for execution.
         addBehaviour(invokeResponsibilityInitiator);

@@ -16,7 +16,6 @@ import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
 import thespian4jade.asynchrony.IObservable;
 import thespian4jade.asynchrony.Observable;
-import thespian4jade.behaviours.parties.IResultParty;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 
@@ -28,7 +27,7 @@ import thespian4jade.protocols.Protocols;
  */
 public class Player_InvokeCompetence_InitiatorParty
     <TArgument extends Serializable, TResult extends Serializable>
-    extends InitiatorParty<Player> implements IResultParty<TResult>, IObservable {
+    extends InitiatorParty<Player> implements IObservable {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
@@ -131,16 +130,6 @@ public class Player_InvokeCompetence_InitiatorParty
         return competenceResult;
     }
     
-    /**
-     * Gets the result.
-     * The IResultParty method.
-     * @return the result
-     */
-    @Override
-    public TResult getResult() {
-        return getCompetenceResult();
-    }
-    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -150,7 +139,6 @@ public class Player_InvokeCompetence_InitiatorParty
      * The IResultParty method.
      * @return the reuslt future
      */
-    @Override
     public Future getResultFuture() {
         Future<TResult> future = new Future();
         addObserver(future);
