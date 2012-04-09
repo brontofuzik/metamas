@@ -150,7 +150,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     
     /**
      * The 'Receive activate reply' (multi sender) state.
-     * A state in which the 'Activate reply' message is received.
+     * A state in which the reply message (AGREE or REFUSE) is received.
      */
     private class ReceiveActivateReply extends ReceiveAgreeOrRefuse {
 
