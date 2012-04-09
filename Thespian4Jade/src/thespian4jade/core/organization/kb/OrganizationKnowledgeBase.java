@@ -18,8 +18,14 @@ public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The Query view.
+     */
     private Query query = this.new Query(); 
     
+    /**
+     * The Update view.
+     */
     private Update update = this.new Update(); 
     
     /**
@@ -42,16 +48,30 @@ public class OrganizationKnowledgeBase {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Gets the Query view.
+     * @return the Uery view 
+     */
     public Query query() {
         return query;
     }
 
+    /**
+     * Gets the Update view.
+     * @return Update view 
+     */
     public Update update() {
         return update;
     }
     
     // ----- PRIVATE -----
     
+    /**
+     * Gets the position on the given index.
+     * @param positions a map of positions
+     * @param index the index
+     * @return the position on the given index
+     */
     private static AID getPositionAtIndex(Map<AID, AID> positions, int index) {
         for (AID position : positions.values()) {
             if (index == 0) {
@@ -78,6 +98,9 @@ public class OrganizationKnowledgeBase {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The Query view.
+     */
     public class Query {
         
         // ----- Roles -----
@@ -127,9 +150,9 @@ public class OrganizationKnowledgeBase {
             return positions.get(player);
         }
 
-        // TAG NOT-USED
         /**
          * Gets the first position of a specified role (class).
+         * Note: This method is currently not used.
          * @param roleName the name of the role
          * @return the first position of the specified role
          */
@@ -142,9 +165,9 @@ public class OrganizationKnowledgeBase {
             }      
         }
 
-        // TAG NOT-USED
         /**
          * Gets a random position of a specified role.
+         * Note: This method is currently not used.
          * @param roleName the name of the role
          * @return a random position of the specified role
          */
@@ -158,9 +181,9 @@ public class OrganizationKnowledgeBase {
             }
         }
 
-        // TAG NOT-USED
         /**
          * Gets all role instances of a specified role (class).
+         * Note: This method is currently not used.
          * @param roleName the name of the role (class)
          * @return the set of all role instances of the specified role (class)
          */
@@ -183,6 +206,11 @@ public class OrganizationKnowledgeBase {
                 enactingPlayers.get(player).isEmployed();
         }
         
+        /**
+         * Get the players subscribed to a given event.
+         * @param event the event
+         * @return the players subscribed to the given event
+         */
         public Set<AID> getPlayersSubscribedToEvent(Event event) {
             Set<PlayerDescription> allPlayers = new HashSet<PlayerDescription>(enactingPlayers.values());
             Set<PlayerDescription> subscribedPlayers = new HashSet<PlayerDescription>();
@@ -201,22 +229,23 @@ public class OrganizationKnowledgeBase {
         public Set<AID> getAllPlayers() {
             return new HashSet(enactingPlayers.keySet());
         }
-
-        public boolean canInvokeResponsibility(String responsibilityName) {
-            // ----- Preconditions -----
-            assert responsibilityName != null && !responsibilityName.isEmpty();
-            // -------------------------
-            
-            // TODO (priority: medium) Implement.
+        
+        /**
+         * Determines whether a competence can be invoked on a specified player.
+         * @param player the player; more precisely, its AID
+         * @param responsibilityName the name of the responsibility
+         * @return <c>true</c> if responsibility can be invoked, <c>false</c> otherwise
+         */
+        public boolean canInvokeResponsibility(AID player, String responsibilityName) {
             return true;
         }
         
         // ----- PRIVATE -----
         
         /**
-         * Projects the player description
-         * @param playerDescriptions
-         * @return 
+         * Projects player descriptions (a set) to player AIDs (a set).
+         * @param playerDescriptions the player descriptios (a set)
+         * @return the player AIDs (a set)
          */
         private Set<AID> projectPlayerDescriptionsToAIDs(Set<PlayerDescription> playerDescriptions) {
             Set<AID> playerAIDs = new HashSet<AID>();
@@ -227,6 +256,9 @@ public class OrganizationKnowledgeBase {
         }
     }
     
+    /**
+     * The Update view.
+     */
     public class Update {
         
         // ----- Roles -----
