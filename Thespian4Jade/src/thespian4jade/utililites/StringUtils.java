@@ -11,6 +11,12 @@ import java.util.Iterator;
  */
 public /* static */ class StringUtils {
     
+    /**
+     * Concatenates a sequence of objects (their string representations).
+     * @param objects the sequence of objects
+     * @param delimiter the delimiter separating the objects
+     * @return a concatenation of the objects
+     */
     public static String join(Iterable objects, String delimiter) {
         Iterator iterator = objects.iterator();       
         if (!iterator.hasNext()) {
@@ -24,6 +30,12 @@ public /* static */ class StringUtils {
         return builder.toString();
     }
     
+    /**
+     * Concatenates an array of objects (their string representations).
+     * @param objects an array of objects
+     * @param delimiter the delimiter separating the objects
+     * @return a concatenation of the objects
+     */
     public static String join(Object[] objects, String delimiter) {
         return thespian4jade.utililites.StringUtils.join(Arrays.asList(objects), delimiter);
     }
