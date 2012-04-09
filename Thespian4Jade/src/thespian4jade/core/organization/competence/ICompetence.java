@@ -13,6 +13,8 @@ public interface ICompetence
     <TArgument extends Serializable, TResult extends Serializable>
     extends IState {
     
+    // <editor-fold defaultstate="collapsed" desc="Getters and setters">
+    
     /**
      * Sets the competence argument.
      * @param argument the competence argument
@@ -24,4 +26,6 @@ public interface ICompetence
      * @return the competence result
      */
     public TResult getResult();
+    
+    // </editor-fold>
 }
