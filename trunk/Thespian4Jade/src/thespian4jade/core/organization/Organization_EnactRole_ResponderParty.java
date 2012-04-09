@@ -194,7 +194,7 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     /**
      * The 'Receive responsibilities reply' (receive-agree-or-refuse) state.
-     * A state in which the 'Agree' or 'Refuse' message is received.
+     * A state in which the 'Responsibilities reply' message is received.
      */
     private class ReceiveResponsibilitiesReply extends ReceiveAgreeOrRefuse {
         
