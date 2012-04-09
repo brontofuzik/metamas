@@ -3,6 +3,7 @@ package thespian4jade.behaviours.states.special;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 
 /**
+ * An (one-shot) state that handles an event.
  * @author Lukáš Kúdela
  * @since 2012-03-19
  * @version %I% %G%
@@ -38,6 +39,10 @@ public abstract class EventHandler<TAgent> extends OneShotBehaviourState {
         return argument;
     }
     
+    /**
+     * Gets the owner payer.
+     * @return the owner player
+     */
     protected TAgent getMyPlayer() {
         return (TAgent)myAgent;
     }
@@ -53,6 +58,11 @@ public abstract class EventHandler<TAgent> extends OneShotBehaviourState {
     
     // ----- PROTECTED -----
     
+    /**
+     * Handles the event.
+     * Override this method to handle the event.
+     * @param argument the event argument
+     */
     protected abstract void handleEvent(String argument);
     
     // </editor-fold>

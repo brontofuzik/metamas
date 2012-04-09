@@ -4,13 +4,15 @@ import java.io.Serializable;
 import thespian4jade.core.organization.Role_InvokeResponsibility_InitiatorParty;
 
 /**
+ * A (wrapper) state in which the 'Invoke responsibility' protocol initiator party is
+ * (synchronously) executed.
  * @author Lukáš Kúdela
  * @since 2012-03-17
  * @version %I% %G%
  */  
 public abstract class InvokeResponsibilityState
     <TArgument extends Serializable, TResult extends Serializable>
-    extends StateWrapperState<Role_InvokeResponsibility_InitiatorParty> {
+    extends WrapperState<Role_InvokeResponsibility_InitiatorParty> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -52,13 +54,15 @@ public abstract class InvokeResponsibilityState
     
     /**
      * Gets the responsibility argument.
+     * Override this method to provide the responsibility argument.
      * @return the responsibility argument
      */
     protected abstract TArgument getResponsibilityArgument();
     
     /**
      * Sets the responsibility result.
-     * @param responsibilityResult the responsibility result
+     * Override this method to retrieve the responsibility result.
+     * @param competenceResult the responsibility result
      */
     protected abstract void setResponsibilityResult(TResult competenceResult);
     
@@ -66,14 +70,24 @@ public abstract class InvokeResponsibilityState
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Provides the name of the responsibility and its argument to the wrapped
+     * 'Invoke responsibility' protocol initiator party.
+     * @param wrappedState the wrapped 'Invoke responsibility' protocol initiator party
+     */
     @Override
-    protected final void setWrappedStateArgument(Role_InvokeResponsibility_InitiatorParty wrappedState) {
+    protected final void doActionBefore(Role_InvokeResponsibility_InitiatorParty wrappedState) {
         wrappedState.setResponsibilityName(getResponsibilityName());
         wrappedState.setResponsibilityArgument(getResponsibilityArgument());
     }
 
+    /**
+     * Retrieves the responsibility result from the wrapped 'Invoke responsibility'
+     * protocol initiator party.
+     * @param wrappedState the wrapped 'Invoke responsibility' protocol initiator party
+     */
     @Override
-    protected final void getWrappedStateResult(Role_InvokeResponsibility_InitiatorParty wrappedState) {
+    protected final void doActionAfter(Role_InvokeResponsibility_InitiatorParty wrappedState) {
         setResponsibilityResult((TResult)wrappedState.getResponsibilityResult());
     }
     

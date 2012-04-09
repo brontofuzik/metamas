@@ -14,7 +14,7 @@ import thespian4jade.protocols.role.invokecompetence.CompetenceArgumentMessage;
 import thespian4jade.protocols.role.invokecompetence.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokecompetence.CompetenceResultMessage;
 import java.io.Serializable;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
@@ -297,7 +297,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     }
       
     private class CompetenceWrapperState
-        extends StateWrapperState<ICompetence<TArgument, TResult>> {
+        extends WrapperState<ICompetence<TArgument, TResult>> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -310,12 +310,12 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(ICompetence<TArgument, TResult> competence) {
+        protected void doActionBefore(ICompetence<TArgument, TResult> competence) {
             competence.setArgument(argument);
         }
 
         @Override
-        protected void getWrappedStateResult(ICompetence<TArgument, TResult> competence) {
+        protected void doActionAfter(ICompetence<TArgument, TResult> competence) {
             result = competence.getResult();
         }
         
