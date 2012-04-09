@@ -65,7 +65,7 @@ public abstract class SingleSenderState<TMessage extends Message>
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Single' (inner sender) state.
+     * The 'Single sender' (inner sender) state.
      */
     private class SingleSender extends InnerSenderState<TMessage> {
         

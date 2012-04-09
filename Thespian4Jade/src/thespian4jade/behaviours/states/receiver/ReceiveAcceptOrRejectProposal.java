@@ -39,7 +39,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     
     /**
      * Gets the senders; more precisely, their AIDs.
-     * @return the senders; more precisely, their AIDs.
+     * @return the senders; more precisely, their AIDs
      */
     protected abstract AID[] getSenders();
     
@@ -47,19 +47,21 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    // TODO!!! Replace with onAcceptProposal().
     /**
-     * Handles the received ACCEPT_PROPOSAL message.
-     * @param message the recived ACCEPT_PROPOSAL message
+     * Handles the received ACCEPT-PROPOSAL message.
+     * @param message the recived ACCEPT-PROPOSAL message
      */
-    protected /* virtual */ void handleAcceptProposalMessage(SimpleMessage message) {
+    protected void handleAcceptProposalMessage(SimpleMessage message) {
         // Do nothing.
     }
     
+    // TODO!!! Replace with onRejectProposal().
     /**
-     * Handles the recevied REJECT_PROPOSAL message.
-     * @param message the received REJECT_PROPOSAL message
+     * Handles the recevied REJECT-PROPOSAL message.
+     * @param message the received REJECT-PROPOSAL message
      */
-    protected /* virtual */ void handleRejectProposalMessage(SimpleMessage message) {
+    protected void handleRejectProposalMessage(SimpleMessage message) {
         // Do nothing.
     }
     
@@ -68,7 +70,8 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Receive ACCEPT_PROPOSAL' (inner receiver) state.
+     * The 'Receive ACCEPT-PROPOSAL' (inner receiver) state.
+     * A state in which an ACCEPT-PROPOSAL simple message is received.
      */
     private class ReceiveAcceptProposal extends ReceiveSimpleMessage {
         
@@ -111,7 +114,8 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
     }
     
     /**
-     * The 'Receive REJECT_PROPOSAL' (inner receiver) state.
+     * The 'Receive REJECT-PROPOSAL' (inner receiver) state.
+     * A state in which the REJECT-PROPOSAL simple message is received.
      */
     private class MyReceiveRejectProposal extends ReceiveSimpleMessage {
         

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * An outer receiver state.
  * A top-level receiver state.
  * @author Lukáš Kúdela
  * @since 2011-12-11
@@ -20,18 +21,32 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The inner receiver states.
+     */
     private List<InnerReceiverState> receivers = new ArrayList<InnerReceiverState>();
-    
+  
+    /**
+     * The exit value.
+     */
     private int exitValue;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the exit value.
+     * @return the exit value
+     */
     protected int getExitValue() {
         return exitValue;
     }
     
+    /**
+     * Sets the exit value.
+     * @param exitValue the exit value
+     */
     protected void setExitValue(int exitValue) {
         this.exitValue = exitValue;
     }
@@ -45,8 +60,13 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         return getExitValue();
     }
     
-    // ------------ PROTECTED ----------
+    // ----- PROTECTED -----
     
+    /**
+     * Adds an inner receiver state triggered by an event.
+     * @param event the event triggering the inner receiver state
+     * @param sender the innder receiver state to be added
+     */
     protected void addReceiver(InnerReceiverState receiver) {
         // ----- Preconditions -----
         if (receiver == null) {
@@ -98,19 +118,34 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // blocker ---[Default]---> manager
         blocker.registerDefaultTransition(manager/*, new String[] { manager.getName() }*/);
     }
-     
+   
+    /**
+     * Override this method to perform some action on entering the state.
+     */
     protected abstract void onEntry();
     
+    /**
+     * Override this method to return the outer receiver state event.
+     * The outer receiver state event determines which inner receiver state
+     * will be selected.
+     * @return the outer receiver state event
+     */
     protected void onManager() {
         // Do nothing.
     }
-    
+   
+    /**
+     * Override this method to perform some action on exiting the state.
+     */
     protected abstract void onExit();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Entry' (one-shot) state.
+     */
     protected class EntryState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -123,6 +158,9 @@ public abstract class OuterReceiverState extends FSMBehaviourReceiverState {
         // </editor-fold>
     }
     
+    /**
+     * The 'Manager' (one-shot) state.
+     */
     protected class ManagerState extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

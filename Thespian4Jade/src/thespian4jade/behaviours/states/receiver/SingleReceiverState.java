@@ -23,6 +23,10 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the SingleReceiverState class.
+     * @param messageFactory 
+     */
     public SingleReceiverState(IMessageFactory<TMessage> messageFactory) {        
         addReceiver(new SingleReceiver(messageFactory));
         
@@ -33,13 +37,21 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the senders; more precisely, their AIDs.
+     * @return the senders; more precisely, their AIDs
+     */
     protected abstract AID[] getSenders();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">   
     
-    protected /* virtual */ void handleMessage(TMessage message) {
+    /**
+     * Override this method to handle the received message.
+     * @return the received message
+     */
+    protected void handleMessage(TMessage message) {
         // Do nothing.
     }   
     
@@ -47,6 +59,9 @@ public abstract class SingleReceiverState<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Single receiver' (inner receiver) state.
+     */
     private class SingleReceiver
         extends InnerReceiverState<TMessage> {
         
