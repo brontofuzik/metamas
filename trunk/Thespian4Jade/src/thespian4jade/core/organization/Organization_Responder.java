@@ -10,13 +10,14 @@ import thespian4jade.behaviours.Responder;
  * @since 2011-12-16
  * @version %I% %G%
  */
-public class Organization_Responder extends Responder {
+class Organization_Responder extends Responder {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     /**
      * Initializes a new instance of the Organization_Responder class.
-     * Configures the organization responder - adds individual protocol responders.
+     * Configures an organization to respond to the 'Enact role', 'Deact role'
+     * and 'Subscribe to event' protocols.
      */
     Organization_Responder() {
         addProtocol(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));

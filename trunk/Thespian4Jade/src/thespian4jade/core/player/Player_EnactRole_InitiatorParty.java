@@ -42,7 +42,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     private String roleName;
     
     /**
-     * The responsibilitties of the role.
+     * The responsibilities of the role.
      */
     private String[] responsibilities;
     
@@ -55,6 +55,11 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Player_EnactRole_InitiatorParty class.
+     * @param organizationName the name of the organization in which to enact the role
+     * @param roleName the name of the role to enact
+     */
     public Player_EnactRole_InitiatorParty(String organizationName, String roleName) {
         super(ProtocolRegistry.getProtocol(Protocols.ENACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
@@ -72,6 +77,9 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         IState initialize = new Initialize();
@@ -109,6 +117,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     /**
      * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends ExitValueState {
     
@@ -152,7 +161,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Send enact request' active state.
+     * The 'Send enact request' (single sender) state.
      * A state in which the 'Enact' request is sent.
      */
     private class SendEnactRequest extends SingleSenderState<EnactRequestMessage> {
@@ -192,8 +201,8 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Receive responsibilities info' (multi receiver) state.
-     * A state in which the 'Responsibilities' info is received.
+     * The 'Receive responsibilities' (receive-success-or-failure) state.
+     * A state in which the 'Responsibilities' message is received.
      */
     private class ReceiveResponsibilities extends
         ReceiveSuccessOrFailure<ResponsibilitiesMessage> {
@@ -236,7 +245,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Send responsibilities reply' (multi sender) state.
+     * The 'Send responsibilities reply' (send-agree-or-refuse) state.
      * A state in which the 'Agree' or 'Refuse' message is sent.
      */
     private class SendResponsibilitiesReply extends SendAgreeOrRefuse {
@@ -277,7 +286,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Receive role AID' passive state.
+     * The 'Receive role AID' (single receiver) state.
      * A state in which the 'Role AID' message is received.
      */
     private class ReceiveRoleAID extends SingleReceiverState<RoleAIDMessage> {
