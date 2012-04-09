@@ -16,7 +16,7 @@ public interface IReceiverState {
     /**
      * Receives a message.
      * @param message the message to be received
-     * @param senders the senders. More precisely, their AIDs
+     * @param senders the senders; more precisely, their AIDs
      * @return <c>true</c> if the message has been received, <c>false</c> otherwise
      */
     public boolean receive(Message message, AID... senders);
