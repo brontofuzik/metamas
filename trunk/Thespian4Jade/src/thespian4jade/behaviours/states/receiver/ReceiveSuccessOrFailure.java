@@ -25,9 +25,13 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the ReceiveSuccessOrFailure class.
+     * @param messageFactory 
+     */
     protected ReceiveSuccessOrFailure(IMessageFactory<TMessage> messageFactory) {
-        addReceiver(new MyReceiveSuccess(messageFactory));
-        addReceiver(new MyReceiveFailure());
+        addReceiver(new ReceiveSuccess(messageFactory));
+        addReceiver(new ReceiveFailure());
         
         buildFSM();
     }
@@ -36,13 +40,28 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the senders; more precisely, their AIDs.
+     * @return the senders; more precisely, their AIDs
+     */
     protected abstract AID[] getSenders();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    protected /* virtual */ void handleSuccessMessage(TMessage message) {
+    /**
+     * Override this method to handle the message received in case of success.
+     * @return the message received in case of success
+     */
+    protected void handleSuccessMessage(TMessage message) {
+        // Do nothing.
+    }
+    
+    /**
+     * Override this method to handle the FAILURE simple message received.
+     */
+    protected void onFailure() {
         // Do nothing.
     }
     
@@ -50,11 +69,15 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    private class MyReceiveSuccess extends InnerReceiverState<TMessage> {
+    /**
+     * The 'Receive success' (inner receiver) state.
+     * A state in which the success message is received.
+     */
+    private class ReceiveSuccess extends InnerReceiverState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        MyReceiveSuccess(IMessageFactory<TMessage> messageFactory) {
+        ReceiveSuccess(IMessageFactory<TMessage> messageFactory) {
             super(messageFactory, SUCCESS);
         }
         
@@ -81,15 +104,16 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     
     /**
      * The 'Receive FAILURE' (inner receiver) state.
+     * A state in which the FAILURE simple message is received.
      */
-    private class MyReceiveFailure extends ReceiveSimpleMessage {
+    private class ReceiveFailure extends ReceiveSimpleMessage {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initializes a new instance of the ReceiveFailure class.
          */
-        MyReceiveFailure() {
+        ReceiveFailure() {
             super(ACLMessage.FAILURE, FAILURE);
         }
         

@@ -39,7 +39,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     /**
      * Gets the senders; more precisely, their AIDs.
-     * @return the senders; more precisely, their AIDs.
+     * @return the senders; more precisely, their AIDs
      */
     protected abstract AID[] getSenders();
     
@@ -47,6 +47,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    // TODO!!! Replace with onAgree().
     /**
      * Handles the received AGREE message.
      * @param message the received AGREE message
@@ -55,6 +56,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
         // Do nothing.
     }
     
+    // TODO!!! Replace with onRefuse().
     /**
      * Handles the received REFUSE message.
      * @param message the received REFUSE message
@@ -68,7 +70,8 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Receive AGREE' (inner receiver) state. 
+     * The 'Receive AGREE' (inner receiver) state.
+     * A state in which an AGREE simple message is received.
      */
     private class ReceiveAgree extends ReceiveSimpleMessage {
         
@@ -112,6 +115,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     /**
      * The 'Receive REFUSE' (inner receiver) state.
+     * A state in which the REFUSE simple message is received.
      */
     private class MyReceiveRefuse extends ReceiveSimpleMessage {
         
