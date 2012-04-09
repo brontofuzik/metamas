@@ -246,7 +246,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     /**
      * The 'Send responsibilities reply' (send-agree-or-refuse) state.
-     * A state in which the 'Agree' or 'Refuse' message is sent.
+     * A state in which the 'Responsibilities reply' message is sent.
      */
     private class SendResponsibilitiesReply extends SendAgreeOrRefuse {
 

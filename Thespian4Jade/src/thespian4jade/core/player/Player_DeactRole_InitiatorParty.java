@@ -1,7 +1,6 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -23,17 +22,18 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
     /**
+     * The organization in which to deact the role; more precisely its AID.
+     * The responder party.
+     */
+    private AID organization;
+    
+    /**
      * The organization name.
      */
     private String organizationName;
-    
-    /**
-     * The organization AID.
-     */
-    private AID organizationAID;
 
     /**
-     * The role name.
+     * The name of the role to deact.
      */
     private String roleName;
 
@@ -46,6 +46,11 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Player_DeactRole_InitiatorParty class.
+     * @param organizationName the name of the organization in which to deact the role
+     * @param roleName the name of the role
+     */
     public Player_DeactRole_InitiatorParty(String organizationName, String roleName) {
         super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL));
         // ----- Preconditions -----
@@ -94,6 +99,10 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends ExitValueState {
 
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -118,8 +127,8 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
 //            DFAgentDescription organization = YellowPages
 //                .searchOrganizationWithRole(this, organizationName, roleName);
 
-            organizationAID = new AID(organizationName, AID.ISLOCALNAME);
-            if (organizationAID != null) {
+            organization = new AID(organizationName, AID.ISLOCALNAME);
+            if (organization != null) {
                 // The organizaiton exists.
                 return OK;
             } else {
@@ -144,7 +153,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>
@@ -172,7 +181,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Receive deact reply' (multi receiver) state.
+     * The 'Receive deact reply' (receive-agree-or-refuse) state.
      * A state in which the 'Deact reply' message is received.
      */
     private class ReceiveDeactReply extends ReceiveAgreeOrRefuse {
@@ -181,7 +190,7 @@ public class Player_DeactRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { organizationAID };
+            return new AID[] { organization };
         }
         
         // </editor-fold>

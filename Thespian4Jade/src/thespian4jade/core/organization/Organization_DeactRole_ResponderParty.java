@@ -27,12 +27,19 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
      */
     private AID player;
     
+    /**
+     * The name of the role to deact.
+     */
     private String roleName;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Organization_DeactRole_ResponderParty class.
+     * @param aclMessage the ACL message initiating the protocol
+     */
     public Organization_DeactRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.DEACT_ROLE_PROTOCOL), aclMessage);
 
@@ -71,6 +78,10 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -108,7 +119,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
     }
     
     /**
-     * The 'Send deact reply' (multi sender) state.
+     * The 'Send deact reply' (send-agree-or-refuse) state.
      * A state in which the 'Enact reply' message is sent.
      */
     private class SendDeactReply extends SendAgreeOrRefuse {
