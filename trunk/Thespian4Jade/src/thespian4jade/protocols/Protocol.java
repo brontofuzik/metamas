@@ -16,12 +16,19 @@ public abstract class Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The performative of the ACL message initiating the protocol.
+     */
     private int performative;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Protocol class.
+     * @param performative the performative of the ACL message initiating the protocol
+     */
     protected Protocol(int performative) {
         this.performative = performative;
     }
@@ -46,6 +53,10 @@ public abstract class Protocol {
         return MessageTemplate.MatchProtocol(getName());
     }
     
+    /**
+     * Gets the performative of the ACL message initiating this protocol.
+     * @return the performative of the ACL message initiating this protocol
+     */
     public int getPerformative() {
         return performative;
     }
@@ -63,7 +74,7 @@ public abstract class Protocol {
     
     /**
      * Creates a responder party.
-     * @param message the ACL message
+     * @param message the ACL message to which the responder party responds
      * @returns a responder party
      */
     public abstract ResponderParty createResponderParty(ACLMessage message);
