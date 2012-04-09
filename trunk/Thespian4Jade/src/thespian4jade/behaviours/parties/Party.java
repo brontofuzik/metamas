@@ -140,7 +140,7 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     
     /**
      * Creates a message template that matches the senders.
-     * @param seners the senders. More precisely, their AIDs
+     * @param seners the senders; more precisely, their AIDs
      * @return the message template that matches the senders
      */
     private MessageTemplate createSendersTemplate(AID[] senders) {
