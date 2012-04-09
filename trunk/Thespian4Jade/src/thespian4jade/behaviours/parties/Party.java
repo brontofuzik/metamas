@@ -9,7 +9,7 @@ import thespian4jade.protocols.Protocol;
 import thespian4jade.behaviours.states.FSMBehaviourState;
 
 /**
- * A protocol party.
+ * A party---a role participating in a protocol.
  * @author Lukáš Kúdela
  * @since 2011-10-20
  * @version %I% %G%
@@ -18,14 +18,24 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The protocol.
+     */
     private Protocol protocol;
     
+    /**
+     * The protocol id.
+     */
     private String protocolId;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Party class.
+     * @param protocol 
+     */
     protected Party(Protocol protocol) {
         // ----- Preconditions -----
         assert protocol != null;
@@ -39,16 +49,16 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the id of the protocol.
-     * @return the id of the protocol
+     * Gets the protocol id.
+     * @return the protocol id
      */
     public String getProtocolId() {
         return protocolId;
     }
     
     /**
-     * Sets the id of the protocol.
-     * @param protocolId the id of the protocol
+     * Sets the protocol id.
+     * @param protocolId the protocol id
      */
     public void setProtocolId(String protocolId) {
         this.protocolId = protocolId;
@@ -57,48 +67,12 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     // ----- PROTECTED -----
     
     /**
-     * Gets the agent owning this party.
-     * @return the agent owning this party
+     * Gets the agent owner agent.
+     * @return the owner agent
      */
     protected TAgent getMyAgent() {
         return (TAgent)myAgent;
     }
-    
-//    /**
-//     * Gets the organization owning this party.
-//     * @return the organization owning this party
-//     */
-//    protected TAgent getMyOrganization() {
-//        if (!(getMyAgent() instanceof Organization)) {
-//            // The agent owning this party is not an arganization.
-//            throw new IllegalStateException();
-//        }
-//        return getMyAgent();
-//    }
-//    
-//    /**
-//     * Gets the role owning this party.
-//     * @return the role owning this party
-//     */
-//    protected TAgent getMyRole() {
-//        if (!(getMyAgent() instanceof Role)) {
-//            // The agent owning this party is not a role.
-//            throw new IllegalStateException();
-//        }
-//        return getMyAgent();
-//    }
-//    
-//    /**
-//     * Gets the player owning this party.
-//     * @return the player owning this party
-//     */
-//    protected TAgent getMyPlayer() {
-//        if (!(getMyAgent() instanceof Player)) {
-//            // The agent owning this party is not a player.
-//            throw new IllegalStateException();
-//        }
-//        return getMyAgent();
-//    }
     
     // </editor-fold>
     
@@ -107,7 +81,7 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     /**
      * Sends a Thespian4Jade (T4J) message.
      * @param messageClass the message class
-     * @param receivers the receivers. More precisely, their AIDs
+     * @param receivers the receivers; more precisely, their AIDs
      */
     public void send(Message message, AID[] receivers) {
         // Generate the ACL message.
@@ -126,8 +100,9 @@ public abstract class Party<TAgent extends Agent> extends FSMBehaviourState {
     
     /**
      * Receives a Thespian4Jade (T4J) message.
-     * @param messageClass the message class
-     * @return the received message
+     * @param message the empty message
+     * @param senders the senders; more precisely, their AIDs
+     * @return <c>true</c> if the message has been received, <c>false</c> otherwise
      */
     public boolean receive(Message message, AID[] senders) {
         MessageTemplate protocolTemplate = createProtocolTemplate();
