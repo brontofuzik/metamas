@@ -21,12 +21,12 @@ public class OrganizationKnowledgeBase {
     /**
      * The Query view.
      */
-    private Query query = this.new Query(); 
+    private QueryView queryView = this.new QueryView(); 
     
     /**
      * The Update view.
      */
-    private Update update = this.new Update(); 
+    private UpdateView updateView = this.new UpdateView(); 
     
     /**
      * The pseudo-random number generator.
@@ -52,16 +52,16 @@ public class OrganizationKnowledgeBase {
      * Gets the Query view.
      * @return the Uery view 
      */
-    public Query query() {
-        return query;
+    public QueryView query() {
+        return queryView;
     }
 
     /**
      * Gets the Update view.
      * @return Update view 
      */
-    public Update update() {
-        return update;
+    public UpdateView update() {
+        return updateView;
     }
     
     // ----- PRIVATE -----
@@ -101,7 +101,7 @@ public class OrganizationKnowledgeBase {
     /**
      * The Query view.
      */
-    public class Query {
+    public class QueryView {
         
         // ----- Roles -----
         
@@ -230,16 +230,6 @@ public class OrganizationKnowledgeBase {
             return new HashSet(enactingPlayers.keySet());
         }
         
-        /**
-         * Determines whether a competence can be invoked on a specified player.
-         * @param player the player; more precisely, its AID
-         * @param responsibilityName the name of the responsibility
-         * @return <c>true</c> if responsibility can be invoked, <c>false</c> otherwise
-         */
-        public boolean canInvokeResponsibility(AID player, String responsibilityName) {
-            return true;
-        }
-        
         // ----- PRIVATE -----
         
         /**
@@ -259,7 +249,7 @@ public class OrganizationKnowledgeBase {
     /**
      * The Update view.
      */
-    public class Update {
+    public class UpdateView {
         
         // ----- Roles -----
     

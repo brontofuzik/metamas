@@ -97,7 +97,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
 
             if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyAgent().knowledgeBase.query().getEnactedRole(roleName).getAID();
+                roleAID = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be deactivated.
