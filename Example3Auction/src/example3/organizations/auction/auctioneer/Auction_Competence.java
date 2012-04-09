@@ -6,7 +6,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionType;
 import thespian4jade.core.organization.competence.SynchronousCompetence;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
  * The 'Auction' (synchronous) competence.
@@ -89,7 +89,7 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
      * The 'Auction initiator party' (state wrapper) state.
      */
     private class AuctionInitiatorWrapper
-        extends StateWrapperState<Auction_InitiatorParty> {
+        extends WrapperState<Auction_InitiatorParty> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -106,12 +106,12 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(Auction_InitiatorParty wrappedState) {
+        protected void doActionBefore(Auction_InitiatorParty wrappedState) {
             wrappedState.setAuctionArgument(getArgument());
         }
 
         @Override
-        protected void getWrappedStateResult(Auction_InitiatorParty wrappedState) {
+        protected void doActionAfter(Auction_InitiatorParty wrappedState) {
             setResult(wrappedState.getAuctionResult());
         }
         
