@@ -50,15 +50,17 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     /**
      * Override this method to handle the AGREE simple message being sent.
      */
-    protected void onAgree() {
+    protected String onAgree() {
         // Do nothing.
+        return "";
     }
     
     /**
      * Override this method to handle the REFUSE simple message being sent.
      */
-    protected void onRefuse() {
+    protected String onRefuse() {
         // Do nothing.
+        return "";
     }
     
     // </editor-fold>
@@ -103,8 +105,9 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
          */
         @Override
         protected SimpleMessage prepareMessage() {
-            onAgree();
-            return super.prepareMessage();
+            SimpleMessage message = super.prepareMessage();
+            message.setContent(onAgree());
+            return message;
         }
         
         // </editor-fold>
@@ -148,8 +151,9 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
          */
         @Override
         protected SimpleMessage prepareMessage() {
-            onRefuse();
-            return super.prepareMessage();
+            SimpleMessage message = super.prepareMessage();
+            message.setContent(onRefuse());
+            return message;
         }
 
         // </editor-fold>

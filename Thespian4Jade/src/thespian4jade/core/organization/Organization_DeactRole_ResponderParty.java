@@ -147,7 +147,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
         }
         
         @Override
-        protected void onAgree() {
+        protected String onAgree() {
             // Update the knowledge base.
             getMyAgent().knowledgeBase
                 .update().roleIsDeacted(roleName, player);
@@ -160,6 +160,7 @@ public class Organization_DeactRole_ResponderParty extends ResponderParty<Organi
             
             // Destroy the role agent.
             // TODO (priority: medium) Implement.
+            return "";
         }
 
         @Override

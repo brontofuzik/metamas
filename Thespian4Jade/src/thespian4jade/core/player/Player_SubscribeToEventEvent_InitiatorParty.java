@@ -203,8 +203,12 @@ public class Player_SubscribeToEventEvent_InitiatorParty
             getMyAgent().logInfo("Receiving subscribe reply.");
         }
 
+        /**
+         * Handles the received AGREE simple message.
+         * @param messageContent the content of the received AGREE simple message
+         */
         @Override
-        protected void handleAgreeMessage(SimpleMessage message) {
+        protected void onAgree(String messageContent) {
             getMyAgent().addEventHandler(event, eventHandlerClass);
         }  
 
