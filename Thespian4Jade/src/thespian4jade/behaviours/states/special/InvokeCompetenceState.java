@@ -4,13 +4,15 @@ import java.io.Serializable;
 import thespian4jade.core.player.Player_InvokeCompetence_InitiatorParty;
 
 /**
+ * A (wrapper) state in which the 'Invoke competence' protocol initiator party is
+ * (synchronously) executed.
  * @author Lukáš Kúdela
  * @since 2012-03-17
  * @version %I% %G%
  */  
 public abstract class InvokeCompetenceState
     <TArgument extends Serializable, TResult extends Serializable>
-    extends StateWrapperState<Player_InvokeCompetence_InitiatorParty> {
+    extends WrapperState<Player_InvokeCompetence_InitiatorParty> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
@@ -52,12 +54,14 @@ public abstract class InvokeCompetenceState
     
     /**
      * Gets the competence argument.
+     * Override this method to provide the competence argument.
      * @return the competence argument
      */
     protected abstract TArgument getCompetenceArgument();
     
     /**
      * Sets the competence result.
+     * Override this method to retrieve the competence result.
      * @param competenceResult the competence result
      */
     protected abstract void setCompetenceResult(TResult competenceResult);
@@ -66,14 +70,24 @@ public abstract class InvokeCompetenceState
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Provides the name of the competence and its argument to the wrapped
+     * 'Invoke competence' protocol initiator party.
+     * @param wrappedState the wrapped 'Invoke competence' protocol initiator party
+     */
     @Override
-    protected final void setWrappedStateArgument(Player_InvokeCompetence_InitiatorParty wrappedState) {
+    protected final void doActionBefore(Player_InvokeCompetence_InitiatorParty wrappedState) {
         wrappedState.setCompetenceName(getCompetenceName());
         wrappedState.setCompetenceArgument(getCompetenceArgument());
     }
     
+    /**
+     * Retrieves the competence result from the wrapped 'Invoke competence'
+     * protocol initiator party.
+     * @param wrappedState the wrapped 'Invoke competence' protocol initiator party
+     */
     @Override
-    protected final void getWrappedStateResult(Player_InvokeCompetence_InitiatorParty wrappedState) {
+    protected final void doActionAfter(Player_InvokeCompetence_InitiatorParty wrappedState) {
         setCompetenceResult((TResult)wrappedState.getCompetenceResult());
     }
     

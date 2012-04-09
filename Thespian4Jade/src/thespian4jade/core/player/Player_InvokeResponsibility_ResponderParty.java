@@ -14,7 +14,7 @@ import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityArgumentM
 import thespian4jade.protocols.role.invokeresponsibility.ArgumentRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.InvokeResponsibilityRequestMessage;
 import thespian4jade.protocols.role.invokeresponsibility.ResponsibilityResultMessage;
-import thespian4jade.behaviours.states.special.StateWrapperState;
+import thespian4jade.behaviours.states.special.WrapperState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.utililites.ClassHelper;
@@ -299,7 +299,7 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     private class ResponsibilityWrapperState
-        extends StateWrapperState<IResponsibility<TArgument, TResult>> {
+        extends WrapperState<IResponsibility<TArgument, TResult>> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
@@ -312,12 +312,12 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
-        protected void setWrappedStateArgument(IResponsibility<TArgument, TResult> responsibility) {
+        protected void doActionBefore(IResponsibility<TArgument, TResult> responsibility) {
             responsibility.setArgument(argument);
         }
 
         @Override
-        protected void getWrappedStateResult(IResponsibility<TArgument, TResult> responsibility) {
+        protected void doActionAfter(IResponsibility<TArgument, TResult> responsibility) {
             result = responsibility.getResult();
         }
         

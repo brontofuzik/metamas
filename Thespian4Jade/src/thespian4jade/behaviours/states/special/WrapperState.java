@@ -5,18 +5,19 @@ import thespian4jade.behaviours.states.IState;
 import thespian4jade.behaviours.states.OneShotBehaviourState;
 
 /**
- * A 'State wrapper' state.
+ * A state that wraps another state (or a whole party), enabling to perform
+ * some action before and after the wrapped state is executed.
  * @author Lukáš Kúdela
  * @since 2012-03-15
  * @version %I% %G%
  */
-public abstract class StateWrapperState<TState extends IState>
+public abstract class WrapperState<TState extends IState>
     extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The wrapped state.
+     * The wrapped state (or party).
      */
     private TState wrappedState;
     
@@ -26,9 +27,9 @@ public abstract class StateWrapperState<TState extends IState>
     
     /**
      * Initializes a new insatance of the StateWrapperState class.
-     * @param state 
+     * @param state the state (or party) to be wrapped.
      */
-    public StateWrapperState(TState state) {
+    public WrapperState(TState state) {
         this.wrappedState = state;
         
         buildFSM();
@@ -38,6 +39,10 @@ public abstract class StateWrapperState<TState extends IState>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the wrapped state (or party).
+     * @return the wrapped state (or party)
+     */
     protected TState getWrappedState() {
         return wrappedState;
     }
@@ -47,16 +52,18 @@ public abstract class StateWrapperState<TState extends IState>
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Sets the wrapped state argument.
-     * @param wrappedState the wrapped state 
+     * Override this method to perform some action before the wrapped state
+     * (or party) is executed.
+     * @param wrappedState the wrapped state (or party)
      */
-    protected abstract void setWrappedStateArgument(TState wrappedState);
+    protected abstract void doActionBefore(TState wrappedState);
     
     /**
-     * Gets the wrapped state result.
-     * @param wrappedState the wrapped state result
+     * Override this method to perform some action after the wrapped state
+     * (or party) is executed.
+     * @param wrappedState the wrapped state (or party)
      */
-    protected abstract void getWrappedStateResult(TState wrappedState);
+    protected abstract void doActionAfter(TState wrappedState);
     
     // ---------- PRIVATE ----------
     
@@ -65,18 +72,18 @@ public abstract class StateWrapperState<TState extends IState>
      */
     private void buildFSM() {
         // ----- States -----
-        IState setStateArgument = new SetWrappedStateArgument();
-        IState getStateResult = new GetWrappedStateResult();
+        IState actionBefore = new ActionBefore();
+        IState actionAfter = new ActionAfter();
         // ------------------
         
         // Register the states.
-        registerFirstState(setStateArgument);    
+        registerFirstState(actionBefore);    
         registerState(wrappedState);     
-        registerLastState(getStateResult);
+        registerLastState(actionAfter);
         
         // Register the transitions.
-        setStateArgument.registerDefaultTransition(wrappedState);     
-        wrappedState.registerDefaultTransition(getStateResult);
+        actionBefore.registerDefaultTransition(wrappedState);     
+        wrappedState.registerDefaultTransition(actionAfter);
     }
     
     // </editor-fold>
@@ -84,30 +91,32 @@ public abstract class StateWrapperState<TState extends IState>
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Set wrapped state argument' state.
+     * The 'Action before' (one-shot) state.
+     * A state in which the before-action is performed.
      */
-    private class SetWrappedStateArgument extends OneShotBehaviourState {
+    private class ActionBefore extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            setWrappedStateArgument(wrappedState);
+            doActionBefore(wrappedState);
         }
         
         // </editor-fold>
     }
     
     /**
-     * The 'Get wrapped state result' state.
+     * The 'Action after' (one-shot) state.
+     * A state in which the after-action is performed.
      */
-    private class GetWrappedStateResult extends OneShotBehaviourState {
+    private class ActionAfter extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
         
         @Override
         public void action() {
-            getWrappedStateResult(wrappedState);
+            doActionAfter(wrappedState);
         }
         
         // </editor-fold>
