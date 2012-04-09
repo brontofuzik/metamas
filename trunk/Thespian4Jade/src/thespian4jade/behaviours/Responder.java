@@ -8,7 +8,8 @@ import jade.lang.acl.MessageTemplate;
 import thespian4jade.protocols.Protocol;
 
 /**
- * A responder.
+ * A responder behaviour that receives protocol initiation messages and
+ * invokes the corresponding protocol responder parties.
  * @author Lukáš Kúdela
  * @since 2012-01-13
  * @version %I% %G%
@@ -17,6 +18,9 @@ public abstract class Responder extends FSMBehaviour {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the Responder class.
+     */
     public Responder() {     
         buildFSM();
     }
@@ -26,8 +30,8 @@ public abstract class Responder extends FSMBehaviour {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Adds a responder responding to a given protocol and the REQUEST performative.
-     * @param protocol the protocol
+     * Adds a protocol to which the responder should respond.
+     * @param protocol the protocol to which the responder should respond
      */
     protected void addProtocol(Protocol protocol) {
         // ----- Preconditions -----
@@ -40,6 +44,8 @@ public abstract class Responder extends FSMBehaviour {
         ResponderStateHolder responders = (ResponderStateHolder)getState(ResponderStateHolder.NAME);
         responders.addSubBehaviour(responder);
     }
+    
+    // ----- PRIVATE -----
     
     /**
      * Builds the responder FSM.

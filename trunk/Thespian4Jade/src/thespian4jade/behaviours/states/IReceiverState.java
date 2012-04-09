@@ -4,7 +4,7 @@ import jade.core.AID;
 import thespian4jade.language.Message;
 
 /**
- * A receiver state.
+ * An interface of a state in which the party receives a message.
  * @author Lukáš Kúdela
  * @since 2011-12-06
  * @version %I% %G%
@@ -15,13 +15,11 @@ public interface IReceiverState {
     
     /**
      * Receives a message.
-     * @param message the message to receive
+     * @param message the message to be received
      * @param senders the senders. More precisely, their AIDs
-     * @return a flag indicating whether the message has been received
+     * @return <c>true</c> if the message has been received, <c>false</c> otherwise
      */
-    public boolean receive(Message message, AID[] senders);
-    
-    public boolean receive(Message message, AID sender);
+    public boolean receive(Message message, AID... senders);
     
     // </editor-fold>
 }

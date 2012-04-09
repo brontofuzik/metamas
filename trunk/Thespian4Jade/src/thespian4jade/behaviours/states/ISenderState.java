@@ -4,7 +4,7 @@ import jade.core.AID;
 import thespian4jade.language.Message;
 
 /**
- * A sender state.
+ * An interface of a state in which the party sends a message.
  * @author Lukáš Kúdela
  * @since 2011-12-05
  * @version %I% %G%
@@ -15,12 +15,10 @@ public interface ISenderState extends IState {
     
     /**
      * Sends a message.
-     * @param message the message to send
-     * @param receivers the receivers. More precisely, their AIDs
+     * @param message the message to be sent
+     * @param receivers the receivers; more precisely, their AIDs
      */
-    public void send(Message message, AID[] receivers);
-    
-    public void send(Message message, AID receiver);
+    public void send(Message message, AID... receivers);
     
     // </editor-fold>
 }
