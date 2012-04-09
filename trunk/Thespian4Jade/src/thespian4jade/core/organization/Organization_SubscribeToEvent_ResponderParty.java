@@ -169,8 +169,9 @@ public class Organization_SubscribeToEvent_ResponderParty
         }
 
         @Override
-        protected void onAgree() {
+        protected String onAgree() {
             getMyAgent().knowledgeBase.update().playerSubscribesToEvent(player, event);
+            return "";
         } 
 
         @Override

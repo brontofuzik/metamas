@@ -157,8 +157,9 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
         }
         
         @Override
-        protected void onAgree() {
+        protected String onAgree() {
             getMyAgent().deactivate();
+            return "";
         }
 
         @Override

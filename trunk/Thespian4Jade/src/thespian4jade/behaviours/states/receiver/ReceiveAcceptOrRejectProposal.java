@@ -28,7 +28,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
      */
     protected ReceiveAcceptOrRejectProposal() {
         addReceiver(this.new ReceiveAcceptProposal());
-        addReceiver(this.new MyReceiveRejectProposal());
+        addReceiver(this.new ReceiveRejectProposal());
         
         buildFSM();
     }
@@ -52,7 +52,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
      * Handles the received ACCEPT-PROPOSAL message.
      * @param message the recived ACCEPT-PROPOSAL message
      */
-    protected void handleAcceptProposalMessage(SimpleMessage message) {
+    protected void onAcceptProposal(String messageContent) {
         // Do nothing.
     }
     
@@ -61,7 +61,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
      * Handles the recevied REJECT-PROPOSAL message.
      * @param message the received REJECT-PROPOSAL message
      */
-    protected void handleRejectProposalMessage(SimpleMessage message) {
+    protected void onRejectProposal(String messageContent) {
         // Do nothing.
     }
     
@@ -107,7 +107,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleAcceptProposalMessage(message);
+            onAcceptProposal(message.getContent());
         }
 
         // </editor-fold>    
@@ -117,14 +117,14 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
      * The 'Receive REJECT-PROPOSAL' (inner receiver) state.
      * A state in which the REJECT-PROPOSAL simple message is received.
      */
-    private class MyReceiveRejectProposal extends ReceiveSimpleMessage {
+    private class ReceiveRejectProposal extends ReceiveSimpleMessage {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initializes a new instance of the MyReceiveRejectProposal class.
          */
-        MyReceiveRejectProposal() {
+        ReceiveRejectProposal() {
             super(ACLMessage.REJECT_PROPOSAL, REJECT_PROPOSAL);
         }
         
@@ -151,7 +151,7 @@ public abstract class ReceiveAcceptOrRejectProposal extends OuterReceiverState {
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleRejectProposalMessage(message);
+            onRejectProposal(message.getContent());
         }
 
         // </editor-fold>

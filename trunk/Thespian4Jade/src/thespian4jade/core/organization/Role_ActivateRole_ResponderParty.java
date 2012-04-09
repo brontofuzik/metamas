@@ -154,8 +154,9 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
         }
         
         @Override
-        protected void onAgree() {
+        protected String onAgree() {
             getMyAgent().activate();
+            return "";
         }
 
         @Override

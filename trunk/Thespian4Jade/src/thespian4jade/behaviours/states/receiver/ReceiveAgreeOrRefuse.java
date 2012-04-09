@@ -47,21 +47,19 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
-    // TODO!!! Replace with onAgree().
     /**
      * Handles the received AGREE message.
      * @param message the received AGREE message
      */
-    protected void handleAgreeMessage(SimpleMessage message) {
+    protected void onAgree(String messageContent) {
         // Do nothing.
     }
-    
-    // TODO!!! Replace with onRefuse().
+
     /**
      * Handles the received REFUSE message.
      * @param message the received REFUSE message
      */
-    protected void handleRefuseMessage(SimpleMessage message) {
+    protected void onRefuse(String messageContent) {
         // Do nothing.
     }
     
@@ -107,7 +105,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleAgreeMessage(message);
+            onAgree(message.getContent());
         }
 
         // </editor-fold>    
@@ -151,7 +149,7 @@ public abstract class ReceiveAgreeOrRefuse extends OuterReceiverState {
          */
         @Override
         protected void handleMessage(SimpleMessage message) {
-            handleRefuseMessage(message);
+            onRefuse(message.getContent());
         }
 
         // </editor-fold>

@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import thespian4jade.language.Message;
 import thespian4jade.language.IMessageFactory;
+import thespian4jade.language.SimpleMessage;
 
 /**
  * A 'Receive success or FAILURE' (multi-receiver) state.
@@ -61,7 +62,7 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
     /**
      * Override this method to handle the FAILURE simple message received.
      */
-    protected void onFailure() {
+    protected void onFailure(String messageContent) {
         // Do nothing.
     }
     
@@ -128,6 +129,15 @@ public abstract class ReceiveSuccessOrFailure<TMessage extends Message>
         @Override
         protected AID[] getSenders() {
             return ReceiveSuccessOrFailure.this.getSenders();
+        }
+        
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Methods">
+
+        @Override
+        protected void handleMessage(SimpleMessage message) {
+            onFailure(message.getContent());
         }
         
         // </editor-fold>

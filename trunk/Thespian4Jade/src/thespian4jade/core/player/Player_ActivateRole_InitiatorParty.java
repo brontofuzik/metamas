@@ -171,11 +171,11 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         }
         
         /**
-         * Handles the received AGREE message
-         * @param message the received AGREE message
+         * Handles the received AGREE simple message.
+         * @param messageContent the content of the received AGREE simple message
          */
         @Override
-        protected void handleAgreeMessage(SimpleMessage message) {
+        protected void onAgree(String messageContent) {
             getMyAgent().knowledgeBase.update().activateRole(roleName);
         }
 

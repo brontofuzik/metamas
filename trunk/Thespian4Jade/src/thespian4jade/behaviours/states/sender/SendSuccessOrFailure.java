@@ -58,8 +58,9 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
     /**
      * Override this method to handle the FAILURE simple message being sent.
      */
-    protected void onFailure() {
+    protected String onFailure() {
         // Do nothing.
+        return "";
     }
     
     // </editor-fold>  
@@ -133,8 +134,9 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
          */
         @Override
         protected SimpleMessage prepareMessage() {
-            onFailure();
-            return super.prepareMessage();
+            SimpleMessage message = super.prepareMessage();
+            message.setContent(onFailure());
+            return message;
         }
         
         // </editor-fold>
