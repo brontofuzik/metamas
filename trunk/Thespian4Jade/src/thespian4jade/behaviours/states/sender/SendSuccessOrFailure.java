@@ -6,7 +6,7 @@ import thespian4jade.language.Message;
 import thespian4jade.language.SimpleMessage;
 
 /**
- * A 'Send success or FAILURE' (multi-sender) state.
+ * A 'Send success or FAILURE' sender state.
  * @author Lukáš Kúdela
  * @since 2011-12-24
  * @version %I% %G%
@@ -25,6 +25,9 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the SendSuccessOrFailure class.
+     */
     protected SendSuccessOrFailure() {        
         addSender(SUCCESS, new SendSuccess());
         addSender(FAILURE, new SendFailure());
@@ -36,16 +39,23 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the receivers; more precisely, their AIDs.
+     * @return the receivers; more precisely, their AIDs
+     */
     protected abstract AID[] getReceivers();
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Override this method to prepare the mesasge to be sent in case of success.
+     * @return the message to be sent in case of success
+     */
     protected abstract TMessage prepareMessage();
     
     /**
-     * Handles the FAILURE simple message being sent.
      * Override this method to handle the FAILURE simple message being sent.
      */
     protected void onFailure() {
@@ -56,6 +66,10 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Send success' (inner sender) state.
+     * A state in which the success message is sent.
+     */
     private class SendSuccess extends InnerSenderState<TMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -83,6 +97,7 @@ public abstract class SendSuccessOrFailure<TMessage extends Message>
     
     /**
      * The 'Send FAILURE' (inner sender) state.
+     * A state in which the FAILURE simple message is sent.
      */
     private class SendFailure extends SendSimpleMessage {
 

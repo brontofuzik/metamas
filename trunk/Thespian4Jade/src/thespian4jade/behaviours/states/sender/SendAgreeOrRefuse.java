@@ -23,6 +23,9 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the SendAgreeOrRefuse class.
+     */
     protected SendAgreeOrRefuse() {            
         addSender(AGREE, this.new SendAgree());
         addSender(REFUSE, this.new SendRefuse());
@@ -34,6 +37,10 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the receivers; more precisely, their AIDs.
+     * @return the receivers; more precisely, their AIDs
+     */
     protected abstract AID[] getReceivers();
     
     // </editor-fold>
@@ -41,7 +48,6 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Handles the AGREE simple message being sent.
      * Override this method to handle the AGREE simple message being sent.
      */
     protected void onAgree() {
@@ -49,7 +55,6 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     }
     
     /**
-     * Handles the REFUSE simple message being sent.
      * Override this method to handle the REFUSE simple message being sent.
      */
     protected void onRefuse() {
@@ -62,6 +67,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     /**
      * The 'Send AGREE' (inner sender) state.
+     * A state in which an AGREE simple message is sent.
      */
     private class SendAgree extends SendSimpleMessage {
         
@@ -106,6 +112,7 @@ public abstract class SendAgreeOrRefuse extends OuterSenderState {
     
     /**
      * The 'Send REFUSE' (inner sender) state.
+     * A state in which the REFUSE simple message is sent.
      */
     private class SendRefuse extends SendSimpleMessage {
         
