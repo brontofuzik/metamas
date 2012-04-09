@@ -19,7 +19,7 @@ class RoleDefinition {
     /**
      * The role multiplicity.
      */
-    private Multiplicity multiplicity;
+    private RoleMultiplicity multiplicity;
 
     /**
      * The role responsibilites.
@@ -30,7 +30,7 @@ class RoleDefinition {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    RoleDefinition(Class roleClass, Multiplicity multiplicity, String[] responsibilites) {
+    RoleDefinition(Class roleClass, RoleMultiplicity multiplicity, String[] responsibilites) {
         // ----- Preconditions -----
         if (roleClass == null) {
             throw new IllegalArgumentException("roleClass");
@@ -45,16 +45,16 @@ class RoleDefinition {
         this.responsibilites = responsibilites;
     }
 
-    RoleDefinition(Class roleClass, Multiplicity multiplicity) {
+    RoleDefinition(Class roleClass, RoleMultiplicity multiplicity) {
         this(roleClass, multiplicity, new String[] {});
     }
 
     RoleDefinition(Class roleClass, String[] responsibilities) {
-        this(roleClass, Multiplicity.SINGLE, responsibilities);
+        this(roleClass, RoleMultiplicity.SINGLE, responsibilities);
     }
 
     RoleDefinition(Class roleClass) {
-        this(roleClass, Multiplicity.SINGLE, new String[] {});
+        this(roleClass, RoleMultiplicity.SINGLE, new String[] {});
     }
 
     // </editor-fold>
@@ -81,7 +81,7 @@ class RoleDefinition {
      * Gets the role multiplicity
      * @return the role multiplicity
      */
-    Multiplicity getMultiplicity() {
+    RoleMultiplicity getMultiplicity() {
         return multiplicity;
     }
 

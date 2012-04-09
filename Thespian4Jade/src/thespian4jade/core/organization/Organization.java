@@ -150,7 +150,7 @@ public abstract class Organization extends Agent {
      * @param multiplicity the role multiplicity (single or multiple)
      * @param responsibilities the role responsibilities
      */
-    protected void addRole(Class roleClass, Multiplicity multiplicity, String[] responsibilities) {
+    protected void addRole(Class roleClass, RoleMultiplicity multiplicity, String[] responsibilities) {
         // ----- Preconditions -----
         if (roleClass == null) {
             throw new IllegalArgumentException("roleClass");
@@ -177,7 +177,7 @@ public abstract class Organization extends Agent {
      * @param roleClass the role class
      * @param multiplicity the role multiplicity
      */
-    protected void addRole(Class roleClass, Multiplicity multiplicity) {
+    protected void addRole(Class roleClass, RoleMultiplicity multiplicity) {
         addRole(roleClass, multiplicity, new String[] {});
         
         // Alternative:
@@ -190,7 +190,7 @@ public abstract class Organization extends Agent {
      * @responsibilities the role responsibilities
      */
     protected void addRole(Class roleClass, String[] responsibilities) {        
-        addRole(roleClass, Multiplicity.SINGLE, responsibilities);
+        addRole(roleClass, RoleMultiplicity.SINGLE, responsibilities);
         
         // Alternative:
         //addRole(new RoleDefinition(roleClass, responsibilities));
@@ -201,7 +201,7 @@ public abstract class Organization extends Agent {
      * @param roleClass the role class
      */
     protected void addRole(Class roleClass) {
-        addRole(roleClass, Multiplicity.SINGLE, new String[] {});
+        addRole(roleClass, RoleMultiplicity.SINGLE, new String[] {});
         
         // Alternative:
         //addRole(new RoleDefinition(roleClass));
