@@ -6,8 +6,10 @@ import thespian4jade.language.IMessageFactory;
 import java.io.Serializable;
 
 /**
- * A 'Competence result' (binary) message.
- * @param <TResult> the competence result type
+ * A 'Competence result' (binary) message is sent by the 'Invoke competence'
+ * protocol responder party (a role) to the initiator party (a player) and
+ * contains the competence result.
+ * @param <TArgument> the competence result type
  * @author Lukáš Kúdela
  * @since 2011-12-28
  * @version %I% %G%
@@ -19,7 +21,7 @@ public class CompetenceResultMessage<TResult extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The (serializable) competence result.
+     * The competence result.
      */
     private TResult result;
     
@@ -29,6 +31,7 @@ public class CompetenceResultMessage<TResult extends Serializable>
     
     /**
      * Initializes a new instance of the CompetenceResultMessage class.
+     * The corresponding ACL message has the INFORM performative.
      */
     public CompetenceResultMessage() {
         super(ACLMessage.INFORM);
@@ -49,7 +52,7 @@ public class CompetenceResultMessage<TResult extends Serializable>
     /**
      * Sets the competence result.
      * @param result the competence result
-     * @return this 'Competence result' message (fluent interface)
+     * @return this 'Competence result' message (Design pattern: Fluent interface)
      */
     public CompetenceResultMessage setResult(TResult result) {
         this.result = result;
@@ -61,8 +64,8 @@ public class CompetenceResultMessage<TResult extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Gets the (serializable) content object.
-     * @return the (serializable) content object
+     * Gets the content object for the ACL message.
+     * @return the content object for the ACL message
      */
     @Override
     protected Serializable getContentObject() {
@@ -70,8 +73,8 @@ public class CompetenceResultMessage<TResult extends Serializable>
     }
 
     /**
-     * Sets the (serializable) content object
-     * @param contentObject the (serializable) content object
+     * Sets the content object from the ACL message.
+     * @param contentObject the content object from the ACL message
      */
     @Override
     protected void setContentObject(Serializable contentObject) {

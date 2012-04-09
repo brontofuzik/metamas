@@ -7,7 +7,7 @@ import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
 import thespian4jade.behaviours.states.receiver.ReceiveSuccessOrFailure;
 import thespian4jade.protocols.organization.enactrole.EnactRequestMessage;
-import thespian4jade.protocols.organization.enactrole.ResponsibilitiesInformMessage;
+import thespian4jade.protocols.organization.enactrole.ResponsibilitiesMessage;
 import thespian4jade.protocols.organization.enactrole.RoleAIDMessage;
 import thespian4jade.behaviours.states.IState;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;
@@ -76,7 +76,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         // ----- States -----
         IState initialize = new Initialize();
         IState sendEnactRequest = new SendEnactRequest();
-        IState receiveResponsibilitiesInform = new ReceiveResponsibilitiesInform();
+        IState receiveResponsibilities = new ReceiveResponsibilities();
         IState sendResponsibilitiesReply = new SendResponsibilitiesReply();
         IState receiveRoleAID = new ReceiveRoleAID();
         IState roleEnacted = new RoleEnacted();
@@ -86,7 +86,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         // Register the states.
         registerFirstState(initialize);     
         registerState(sendEnactRequest);
-        registerState(receiveResponsibilitiesInform);
+        registerState(receiveResponsibilities);
         registerState(sendResponsibilitiesReply);
         registerState(receiveRoleAID);       
         registerLastState(roleEnacted);
@@ -95,9 +95,9 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         // Register the transitions.
         initialize.registerTransition(Initialize.OK, sendEnactRequest);
         initialize.registerTransition(Initialize.FAIL, roleNotEnacted);       
-        sendEnactRequest.registerDefaultTransition(receiveResponsibilitiesInform);
-        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.SUCCESS, sendResponsibilitiesReply);
-        receiveResponsibilitiesInform.registerTransition(ReceiveResponsibilitiesInform.FAILURE, roleNotEnacted);      
+        sendEnactRequest.registerDefaultTransition(receiveResponsibilities);
+        receiveResponsibilities.registerTransition(ReceiveResponsibilities.SUCCESS, sendResponsibilitiesReply);
+        receiveResponsibilities.registerTransition(ReceiveResponsibilities.FAILURE, roleNotEnacted);      
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.AGREE, receiveRoleAID);
         sendResponsibilitiesReply.registerTransition(SendResponsibilitiesReply.REFUSE, roleNotEnacted);
         receiveRoleAID.registerDefaultTransition(roleEnacted);
@@ -195,13 +195,13 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
      * The 'Receive responsibilities info' (multi receiver) state.
      * A state in which the 'Responsibilities' info is received.
      */
-    private class ReceiveResponsibilitiesInform extends
-        ReceiveSuccessOrFailure<ResponsibilitiesInformMessage> {
+    private class ReceiveResponsibilities extends
+        ReceiveSuccessOrFailure<ResponsibilitiesMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
-        ReceiveResponsibilitiesInform() {
-            super(new ResponsibilitiesInformMessage.Factory());
+        ReceiveResponsibilities() {
+            super(new ResponsibilitiesMessage.Factory());
         }
         
         // </editor-fold>
@@ -223,7 +223,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
         }
 
         @Override
-        protected void handleSuccessMessage(ResponsibilitiesInformMessage message) {
+        protected void handleSuccessMessage(ResponsibilitiesMessage message) {
             responsibilities = message.getResponsibilities();
         }
 

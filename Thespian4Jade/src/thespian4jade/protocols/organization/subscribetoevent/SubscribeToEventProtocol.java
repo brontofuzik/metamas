@@ -18,6 +18,11 @@ public class SubscribeToEventProtocol extends Protocol {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the SubscribeToEventProtocol class.
+     * The 'Subscribe to event' protocol is initiated by an ACL message with the REQUEST
+     * performative.
+     */
     public SubscribeToEventProtocol() {
         super(ACLMessage.REQUEST);
     }
@@ -27,9 +32,13 @@ public class SubscribeToEventProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Creates an initiator party.
-     * @param arguments the initiator party's contructor arguments
-     * @returns an initiator party
+     * Creates a new 'Subscribe to event' protocol initiator party.
+     * @param arguments the 'Subscribe to event' protocol initiator party's contructor
+     * arguments:
+     *     1) name of the organization,
+     *     2) event, and
+     *     3) event handler
+     * @returns a new 'Subscribe to event' protocol initiator party
      */
     @Override
     public InitiatorParty createInitiatorParty(Object... arguments) {
@@ -40,9 +49,10 @@ public class SubscribeToEventProtocol extends Protocol {
     }
 
     /**
-     * Creates a responder party.
-     * @param message the ACL message
-     * @returns a responder party
+     * Creates a new 'Subscribe to event' protocol responder party.
+     * @param message the ACL message to which the 'Subscribe to event' protocol
+     * responder party responds
+     * @returns a new 'Subscribe to event' protocol responder party
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {

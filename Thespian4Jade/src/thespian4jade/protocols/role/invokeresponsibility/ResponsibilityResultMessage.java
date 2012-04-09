@@ -6,7 +6,10 @@ import thespian4jade.language.IMessageFactory;
 import java.io.Serializable;
 
 /**
- * A 'Result inform' message.
+ * A 'Responsibility result' (binary) message is sent by the 'Invoke responsibility'
+ * protocol responder party (a player) to the initiator party (a role) and
+ * contains the responsibility result.
+ * @param <TArgument> the responsibility result type
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%
@@ -17,7 +20,7 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The (serializable) responsibility result.
+     * The responsibility result.
      */
     private TResult result;
     
@@ -27,6 +30,7 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
     
     /**
      * Initializes a new instance of the ResponsibilityResultMessage class.
+     * The corresponding ACL message has the INFORM performative.
      */
     public ResponsibilityResultMessage() {
         super(ACLMessage.INFORM);
@@ -47,7 +51,7 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
     /**
      * Set the responsibility result.
      * @param result the responsibility result
-     * @return this 'Responsibility result' message (fluent interface)
+     * @return this 'Responsibility result' message (Design pattern: Fluent interface)
      */
     public ResponsibilityResultMessage setResult(TResult result) {
         this.result = result;
@@ -59,8 +63,8 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Gets the (serializable) content object.
-     * @return the (serializable) content object
+     * Gets the content object for the ACL message.
+     * @return the content object for the ACL message
      */
     @Override
     protected Serializable getContentObject() {
@@ -68,8 +72,8 @@ public class ResponsibilityResultMessage<TResult extends Serializable>
     }
 
     /**
-     * Sets the (seralizable) content object.
-     * @param contentObject the (serializable) content object
+     * Sets the content object from the ACL message.
+     * @param contentObject the content object from the ACL message
      */
     @Override
     protected void setContentObject(Serializable contentObject) {

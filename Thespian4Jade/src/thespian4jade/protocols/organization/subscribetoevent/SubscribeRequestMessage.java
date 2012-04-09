@@ -7,10 +7,9 @@ import thespian4jade.core.Event;
 import thespian4jade.language.TextMessage;
 
 /**
- * A 'Request subscribe' (text) message.
- * This message is sent by the 'Subscribe to event' protocol initiator (a player)
- * to the protocol responder (an organization) and coitains a request
- * to subscribe to an event.
+ * A 'Request subscribe' (text) message is sent by the 'Subscribe to event'
+ * protocol initiator (a player) to the protocol responder (an organization)
+ * and contains a request to subscribe to an event.
  * @author Lukáš Kúdela
  * @since 2012-03-21
  * @version %I% %G%
@@ -30,6 +29,7 @@ public class SubscribeRequestMessage extends TextMessage {
     
     /**
      * Initializes a new instance of the SubscribeRequestMessage class.
+     * The corresponding ACL message has the REQUEST performative.
      */
     public SubscribeRequestMessage() {
         super(ACLMessage.REQUEST);
@@ -41,7 +41,7 @@ public class SubscribeRequestMessage extends TextMessage {
     
     /**
      * Gets the event to subscribe to.
-     * @return the event to subscribe to
+     * @return the event
      */
     public Event getEvent() {
         return event;
@@ -49,8 +49,8 @@ public class SubscribeRequestMessage extends TextMessage {
     
     /**
      * Sets the event to subscribe to.
-     * @param event the event to subscribe to
-     * @return this 'Subscribe request' message
+     * @param event the event
+     * @return this 'Subscribe request' message (Design pattern: Fluent interface)
      */
     public SubscribeRequestMessage setEvent(Event event) {
         this.event = event;
@@ -61,11 +61,19 @@ public class SubscribeRequestMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Generates the content of corresponding the ACL message.
+     * @return the content of the ACL message
+     */
     @Override
     protected String generateContent() {
         return String.format("subscribe-to-event(%1$s)", event);
     }
 
+    /**
+     * Parses the content of the corresponding ACL message.
+     * @param content the content of the ACL message
+     */
     @Override
     protected void parseContent(String content) {
         final Pattern contentPattern = Pattern.compile("subscribe-to-event\\((.*)\\)");

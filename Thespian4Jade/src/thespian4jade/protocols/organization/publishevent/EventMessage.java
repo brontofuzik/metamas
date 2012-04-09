@@ -7,6 +7,9 @@ import thespian4jade.core.Event;
 import thespian4jade.language.TextMessage;
 
 /**
+ * A 'Event' (text) message is sent by the 'Publish event'
+ * protocol initiator (an organization) to the protocol responder (an player)
+ * and contains an event and its argument.
  * @author Lukáš Kúdela
  * @since 2012-03-19
  * @version %I% %G%
@@ -31,6 +34,7 @@ public class EventMessage extends TextMessage {
     
     /**
      * Initializes a new instance of the EventMessage class.
+     * The corresponding ACL message has the INFORM performative.
      */
     public EventMessage() {
         super(ACLMessage.INFORM);
@@ -51,7 +55,7 @@ public class EventMessage extends TextMessage {
     /**
      * Sets the event.
      * @param event the event
-     * @return this 'Event' message
+     * @return this 'Event' message (Design pattern: Fluent interface)
      */
     public EventMessage setEvent(Event event) {
         this.event = event;
@@ -69,7 +73,7 @@ public class EventMessage extends TextMessage {
     /**
      * Sets the event argument.
      * @param argument the event argument
-     * @return this 'Event' message
+     * @return this 'Event' message (Design pattern: Fluent interface)
      */
     public EventMessage setArgument(String argument) {
         this.argument = argument;
@@ -80,11 +84,19 @@ public class EventMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Generates the content of corresponding the ACL message.
+     * @return the content of the ACL message
+     */
     @Override
     protected String generateContent() {
         return String.format("event(%1$s,%2$s)", event.toString(), argument);
     }
 
+    /**
+     * Parses the content of the corresponding ACL message.
+     * @param content the content of the ACL message
+     */
     @Override
     protected void parseContent(String content) {
         final Pattern contentPattern = Pattern.compile("event\\((.*),(.*)\\)");

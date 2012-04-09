@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A 'Role AID' message.
  * A 'Role AID' message is send by an Organization agent to a Player agent
  * as part the 'Enact' protocol and contains information about the Role agent's AID.
  * @author Lukáš Kúdela
@@ -19,12 +18,19 @@ public class RoleAIDMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
+    /**
+     * The role AID.
+     */
     private AID roleAID;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the RoleAIDMessage class.
+     * The corresponding ACL message has the INFORM performative.
+     */
     public RoleAIDMessage() {
         super(ACLMessage.INFORM);
     }
@@ -33,10 +39,19 @@ public class RoleAIDMessage extends TextMessage {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the role AID.
+     * @return the role AID
+     */
     public AID getRoleAID() {
         return roleAID;
     }
     
+    /**
+     * Sets the role AID.
+     * @param roleAID the role AID
+     * @return this 'Role AID' message (Design pattern: Fleunt interface)
+     */
     public RoleAIDMessage setRoleAID(AID roleAID) {
         this.roleAID = roleAID;
         return this;
@@ -46,11 +61,19 @@ public class RoleAIDMessage extends TextMessage {
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Generates the content of corresponding the ACL message.
+     * @return the content of the ACL message
+     */
     @Override
     public String generateContent() {
         return String.format("role-aid(%1$s)", roleAID.getName());
     }
 
+    /**
+     * Parses the content of the corresponding ACL message.
+     * @param content the content of the ACL message
+     */
     @Override
     public void parseContent(String content) {
         final Pattern contentPattern = Pattern.compile("role-aid\\((.*)\\)");
