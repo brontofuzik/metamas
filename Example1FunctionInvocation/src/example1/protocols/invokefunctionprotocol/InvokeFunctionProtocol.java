@@ -18,6 +18,9 @@ public class InvokeFunctionProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the InvokeFunctionProtocol class.
+     */
     public InvokeFunctionProtocol() {
         super(ACLMessage.REQUEST);
     }

@@ -48,7 +48,8 @@ public class InvokeFunction_Competence extends SynchronousCompetence<Integer, In
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Invoke function initiator party' (state wrapper) state. 
+     * The 'Invoke function initiator party' initial (wrapper) state.
+     * A state in which the 'Invoke function' protocol initiator party is executed.
      */
     private class InvokeFunctionInitiatorWrapper
         extends WrapperState<InvokeFunction_InitiatorParty> {
@@ -80,7 +81,7 @@ public class InvokeFunction_Competence extends SynchronousCompetence<Integer, In
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
      */
     private class End extends OneShotBehaviourState {
         
