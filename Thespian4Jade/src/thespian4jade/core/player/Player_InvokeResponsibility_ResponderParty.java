@@ -67,10 +67,10 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     
     /**
      * Initializes a new instance of the Player_InvokeResponsibility_ResponderParty class.
-     * @param aclMessage the ACL message
+     * @param message the ACL message intiating the protocol
      */
-    public Player_InvokeResponsibility_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL), aclMessage);
+    public Player_InvokeResponsibility_ResponderParty(ACLMessage message) {
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_RESPONSIBILITY_PROTOCOL), message);
         
         buildFSM();
     }
@@ -119,7 +119,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' initial (one-shot) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -139,7 +140,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * The 'Receive invoke responsibility request' (one-shot) state.
+     * The 'Receive invoke responsibility request' (single receiver) state.
+     * A state in which the 'Invoke responsibility request' is received.
      */
     private class ReceiveInvokeResponsibilityRequest extends ExitValueState {
         
@@ -174,7 +176,8 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
     }
     
     /**
-     * The 'Select responsbility' (exit value) state.
+     * The 'Select responsibility' (exit value) state.
+     * A state in which the responsibility is selected.
      */
     private class SelectResponsibility extends ExitValueState {
 
@@ -213,6 +216,11 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // </editor-fold>
     }
     
+    /**
+     * The 'Send responsibility argument request' (send-success-or-failure) state.
+     * A state in which a 'Competence argument request' message is sent
+     * in case of success, or a FAILURE message. 
+     */
     private class SendResponsibilityArgumentRequest
         extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
@@ -253,6 +261,10 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive responsibility argument' (single receiver) state.
+     * A stat in which the responsibility argument is received.
+     */
     private class ReceiveResponsibilityArgument
         extends SingleReceiverState<ResponsibilityArgumentMessage<TArgument>> {
         
@@ -298,6 +310,10 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // </editor-fold>
     }
     
+    /**
+     * The 'Responsibility wrapper' (wrapper) state.
+     * A state in which the responsibility is executed.
+     */
     private class ResponsibilityWrapperState
         extends WrapperState<IResponsibility<TArgument, TResult>> {
 
@@ -324,7 +340,11 @@ public class Player_InvokeResponsibility_ResponderParty<TArgument extends Serial
         // </editor-fold>
     }
     
-    
+    /**
+     * The 'Send responsibility result' (send-success-or-failure) state.
+     * A state in which either a responsibility result is sent in case of success,
+     * or a FAILURE message.
+     */
     private class SendResponsibilityResult
         extends SendSuccessOrFailure<ResponsibilityResultMessage> {
         
