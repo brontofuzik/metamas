@@ -25,10 +25,10 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
      * The role to activate; more precisely, its AID.
      * The responder party.
      */
-    private AID roleAID;
+    private AID role;
     
     /**
-     * The rname of the role to activate.
+     * The name of the role to activate.
      */
     private String roleName;
     
@@ -48,7 +48,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     public Player_ActivateRole_InitiatorParty(String roleName) {
         super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
-        assert roleAID != null;
+        assert role != null;
         // -------------------------
 
         this.roleName = roleName;
@@ -117,7 +117,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
             // Check if the role can be activated.
             if (getMyAgent().knowledgeBase.query().canActivateRole(roleName)) {
                 // The role can be activated.
-                roleAID = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
+                role = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be activated.
@@ -139,7 +139,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -175,7 +175,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>

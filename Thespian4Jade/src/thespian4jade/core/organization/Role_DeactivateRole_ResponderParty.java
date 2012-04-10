@@ -32,8 +32,12 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
-    public Role_DeactivateRole_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL), aclMessage);
+    /**
+     * Initializes a new instance of the Role_DeactivateRole_ResponderParty class.
+     * @param message the ACL message initiating the protocol 
+     */
+    public Role_DeactivateRole_ResponderParty(ACLMessage message) {
+        super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL), message);
 
         buildFSM();
     }
@@ -73,6 +77,10 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -93,7 +101,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     }
     
     /**
-     * The 'Receive deactivate request' (exit value) state.
+     * The 'Receive deactivate request' (single receiver) state.
+     * A state in which the 'Deactivate request' message is received.
      */
     private class ReceiveDeactivateRequest extends ExitValueState {
         
@@ -127,7 +136,8 @@ public class Role_DeactivateRole_ResponderParty extends ResponderParty<Role> {
     }
     
     /**
-     * The 'Send deactivate reply' (multi sender) state.
+     * The 'Send deactivate reply' (send-agree-or-refuse) state.
+     * A state in which the reply message (AGREE or REFUSE) is sent.
      */
     private class SendDeactivateReply extends SendAgreeOrRefuse {
         
