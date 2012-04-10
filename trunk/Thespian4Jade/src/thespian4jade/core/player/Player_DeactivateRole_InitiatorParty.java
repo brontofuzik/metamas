@@ -1,7 +1,6 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -22,32 +21,44 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    /** The role name. */
-    private String roleName;
+    /**
+     * The role to deactivate; more precisely, its AID.
+     * The responder party.
+     */
+    private AID role;
     
-    /** The role AID. */
-    private AID roleAID;
+    /**
+     * The name of the role to activate.
+     */
+    private String roleName;
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Player_DeactivateRole_InitiatorParty class.
+     * @param roleName the name of the role to deactivate
+     */
     public Player_DeactivateRole_InitiatorParty(String roleName) {
         super(ProtocolRegistry.getProtocol(Protocols.DEACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
-        assert roleAID != null;
+        assert role != null;
         // -------------------------
 
         this.roleName = roleName;
         
-        registerStatesAndtransitions();
+        buildFSM();
     }
 
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    private void registerStatesAndtransitions() {
+    /**
+     * Builds the party FSM.
+     */
+    private void buildFSM() {
         // ----- States -----
         IState initialize = new Initialize();
         IState sendDeactivateRequest = new SendDeactivateRequest();
@@ -75,6 +86,10 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends ExitValueState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -97,7 +112,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
 
             if (getMyAgent().knowledgeBase.query().canDeactivateRole(roleName)) {
                 // The role can be deactivated.
-                roleAID = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
+                role = getMyAgent().knowledgeBase.query().getEnactedPositions(roleName).getAID();
                 return OK;
             } else {
                 // The role can not be deactivated.
@@ -112,7 +127,8 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
     }
     
     /**
-     * 
+     * The 'Send deactivate request' (single sender) state.
+     * A state in which the 'Deactivate request' message is sent.
      */
     private class SendDeactivateRequest
         extends SingleSenderState<DeactivateRequestMessage> {
@@ -121,7 +137,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
@@ -145,10 +161,11 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         }
         
         // </editor-fold>
-    }
-    
+    }   
+
     /**
-     * 
+     * The 'Receive deactivate reply' (receive-agree-or-refuse) state.
+     * A state in which the reply message (AGREE or REFUSE) is received.
      */
     private class ReceiveDeactivateReply extends ReceiveAgreeOrRefuse {
 
@@ -156,7 +173,7 @@ public class Player_DeactivateRole_InitiatorParty extends InitiatorParty<Player>
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { roleAID };
+            return new AID[] { role };
         }
         
         // </editor-fold>
