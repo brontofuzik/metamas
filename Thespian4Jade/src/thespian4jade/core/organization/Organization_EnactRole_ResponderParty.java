@@ -137,7 +137,8 @@ public class Organization_EnactRole_ResponderParty extends ResponderParty<Organi
     
     /**
      * The 'Send responsibilities' (send-success-or-failure) state.
-     * A state in which the 'Responsibilities' message is sent.
+     * A state in which a 'Responsibilities' message is sent in sent in case
+     * of success, or a FAILURE message.
      */
     private class SendResponsibilities
         extends SendSuccessOrFailure<ResponsibilitiesMessage> {
