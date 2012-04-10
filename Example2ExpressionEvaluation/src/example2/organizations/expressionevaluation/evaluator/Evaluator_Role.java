@@ -12,6 +12,7 @@ public class Evaluator_Role extends Role {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
+    /** The name of the 'Evaluator' role. */
     public static final String NAME = "Evaluator_Role";
     
     // </editor-fold>

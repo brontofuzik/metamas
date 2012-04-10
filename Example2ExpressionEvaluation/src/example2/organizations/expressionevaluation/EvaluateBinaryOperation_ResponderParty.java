@@ -6,7 +6,6 @@ import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMe
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.core.organization.Role;
 import thespian4jade.behaviours.states.special.InvokeResponsibilityState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.parties.ResponderParty;
@@ -15,6 +14,7 @@ import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
 
 /**
+ * The 'Evaluate binary operation' protocol responder party.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
@@ -25,28 +25,48 @@ public class EvaluateBinaryOperation_ResponderParty
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The initiating evaluator; more precisely its AID.
+     * The evaluator; more precisely its AID.
+     * The initiator party.
      */
     private AID evaluator;
     
+    /**
+     * The first operand expression.
+     */
     private String operandExpression1;
     
+    /**
+     * The second operand expression.
+     */
     private String operandExpression2;
     
     private EvaluateExpression_InitiatorParty evaluateExpressionInitiator1;
     
     private EvaluateExpression_InitiatorParty evaluateExpressionInitiator2;
     
+    /**
+     * The first operand.
+     */
     private int operand1;
     
+    /**
+     * The second operand.
+     */
     private int operand2;
     
+    /**
+     * The result.
+     */
     private int result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the EvaluateBinaryOperation_ResponderParty class.
+     * @param message 
+     */
     public EvaluateBinaryOperation_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL), message);
         
@@ -97,7 +117,11 @@ public class EvaluateBinaryOperation_ResponderParty
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
-            
+    
+    /**
+     * The 'Receive evaluate request' initial (single receiver) state.
+     * A state in which the 'Evaluate binary operation request' message is received.
+     */
     private class ReceiveEvaluateRequest extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -117,6 +141,11 @@ public class EvaluateBinaryOperation_ResponderParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Set initiator argument' (one-shot) state.
+     * A state in which the 'Evaluate expression' protocol initiators' arguments
+     * are provided to them.
+     */
     private class SetInitiatorArgument extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -130,6 +159,11 @@ public class EvaluateBinaryOperation_ResponderParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Get initiator result' (one-shot) states.
+     * A state in which the 'Evaluate expression' protocol initiators' results
+     * are obtianed from them.
+     */
     private class GetInitiatorResult extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -143,6 +177,10 @@ public class EvaluateBinaryOperation_ResponderParty
         // </editor-fold>
     }
 
+    /**
+     * The 'Invoke responsibility - Evaluate binary operation' (invoke responsibility) state.
+     * A state in which the 'Evaluate binary operation' responsibility is invoked.
+     */
     private class InvokeResponsibility_EvaluateBinaryOperation
         extends InvokeResponsibilityState<OperandPair, Integer> {
         
@@ -174,6 +212,10 @@ public class EvaluateBinaryOperation_ResponderParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Send evaluate reply' (single sender) state.
+     * A state in which the 'Evaluate binary operation reply' message is Sent.
+     */
     private class SendEvaluateReply extends SingleSenderState<EvaluateBinaryOperationReplyMessage> {
 
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
@@ -207,6 +249,10 @@ public class EvaluateBinaryOperation_ResponderParty
         // </editor-fold>
     }
     
+    /**
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
+     */
     private class End extends OneShotBehaviourState {
 
         // <editor-fold defaultstate="collapsed" desc="Methods">

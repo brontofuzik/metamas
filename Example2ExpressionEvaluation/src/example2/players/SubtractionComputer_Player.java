@@ -3,7 +3,7 @@ package example2.players;
 import thespian4jade.core.Event;
 
 /**
- * 'Subtraction computer' player - the player plying the 'Subtractor' role.
+ * The 'Subtraction computer' player - the player plying the 'Subtractor' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
@@ -13,7 +13,7 @@ public class SubtractionComputer_Player extends OperatorPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
-     * The full name of the Subtractor role.
+     * The full name of the 'Subtractor' role.
      */
     private static String SUBTRACTOR_ROLE_FULL_NAME
         = "expressionEvaluation_Organization.Subtractor_Role";
@@ -23,7 +23,7 @@ public class SubtractionComputer_Player extends OperatorPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instane of the Calculator3_Player class.
+     * Initializes a new instance of the SubtractionComputer_Player class.
      */
     public SubtractionComputer_Player() {
         super(new RoleFullName(SUBTRACTOR_ROLE_FULL_NAME));

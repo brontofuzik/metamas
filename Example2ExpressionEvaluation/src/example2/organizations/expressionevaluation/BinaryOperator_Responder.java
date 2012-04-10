@@ -16,6 +16,7 @@ public class BinaryOperator_Responder extends Responder {
      * Initializes a new instance of the BinaryOperator_Responder class.
      */
     BinaryOperator_Responder() {
+        // Add protocols.
         addProtocol(ProtocolRegistry.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
     }
 }

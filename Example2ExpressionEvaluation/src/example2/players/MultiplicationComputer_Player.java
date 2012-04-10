@@ -3,7 +3,7 @@ package example2.players;
 import thespian4jade.core.Event;
 
 /**
- * 'Multiplication computer' player - the player playing the 'Multiplier' role.
+ * The 'Multiplication computer' player - the player playing the 'Multiplier' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
@@ -13,7 +13,7 @@ public class MultiplicationComputer_Player extends OperatorPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
     /**
-     * The full name of the Multiplier role.
+     * The full name of the 'Multiplier' role.
      */
     private static String MULTIPLIER_ROLE_FULL_NAME
         = "expressionEvaluation_Organization.Multiplier_Role";
@@ -23,7 +23,7 @@ public class MultiplicationComputer_Player extends OperatorPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instane of the Calculator4_Player class.
+     * Initializes a new instance of the MultiplicationComputer_Player class.
      */
     public MultiplicationComputer_Player() {
         super(new RoleFullName(MULTIPLIER_ROLE_FULL_NAME));

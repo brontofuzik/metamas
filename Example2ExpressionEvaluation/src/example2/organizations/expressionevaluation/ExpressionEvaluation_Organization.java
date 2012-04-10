@@ -8,7 +8,7 @@ import example2.organizations.expressionevaluation.subtractor.Subtractor_Role;
 import thespian4jade.core.organization.Organization;
 
 /**
- * 
+ * The 'Expression evaluation' organization.
  * @author Lukáš Kúdela
  * @since 2012-03-12
  * @version %I% %G%

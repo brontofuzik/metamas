@@ -4,7 +4,8 @@ import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationProtoco
 import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
 
 /**
- * A static class containing the protocols used in Example 2 - ExpressionEvaluation.
+ * A static class containing the application-specific (domain logic) protocols
+ * used in Example 1 - Expression Evaluation.
  * @author Lukáš Kúdela
  * @since 2012-03-21
  * @version %I% %G%

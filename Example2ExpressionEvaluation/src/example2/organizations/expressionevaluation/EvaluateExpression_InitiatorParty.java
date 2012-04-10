@@ -2,7 +2,6 @@ package example2.organizations.expressionevaluation;
 
 import example2.organizations.expressionevaluation.evaluator.Evaluator_Role;
 import example2.protocols.Protocols;
-import example2.protocols.evaluateexpression.EvaluateExpressionProtocol;
 import example2.protocols.evaluateexpression.EvaluateExpressionReplyMessage;
 import example2.protocols.evaluateexpression.EvaluateExpressionRequestMessage;
 import jade.core.AID;
@@ -24,16 +23,29 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID evaluatorAID;
+    /**
+     * The evaluator; more precisely, its AID.
+     * The responder party.
+     */
+    private AID evaluator;
     
+    /**
+     * The expression to evaluate.
+     */
     private String expression;
     
+    /**
+     * The expression value.
+     */
     private int value;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the EvaluateExpression_InitiatorParty class.
+     */
     public EvaluateExpression_InitiatorParty() {
         super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
         
@@ -44,10 +56,18 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Sets the expression to evaluate.
+     * @param expression the expression to evaluate
+     */
     public void setExpression(String expression) {
         this.expression = expression;
     }
     
+    /**
+     * Gets the expression value.
+     * @return the expression value
+     */
     public int getValue() {
         return value;
     }
@@ -84,7 +104,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (one-shot) state.
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -98,7 +119,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
                 getProtocolId()));
             
             // Get an active 'Evaluator' position.
-            evaluatorAID = getMyAgent().getMyOrganization()
+            evaluator = getMyAgent().getMyOrganization()
                 .getActivePosition(Evaluator_Role.NAME).getAID();
         }
         
@@ -107,6 +128,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     
     /**
      * The 'Send request' (single sender) state.
+     * A state in which the 'Evaluate expression request' message is sent.
      */
     private class SendRequest extends SingleSenderState<EvaluateExpressionRequestMessage> {
 
@@ -114,7 +136,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { evaluatorAID };
+            return new AID[] { evaluator };
         }
         
         // </editor-fold>
@@ -142,7 +164,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     }
     
     /**
-     * The 'Receive request' (single receiver) state.
+     * The 'Receive reply' (single receiver) state.
+     * A state in which the 'Evaluate expression reply' message is received.
      */
     private class ReceiveReply extends SingleReceiverState<EvaluateExpressionReplyMessage> {
 
@@ -158,7 +181,7 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { evaluatorAID };
+            return new AID[] { evaluator };
         }
         
         // </editor-fold>
@@ -184,7 +207,8 @@ public class EvaluateExpression_InitiatorParty extends InitiatorParty<Role> {
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
      */
     private class End extends OneShotBehaviourState {
 
