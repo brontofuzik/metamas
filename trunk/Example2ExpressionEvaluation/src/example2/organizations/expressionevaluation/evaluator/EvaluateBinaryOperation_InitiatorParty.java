@@ -4,7 +4,6 @@ import example2.organizations.expressionevaluation.adder.Adder_Role;
 import example2.organizations.expressionevaluation.divisor.Divider_Role;
 import example2.organizations.expressionevaluation.multiplier.Multiplier_Role;
 import example2.organizations.expressionevaluation.subtractor.Subtractor_Role;
-import example2.players.AdditionComputer_Player;
 import example2.protocols.Protocols;
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationReplyMessage;
 import example2.protocols.evaluatebinaryoperation.EvaluateBinaryOperationRequestMessage;
@@ -17,6 +16,7 @@ import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
 
 /**
+ * The 'Evaluate binary operation' protocol initiator party.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
@@ -27,7 +27,8 @@ public class EvaluateBinaryOperation_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The responding binary operator; more precisely its AID.
+     * The binary operator; more precisely its AID.
+     * The responder party.
      */
     private AID binaryOperator;
     
@@ -37,12 +38,12 @@ public class EvaluateBinaryOperation_InitiatorParty
     private Operation operation;
     
     /**
-     * The first operand.
+     * The first operand expression.
      */
     private String operand1;
     
     /**
-     * The second operand.
+     * The second operand expression.
      */
     private String operand2;
     
@@ -55,6 +56,10 @@ public class EvaluateBinaryOperation_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the EvaluateBinaryOperation_InitiatorParty class.
+     * @param operation the operation
+     */
     public EvaluateBinaryOperation_InitiatorParty(Operation operation) {
         super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_BINARY_OPERATION_PROTOCOL));
         
@@ -67,14 +72,26 @@ public class EvaluateBinaryOperation_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Sets the first operand expression.
+     * @param operand1 the first operand expression
+     */
     void setOperand1(String operand1) {
         this.operand1 = operand1;
     }
     
+    /**
+     * Sets the second operand expression.
+     * @param operand2 the second operand expression
+     */
     void setOperand2(String operand2) {
         this.operand2 = operand2;
     }
     
+    /**
+     * Gets the result.
+     * @return the result
+     */
     int getResult() {
         return result;
     }
@@ -111,7 +128,8 @@ public class EvaluateBinaryOperation_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (one-shot) state.
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -147,7 +165,8 @@ public class EvaluateBinaryOperation_InitiatorParty
     }
     
     /**
-     * The 'Send evalaute request' (single sender) state.
+     * The 'Send evaluate request' (single sender) state.
+     * A state in which the 'Evaluate binary operation request' message is sent.
      */
     private class SendEvaluateRequest extends SingleSenderState<EvaluateBinaryOperationRequestMessage> {
 
@@ -185,6 +204,7 @@ public class EvaluateBinaryOperation_InitiatorParty
     
     /**
      * The 'Receive evaluate reply' (single receiver) state.
+     * A state in which the 'Evaluate binary operation reply' message is received.
      */
     private class ReceiveEvaluateReply extends SingleReceiverState<EvaluateBinaryOperationReplyMessage> {
 
@@ -226,7 +246,8 @@ public class EvaluateBinaryOperation_InitiatorParty
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
      */
     private class End extends OneShotBehaviourState {
 

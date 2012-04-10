@@ -24,7 +24,12 @@ public class Multiply_Responsibility extends AsynchronousResponsibility<OperandP
     
     // ----- PRIVATE -----
     
-    // factor * factor = product
+    /**
+     * Computes multiplication.
+     * @param factor1 the first factor
+     * @param factor2 the second factor
+     * @return the product
+     */
     private int multiply(int factor1, int factor2) {
         return factor1 * factor2;
     }

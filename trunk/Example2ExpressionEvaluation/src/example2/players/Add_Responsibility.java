@@ -24,7 +24,12 @@ public class Add_Responsibility extends AsynchronousResponsibility<OperandPair, 
     
     // ----- PRIVATE -----
     
-    // addend + addend = sum
+    /**
+     * Computes addition.
+     * @param addend1 the first addend
+     * @param addend2 the second addend
+     * @return the sum
+     */
     private int add(int addend1, int addend2) {
         return addend1 + addend2;
     }

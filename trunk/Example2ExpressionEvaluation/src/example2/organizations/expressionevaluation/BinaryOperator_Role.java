@@ -12,6 +12,10 @@ public abstract class BinaryOperator_Role extends Role {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Override this method to return the name of the responsibility.
+     * @return the name of the responsibility
+     */
     public abstract String getResponsibilityName();
     
     // </editor-fold>

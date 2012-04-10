@@ -8,7 +8,7 @@ import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.example.CompetenceInvokerPlayer;
 
 /**
- * 'Blank' player - the player playing the 'Evaluator' role.
+ * The 'Blank' player - the player playing the 'Evaluator' role.
  * @author Lukáš Kúdela
  * @since 2012-03-14
  * @version %I% %G%
@@ -36,8 +36,7 @@ public class Blank_Player extends CompetenceInvokerPlayer<String> implements IOb
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instane of the Calculator1_Player class.
-     * Creates the calculator1 player who will enact the 'Evaluator' role.
+     * Initializes a new instane of the Blank_Player class.
      */
     public Blank_Player() {
         super(new RoleFullName(EVALUATOR_ROLE_FULL_NAME), EVALUATE_COMPETENCE_NAME);

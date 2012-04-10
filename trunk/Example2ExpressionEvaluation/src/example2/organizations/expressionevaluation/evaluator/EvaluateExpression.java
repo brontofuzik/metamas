@@ -6,7 +6,7 @@ import thespian4jade.behaviours.states.IState;
 import thespian4jade.behaviours.states.special.WrapperState;
 
 /**
- * The 'State expression' (FSM) behaviour.
+ * The 'EvaluateExpression' (FSM) behaviour.
  * @author Lukáš Kúdela
  * @since 2012-04-15
  * @version %I% %G%
@@ -20,12 +20,24 @@ public class EvaluateExpression extends FSMBehaviourState {
     private IState end;
     // ------------------
     
+    /**
+     * The expression to evaluate.
+     */
     private String expression;
     
+    /**
+     * The first operand expression.
+     */
     private String operand1;
     
+    /**
+     * The second operand expression.
+     */
     private String operand2;
     
+    /**
+     * The expression value.
+     */
     private int value;
     
     // </editor-fold>
@@ -43,10 +55,18 @@ public class EvaluateExpression extends FSMBehaviourState {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Sets the expression to evalaute.
+     * @param expression the expression to evaluate
+     */
     void setExpression(String expression) {
         this.expression = expression;
     }
     
+    /**
+     * Gets the expression value.
+     * @return the expression value
+     */
     int getValue() {
         return value;
     }
@@ -77,7 +97,7 @@ public class EvaluateExpression extends FSMBehaviourState {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Process' (one-shot) state.
+     * The 'Initialize' initial (one-shot) state.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -133,7 +153,8 @@ public class EvaluateExpression extends FSMBehaviourState {
     }
     
     /**
-     * The 'Evaluate binary operation initiator party' (wrapper) state.
+     * The 'Evaluate binary operation initiator party' initial (wrapper) state.
+     * A state in which the 'Evaluate binary operation' protocol initiator party is executed.
      */
     private class EvaluateBinaryOperationInitiatorWrapper
         extends WrapperState<EvaluateBinaryOperation_InitiatorParty> {
@@ -163,7 +184,7 @@ public class EvaluateExpression extends FSMBehaviourState {
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
      */
     private class End extends OneShotBehaviourState {
 
@@ -178,7 +199,7 @@ public class EvaluateExpression extends FSMBehaviourState {
     }
     
     /**
-     * Expression parser.
+     * An expression parser.
      */
     private class ExpressionParser {
         

@@ -24,7 +24,12 @@ public class Subtract_Responsibility extends AsynchronousResponsibility<OperandP
     
     // ----- PRIVATE -----
     
-    // minuend - subtrahend = difference
+    /**
+     * Computes subtraction.
+     * @param minuend the minuend
+     * @param subtrahend the subtrahend
+     * @return the difference
+     */
     private int subtract(int minuend, int subtrahend) {
         return minuend - subtrahend;
     }

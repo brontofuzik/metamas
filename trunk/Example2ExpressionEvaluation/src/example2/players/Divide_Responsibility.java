@@ -23,8 +23,13 @@ public class Divide_Responsibility extends AsynchronousResponsibility<OperandPai
     }
     
     // ----- PRIVATE -----
-    
-    // dividend / divisor = quotient (remainder) 
+   
+    /**
+     * Computes division.
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return the quotient
+     */
     private int divide(int dividend, int divisor) {
         return dividend / divisor;
     }

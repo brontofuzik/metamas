@@ -18,6 +18,7 @@ class Evaluator_Responder extends Responder {
      * Initializes a new instance of the Evaluator_Responder class.
      */
     Evaluator_Responder() {
+        // Add protocols.
         addProtocol(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL));
     }
     

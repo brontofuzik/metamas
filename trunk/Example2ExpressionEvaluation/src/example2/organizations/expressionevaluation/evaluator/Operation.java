@@ -1,7 +1,7 @@
 package example2.organizations.expressionevaluation.evaluator;
 
 /**
- * Operation enumeration.
+ * An operation.
  * @author Lukáš Kúdela
  * @since 2012-03-16
  * @version %I% %G%

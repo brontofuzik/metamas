@@ -4,6 +4,8 @@ import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.example.RoleEnacterPlayer;
 
 /**
+ * The 'Operator' abstract player - the player playing the 'Binary operator'
+ * abstract role.
  * @author Lukáš Kúdela
  * @since 2012-03-20
  * @version %I% %G%
@@ -12,6 +14,10 @@ public abstract class OperatorPlayer extends RoleEnacterPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new insatnce of the OperatorPlayer class.
+     * @param roleFullName 
+     */
     protected OperatorPlayer(RoleFullName roleFullName) {
         super(roleFullName);
     }

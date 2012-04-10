@@ -48,12 +48,13 @@ public class Evaluate_Competence extends SynchronousCompetence<String, Integer> 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Evaluate expression' (state wrapper) state.
+     * The 'Evaluate expression' initial (wrapper) state.
+     * A state in which the 'Evaluate expression' behaviour is executed.
      */
     private class EvaluateExpressionWrapper
         extends WrapperState<EvaluateExpression> {
 
-        // <editor-fold defaultstate="collapsed" desc="Methods">
+        // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         /**
          * Initialize a nex instance of the EvaluateExpressionWrapper class.
@@ -80,7 +81,7 @@ public class Evaluate_Competence extends SynchronousCompetence<String, Integer> 
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
      */
     private class End extends OneShotBehaviourState {
 

@@ -23,7 +23,8 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The initiating binary operator; more precisely its AID.
+     * The binary operator; more precisely its AID.
+     * The initiator party.
      */
     private AID binaryOperator;
     
@@ -33,7 +34,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     private String expression;
     
     /**
-     * The value of the expression.
+     * The expression value.
      */
     private int value;
     
@@ -43,7 +44,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     
     /**
      * Initializes a new instance of the EvaluateExpression_ResponderParty class.
-     * @param message the received ACL message
+     * @param message the ACL message initiating the protocol
      */
     public EvaluateExpression_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.EVALUATE_EXPRESSION_PROTOCOL), message);
@@ -85,8 +86,9 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
-    /**
-     * The 'Receive request' (one-shot) state.
+/**
+     * The 'Receive request' initial (single sender) state.
+     * A state in which the 'Evaluate expression request' message is received.
      */
     private class ReceiveRequest extends OneShotBehaviourState {
 
@@ -110,6 +112,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     
     /**
      * The 'Evaluate expression' (wrapper) state.
+     * A state in which the 'Evaluate expression' beahviour is executed.
      */
     private class EvaluteExpressionWrapper
         extends WrapperState<EvaluateExpression> {
@@ -139,6 +142,7 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     
     /**
      * The 'Send reply' (single sender) state.
+     * A state in which the 'Evaluate expression reply' message is sent.
      */
     private class SendReply extends SingleSenderState<EvaluateExpressionReplyMessage> {
 
@@ -176,7 +180,8 @@ public class EvaluateExpression_ResponderParty extends ResponderParty<Evaluator_
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
      */
     private class End extends OneShotBehaviourState {
 
