@@ -2,7 +2,7 @@ package example3.organizations.auction;
 
 import example3.organizations.auction.auctioneer.Auctioneer_Role;
 import example3.organizations.auction.bidder.Bidder_Role;
-import thespian4jade.core.organization.Multiplicity;
+import thespian4jade.core.organization.RoleMultiplicity;
 import thespian4jade.core.organization.Organization;
 import java.util.logging.Level;
 
@@ -21,8 +21,8 @@ public class Auction_Organization extends Organization {
         super.setup();
         
         // Add roles.
-        addRole(Auctioneer_Role.class, Multiplicity.MULTIPLE);
-        addRole(Bidder_Role.class, Multiplicity.MULTIPLE);
+        addRole(Auctioneer_Role.class, RoleMultiplicity.MULTIPLE);
+        addRole(Bidder_Role.class, RoleMultiplicity.MULTIPLE);
         log(Level.INFO, "Roles added.");
     }
     
