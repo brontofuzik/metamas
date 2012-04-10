@@ -94,7 +94,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' initial (exit value) state.
+     * The 'Initialize' initial (one-shot) state.
      * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {

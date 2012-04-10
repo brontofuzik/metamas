@@ -119,7 +119,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' initial (exit value) state.
+     * The 'Initialize' initial (one-shot) state.
      * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
