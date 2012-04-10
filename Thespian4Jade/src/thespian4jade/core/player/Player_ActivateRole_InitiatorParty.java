@@ -1,8 +1,6 @@
 package thespian4jade.core.player;
 
 import jade.core.AID;
-import jade.core.behaviours.OneShotBehaviour;
-import thespian4jade.language.SimpleMessage;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -23,18 +21,30 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
 
     // <editor-fold defaultstate="collapsed" desc="Fields">
 
-    /** The role name. */
-    private String roleName;
-    
-    /** The role AID. */
+    /**
+     * The role to activate; more precisely, its AID.
+     * The responder party.
+     */
     private AID roleAID;
     
+    /**
+     * The rname of the role to activate.
+     */
+    private String roleName;
+    
+    /**
+     * The error message.
+     */
     private String errorMessage;
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Player_ActivateRole_InitiatorParty class.
+     * @param roleName the name of the role to activate
+     */
     public Player_ActivateRole_InitiatorParty(String roleName) {
         super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL));
         // ----- Preconditions -----
@@ -43,14 +53,17 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
 
         this.roleName = roleName;
         
-        registerStatesAndtransitions();
+        buildFSM();
     }
 
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
-    private void registerStatesAndtransitions() {
+    /**
+     * Builds the party FSM.
+     */
+    private void buildFSM() {
         // ----- States -----
         IState initialize = new Initialize();
         IState sendActivateRequest = new SendActivateRequest();
@@ -77,6 +90,10 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends ExitValueState {
         
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -149,7 +166,7 @@ public class Player_ActivateRole_InitiatorParty extends InitiatorParty<Player> {
     }
     
     /**
-     * The 'Receive activate reply' (multi sender) state.
+     * The 'Receive activate reply' (receive-agree-or-refuse) state.
      * A state in which the reply message (AGREE or REFUSE) is received.
      */
     private class ReceiveActivateReply extends ReceiveAgreeOrRefuse {

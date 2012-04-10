@@ -32,6 +32,10 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the Role_ActivateRole_ResponderParty class.
+     * @param aclMessage the ACL message initiating the protocol
+     */
     public Role_ActivateRole_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.ACTIVATE_ROLE_PROTOCOL), aclMessage);
         
@@ -42,6 +46,9 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- States -----
         IState initialize = new Initialize();
@@ -71,7 +78,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
     /**
-     * The 'Initialize' initial (one-shot) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
         
@@ -126,8 +134,8 @@ public class Role_ActivateRole_ResponderParty extends ResponderParty<Role> {
     }
 
     /**
-     * The 'Send activate reply' (multi sender) state.
-     * A state in which the 'Activate reply' message is sent.
+     * The 'Send activate reply' (send-agree-or-refuse) state.
+     * A state in which the reply message (AGREE or REFUSE) is sent.
      */
     private class SendActivateReply extends SendAgreeOrRefuse {
 
