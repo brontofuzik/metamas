@@ -3,7 +3,6 @@ package thespian4jade.core.player;
 import jade.core.AID;
 import thespian4jade.behaviours.states.special.EventHandler;
 import jade.lang.acl.ACLMessage;
-import jade.mtp.InChannel;
 import thespian4jade.core.Event;
 import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.ProtocolRegistry;
@@ -24,16 +23,29 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The initiating organization; more precisely, its AID.
+     * The organ; more precisely, its AID.
+     * The initiator party.
      */
     private AID organization;
     
+    /**
+     * The published event.
+     */
     private Event event;
     
+    /**
+     * The argument.
+     */
     private String argument;
     
+    /**
+     * The 'Select event handler' state.
+     */
     private IState selectEventHandler;
     
+    /**
+     * The 'Event published' state.
+     */
     private IState eventPublished;
     
     // </editor-fold>
@@ -42,7 +54,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     /**
      * Initializes a new instance of the Player_PublishEvent_ResponderParty class.
-     * @param message 
+     * @param message the ACL message initiating the protocol
      */
     public Player_PublishEvent_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.PUBLISH_EVENT_PROTOCOL), message);
@@ -54,6 +66,9 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
+    /**
+     * Builds the party FSM.
+     */
     private void buildFSM() {
         // ----- State -----
         IState initialize = new Initialize();
@@ -79,7 +94,8 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' initial (one-shot) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -100,6 +116,7 @@ public class Player_PublishEvent_ResponderParty extends ResponderParty<Player> {
     
     /**
      * The 'Receive event' (one-shot) state.
+     * A state in which the 'Event' message is received.
      */
     private class ReceiveEvent extends OneShotBehaviourState {
 
