@@ -3,7 +3,6 @@ package thespian4jade.core.organization;
 import jade.core.AID;
 import java.util.Set;
 import thespian4jade.core.Event;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.protocols.Protocols;
@@ -23,6 +22,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     
     /**
      * The players listening for the event; more precisely their AIDs.
+     * The reposnder parties.
      */
     private AID[] players;
     
@@ -95,7 +95,8 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (one-shot) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
         
@@ -121,7 +122,7 @@ public class Organization_PublishEvent_InitiatorParty extends InitiatorParty<Org
     
     /**
      * The 'Send event' (single sender) state.
-     * Sends the 'Event' message.
+     * A state in which the 'Event' message is sent.
      */
     private class SendEvent extends SingleSenderState<EventMessage> {
 
