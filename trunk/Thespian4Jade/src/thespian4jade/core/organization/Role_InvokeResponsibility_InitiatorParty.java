@@ -34,6 +34,7 @@ public class Role_InvokeResponsibility_InitiatorParty
     
     /**
      * The player; more precisely its AID.
+     * The responder party.
      */
     private AID player;
     
@@ -43,7 +44,7 @@ public class Role_InvokeResponsibility_InitiatorParty
     private String responsibilityName;
     
     /**
-     * The (serializable) responsibility argument.
+     * The responsibility argument.
      */
     private TArgument responsibilityArgument;
     
@@ -52,6 +53,9 @@ public class Role_InvokeResponsibility_InitiatorParty
      */
     private TResult responsibilityResult;
     
+    /**
+     * The error message.
+     */
     private String errorMessage;
     
     /**
@@ -218,7 +222,8 @@ public class Role_InvokeResponsibility_InitiatorParty
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' initial (exit-value) state.
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends ExitValueState {
         
@@ -255,6 +260,10 @@ public class Role_InvokeResponsibility_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Send invoke responsibility request' (single sender) state.
+     * A state in which the 'Invoke responsibility request' is sent.
+     */
     private class SendResponsibilityRequest
         extends SingleSenderState<InvokeResponsibilityRequestMessage> {
         
@@ -289,6 +298,11 @@ public class Role_InvokeResponsibility_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive responsibility argument request' (receive-success-or-failure) state.
+     * A state in which a 'Responsibility argument request' message is received
+     * in case of success, or a FAILURE message. 
+     */
     private class ReceiveResponsibilityArgumentRequest
         extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
@@ -324,6 +338,10 @@ public class Role_InvokeResponsibility_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Send responsibility argument' (single sender) state.
+     * A stat in which the responsibility argument is sent.
+     */
     private class SendResponsibilityArgument
         extends SendSuccessOrFailure<ResponsibilityArgumentMessage> {
         
@@ -367,6 +385,11 @@ public class Role_InvokeResponsibility_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive responsibility result' (receive-success-or-failure) state.
+     * A state in which either a responsibility result is received in case of success,
+     * or a FAILURE message.
+     */
     private class ReceiveResponsibilityResult
         extends ReceiveSuccessOrFailure<ResponsibilityResultMessage<TResult>> {
         

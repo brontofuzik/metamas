@@ -57,6 +57,9 @@ public class Player_InvokeCompetence_InitiatorParty
      */
     private String errorMessage;
     
+    /**
+     * The observable helper.
+     */
     private IObservable observable = new Observable();
     
     // </editor-fold>

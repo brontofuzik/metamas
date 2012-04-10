@@ -67,10 +67,10 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     /**
      * Initializes a new instance of the Role_InvokeCompetence_ResponderParty class.
-     * @param aclMessage the received ACL message
+     * @param message the ACL message initiating the protocol
      */
-    public Role_InvokeCompetence_ResponderParty(ACLMessage aclMessage) {
-        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), aclMessage);
+    public Role_InvokeCompetence_ResponderParty(ACLMessage message) {
+        super(ProtocolRegistry.getProtocol(Protocols.INVOKE_COMPETENCE_PROTOCOL), message);
                 
         buildFSM();
     }
