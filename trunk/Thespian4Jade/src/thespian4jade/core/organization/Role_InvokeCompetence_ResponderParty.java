@@ -120,6 +120,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     /**
      * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
         
@@ -139,7 +140,8 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     }
     
     /**
-     * The 'Receive invoke competence request' (one-shot) state. 
+     * The 'Receive invoke competence request' (single receiver) state.
+     * A state in which the 'Invoke competence request' is received.
      */
     private class ReceiveInvokeCompetenceRequest extends ExitValueState {
         
@@ -176,6 +178,7 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
     
     /**
      * The 'Select competence' (exit value) state.
+     * A state in which the competence is selected.
      */
     private class SelectCompetence extends ExitValueState {
 
@@ -214,6 +217,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
    
+    /**
+     * The 'Send competence argument request' (send-success-or-failure) state.
+     * A state in which a 'Competence argument request' message is sent
+     * in case of success, or a FAILURE message. 
+     */
     private class SendCompetenceArgumentRequest
         extends SendSuccessOrFailure<ArgumentRequestMessage> {
         
@@ -254,6 +262,10 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive competence argument' (single receiver) state.
+     * A stat in which the competence argument is received.
+     */
     private class ReceiveCompetenceArgument
         extends SingleReceiverState<CompetenceArgumentMessage<TArgument>> {
         
@@ -295,7 +307,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         
         // </editor-fold>
     }
-      
+    
+    /**
+     * The 'Competence wrapper' (wrapper) state.
+     * A state in which the competence is executed.
+     */
     private class CompetenceWrapperState
         extends WrapperState<ICompetence<TArgument, TResult>> {
 
@@ -322,6 +338,11 @@ public class Role_InvokeCompetence_ResponderParty<TArgument extends Serializable
         // </editor-fold>
     }
     
+    /**
+     * The 'Send competence result' (send-success-or-failure) state.
+     * A state in which either a competence result is sent in case of success,
+     * or a FAILURE message.
+     */
     private class SendCompetenceResult
         extends SendSuccessOrFailure<CompetenceResultMessage> {
         

@@ -33,6 +33,7 @@ public class Player_InvokeCompetence_InitiatorParty
     
     /**
      * The role; more precisely its AID.
+     * The responder party.
      */
     private AID role;
     
@@ -216,6 +217,10 @@ public class Player_InvokeCompetence_InitiatorParty
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (exit value) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends ExitValueState {
     
         // <editor-fold defaultstate="collapsed" desc="Constant fields">
@@ -253,6 +258,10 @@ public class Player_InvokeCompetence_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Send invoke competence request' (single sender) state.
+     * A state in which the 'Invoke competence request' is sent.
+     */
     private class SendInvokeCompetenceRequest
         extends SingleSenderState<InvokeCompetenceRequestMessage> {
         
@@ -287,6 +296,11 @@ public class Player_InvokeCompetence_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive competence argument request' (receive-success-or-failure) state.
+     * A state in which a 'Competence argument request' message is received
+     * in case of success, or a FAILURE message. 
+     */
     private class ReceiveCompetenceArgumentRequest
         extends ReceiveSuccessOrFailure<ArgumentRequestMessage> {
         
@@ -322,6 +336,10 @@ public class Player_InvokeCompetence_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Send competence argument' (single sender) state.
+     * A stat in which the competence argument is sent.
+     */
     private class SendCompetenceArgument
         extends SingleSenderState<CompetenceArgumentMessage> {
         
@@ -356,6 +374,11 @@ public class Player_InvokeCompetence_InitiatorParty
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive competence result' (receive-success-or-failure) state.
+     * A state in which either a competence result is received in case of success,
+     * or a FAILURE message.
+     */
     private class ReceiveCompetenceResult
         extends ReceiveSuccessOrFailure<CompetenceResultMessage<TResult>> {
         
