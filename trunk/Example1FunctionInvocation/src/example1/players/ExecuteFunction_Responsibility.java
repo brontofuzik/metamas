@@ -25,6 +25,11 @@ public class ExecuteFunction_Responsibility extends AsynchronousResponsibility<I
     
     // ----- PRIVATE -----
     
+    /**
+     * Computes the factorial function.
+     * @param n the function argument
+     * @return the function value
+     */
     private static int factorial(int n) {
         if (n > 1) {
             return n * factorial(n - 1);

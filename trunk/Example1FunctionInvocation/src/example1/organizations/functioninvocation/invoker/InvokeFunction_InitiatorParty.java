@@ -22,16 +22,29 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID executorAID;
+    /**
+     * The function executor; more precisely, its AID.
+     * The responder party.
+     */
+    private AID executor;
     
+    /**
+     * The function argument.
+     */
     private int argument;
     
+    /**
+     * The function result.
+     */
     private int result;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the InvokeFunction_InitiatorParty class.
+     */
     public InvokeFunction_InitiatorParty() {
         super(ProtocolRegistry.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL));
         
@@ -66,18 +79,14 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         // ------------------
         
         // Register the states.
-        registerFirstState(initialize);
-        
+        registerFirstState(initialize);   
         registerState(sendRequest);
-        registerState(receiveReply);
-        
+        registerState(receiveReply);     
         registerLastState(end);
         
         // Register the transitions.
-        initialize.registerDefaultTransition(sendRequest);
-        
-        sendRequest.registerDefaultTransition(receiveReply);
-        
+        initialize.registerDefaultTransition(sendRequest);       
+        sendRequest.registerDefaultTransition(receiveReply);      
         receiveReply.registerDefaultTransition(end);
     }
     
@@ -85,6 +94,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
+    /**
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
+     */
     private class Initialize extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">
@@ -96,20 +109,24 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
                 getProtocolId()));
             
             // Get an active 'Executor' position.
-            executorAID = getMyAgent().getMyOrganization()
+            executor = getMyAgent().getMyOrganization()
                 .getActivePosition(Executor_Role.NAME).getAID();
         }
         
         // </editor-fold>
     }
     
+    /**
+     * The 'Send request' (single sender) state.
+     * A state in which the 'Invoke function request' message is sent.
+     */
     private class SendRequest extends SingleSenderState<InvokeFunctionRequestMessage> {
       
         // <editor-fold defaultstate="collapsed" desc="Getters and setters">
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { executorAID };
+            return new AID[] { executor };
         }
         
         // </editor-fold>
@@ -140,6 +157,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         // </editor-fold>
     }
     
+    /**
+     * The 'Receive reply' (sinle receiver) state.
+     * A state in which the 'Invoke function reply' message is received.
+     */
     private class ReceiveReply extends SingleReceiverState<InvokeFunctionReplyMessage> {
         
         // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -154,7 +175,7 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         
         @Override
         protected AID[] getSenders() {
-            return new AID[] { executorAID };
+            return new AID[] { executor };
         }
         
         // </editor-fold>
@@ -179,6 +200,10 @@ public class InvokeFunction_InitiatorParty extends InitiatorParty<Invoker_Role> 
         // </editor-fold>
     }
     
+    /**
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
+     */
     private class End extends OneShotBehaviourState {
         
         // <editor-fold defaultstate="collapsed" desc="Methods">

@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package example1.organizations.functioninvocation.invoker;
 
 import thespian4jade.core.organization.Role;
 
 /**
- * An Invoker role.
+ * The 'Invoker' role.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%

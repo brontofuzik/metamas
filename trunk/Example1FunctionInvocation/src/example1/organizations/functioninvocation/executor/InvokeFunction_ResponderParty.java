@@ -1,7 +1,6 @@
 package example1.organizations.functioninvocation.executor;
 
 import example1.protocols.Protocols;
-import example1.protocols.invokefunctionprotocol.InvokeFunctionProtocol;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionReplyMessage;
 import example1.protocols.invokefunctionprotocol.InvokeFunctionRequestMessage;
 import jade.core.AID;
@@ -23,10 +22,20 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
-    private AID invokerAID;
+    /**
+     * The function invoker; more precisely, its AID.
+     * The initiator party.
+     */
+    private AID invoker;
     
+    /**
+     * The function argument.
+     */
     private int argument;
     
+    /**
+     * The function result.
+     */
     private int result;
     
     // </editor-fold>
@@ -35,13 +44,13 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     
     /**
      * Initializes a new instance of the InvokeFunction_ResponderParty class.
-     * @param message the received ACL message
+     * @param message the ACL message initiating the protocol
      */
     public InvokeFunction_ResponderParty(ACLMessage aclMessage) {
         super(ProtocolRegistry.getProtocol(Protocols.INVOKE_FUNCTION_PROTOCOL), aclMessage);
         
         // TODO (priority: low) Consider moving this initialization to the Initialize' state.
-        invokerAID = getACLMessage().getSender();
+        invoker = getACLMessage().getSender();
         
         buildFSM();
     }
@@ -62,18 +71,14 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
         // ------------------
         
         // Register the states.
-        registerFirstState(receiveRequest);
-        
+        registerFirstState(receiveRequest);       
         registerState(invokeResponsibility_ExecuteFunction);
-        registerState(sendReply);
-        
+        registerState(sendReply);       
         registerLastState(end);
         
         // Register the transitions.
-        receiveRequest.registerDefaultTransition(invokeResponsibility_ExecuteFunction);
-        
-        invokeResponsibility_ExecuteFunction.registerDefaultTransition(sendReply);
-        
+        receiveRequest.registerDefaultTransition(invokeResponsibility_ExecuteFunction);       
+        invokeResponsibility_ExecuteFunction.registerDefaultTransition(sendReply);       
         sendReply.registerDefaultTransition(end);  
     }
     
@@ -83,6 +88,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     
     /**
      * The 'Receive request' (one-shot) state.
+     * A state in which the 'Invoke function request' message is received.
      */
     private class ReceiveRequest extends OneShotBehaviourState {
         
@@ -106,6 +112,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     
     /**
      * The 'Invoke responsibility - Execute function' (invoke responsibility) state.
+     * A state in which the 'Execute function' responsibility is invoked.
      */
     private class InvokeResponsibility_ExecuteFunction
         extends InvokeResponsibilityState<Integer, Integer> {
@@ -113,7 +120,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
         // <editor-fold defaultstate="collapsed" desc="Constructors">
         
         InvokeResponsibility_ExecuteFunction() {
-            super(Executor_Role.EXECUTE_RESPONSIBILITY);
+            super(Executor_Role.EXECUTE_FUNCTION_RESPONSIBILITY);
         }
         
         // </editor-fold>
@@ -135,6 +142,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     
     /**
      * The 'Send reply' (sinle sender) state.
+     * A state in which the 'Invoke function reply' message is sent.
      */
     private class SendReply extends SingleSenderState<InvokeFunctionReplyMessage> {
         
@@ -142,7 +150,7 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
         
         @Override
         protected AID[] getReceivers() {
-            return new AID[] { invokerAID };
+            return new AID[] { invoker };
         }
         
         // </editor-fold>
@@ -170,7 +178,8 @@ public class InvokeFunction_ResponderParty extends ResponderParty<Executor_Role>
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
      */
     private class End extends OneShotBehaviourState {
         

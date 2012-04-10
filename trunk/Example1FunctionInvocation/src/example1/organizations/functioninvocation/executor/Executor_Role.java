@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package example1.organizations.functioninvocation.executor;
 
 import thespian4jade.core.organization.Role;
 
 /**
- * An Executor role.
+ * The 'Executor' role.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
@@ -16,9 +12,11 @@ public class Executor_Role extends Role {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
+    /** The name of the 'Executor' role. */
     public static final String NAME = "Executor_Role";
     
-    public static final String EXECUTE_RESPONSIBILITY = "ExecuteFunction_Responsibility";
+    /** The name of the 'Execute function' responsibility. */
+    public static final String EXECUTE_FUNCTION_RESPONSIBILITY = "ExecuteFunction_Responsibility";
     
     // </editor-fold>
     

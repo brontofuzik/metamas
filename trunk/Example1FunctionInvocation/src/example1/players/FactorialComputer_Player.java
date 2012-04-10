@@ -14,6 +14,7 @@ public class FactorialComputer_Player extends RoleEnacterPlayer {
     
     // <editor-fold defaultstate="collapsed" desc="Constant fields">
     
+    /** The full name of the 'Executor' role. */
     private static final String EXECUTOR_ROLE_FULL_NAME
         = "functionInvocation_Organization.Executor_Role";
     
@@ -22,8 +23,7 @@ public class FactorialComputer_Player extends RoleEnacterPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Creates a new Demo player who will enact the Executor role.
-     * @param roleFullName the full name of the role to enact and activate
+     * Initializes a new instance of the FactorialComputer_Player class.
      */
     public FactorialComputer_Player() {
         super(new RoleFullName(EXECUTOR_ROLE_FULL_NAME));

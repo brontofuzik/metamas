@@ -5,7 +5,7 @@ import example1.organizations.functioninvocation.invoker.Invoker_Role;
 import thespian4jade.core.organization.Organization;
 
 /**
- * An English auction organization.
+ * The 'Function invocation' oragnization.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%
