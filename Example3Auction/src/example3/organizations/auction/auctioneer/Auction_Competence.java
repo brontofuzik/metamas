@@ -19,12 +19,12 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The 'Initialize' state.
+     * The 'Initialize' initial state.
      */
     private IState initialize;
     
     /**
-     * The 'End' state.
+     * The 'End' final state.
      */
     private IState end;
     
@@ -62,7 +62,8 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' (one-shot) state.
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
 
@@ -86,7 +87,8 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
     }
     
     /**
-     * The 'Auction initiator party' (state wrapper) state.
+     * The 'Auction initiator party' (wrapper) state.
+     * A state in which the 'Auction' protocol initiator party is executed.
      */
     private class AuctionInitiatorWrapper
         extends WrapperState<Auction_InitiatorParty> {
@@ -119,7 +121,8 @@ public class Auction_Competence extends SynchronousCompetence<AuctionArgument, A
     }
     
     /**
-     * The 'End' (one-shot) state.
+     * The 'End' final (one-shot) state.
+     * A state in which the party ends.
      */
     private static class End extends OneShotBehaviourState {
 

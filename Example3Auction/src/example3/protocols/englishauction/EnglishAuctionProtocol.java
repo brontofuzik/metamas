@@ -18,6 +18,9 @@ public class EnglishAuctionProtocol extends Protocol {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the EnglishAuctionProtocol class.
+     */
     public EnglishAuctionProtocol() {
         super(ACLMessage.CFP);
     }
@@ -27,9 +30,11 @@ public class EnglishAuctionProtocol extends Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
-     * Creates an initiator party.
-     * @param arguments the initiator party's contructor arguments
-     * @returns an initiator party
+     * Creates a new 'English auction' protocol initiator party.
+     * @param arguments the 'English auction' protocol initiator party's contructor
+     * arguments:
+     *     - none
+     * @returns a new 'English auction' protocol initiator party
      */
     @Override
     public InitiatorParty createInitiatorParty(Object[] arguments) {
@@ -37,9 +42,10 @@ public class EnglishAuctionProtocol extends Protocol {
     }
 
     /**
-     * Creates a responder party.
-     * @param message the ACL message
-     * @returns a responder party
+     * Creates a new 'English auction' protocol responder party.
+     * @param message the ACL message to which the 'English auction' protocol
+     * responder party responds
+     * @returns a new 'English auction' protocol responder party
      */
     @Override
     public ResponderParty createResponderParty(ACLMessage message) {

@@ -14,6 +14,10 @@ public class Bid_Responsibility extends AsynchronousResponsibility<BidArgument, 
 
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the owner participant.
+     * @return the owner participant
+     */
     private ParticipantPlayer getMyParticipant() {
         return (ParticipantPlayer)myAgent;
     }

@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import thespian4jade.core.organization.Role;
 import thespian4jade.language.SimpleMessage;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.protocols.Protocol;
 import thespian4jade.behaviours.states.receiver.SingleReceiverState;
 import thespian4jade.behaviours.states.sender.SingleSenderState;
@@ -22,7 +21,7 @@ import thespian4jade.behaviours.states.OneShotBehaviourState;
 import thespian4jade.behaviours.states.IState;
 
 /**
- * The 'Sealed bid auction' protocol initiator party.
+ * The 'Sealed bid auction' abstract protocol initiator party.
  * @author Lukáš Kúdela
  * @since 2012-03-18
  * @version %I% %G%
@@ -33,6 +32,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
         
     /**
      * The bidders; more precisely their AIDs.
+     * The responder parties.
      */
     private Set<AID> bidders = new HashSet<AID>();
     
@@ -165,8 +165,9 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     }
     
     /**
-     * Determies the winner and the hammer price.
-     * @return <c>true</c> if the winner has been determined; <c>false</c> otherwise.
+     * Determines the winner and the hammer price.
+     * @return <c>true</c> if the winner has been determined,
+     *     <c>false</c> otherwise
      */
     protected abstract boolean determineWinner();
     
@@ -175,8 +176,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' state.
-     * An (initial) state in which the party is initialized and begins.
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
      */
     private class Initialize extends OneShotBehaviourState {
         
@@ -202,9 +203,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     }
     
     /**
-     * The 'Send auction CFP' (single sender) state.
-     * A state in which the auction call for proposals (CFP) is sent
-     * to the bidders.
+     * The 'Send auction call-for-proposal' (single sender) state.
+     * A state in which the 'Auction call-for-proposal' message is sent.
      */
     private class SendAuctionCFP extends SingleSenderState<AuctionCFPMessage> {
 
@@ -248,8 +248,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     }
     
     /**
-     * The 'Receive bid' (single sender) state.
-     * A state in which a bid is received from the bidders.
+     * The 'Receive bid' (single receiver) state.
+     * A state in which the 'Bid propose' message is received.
      */
     private class ReceiveBid extends SingleReceiverState<BidProposeMessage> {
 
@@ -304,7 +304,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
          */
         @Override
         protected void handleMessage(BidProposeMessage message) {
-            bids.put(message.getSender(), message.getBid());
+            bids.put(message.getSender(), message.getBidAmount());
         }
 
         @Override
@@ -354,7 +354,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     
     /**
      * The 'Send auction result to the winner' (single sender) state.
-     * A state in which the positive auction result is sent to the winner.
+     * A state in which the ACCEPT-PROPOSAL simple message is sent to the winner.
      */
     private class SendAuctionResultToWinner extends SingleSenderState<SimpleMessage> {
 
@@ -399,7 +399,7 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     
     /**
      * The 'Send auction result to the losers' (single sender) state.
-     * A state in which the negative auction result is sent to the losers.
+     * A state in which the REJECT-PROPOSAL simple message is sent to the losers.
      */
     private class SendAuctionResultToLosers extends SingleSenderState<SimpleMessage> {
 
@@ -443,8 +443,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     }
     
     /**
-     * The 'Success end' state.
-     * A (final) state in which the party secceeds.
+     * The 'Success end' final (one-shot) state.
+     * A state in which the party succeeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -462,8 +462,8 @@ public abstract class SealedBidAuction_InitiatorParty extends Auction_InitiatorP
     }
     
     /**
-     * The 'Failure end' state.
-     * A (final) state in which the party fails.
+     * The 'Failure end' final (one-shot) state.
+     * A state in which the party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 

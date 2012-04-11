@@ -20,38 +20,51 @@ public class BidResult implements Serializable {
     private boolean bidMade;
     
     /**
-     * The bid.
+     * The bid amount.
      */
-    private double bid;
+    private double bidAmount;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    private BidResult(boolean bidMade, double bid) {
+    /**
+     * Initializes a new instance of the BidResult class.
+     * @param bidMade a flag indicating wheter a bid has been made
+     * @param bidAmount the bid amount 
+     */
+    private BidResult(boolean bidMade, double bidAmount) {
         // ----- Preconditions -----
-        assert !bidMade || bid > 0;
+        assert !bidMade || bidAmount > 0;
         // -------------------------
         
         this.bidMade = bidMade;
-        this.bid = bid;
+        this.bidAmount = bidAmount;
     }
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Determines whether a bid has been made.
+     * @return <c>true</c> if the bid has been made, <c>false</c> otherwise
+     */
     public boolean isBidMade() {
         return bidMade;
     }
 
-    public double getBid() {
+    /**
+     * Gets the bid amount.
+     * @return the bid amount
+     */
+    public double getBidAmount() {
         // ----- Preconditions -----
         if (!bidMade) {
             throw new IllegalStateException("No bid. The bid has not been made.");
         }
         // -------------------------
-        return bid;
+        return bidAmount;
     }
     
    

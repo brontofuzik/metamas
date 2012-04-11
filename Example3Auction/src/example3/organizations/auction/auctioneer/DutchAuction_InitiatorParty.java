@@ -10,6 +10,7 @@ import thespian4jade.protocols.ProtocolRegistry;
 /**
  * The 'Dutch auction' protocol initiator party.
  * Design pattern: Abstract factory, Role: Concrete product
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%

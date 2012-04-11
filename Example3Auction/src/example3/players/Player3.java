@@ -14,7 +14,7 @@ public class Player3 extends ParticipantPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes the 'Participant3' player.
+     * Initializes a new instance of the Player3 class.
      */
     public Player3() {
         // Add items to sell.
@@ -52,6 +52,10 @@ public class Player3 extends ParticipantPlayer {
         scheduleDeactRole(getBidderRoleFullName(), 25000);
     }
     
+    /**
+     * Gets the name of the item to sell.
+     * @return the name of the item to sell 
+     */
     @Override
     protected String getItemToSellName() {
         return KLIMT;

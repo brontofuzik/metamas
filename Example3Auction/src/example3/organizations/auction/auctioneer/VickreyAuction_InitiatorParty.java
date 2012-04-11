@@ -7,17 +7,20 @@ import java.util.Map;
 import thespian4jade.protocols.ProtocolRegistry;
 
 /**
- * The 'Vickerey auction' protocol initiator party.
+ * The 'Vickrey auction' protocol initiator party.
  * Design pattern: Abstract factory, Role: Concrete product
  * @author Lukáš Kúdela
  * @since 2012-01-21
  * @version %I% %G%
  */
-public class VickereyAuction_InitiatorParty extends SealedBidAuction_InitiatorParty {
+public class VickreyAuction_InitiatorParty extends SealedBidAuction_InitiatorParty {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
-    public VickereyAuction_InitiatorParty() {
+    /**
+     * Initializes a new instance of the VickreyAuction_InitiatorParty class.
+     */
+    public VickreyAuction_InitiatorParty() {
         super(ProtocolRegistry.getProtocol(Protocols.VICKREY_AUCTION_PROTOCOL));
     }    
     
@@ -27,7 +30,7 @@ public class VickereyAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     
     /**
      * Gets the auction type.
-     * @return the auction type
+     * @return the auction type (Vickrey auction)
      */
     @Override
     public AuctionType getAuctionType() {
@@ -39,8 +42,9 @@ public class VickereyAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Determies the winner and the hammer price.
-     * @return <c>true</c> if the winner has been determined; <c>false</c> otherwise.
+     * Determines the winner and the hammer price.
+     * @return <c>true</c> if the winner has been determined,
+     *     <c>false</c> otherwise
      */
     @Override
     protected boolean determineWinner() {

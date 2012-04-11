@@ -16,6 +16,10 @@ public class EnglishAuction_ResponderParty extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new insatnce of the EnglishAuction_ResponderParty class.
+     * @param message the ACL message initiating the protocol
+     */
     public EnglishAuction_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.ENGLISH_AUCTION_PROTOCOL), message);
     }

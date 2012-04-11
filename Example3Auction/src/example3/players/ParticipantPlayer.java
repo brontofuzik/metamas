@@ -7,12 +7,11 @@ import java.util.Map;
 import thespian4jade.asynchrony.Future;
 import thespian4jade.asynchrony.IObservable;
 import thespian4jade.asynchrony.IObserver;
-import thespian4jade.core.Event;
 import thespian4jade.behaviours.states.special.EventHandler;
 import thespian4jade.core.player.Player;
 
 /**
- * A Participant player.
+ * The 'Participant' player.
  * @author Lukáš Kúdela
  * @since 2011-11-18
  * @version %I% %G%
@@ -48,8 +47,6 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
      */
     private int bidders;
     
-    // ----- PRIVATE -----
-    
     /**
      * The full name of the 'Auctioneer' role.
      */
@@ -76,6 +73,10 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
+    /**
+     * Gets the name of the organziation.
+     * @return the name of the organization
+     */
     String getAuctionOrganizationName() {
         return auctioneerRoleFullName.getOrganizationName();
     }
@@ -89,8 +90,8 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
     }
     
     /**
-     * Gets the name of the 'Aucitoneer' role.
-     * @return the name of the 'Aucitoneer' role
+     * Gets the name of the 'Auctioneer' role.
+     * @return the name of the 'Auctioneer' role
      */
     String getAuctioneerRoleName() {
         return auctioneerRoleFullName.getRoleName();
@@ -189,6 +190,10 @@ public abstract class ParticipantPlayer extends Player implements IObserver {
         return itemsToBuy.get(itemName);
     }
     
+    /**
+     * Override this method to return the name of the item to sell.
+     * @return the name of the item to sell
+     */
     protected abstract String getItemToSellName();
       
     // </editor-fold>

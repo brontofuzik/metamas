@@ -7,7 +7,6 @@ import example3.protocols.AuctionCFPMessage;
 import example3.protocols.BidProposeMessage;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import thespian4jade.behaviours.states.special.ExitValueState;
 import thespian4jade.behaviours.states.special.InvokeResponsibilityState;
 import thespian4jade.protocols.ProtocolRegistry;
 import thespian4jade.behaviours.states.receiver.ReceiveAcceptOrRejectProposal;
@@ -28,7 +27,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The aucitoneer; more precisely, its AID.
+     * The auctioneer; more precisely, its AID.
+     * The initiator party.
      */
     private AID auctioneer;
     
@@ -43,17 +43,17 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     private boolean bidMade;
     
     /**
-     * The bid.
+     * The bid amount.
      */
-    private double bid;
+    private double bidAmount;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Bidder_EnvelopeAuctionResponder class.
-     * @param message the ACL message
+     * Initializes a new insatnce of the EnvelopeAuction_ResponderParty class.
+     * @param message the ACL message initiating the protocol
      */
     public EnvelopeAuction_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL), message);
@@ -69,7 +69,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Builds the finite state machine, i. e. registers the states and transitions.
+     * Builds the party FSM.
      */
     private void buildFSM() {
         // ----- States -----
@@ -105,8 +105,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * The 'Initialize' state.
-     * An (initial) state in which the party is initialized and begins.
+     * The 'Initialize' initial (one-shot) state.
+     * A state in which the party is initialized.
      */
     private class Start extends OneShotBehaviourState {
 
@@ -132,9 +132,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Receive auction CFP' (single receiver) state.
-     * A state in which the auciton call for proposals (CFP) is received
-     * from the auctioneer.
+     * The 'Receive auction call-for-proposal' (single receiver) state.
+     * A state in which the 'Auciton call-for-proposal' message is received.
      */
     private class ReceiveAuctionCFP extends OneShotBehaviourState {
         
@@ -154,7 +153,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Invoke responsibility - Bid' state.
+     * The 'Invoke responsibility - Bid' (invoke responsibility) state.
      * A state in which the 'Bid' responsibility is invoked.
      */
     private class InvokeResponsibility_Bid
@@ -190,7 +189,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         protected void setResponsibilityResult(BidResult responsibilityResult) {
             bidMade = responsibilityResult.isBidMade();
             if (bidMade) {
-                bid = responsibilityResult.getBid();
+                bidAmount = responsibilityResult.getBidAmount();
             }
         }
         
@@ -198,8 +197,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Send bid' (single-sender) state.
-     * A state in which the bid is sent to the auctioneer.
+     * The 'Send bid' (single sender) state.
+     * A state in which the 'Bid propose' message is sent.
      */
     private class SendBid extends SingleSenderState<BidProposeMessage> {
 
@@ -227,7 +226,7 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
         protected BidProposeMessage prepareMessage() {
             BidProposeMessage message = new BidProposeMessage();
             // TODO (priority: low) Also consider the situation when no bid is made.
-            message.setBid(bid);
+            message.setBid(bidAmount);
             return message;
         }
 
@@ -240,9 +239,9 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Receive ACCEPT_PROPOSAL or REJECT_PROPOSAL' (multi-receiver) state.
-     * A state in which the auction result (ACCEPT_PROPOSAL or REJECT_PROPOSAL) is received
-     * from the auctioneer.
+     * The 'Receive auction result' (receive-accept-or-reject-proposal) state.
+     * A state in which the either the ACCEPT-PROPOSAL or REJECT-PROPOSAL simple
+     * message is received.
      */
     private class ReceiveAuctionResult extends ReceiveAcceptOrRejectProposal {
 
@@ -271,8 +270,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Success end' (one-shot) state.
-     * A (final) state in which the party succeeds.
+     * The 'Success end' final (one-shot) state.
+     * A state in which the party succeeds.
      */
     private class SuccessEnd extends OneShotBehaviourState {
 
@@ -287,8 +286,8 @@ public class EnvelopeAuction_ResponderParty extends ResponderParty<Bidder_Role> 
     }
     
     /**
-     * The 'Failure end' (one-shot) state.
-     * A (final) state in which the party fails.
+     * The 'Failure end' final (one-shot) state.
+     * A state in which the party fails.
      */
     private class FailureEnd extends OneShotBehaviourState {
 

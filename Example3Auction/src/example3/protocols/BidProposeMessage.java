@@ -7,8 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A 'Bid propose' message.
- * A 'Bid propose' message is sent by a bidder to an auctioneer.
+ * An 'Bid proposal' message is a message sent by the 'Auction'
+ * protocol responder party (a bidder) to the initiator party (an auctioneer) and
+ * contains a proposal for a bid.
  * @author Lukáš Kúdela
  * @since 2012-01-24
  * @version %I% %G%
@@ -18,14 +19,17 @@ public class BidProposeMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Fields">
     
     /**
-     * The bid.
+     * The bid amount.
      */
-    private double bid;
+    private double bidAmount;
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the BidProposeMessage class.
+     */
     public BidProposeMessage() {
         super(ACLMessage.PROPOSE);
     }
@@ -35,20 +39,20 @@ public class BidProposeMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Getters and setters">
     
     /**
-     * Gets the bid.
-     * @return the bid
+     * Gets the bid amount.
+     * @return the bid amount
      */
-    public Double getBid() {
-        return bid;
+    public Double getBidAmount() {
+        return bidAmount;
     }
     
     /**
-     * Sets the bid.
-     * @param bid the bid
-     * @return this 'Bid' message (fluent interface)
+     * Sets the bid amount.
+     * @param bid the bid amount
+     * @return this 'Bid propose' message (Design pattern: Fluent interface)
      */
     public BidProposeMessage setBid(double bid) {
-        this.bid = bid;
+        this.bidAmount = bid;
         return this;
     }
     
@@ -57,17 +61,17 @@ public class BidProposeMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
-     * Generates the 'Bid' message content.
-     * @return the 'Bid' message content
+     * Generates the content of corresponding the ACL message.
+     * @return the content of the ACL message
      */
     @Override
     protected String generateContent() {
-        return String.format("bid(%1$s)", bid);
+        return String.format("bid(%1$s)", bidAmount);
     }
 
     /**
-     * Parses the 'Bid' message content.
-     * @param content the 'Bid' message content
+     * Parses the content of the corresponding ACL message.
+     * @param content the content of the ACL message
      */
     @Override
     protected void parseContent(String content) {
@@ -75,17 +79,15 @@ public class BidProposeMessage extends TextMessage {
         Matcher matcher = contentPattern.matcher(content);
         matcher.matches();
  
-        bid = new Double(matcher.group(1)).doubleValue();
+        bidAmount = new Double(matcher.group(1)).doubleValue();
     }
-
-
     
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Classes">
 
     /**
-     * A 'Bid' message factory.
+     * A 'Bid propose' message factory.
      * @author Lukáš Kúdela
      * @since
      * @version %I% %G%
