@@ -1,6 +1,7 @@
 package thespian4jade.core;
 
 /**
+ * An event.
  * @author Lukáš Kúdela
  * @since 2012-03-20
  * @version %I% %G%

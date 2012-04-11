@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * A text message---a message whose payload is interpreted as a serialized object.
+ * A message whose payload is interpreted as a serialized object.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%

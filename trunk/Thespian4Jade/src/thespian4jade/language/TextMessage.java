@@ -3,7 +3,7 @@ package thespian4jade.language;
 import jade.lang.acl.ACLMessage;
 
 /**
- * A text message---a message whose payload is interpreted as text.
+ * A message whose payload is interpreted as text.
  * @author Lukáš Kúdela
  * @since 2011-12-22
  * @version %I% %G%

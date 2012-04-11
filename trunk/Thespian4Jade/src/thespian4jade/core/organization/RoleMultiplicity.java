@@ -1,7 +1,7 @@
 package thespian4jade.core.organization;
 
 /**
- * Role multiplicity.
+ * A role multiplicity.
  * @author Lukáš Kúdela
  * @since 2012-04-09
  * @version %I% %G%

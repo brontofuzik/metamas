@@ -66,7 +66,7 @@ public abstract class Protocol {
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Creates a new initiator party
+     * Creates a new initiator party.
      * @param arguments the initiator party's contructor arguments
      * @returns a new initiator party
      */

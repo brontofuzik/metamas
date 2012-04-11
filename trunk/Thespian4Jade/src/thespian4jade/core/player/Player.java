@@ -63,7 +63,8 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a set of responsibilities.
      * @param responsibilities the set of responsibilities to evaluate
-     * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise
+     * @return <c>true</c> if all responsibilities can be met,
+     *     <c>false</c> otherwise
      */
     public boolean evaluateResponsibilities(String[] responsibilities) {
         return evaluateAllResponsibilities(responsibilities);
@@ -231,7 +232,8 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a set of responsibilities.
      * @param responsibilities the set of responsibilities to evaluate
-     * @return <c>true</c> if all responsibility can be met; <c>false</c> otherwise
+     * @return <c>true</c> if all responsibility can be met,
+     *     <c>false</c> otherwise
      */
     protected final boolean evaluateAllResponsibilities(String[] responsibilities) {
         for (String responsibility : responsibilities) {
@@ -245,7 +247,8 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a set of responsibilities.
      * @param responsibilities the set of responsibilities to evaluate
-     * @return <c>true</c> if any responsibility can be met; <c>false</c> otherwise
+     * @return <c>true</c> if any responsibility can be met,
+     *     <c>false</c> otherwise
      */
     protected final boolean evaluteAnyResponsibilities(String[] responsibilities) {
         for (String responsibility : responsibilities) {
@@ -259,7 +262,8 @@ public abstract class Player extends Agent {
     /**
      * Evaluates a responsibility.
      * @param responsibility the responsibility to evaluate
-     * @return <c>true</c> if all responsibilities can be met; <c>false</c> otherwise 
+     * @return <c>true</c> if all responsibilities can be met,
+     *     <c>false</c> otherwise 
      */
     protected boolean evaluateReponsibility(String responsibility) {
         return responsibilities.containsKey(responsibility);

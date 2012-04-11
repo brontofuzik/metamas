@@ -202,7 +202,7 @@ public class Player_EnactRole_InitiatorParty extends InitiatorParty<Player> {
     
     /**
      * The 'Receive responsibilities' (receive-success-or-failure) state.
-     * A state in which a 'Responsibilities' message is received in sent in case
+     * A state in which a 'Responsibilities' message is received in case
      * of success, or a FAILURE message.
      */
     private class ReceiveResponsibilities extends
