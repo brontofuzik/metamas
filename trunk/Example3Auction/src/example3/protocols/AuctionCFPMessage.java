@@ -7,8 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * An 'Auction CFP' message.
- * An 'Auciton CFP' message is sent by an auctioneer to bidders. 
+ * An 'Auction call-for-proposals' message is a message sent by the 'Auction'
+ * protocol initiator party (an auctioneer) to the responder parties (bidders) and
+ * contains a call for proposals for bids.
  * @author Lukáš Kúdela
  * @since
  * @version %I% %G%
@@ -48,7 +49,7 @@ public class AuctionCFPMessage extends TextMessage {
     /**
      * Sets the name of the item.
      * @param itemName the name of the item
-     * @return this 'Auction CFP' message (fluent interface)
+     * @return this 'Auction CFP' message (Design pattern: Fluent interface)
      */
     public AuctionCFPMessage setItemName(String itemName) {
         this.itemName = itemName;
@@ -60,8 +61,8 @@ public class AuctionCFPMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Methods">
 
     /**
-     * Generates the ACL message content.
-     * @return the ACL message content
+     * Generates the content of corresponding the ACL message.
+     * @return the content of the ACL message
      */
     @Override
     protected String generateContent() {
@@ -69,8 +70,8 @@ public class AuctionCFPMessage extends TextMessage {
     }
 
     /**
-     * Parses the ACL message content.
-     * @param content the ACL message content
+     * Parses the content of the corresponding ACL message.
+     * @param content the content of the ACL message
      */
     @Override
     protected void parseContent(String content) {
@@ -86,7 +87,7 @@ public class AuctionCFPMessage extends TextMessage {
     // <editor-fold defaultstate="collapsed" desc="Classes">
     
     /**
-     * A 'Auction CFP' message factory.
+     * A 'Auction call-for-proposals' message factory.
      * @author Lukáš Kúdela
      * @since
      * @version %I% %G%

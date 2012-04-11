@@ -14,7 +14,7 @@ public class Player2 extends ParticipantPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">  
     
     /**
-     * Initializes the 'Participant2' player.
+     * Initializes a new instance of the Player2 class.
      */
     public Player2() {
         // Add items to sell.
@@ -52,6 +52,10 @@ public class Player2 extends ParticipantPlayer {
         scheduleDeactRole(getBidderRoleFullName(), 23000);
     }
     
+    /**
+     * Gets the name of the item to sell.
+     * @return the name of the item to sell 
+     */
     @Override
     protected String getItemToSellName() {
         return KOONING;

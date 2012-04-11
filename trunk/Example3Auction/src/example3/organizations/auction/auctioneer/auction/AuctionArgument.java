@@ -53,6 +53,14 @@ public class AuctionArgument implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Initializes a new instance of the AuctionArgument class.
+     * @param auctionType the auction type
+     * @param itemName the name of the item
+     * @param startingPrice the starting price
+     * @param reservationPrice the reservation price
+     * @param bidChange the bid change
+     */
     private AuctionArgument(AuctionType auctionType, String itemName,
         Double startingPrice, Double reservationPrice, Double bidChange) {
         // ---- Preconditions -----

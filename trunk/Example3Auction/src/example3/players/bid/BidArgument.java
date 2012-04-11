@@ -4,7 +4,7 @@ import example3.organizations.auction.auctioneer.auction.AuctionType;
 import java.io.Serializable;
 
 /**
- * A 'Bid' responsibility arguemnt.
+ * A 'Bid' responsibility argument.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%
@@ -41,6 +41,13 @@ public class BidArgument implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the BidArgument class.
+     * @param auctionType the auction type
+     * @param itemName the name of the item
+     * @param currentPrice the current price
+     * @param bidChange the bid change
+     */
     private BidArgument(AuctionType auctionType, String itemName,
         Double currentPrice, Double bidChange) {
         // ----- Preconditions -----

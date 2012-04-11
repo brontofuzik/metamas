@@ -3,7 +3,7 @@ package example3.organizations.auction.auctioneer;
 import thespian4jade.core.organization.Role;
 
 /**
- * An 'Auctioneer' role.
+ * The 'Auctioneer' role.
  * @author Lukáš Kúdela
  * @since 2011-11-20
  * @version %I% %G%

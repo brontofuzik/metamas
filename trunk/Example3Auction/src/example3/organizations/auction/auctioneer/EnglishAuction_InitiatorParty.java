@@ -4,13 +4,13 @@ import example3.organizations.auction.auctioneer.auction.AuctionResult;
 import example3.organizations.auction.auctioneer.auction.AuctionType;
 import example3.organizations.auction.auctioneer.auction.AuctionArgument;
 import example3.protocols.Protocols;
-import example3.protocols.englishauction.EnglishAuctionProtocol;
 import jade.core.AID;
 import thespian4jade.protocols.ProtocolRegistry;
 
 /**
  * The 'English auction' protocol initiator party.
  * Design pattern: Abstract factory, Role: Concrete product
+ * Note: This class is currently not used.
  * @author Lukáš Kúdela
  * @since 2012-01-18
  * @version %I% %G%

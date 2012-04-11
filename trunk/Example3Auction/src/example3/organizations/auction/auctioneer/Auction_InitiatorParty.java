@@ -8,7 +8,7 @@ import thespian4jade.behaviours.parties.InitiatorParty;
 import thespian4jade.protocols.Protocol;
 
 /**
- * An auction initiator.
+ * The 'Auction' abstract protocol initiator party.
  * @author Lukáš Kúdela
  * @since 2012-01-19
  * @version %I% %G%
@@ -62,7 +62,7 @@ public abstract class Auction_InitiatorParty extends InitiatorParty<Role> {
                 return new EnvelopeAuction_InitiatorParty();
 
             case VICKREY:
-                return new VickereyAuction_InitiatorParty();
+                return new VickreyAuction_InitiatorParty();
 
             case ENGLISH:
                 return new EnglishAuction_InitiatorParty();

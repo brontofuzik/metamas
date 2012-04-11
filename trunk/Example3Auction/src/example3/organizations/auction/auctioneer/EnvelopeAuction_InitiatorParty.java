@@ -18,7 +18,7 @@ public class EnvelopeAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new instance of the Auctioneer_EnvelopeAuctionInitiator class.
+     * Initializes a new instance of the EnvelopeAuction_InitiatorParty class.
      */
     public EnvelopeAuction_InitiatorParty() {
         super(ProtocolRegistry.getProtocol(Protocols.ENVELOPE_AUCTION_PROTOCOL));
@@ -30,7 +30,7 @@ public class EnvelopeAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     
     /**
      * Gets the auction type.
-     * @return the auction type
+     * @return the auction type (Enveope auction)
      */
     @Override
     public AuctionType getAuctionType() {
@@ -42,8 +42,9 @@ public class EnvelopeAuction_InitiatorParty extends SealedBidAuction_InitiatorPa
     // <editor-fold defaultstate="collapsed" desc="Methods">
     
     /**
-     * Determies the winner and the hammer price.
-     * @return <c>true</c> if the winner has been determined; <c>false</c> otherwise.
+     * Determines the winner and the hammer price.
+     * @return <c>true</c> if the winner has been determined,
+     *     <c>false</c> otherwise
      */
     @Override
     protected boolean determineWinner() {

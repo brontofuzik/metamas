@@ -16,6 +16,10 @@ public class DutchAuction_ResponderParty extends ResponderParty<Bidder_Role> {
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the DutchAuction_ResponderParty class.
+     * @param message the ACL message initiating the protocol
+     */
     public DutchAuction_ResponderParty(ACLMessage message) {
         super(ProtocolRegistry.getProtocol(Protocols.DUTCH_AUCTION_PROTOCOL), message);
     }

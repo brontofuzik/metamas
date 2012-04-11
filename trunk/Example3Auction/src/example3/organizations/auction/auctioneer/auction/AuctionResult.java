@@ -34,6 +34,12 @@ public class AuctionResult implements Serializable {
     
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
+    /**
+     * Initializes a new instance of the AuctionResult class.
+     * @param winnerDetermined a flag indicating whether the winner has been determined
+     * @param winnerAID the winner AID
+     * @param hammerPrice the hammer price
+     */
     private AuctionResult(boolean winnerDetermined,
         AID winnerAID, double hammerPrice) {
         // ----- Preconditions -----

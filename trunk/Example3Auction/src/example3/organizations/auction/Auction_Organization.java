@@ -7,7 +7,7 @@ import thespian4jade.core.organization.Organization;
 import java.util.logging.Level;
 
 /**
- * An 'Auction' organization.
+ * The 'Auction' organization.
  * @author Lukáš Kúdela
  * @since 2011-11-18
  * @version %I% %G%

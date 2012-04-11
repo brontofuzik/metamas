@@ -6,7 +6,8 @@ import example3.protocols.envelopeauction.EnvelopeAuctionProtocol;
 import example3.protocols.vickreyauction.VickreyAuctionProtocol;
 
 /**
- * A static class containing the protocols used in Example 3 - Auction.
+ * A static class containing the application-specific (domain logic) protocols
+ * used in Example 3 - Auction.
  * @author Lukáš Kúdela
  * @since 2012-03-21
  * @version %I% %G%
