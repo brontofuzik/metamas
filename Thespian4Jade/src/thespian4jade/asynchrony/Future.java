@@ -48,7 +48,7 @@ public class Future<TValue extends Serializable> implements IObserver, IObservab
     
     /**
      * Determines whether the future is resolved.
-     * @return <c>true</c> if the future is resolved; <c>false</c> otherwise.
+     * @return <c>true</c> if the future is resolved, <c>false</c> otherwise.
      */
     public boolean isResolved() {
         return isResolved;

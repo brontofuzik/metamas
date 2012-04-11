@@ -15,7 +15,7 @@ public abstract class OperatorPlayer extends RoleEnacterPlayer {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     
     /**
-     * Initializes a new insatnce of the OperatorPlayer class.
+     * Initializes a new instance of the OperatorPlayer class.
      * @param roleFullName 
      */
     protected OperatorPlayer(RoleFullName roleFullName) {
