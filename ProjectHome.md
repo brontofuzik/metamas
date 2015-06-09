@@ -1,0 +1,1 @@
+Organization-centric multi-agent system meta-model in Java.
